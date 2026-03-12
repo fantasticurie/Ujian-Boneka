@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ujian Morfologi Boneka Aku - Kak Azri</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Varela+Round&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --pink: #ffcce5;
             --blue: #cce5ff;
-            --yellow: #ffffcc;
-            --green: #ccffcc;
-            --purple: #e5ccff;
-            --text: #7a5c5c;
+            --yellow: #fff4bd;
+            --green: #d2f8d2;
+            --purple: #ecd4ff;
+            --text: #5d4343;
         }
 
         body {
-            font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(-45deg, #ffcce5, #cce5ff, #ffffcc, #ccffcc);
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(-45deg, var(--pink), var(--blue), var(--yellow), var(--purple));
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             display: flex;
@@ -25,7 +25,8 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow-x: hidden;
+            overflow: hidden; /* Biar elemen melayang gak bikin scroll */
+            color: var(--text);
         }
 
         @keyframes gradientBG {
@@ -34,127 +35,151 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Animasi Elemen Melayang di Background */
+        .floating-item {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.6;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05));
+            animation: float-random 10s linear infinite;
+        }
+
+        @keyframes float-random {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
         #main-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
             border-radius: 40px;
-            padding: 40px;
+            padding: 30px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 500px;
+            width: 85%;
+            max-width: 450px;
             text-align: center;
-            border: 8px solid white;
+            border: 6px solid white;
             position: relative;
-            animation: float 3s ease-in-out infinite;
+            z-index: 10;
+            max-height: 85vh;
+            overflow-y: auto;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        h1 { color: #ff6b9d; font-weight: 700; font-size: 1.8rem; margin-bottom: 10px; }
+        p { font-weight: 600; line-height: 1.5; font-size: 1.05rem; }
 
-        .koala-img {
-            width: 180px;
-            height: 180px;
-            background: var(--blue);
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .koala-container {
             font-size: 80px;
-            border: 5px solid white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
         }
 
-        h1 { font-family: 'Varela Round', sans-serif; color: #ff85a2; font-size: 1.8rem; margin-bottom: 10px; }
-        p { color: var(--text); line-height: 1.6; }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
 
-        .timer-container {
-            width: 100px;
-            height: 100px;
-            margin: -80px auto 20px;
+        .timer-circle {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #ff85a2;
-            border: 5px solid var(--pink);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff6b9d;
+            border: 6px solid var(--pink);
+            box-shadow: 0 8px 15px rgba(255, 107, 157, 0.2);
         }
 
         .btn-option {
             background: white;
             border: 3px solid var(--blue);
-            padding: 15px 25px;
+            padding: 14px 20px;
             margin: 10px 0;
             border-radius: 20px;
             cursor: pointer;
             width: 100%;
             font-size: 1rem;
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Fredoka', sans-serif;
             font-weight: 700;
             color: var(--text);
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: block;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 var(--blue);
         }
 
-        .btn-option:hover {
-            transform: scale(1.03);
-            background: var(--yellow);
-            border-color: #ffd93d;
-        }
+        .btn-option:hover { transform: translateY(-3px); box-shadow: 0 7px 0 var(--blue); }
+        .btn-option:active { transform: translateY(2px); box-shadow: none; }
 
-        .correct { background: #b8f2e6 !important; border-color: #8cecd9 !important; color: #2d6a4f !important; }
-        .wrong { background: #ffdada !important; border-color: #ffbaba !important; color: #a30000 !important; }
+        .correct { background: #b8f2e6 !important; border-color: #8cecd9 !important; box-shadow: 0 4px 0 #8cecd9 !important; }
+        .wrong { background: #ffdada !important; border-color: #ffbaba !important; box-shadow: 0 4px 0 #ffbaba !important; }
 
-        .btn-start {
-            background: #ff85a2;
+        .btn-primary {
+            background: #ff6b9d;
             color: white;
             border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 133, 162, 0.3);
-            transition: 0.3s;
-            margin-top: 20px;
+            box-shadow: 0 6px 0 #e05586;
+            margin-top: 15px;
         }
 
-        .btn-start:hover { transform: translateY(3px); box-shadow: none; }
+        .review-box {
+            text-align: left;
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .review-item { margin-bottom: 10px; border-bottom: 2px dashed var(--pink); padding-bottom: 5px; }
+        .review-item b { color: #ff6b9d; }
 
         .hidden { display: none; }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
+<div class="floating-item" style="left: 10%; animation-duration: 8s;">🐨</div>
+<div class="floating-item" style="left: 30%; animation-duration: 12s;">🌈</div>
+<div class="floating-item" style="left: 50%; animation-duration: 7s;">✨</div>
+<div class="floating-item" style="left: 70%; animation-duration: 10s;">🎀</div>
+<div class="floating-item" style="left: 85%; animation-duration: 9s;">🌸</div>
+
 <div id="main-card">
     <div id="welcome-screen">
-        <div class="koala-img">🐨</div>
+        <div class="koala-container">🐨</div>
         <h1>Halo Kak Azri! 💖</h1>
-        <p>Selamat Datang Peserta Ujian: <b>Muhammad Fairuz Azri Irwanto</b>.<br>
-        Udah siap buat tes kasih sayang dan ingatan tentang boneka-boneka aku belum?</p>
-        <button class="btn-start" onclick="startQuiz()">Mulai Ujian ✨</button>
+        <p>Selamat Datang Peserta Ujian:<br><span style="color:#ff6b9d">Muhammad Fairuz Azri Irwanto</span></p>
+        <p>Udah siap ujian morfologi boneka aku? <br>Ingat, cuma ada waktu 20 detik!</p>
+        <button class="btn-primary" onclick="startQuiz()">Mulai Ujian ✨</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div id="timer" class="timer-container">20</div>
-        <h2 id="question-text" style="color: #7a5c5c; margin-bottom: 25px;">Pertanyaan</h2>
+        <div id="timer" class="timer-circle">20</div>
+        <h2 id="question-text" style="font-weight: 700;">Pertanyaan</h2>
         <div id="options-container"></div>
     </div>
 
     <div id="result-screen" class="hidden">
-        <div class="koala-img">🏆</div>
-        <h1>Selesai! ✨</h1>
-        <p id="final-score" style="font-size: 1.5rem; font-weight: bold;"></p>
+        <div class="koala-container">🎉</div>
+        <h1>Selesai!</h1>
+        <p id="final-score" style="font-size: 1.5rem; color: #ff6b9d;"></p>
         <p id="closing-msg"></p>
-        <button class="btn-start" onclick="location.reload()">Coba Lagi 🔄</button>
+        <button class="btn-primary" onclick="showReview()">Lihat Jawaban Benar 📖</button>
+        <button class="btn-primary" style="background:#8cecd9; box-shadow: 0 6px 0 #6ecab7;" onclick="location.reload()">Ulangi Ujian 🔄</button>
+        
+        <div id="review-section" class="hidden">
+            <h3 style="margin-top:25px">Rangkuman Jawaban:</h3>
+            <div id="review-list" class="review-box"></div>
+        </div>
     </div>
 </div>
 
@@ -190,7 +215,7 @@
         clearInterval(timerInterval);
         timeLeft = 20;
         document.getElementById('timer').innerText = timeLeft;
-        document.getElementById('timer').style.borderColor = "#cce5ff";
+        document.getElementById('timer').style.borderColor = "#ffcce5";
 
         const q = questions[currentQuestionIndex];
         document.getElementById('question-text').innerText = q.q;
@@ -200,7 +225,7 @@
         q.a.forEach((opt, index) => {
             const button = document.createElement('button');
             button.innerText = opt;
-            button.classList.add('btn-option', 'fade-in');
+            button.classList.add('btn-option');
             button.onclick = () => checkAnswer(index, button);
             optionsContainer.appendChild(button);
         });
@@ -208,7 +233,6 @@
         timerInterval = setInterval(() => {
             timeLeft--;
             document.getElementById('timer').innerText = timeLeft;
-            if(timeLeft <= 5) document.getElementById('timer').style.borderColor = "#ff85a2";
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 autoWrong();
@@ -222,24 +246,19 @@
         clearInterval(timerInterval);
 
         const correctIndex = questions[currentQuestionIndex].correct;
-        const allButtons = document.querySelectorAll('.btn-option');
-
         if (selectedIndex === correctIndex) {
             button.classList.add('correct');
             score++;
         } else {
             button.classList.add('wrong');
-            allButtons[correctIndex].classList.add('correct');
+            document.querySelectorAll('.btn-option')[correctIndex].classList.add('correct');
         }
-
         setTimeout(nextQuestion, 1500);
     }
 
     function autoWrong() {
         canAnswer = false;
-        const correctIndex = questions[currentQuestionIndex].correct;
-        const allButtons = document.querySelectorAll('.btn-option');
-        allButtons[correctIndex].classList.add('correct');
+        document.querySelectorAll('.btn-option')[questions[currentQuestionIndex].correct].classList.add('correct');
         setTimeout(nextQuestion, 1500);
     }
 
@@ -257,14 +276,20 @@
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('final-score').innerText = `Skor: ${score} / ${questions.length}`;
         
-        let msg = "";
-        if(score === questions.length) msg = "Wih! Kamu emang pacar terbaik, hafal semua! 😍";
-        else if(score > 5) msg = "Lumayan lah ya, tapi harus lebih sayang lagi sama mereka! 😜";
-        else msg = "Wah parah, besok belajar lagi ya! 😤";
+        let msg = score === questions.length ? "Wih! Kamu emang pacar terbaik! 😍" : "Semangat belajar lagi besok ya! 💖";
+        document.getElementById('closing-msg').innerHTML = `${msg}<br><br>Makasih udah sayang sama boneka-boneka aku!`;
         
-        document.getElementById('closing-msg').innerHTML = `${msg}<br><br>Makasih sudah perhatian sama Ntu, Mpui, Ici, dan Heli! Semangat ujiannya besok, Sayang! 💖`;
+        // Siapkan list review
+        let reviewHTML = "";
+        questions.forEach((item, idx) => {
+            reviewHTML += `<div class="review-item">${idx+1}. ${item.q}<br><b>Jawab: ${item.a[item.correct]}</b></div>`;
+        });
+        document.getElementById('review-list').innerHTML = reviewHTML;
+    }
+
+    function showReview() {
+        document.getElementById('review-section').classList.toggle('hidden');
     }
 </script>
-
 </body>
 </html>
