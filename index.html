@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ujian Morfologi Boneka Aku - Kak Azri</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --pink: #ffcce5;
             --blue: #cce5ff;
-            --yellow: #fff4bd;
-            --green: #d2f8d2;
-            --purple: #ecd4ff;
-            --text: #5d4343;
+            --yellow: #ffffcc;
+            --green: #b8f2e6;
+            --purple: #e5ccff;
+            --text: #5d4037;
         }
 
         body {
-            font-family: 'Fredoka', sans-serif;
-            background: linear-gradient(-45deg, var(--pink), var(--blue), var(--yellow), var(--purple));
+            font-family: 'Fredoka', sans-serif; /* Font lebih bulat & cute */
+            background: linear-gradient(-45deg, #ffcce5, #cce5ff, #ffffcc, #e5ccff);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             display: flex;
@@ -25,8 +25,8 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden; /* Biar elemen melayang gak bikin scroll */
-            color: var(--text);
+            overflow-x: hidden;
+            position: relative;
         }
 
         @keyframes gradientBG {
@@ -36,166 +36,183 @@
         }
 
         /* Animasi Elemen Melayang di Background */
-        .floating-item {
+        .floating-element {
             position: absolute;
-            z-index: -1;
+            font-size: 40px;
             opacity: 0.6;
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05));
-            animation: float-random 10s linear infinite;
+            z-index: -1;
+            user-select: none;
+            animation: floatBackground 10s linear infinite;
         }
 
-        @keyframes float-random {
-            0% { transform: translateY(100vh) rotate(0deg); }
-            100% { transform: translateY(-100vh) rotate(360deg); }
+        @keyframes floatBackground {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
         }
 
         #main-card {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
-            border-radius: 40px;
-            padding: 30px;
+            border-radius: 50px;
+            padding: 40px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            width: 85%;
-            max-width: 450px;
+            width: 90%;
+            max-width: 550px;
             text-align: center;
-            border: 6px solid white;
+            border: 10px solid white;
             position: relative;
             z-index: 10;
-            max-height: 85vh;
-            overflow-y: auto;
+            margin: 20px;
         }
 
-        h1 { color: #ff6b9d; font-weight: 700; font-size: 1.8rem; margin-bottom: 10px; }
-        p { font-weight: 600; line-height: 1.5; font-size: 1.05rem; }
-
-        .koala-container {
-            font-size: 80px;
-            margin-bottom: 20px;
+        .koala-main {
+            font-size: 100px;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+            margin-bottom: 10px;
+            display: inline-block;
             animation: bounce 2s infinite;
         }
 
         @keyframes bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
+
+        h1 { color: #ff6b9d; font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; -webkit-text-stroke: 1px white; }
+        p { color: var(--text); line-height: 1.6; font-weight: 500; font-size: 1.1rem; }
 
         .timer-circle {
             width: 80px;
             height: 80px;
             margin: 0 auto 20px;
-            background: white;
+            background: #ff85a2;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: #ff6b9d;
-            border: 6px solid var(--pink);
-            box-shadow: 0 8px 15px rgba(255, 107, 157, 0.2);
+            color: white;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(255, 133, 162, 0.4);
         }
 
         .btn-option {
             background: white;
-            border: 3px solid var(--blue);
-            padding: 14px 20px;
-            margin: 10px 0;
-            border-radius: 20px;
+            border: 4px solid var(--blue);
+            padding: 18px;
+            margin: 12px 0;
+            border-radius: 25px;
             cursor: pointer;
             width: 100%;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-family: 'Fredoka', sans-serif;
             font-weight: 700;
             color: var(--text);
-            transition: 0.2s;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 4px 0 var(--blue);
         }
 
-        .btn-option:hover { transform: translateY(-3px); box-shadow: 0 7px 0 var(--blue); }
-        .btn-option:active { transform: translateY(2px); box-shadow: none; }
-
-        .correct { background: #b8f2e6 !important; border-color: #8cecd9 !important; box-shadow: 0 4px 0 #8cecd9 !important; }
-        .wrong { background: #ffdada !important; border-color: #ffbaba !important; box-shadow: 0 4px 0 #ffbaba !important; }
-
-        .btn-primary {
-            background: #ff6b9d;
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #e05586;
-            margin-top: 15px;
+        .btn-option:hover {
+            transform: translateY(-3px);
+            background: var(--yellow);
+            border-color: #ffd93d;
+            box-shadow: 0 6px 0 #ffd93d;
         }
 
-        .review-box {
-            text-align: left;
+        .correct { background: #b8f2e6 !important; border-color: #8cecd9 !important; box-shadow: 0 4px 0 #8cecd9 !important; color: #1b4d3e !important; }
+        .wrong { background: #ffdada !important; border-color: #ffbaba !important; box-shadow: 0 4px 0 #ffbaba !important; color: #a30000 !important; }
+
+        .btn-start {
+            background: #ff85a2;
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #d45d7d;
+            transition: 0.2s;
             margin-top: 20px;
+        }
+
+        .btn-start:active { transform: translateY(4px); box-shadow: 0 2px 0 #d45d7d; }
+
+        /* Rangkuman Section */
+        .summary-container {
+            text-align: left;
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
             padding: 15px;
-            background: #fff;
+            background: white;
             border-radius: 20px;
+            border: 3px dashed var(--pink);
+        }
+
+        .summary-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
             font-size: 0.9rem;
         }
 
-        .review-item { margin-bottom: 10px; border-bottom: 2px dashed var(--pink); padding-bottom: 5px; }
-        .review-item b { color: #ff6b9d; }
+        .summary-q { font-weight: 700; color: #d45d7d; }
+        .summary-a { color: #2d6a4f; font-weight: 500; }
 
         .hidden { display: none; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="floating-item" style="left: 10%; animation-duration: 8s;">🐨</div>
-<div class="floating-item" style="left: 30%; animation-duration: 12s;">🌈</div>
-<div class="floating-item" style="left: 50%; animation-duration: 7s;">✨</div>
-<div class="floating-item" style="left: 70%; animation-duration: 10s;">🎀</div>
-<div class="floating-item" style="left: 85%; animation-duration: 9s;">🌸</div>
+<div id="bg-elements"></div>
 
 <div id="main-card">
     <div id="welcome-screen">
-        <div class="koala-container">🐨</div>
+        <div class="koala-main">🐨</div>
         <h1>Halo Kak Azri! 💖</h1>
-        <p>Selamat Datang Peserta Ujian:<br><span style="color:#ff6b9d">Muhammad Fairuz Azri Irwanto</span></p>
-        <p>Udah siap ujian morfologi boneka aku? <br>Ingat, cuma ada waktu 20 detik!</p>
-        <button class="btn-primary" onclick="startQuiz()">Mulai Ujian ✨</button>
+        <p>Selamat Datang Peserta Ujian:<br><b style="font-size: 1.3rem; color: #ff85a2;">Muhammad Fairuz Azri Irwanto</b></p>
+        <p>Siap untuk tes morfologi boneka aku?<br>Jangan sampai salah ya! 🧸✨</p>
+        <button class="btn-start" onclick="startQuiz()">Mulai Ujian ✨</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
         <div id="timer" class="timer-circle">20</div>
-        <h2 id="question-text" style="font-weight: 700;">Pertanyaan</h2>
+        <h2 id="question-text" style="color: var(--text); margin-bottom: 25px; font-weight: 700;">Pertanyaan</h2>
         <div id="options-container"></div>
     </div>
 
     <div id="result-screen" class="hidden">
-        <div class="koala-container">🎉</div>
-        <h1>Selesai!</h1>
-        <p id="final-score" style="font-size: 1.5rem; color: #ff6b9d;"></p>
+        <div class="koala-main">🏆</div>
+        <h1>Ujian Selesai!</h1>
+        <p id="final-score" style="font-size: 1.8rem; font-weight: 700; color: #ff85a2;"></p>
         <p id="closing-msg"></p>
-        <button class="btn-primary" onclick="showReview()">Lihat Jawaban Benar 📖</button>
-        <button class="btn-primary" style="background:#8cecd9; box-shadow: 0 6px 0 #6ecab7;" onclick="location.reload()">Ulangi Ujian 🔄</button>
         
-        <div id="review-section" class="hidden">
-            <h3 style="margin-top:25px">Rangkuman Jawaban:</h3>
-            <div id="review-list" class="review-box"></div>
-        </div>
+        <h3 style="margin-top: 30px; color: #7a5c5c;">📖 Rangkuman Jawaban:</h3>
+        <div id="summary" class="summary-container"></div>
+        
+        <button class="btn-start" onclick="location.reload()">Ulangi Ujian 🔄</button>
     </div>
 </div>
 
 <script>
     const questions = [
-        { q: "Bagaimana saat Ntu menangis?", a: ["Kedua tangannya menutup mata", "Menutup telinga", "Sembunyi di bantal", "Berteriak kencang"], correct: 0 },
-        { q: "Bagaimana tekstur bulu Ntu?", a: ["Sangat halus", "Tidak halus, tetapi tidak kasar juga", "Seperti handuk kasar", "Licin sekali"], correct: 1 },
-        { q: "Ntu punya pita warna apa?", a: ["Merah dan hijau", "Pink dan putih", "Biru dan kuning", "Hitam dan ungu"], correct: 2 },
-        { q: "Nama boneka rubah?", a: ["foxy", "mochi", "mpui", "lulu"], correct: 2 },
-        { q: "Bagaimana tekstur bulu Mpui?", a: ["Kasar", "Tipis", "Agak lengket", "Halus dan lembut"], correct: 3 },
-        { q: "Ici kalo marah namanya jadi siapa?", a: ["icung", "ica", "ici-ici", "cungir"], correct: 0 },
-        { q: "Boneka capibara namanya siapa?", a: ["capy", "bara", "gembul", "heli"], correct: 3 },
-        { q: "Mpui diberi nama pada tahun berapa?", a: ["2022", "2023", "2024", "2025"], correct: 2 },
-        { q: "Mpui diberi nama dimana?", a: ["di taman", "di mall", "di lampu merah", "di toko buku"], correct: 2 },
-        { q: "Tahun berapa Heli ditemukan?", a: ["2023", "2024", "2025", "2026"], correct: 3 },
-        { q: "Hewan apa Ntu itu?", a: ["Panda", "Koala", "Beruang", "Kelinci"], correct: 1 }
+        { q: "Bagaimana saat Ntu menangis?", a: "Kedua tangannya menutup mata", options: ["Kedua tangannya menutup mata", "Menutup telinga", "Sembunyi di bantal", "Berteriak kencang"] },
+        { q: "Bagaimana tekstur bulu Ntu?", a: "Tidak halus, tetapi tidak kasar juga", options: ["Sangat halus", "Tidak halus, tetapi tidak kasar juga", "Seperti handuk kasar", "Licin sekali"] },
+        { q: "Ntu punya pita warna apa?", a: "Biru dan kuning", options: ["Merah dan hijau", "Pink dan putih", "Biru dan kuning", "Hitam dan ungu"] },
+        { q: "Nama boneka rubah?", a: "mpui", options: ["foxy", "mochi", "mpui", "lulu"] },
+        { q: "Bagaimana tekstur bulu Mpui?", a: "Halus dan lembut", options: ["Kasar", "Tipis", "Agak lengket", "Halus dan lembut"] },
+        { q: "Ici kalo marah namanya jadi siapa?", a: "icung", options: ["icung", "ica", "ici-ici", "cungir"] },
+        { q: "Boneka capibara namanya siapa?", a: "heli", options: ["capy", "bara", "gembul", "heli"] },
+        { q: "Mpui diberi nama pada tahun berapa?", a: "2024", options: ["2022", "2023", "2024", "2025"] },
+        { q: "Mpui diberi nama dimana?", a: "di lampu merah", options: ["di taman", "di mall", "di lampu merah", "di toko buku"] },
+        { q: "Tahun berapa Heli ditemukan?", a: "2026", options: ["2023", "2024", "2025", "2026"] },
+        { q: "Hewan apa Ntu itu?", a: "koala", options: ["Panda", "Koala", "Beruang", "Kelinci"] }
     ];
 
     let currentQuestionIndex = 0;
@@ -203,6 +220,19 @@
     let timeLeft = 20;
     let timerInterval;
     let canAnswer = true;
+
+    // Tambah elemen background melayang secara random
+    const emojis = ['🐨', '🦊', '🐹', '🌈', '💖', '✨', '☁️', '🎀'];
+    const bgContainer = document.getElementById('bg-elements');
+    for (let i = 0; i < 15; i++) {
+        let el = document.createElement('div');
+        el.className = 'floating-element';
+        el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDelay = Math.random() * 10 + 's';
+        el.style.fontSize = (Math.random() * 30 + 20) + 'px';
+        bgContainer.appendChild(el);
+    }
 
     function startQuiz() {
         document.getElementById('welcome-screen').classList.add('hidden');
@@ -215,18 +245,17 @@
         clearInterval(timerInterval);
         timeLeft = 20;
         document.getElementById('timer').innerText = timeLeft;
-        document.getElementById('timer').style.borderColor = "#ffcce5";
-
+        
         const q = questions[currentQuestionIndex];
         document.getElementById('question-text').innerText = q.q;
         const optionsContainer = document.getElementById('options-container');
         optionsContainer.innerHTML = '';
 
-        q.a.forEach((opt, index) => {
+        q.options.forEach((opt) => {
             const button = document.createElement('button');
             button.innerText = opt;
             button.classList.add('btn-option');
-            button.onclick = () => checkAnswer(index, button);
+            button.onclick = () => checkAnswer(opt, button);
             optionsContainer.appendChild(button);
         });
 
@@ -235,40 +264,34 @@
             document.getElementById('timer').innerText = timeLeft;
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                autoWrong();
+                checkAnswer("", null);
             }
         }, 1000);
     }
 
-    function checkAnswer(selectedIndex, button) {
+    function checkAnswer(selected, button) {
         if(!canAnswer) return;
         canAnswer = false;
         clearInterval(timerInterval);
 
-        const correctIndex = questions[currentQuestionIndex].correct;
-        if (selectedIndex === correctIndex) {
+        const correctAns = questions[currentQuestionIndex].a;
+        const buttons = document.querySelectorAll('.btn-option');
+
+        if (selected === correctAns) {
             button.classList.add('correct');
             score++;
         } else {
-            button.classList.add('wrong');
-            document.querySelectorAll('.btn-option')[correctIndex].classList.add('correct');
+            if(button) button.classList.add('wrong');
+            buttons.forEach(btn => {
+                if(btn.innerText === correctAns) btn.classList.add('correct');
+            });
         }
-        setTimeout(nextQuestion, 1500);
-    }
 
-    function autoWrong() {
-        canAnswer = false;
-        document.querySelectorAll('.btn-option')[questions[currentQuestionIndex].correct].classList.add('correct');
-        setTimeout(nextQuestion, 1500);
-    }
-
-    function nextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            showQuestion();
-        } else {
-            showResult();
-        }
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) showQuestion();
+            else showResult();
+        }, 1500);
     }
 
     function showResult() {
@@ -276,20 +299,21 @@
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('final-score').innerText = `Skor: ${score} / ${questions.length}`;
         
-        let msg = score === questions.length ? "Wih! Kamu emang pacar terbaik! 😍" : "Semangat belajar lagi besok ya! 💖";
-        document.getElementById('closing-msg').innerHTML = `${msg}<br><br>Makasih udah sayang sama boneka-boneka aku!`;
-        
-        // Siapkan list review
-        let reviewHTML = "";
-        questions.forEach((item, idx) => {
-            reviewHTML += `<div class="review-item">${idx+1}. ${item.q}<br><b>Jawab: ${item.a[item.correct]}</b></div>`;
-        });
-        document.getElementById('review-list').innerHTML = reviewHTML;
-    }
+        let msg = score === questions.length ? "SEMPURNA! Kamu emang Papa Boneka terbaik! 😍" : "Semangat! Besok ujian benerannya harus dapet 100 ya! 💖";
+        document.getElementById('closing-msg').innerText = msg;
 
-    function showReview() {
-        document.getElementById('review-section').classList.toggle('hidden');
+        // Tampilkan Rangkuman
+        const summaryCont = document.getElementById('summary');
+        questions.forEach((item, index) => {
+            summaryCont.innerHTML += `
+                <div class="summary-item">
+                    <div class="summary-q">${index + 1}. ${item.q}</div>
+                    <div class="summary-a">✅ Jawaban: ${item.a}</div>
+                </div>
+            `;
+        });
     }
 </script>
+
 </body>
 </html>
