@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ujian Morfologi Boneka Aku - Kak Azri</title>
+    <title>Ujian Morfologi Boneka Aku - Sayangg</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -38,23 +38,24 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Animasi Elemen Melayang di Background */
+        /* Animasi Elemen Melayang di Background (Diperbaiki agar tidak numpuk) */
         .floating-element {
             position: absolute;
-            font-size: 40px;
             opacity: 0.6;
             z-index: -1;
             user-select: none;
-            animation: floatBackground 12s linear infinite;
+            bottom: -100px;
+            animation: floatBackground linear infinite;
         }
 
         @keyframes floatBackground {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
             10% { opacity: 0.8; }
             90% { opacity: 0.8; }
-            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
 
+        /* Bubble Card Dinamis */
         #main-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
@@ -68,12 +69,23 @@
             position: relative;
             z-index: 10;
             margin: 20px;
+            transition: background 0.6s ease, box-shadow 0.6s ease; /* Transisi warna super smooth */
             animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         @keyframes popIn {
             0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Animasi saat pindah soal */
+        .fade-transition {
+            animation: slideFade 0.5s ease forwards;
+        }
+
+        @keyframes slideFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .koala-main {
@@ -126,7 +138,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Animasi saat waktu mau habis (merah & berdetak) */
         .timer-warning {
             animation: pulse-red 0.8s infinite !important;
             color: white !important;
@@ -156,7 +167,7 @@
         }
 
         .btn-option:hover:not(:disabled) {
-            transform: translateY(-4px);
+            transform: translateY(-4px) scale(1.02);
             background: var(--yellow);
             border-color: #ffd93d;
             box-shadow: 0 9px 0 #ffd93d;
@@ -184,19 +195,24 @@
             opacity: 0.8;
         }
 
-        .btn-start {
-            background: #ff6b9d;
+        /* Tombol Utama */
+        .btn-start, .btn-secondary {
             color: white;
             border: none;
-            padding: 18px 50px;
+            padding: 18px 30px;
             border-radius: 50px;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 8px 0 #d45d7d;
-            transition: 0.2s;
-            margin-top: 20px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 15px;
             width: 100%;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .btn-start {
+            background: #ff6b9d;
+            box-shadow: 0 8px 0 #d45d7d;
         }
 
         .btn-start:hover {
@@ -207,16 +223,32 @@
 
         .btn-start:active { transform: translateY(4px); box-shadow: 0 2px 0 #d45d7d; }
 
-        /* Rangkuman Section */
+        /* Tombol Sekunder (Untuk Kunci Jawaban) */
+        .btn-secondary {
+            background: #4d94ff;
+            box-shadow: 0 8px 0 #2b6bd4;
+        }
+
+        .btn-secondary:hover {
+            background: #3380ff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0 #2b6bd4;
+        }
+
+        .btn-secondary:active { transform: translateY(4px); box-shadow: 0 2px 0 #2b6bd4; }
+
+        /* Rangkuman Section (Awalnya tersembunyi) */
         .summary-container {
             text-align: left;
             margin-top: 25px;
             max-height: 250px;
             overflow-y: auto;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
-            border: 3px dashed var(--pink);
+            border: 3px dashed var(--highlight-pink);
+            display: none; /* Disembunyikan secara default */
+            animation: slideFade 0.4s ease;
         }
 
         .summary-item {
@@ -226,7 +258,7 @@
             font-size: 1rem;
         }
 
-        .summary-q { font-weight: 700; color: var(--highlight-blue); margin-bottom: 4px; }
+        .summary-q { font-weight: 700; color: var(--text); margin-bottom: 4px; }
         .summary-a { color: #2d6a4f; font-weight: 700; }
 
         .hidden { display: none !important; }
@@ -240,6 +272,14 @@
             font-size: 1.3rem;
             line-height: 1.5;
         }
+
+        /* Container Tombol Hasil */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -250,9 +290,9 @@
     <!-- WELCOME SCREEN -->
     <div id="welcome-screen">
         <div class="koala-main">🐨</div>
-        <h1>Halo Kak Azri! 💖</h1>
+        <h1>Halo Sayangg! 💖</h1>
         <p>Selamat Datang Peserta Ujian Kesayangan:<br>
-            <b style="font-size: 1.4rem;" class="hl-blue">Muhammad Fairuz Azri Irwanto</b>
+            <b style="font-size: 1.4rem;" class="hl-blue">Sayangg</b>
         </p>
         <p style="margin-top: 15px; font-size: 1.1rem;">
             Siap untuk tes ingatan tentang <span class="hl-pink">Ntu</span>, <span class="hl-blue">Mpui</span>, dan kawan-kawan?<br>
@@ -272,20 +312,24 @@
     <div id="result-screen" class="hidden">
         <div class="koala-main" id="result-emoji">🏆</div>
         <h1 id="result-title">Ujian Selesai! 🎉</h1>
-        <p id="final-score" style="font-size: 2.5rem; font-weight: 700; color: #ff85a2; text-shadow: 2px 2px 0px #ffe6ef; margin: 10px 0;"></p>
+        <p id="final-score" style="font-size: 2.8rem; font-weight: 700; color: #ff85a2; text-shadow: 2px 2px 0px #ffe6ef; margin: 10px 0;"></p>
         
         <!-- Pesan emosional -->
         <p id="closing-msg" style="font-size: 1.2rem; font-weight: 700; line-height: 1.5; padding: 0 10px;"></p>
         
-        <h3 style="margin-top: 25px; color: #7a5c5c; text-align: left; padding-left: 5px;">📖 Rangkuman Jawaban Benar:</h3>
-        <div id="summary" class="summary-container"></div>
+        <!-- Rangkuman Jawaban (Hidden Default) -->
+        <div id="summary" class="summary-container">
+            <h3 style="margin-top: 0; color: #ff4d85; text-align: center; margin-bottom: 15px;">📖 Rangkuman Jawaban Benar</h3>
+        </div>
         
-        <button class="btn-start" onclick="location.reload()">Ulangi Ujian 🔄</button>
+        <div class="action-buttons">
+            <button class="btn-start" onclick="location.reload()">Ulangi Ujian 🔄</button>
+            <button class="btn-secondary" id="btn-toggle-summary" onclick="toggleSummary()">Lihat Kunci Jawaban 📖</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // Memasukkan span class warna di dalam pertanyaan agar lebih WOW
     const questions = [
         { q: "Bagaimana saat <span class='hl-pink'>Ntu</span> menangis?", a: "Kedua tangannya menutup mata", options: ["Kedua tangannya menutup mata", "Menutup telinga", "Sembunyi di bantal", "Berteriak kencang"] },
         { q: "Bagaimana tekstur bulu <span class='hl-pink'>Ntu</span>?", a: "Tidak halus, tetapi tidak kasar juga", options: ["Sangat halus", "Tidak halus, tetapi tidak kasar juga", "Seperti handuk kasar", "Licin sekali"] },
@@ -300,6 +344,16 @@
         { q: "Sebenarnya, hewan apakah <span class='hl-pink'>Ntu</span> itu?", a: "Koala", options: ["Panda", "Koala", "Beruang", "Kelinci"] }
     ];
 
+    // Palet warna pastel dinamis untuk setiap soal
+    const bubbleColors = [
+        "rgba(255, 230, 240, 0.95)", // Soft Pink
+        "rgba(230, 245, 255, 0.95)", // Soft Blue
+        "rgba(255, 250, 225, 0.95)", // Soft Yellow
+        "rgba(235, 255, 240, 0.95)", // Soft Green
+        "rgba(245, 235, 255, 0.95)", // Soft Purple
+        "rgba(255, 240, 230, 0.95)"  // Soft Peach
+    ];
+
     let currentQuestionIndex = 0;
     let score = 0;
     const TOTAL_TIME = 20;
@@ -307,16 +361,24 @@
     let timerInterval;
     let canAnswer = true;
 
-    // Tambah elemen background melayang secara random
-    const emojis = ['🐨', '🦊', '🐹', '🌈', '💖', '✨', '☁️', '🎀'];
+    // Logika agar elemen melayang tidak menumpuk (Dibagi menjadi jalur/lane)
+    const emojis = ['🐨', '🦊', '🐹', '🌈', '💖', '✨', '☁️', '🎀', '🌸', '🧸'];
     const bgContainer = document.getElementById('bg-elements');
-    for (let i = 0; i < 20; i++) {
+    const totalLanes = 12; // Membagi layar jadi 12 jalur vertikal
+
+    for (let i = 0; i < totalLanes; i++) {
         let el = document.createElement('div');
         el.className = 'floating-element';
         el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-        el.style.left = Math.random() * 100 + 'vw';
-        el.style.animationDelay = Math.random() * 10 + 's';
-        el.style.fontSize = (Math.random() * 30 + 20) + 'px';
+        
+        // Posisi X diatur secara merata berdasarkan jalurnya
+        let randomOffsetX = Math.random() * 5; // Sedikit acak di dalam jalurnya
+        el.style.left = `calc(${(100 / totalLanes) * i}vw + ${randomOffsetX}vw)`;
+        
+        // Delay dan durasi dibuat acak agar tidak serentak naik
+        el.style.animationDelay = (Math.random() * 5) + 's';
+        el.style.animationDuration = (12 + Math.random() * 8) + 's'; 
+        el.style.fontSize = (Math.random() * 20 + 25) + 'px';
         bgContainer.appendChild(el);
     }
 
@@ -331,12 +393,23 @@
         clearInterval(timerInterval);
         timeLeft = TOTAL_TIME;
         
+        // Ganti warna bubble card secara dinamis berdasar index soal
+        const card = document.getElementById('main-card');
+        card.style.background = bubbleColors[currentQuestionIndex % bubbleColors.length];
+        card.style.boxShadow = `0 20px 50px ${bubbleColors[currentQuestionIndex % bubbleColors.length].replace('0.95', '0.4')}`;
+        
+        // Animasi transisi konten
+        const quizScreen = document.getElementById('quiz-screen');
+        quizScreen.classList.remove('fade-transition');
+        void quizScreen.offsetWidth; // trigger reflow
+        quizScreen.classList.add('fade-transition');
+
         const timerEl = document.getElementById('timer');
         timerEl.innerText = timeLeft;
-        timerEl.classList.remove('timer-warning'); // Hapus efek panik
+        timerEl.classList.remove('timer-warning');
         
         const q = questions[currentQuestionIndex];
-        document.getElementById('question-text').innerHTML = `Soal ${currentQuestionIndex + 1}:<br>${q.q}`;
+        document.getElementById('question-text').innerHTML = `<span style="font-size: 1rem; color: #ff85a2;">Soal ${currentQuestionIndex + 1} / ${questions.length}</span><br>${q.q}`;
         
         const optionsContainer = document.getElementById('options-container');
         optionsContainer.innerHTML = '';
@@ -353,7 +426,6 @@
             timeLeft--;
             timerEl.innerText = timeLeft;
             
-            // Efek WOW: Waktu mau habis (5 detik)
             if(timeLeft <= 5 && timeLeft > 0) {
                 timerEl.classList.add('timer-warning');
             }
@@ -374,7 +446,6 @@
         const correctAns = questions[currentQuestionIndex].a;
         const buttons = document.querySelectorAll('.btn-option');
 
-        // Disable semua tombol biar ga bisa diklik double
         buttons.forEach(btn => btn.disabled = true);
 
         if (selected === correctAns) {
@@ -382,7 +453,6 @@
             score++;
         } else {
             if(button) button.classList.add('wrong');
-            // Kasih tau mana jawaban yang bener
             buttons.forEach(btn => {
                 if(btn.innerText === correctAns) btn.classList.add('correct');
             });
@@ -400,29 +470,31 @@
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
         
+        // Kembalikan warna card ke warna putih pastel
+        document.getElementById('main-card').style.background = "rgba(255, 255, 255, 0.95)";
+        
         const emojiEl = document.getElementById('result-emoji');
         const titleEl = document.getElementById('result-title');
         const msgEl = document.getElementById('closing-msg');
         
-        // LOGIKA PERASAAN (Berdasarkan skor)
         if (score === questions.length) {
             emojiEl.innerText = "🏆💖";
             titleEl.innerText = "WOAAAH SEMPURNA! 🌟";
-            msgEl.innerHTML = "Yeayyy! 100%! 🥰<br><span style='color: var(--highlight-pink);'>Kak Azri emang Papa Boneka paling peka sedunia!</span> Ntu, Mpui, dan Heli bangga banget!! Seneng banget rasanya Kakak merhatiin detail anak-anak kita. Aku makin sayanggg! 💕✨";
+            msgEl.innerHTML = "Yeayyy! 100%! 🥰<br><span style='color: var(--highlight-pink);'>Sayangg emang Papa Boneka paling peka sedunia!</span> Ntu, Mpui, dan Heli bangga banget!! Seneng banget rasanya Sayangg merhatiin detail anak-anak kita. Aku makin sayanggg! 💕✨";
             msgEl.style.color = "#d45d7d";
         } else if (score > 5) {
             emojiEl.innerText = "🥰🧸";
-            titleEl.innerText = "Hebat Sayang! 🎉";
-            msgEl.innerHTML = "Yeyyy nilainya bagus! 🥰<br>Seneng banget rasanya Kak Azri merhatiin dan inget kita. Makasih ya sayang udah sayang sama Ntu, Mpui dkk! Luv youuu! 💖✨";
+            titleEl.innerText = "Hebat Sayangg! 🎉";
+            msgEl.innerHTML = "Yeyyy nilainya bagus! 🥰<br>Seneng banget rasanya Sayangg merhatiin dan inget kita. Makasih ya sayang udah sayang sama Ntu, Mpui dkk! Luv youuu! 💖✨";
             msgEl.style.color = "#2d6a4f";
         } else {
             emojiEl.innerText = "🥺💔";
             titleEl.innerText = "Yahhh... Sedih...";
-            msgEl.innerHTML = "Kak Azri banyak lupanya ya? 🥺💔<br><span style='color: var(--danger-red);'>Sedih deh Ntu sama Mpui...</span> Tapi gak apa-apa, habis ini dibaca rangkumannya dan dihafalin lagi ya sayang? Janji yaa? 🧸💕";
+            msgEl.innerHTML = "Sayangg banyak lupanya ya? 🥺💔<br><span style='color: var(--danger-red);'>Sedih deh Ntu sama Mpui...</span> Tapi gak apa-apa, habis ini dibaca kuncinya dan dihafalin lagi ya sayang? Janji yaa? 🧸💕";
             msgEl.style.color = "#a30000";
         }
 
-        // Tampilkan Rangkuman
+        // Siapkan Rangkuman tapi jangan ditampilkan dulu
         const summaryCont = document.getElementById('summary');
         questions.forEach((item, index) => {
             summaryCont.innerHTML += `
@@ -433,6 +505,24 @@
             `;
         });
     }
+
+    // Fungsi untuk menampilkan/menyembunyikan kunci jawaban
+    function toggleSummary() {
+        const summaryCont = document.getElementById('summary');
+        const btnToggle = document.getElementById('btn-toggle-summary');
+        
+        if (summaryCont.style.display === "none" || summaryCont.style.display === "") {
+            summaryCont.style.display = "block";
+            btnToggle.innerText = "Sembunyikan Kunci Jawaban 🙈";
+        } else {
+            summaryCont.style.display = "none";
+            btnToggle.innerText = "Lihat Kunci Jawaban 📖";
+        }
+    }
+</script>
+
+</body>
+</html>
 </script>
 
 </body>
