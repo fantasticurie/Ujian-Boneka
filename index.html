@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ujian Morfologi Boneka - Muhammad Fairuz Azri Irwanto</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Ujian Morfologi Boneka Aku - Kak Azri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Varela+Round&display=swap" rel="stylesheet">
     <style>
         :root {
-            --soft-pink: #ffdae9;
-            --soft-blue: #d4f1f9;
-            --soft-yellow: #fcf4dd;
-            --soft-green: #e1f8dc;
-            --soft-purple: #ede7f6;
-            --text-color: #5d5d5d;
+            --pink: #ffcce5;
+            --blue: #cce5ff;
+            --yellow: #ffffcc;
+            --green: #ccffcc;
+            --purple: #e5ccff;
+            --text: #7a5c5c;
         }
 
         body {
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(45deg, var(--soft-pink), var(--soft-blue), var(--soft-yellow), var(--soft-green));
+            background: linear-gradient(-45deg, #ffcce5, #cce5ff, #ffffcc, #ccffcc);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             display: flex;
@@ -25,7 +25,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            color: var(--text-color);
+            overflow-x: hidden;
         }
 
         @keyframes gradientBG {
@@ -34,108 +34,150 @@
             100% { background-position: 0% 50%; }
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        #main-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
             width: 90%;
             max-width: 500px;
             text-align: center;
-            border: 5px solid white;
+            border: 8px solid white;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
         }
 
-        h1 { color: #ff85a1; font-weight: 700; }
-        p { font-weight: 600; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
-        .btn {
-            background-color: white;
-            border: 2px solid #ffdae9;
-            padding: 12px 20px;
+        .koala-img {
+            width: 180px;
+            height: 180px;
+            background: var(--blue);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            border: 5px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        h1 { font-family: 'Varela Round', sans-serif; color: #ff85a2; font-size: 1.8rem; margin-bottom: 10px; }
+        p { color: var(--text); line-height: 1.6; }
+
+        .timer-container {
+            width: 100px;
+            height: 100px;
+            margin: -80px auto 20px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff85a2;
+            border: 5px solid var(--pink);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-option {
+            background: white;
+            border: 3px solid var(--blue);
+            padding: 15px 25px;
             margin: 10px 0;
-            border-radius: 15px;
+            border-radius: 20px;
             cursor: pointer;
             width: 100%;
             font-size: 1rem;
             font-family: 'Quicksand', sans-serif;
             font-weight: 700;
-            transition: all 0.3s;
-            color: #5d5d5d;
+            color: var(--text);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: block;
         }
 
-        .btn:hover { background-color: var(--soft-blue); transform: scale(1.02); }
-        
-        .correct { background-color: #a8e6cf !important; border-color: #81c784 !important; }
-        .wrong { background-color: #ff8b94 !important; border-color: #e57373 !important; }
+        .btn-option:hover {
+            transform: scale(1.03);
+            background: var(--yellow);
+            border-color: #ffd93d;
+        }
 
-        #timer-container {
+        .correct { background: #b8f2e6 !important; border-color: #8cecd9 !important; color: #2d6a4f !important; }
+        .wrong { background: #ffdada !important; border-color: #ffbaba !important; color: #a30000 !important; }
+
+        .btn-start {
+            background: #ff85a2;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
             font-size: 1.2rem;
             font-weight: bold;
-            color: #ff85a1;
-            margin-bottom: 10px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 133, 162, 0.3);
+            transition: 0.3s;
+            margin-top: 20px;
         }
 
-        .koala-icon { font-size: 80px; margin-bottom: 10px; }
+        .btn-start:hover { transform: translateY(3px); box-shadow: none; }
+
         .hidden { display: none; }
-        
-        .progress-bar {
-            height: 12px;
-            background: #eee;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        #progress { height: 100%; width: 0%; background: #ff85a1; transition: 0.5s; }
-
-        #feedback { font-weight: bold; margin-top: 10px; min-height: 24px; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<div class="container" id="main-container">
+<div id="main-card">
     <div id="welcome-screen">
-        <div class="koala-icon">🐨</div>
-        <h1>Halo, Kak Azri! 💖</h1>
-        <p>Selamat Datang Peserta Ujian: <br><strong>Muhammad Fairuz Azri Irwanto</strong></p>
-        <p>Siap untuk tes kasih sayang dan ingatan tentang <b>boneka aku</b>?</p>
-        <button class="btn" onclick="startQuiz()">Mulai Ujian ✨</button>
+        <div class="koala-img">🐨</div>
+        <h1>Halo Kak Azri! 💖</h1>
+        <p>Selamat Datang Peserta Ujian: <b>Muhammad Fairuz Azri Irwanto</b>.<br>
+        Udah siap buat tes kasih sayang dan ingatan tentang boneka-boneka aku belum?</p>
+        <button class="btn-start" onclick="startQuiz()">Mulai Ujian ✨</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div id="timer-container">Sisa Waktu: <span id="time-left">20</span>s</div>
-        <div class="progress-bar"><div id="progress"></div></div>
-        <h3 id="question-text">Memuat pertanyaan...</h3>
+        <div id="timer" class="timer-container">20</div>
+        <h2 id="question-text" style="color: #7a5c5c; margin-bottom: 25px;">Pertanyaan</h2>
         <div id="options-container"></div>
-        <div id="feedback"></div>
     </div>
 
     <div id="result-screen" class="hidden">
-        <div class="koala-icon">🎉</div>
-        <h1>Ujian Selesai!</h1>
-        <p id="final-score"></p>
-        <p id="final-msg">Makasih sudah sayang sama Ntu, Mpui, dkk! 🎀</p>
-        <button class="btn" onclick="location.reload()">Ulangi Ujian</button>
+        <div class="koala-img">🏆</div>
+        <h1>Selesai! ✨</h1>
+        <p id="final-score" style="font-size: 1.5rem; font-weight: bold;"></p>
+        <p id="closing-msg"></p>
+        <button class="btn-start" onclick="location.reload()">Coba Lagi 🔄</button>
     </div>
 </div>
 
 <script>
     const questions = [
-        { q: "Bagaimana saat Ntu menangis?", a: ["kedua tangannya menutup mata", "Menutup telinga", "Sembunyi di bantal", "Berteriak kencang"], correct: 0 },
-        { q: "Bagaimana tekstur bulu Ntu?", a: ["Sangat halus", "tidak halus, tetapi tidak kasar juga", "Seperti handuk kasar", "Licin sekali"], correct: 1 },
-        { q: "Ntu punya pita warna apa?", a: ["Merah dan hijau", "Pink dan putih", "biru dan kuning", "Hitam dan ungu"], correct: 2 },
+        { q: "Bagaimana saat Ntu menangis?", a: ["Kedua tangannya menutup mata", "Menutup telinga", "Sembunyi di bantal", "Berteriak kencang"], correct: 0 },
+        { q: "Bagaimana tekstur bulu Ntu?", a: ["Sangat halus", "Tidak halus, tetapi tidak kasar juga", "Seperti handuk kasar", "Licin sekali"], correct: 1 },
+        { q: "Ntu punya pita warna apa?", a: ["Merah dan hijau", "Pink dan putih", "Biru dan kuning", "Hitam dan ungu"], correct: 2 },
         { q: "Nama boneka rubah?", a: ["foxy", "mochi", "mpui", "lulu"], correct: 2 },
-        { q: "Bagaimana tekstur bulu Mpui?", a: ["Halus dan lembut", "Kasar", "Tipis", "Agak lengket"], correct: 0 },
-        { q: "Ici kalo marah namanya jadi siapa?", a: ["ica", "ici-ici", "cungir", "icung"], correct: 3 },
-        { q: "Boneka capibara namanya siapa?", a: ["capy", "bara", "heli", "gembul"], correct: 2 },
+        { q: "Bagaimana tekstur bulu Mpui?", a: ["Kasar", "Tipis", "Agak lengket", "Halus dan lembut"], correct: 3 },
+        { q: "Ici kalo marah namanya jadi siapa?", a: ["icung", "ica", "ici-ici", "cungir"], correct: 0 },
+        { q: "Boneka capibara namanya siapa?", a: ["capy", "bara", "gembul", "heli"], correct: 3 },
         { q: "Mpui diberi nama pada tahun berapa?", a: ["2022", "2023", "2024", "2025"], correct: 2 },
-        { q: "Mpui diberi nama dimana?", a: ["di taman", "di lampu merah", "di mall", "di toko buku"], correct: 1 },
-        { q: "Tahun berapa Heli ditemukan?", a: ["2023", "2024", "2025", "2026"], correct: 3 }
+        { q: "Mpui diberi nama dimana?", a: ["di taman", "di mall", "di lampu merah", "di toko buku"], correct: 2 },
+        { q: "Tahun berapa Heli ditemukan?", a: ["2023", "2024", "2025", "2026"], correct: 3 },
+        { q: "Hewan apa Ntu itu?", a: ["Panda", "Koala", "Beruang", "Kelinci"], correct: 1 }
     ];
 
-    let currentIdx = 0;
+    let currentQuestionIndex = 0;
     let score = 0;
-    let timer;
     let timeLeft = 20;
+    let timerInterval;
+    let canAnswer = true;
 
     function startQuiz() {
         document.getElementById('welcome-screen').classList.add('hidden');
@@ -144,72 +186,83 @@
     }
 
     function showQuestion() {
-        if (currentIdx >= questions.length) {
-            return showResult();
-        }
-
-        clearInterval(timer);
+        canAnswer = true;
+        clearInterval(timerInterval);
         timeLeft = 20;
-        updateTimerDisplay();
-        document.getElementById('feedback').innerText = "";
+        document.getElementById('timer').innerText = timeLeft;
+        document.getElementById('timer').style.borderColor = "#cce5ff";
 
-        const qData = questions[currentIdx];
-        document.getElementById('question-text').innerText = qData.q;
-        document.getElementById('progress').style.width = ((currentIdx / questions.length) * 100) + "%";
+        const q = questions[currentQuestionIndex];
+        document.getElementById('question-text').innerText = q.q;
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
 
-        const container = document.getElementById('options-container');
-        container.innerHTML = "";
-
-        qData.a.forEach((opt, idx) => {
-            const btn = document.createElement('button');
-            btn.className = 'btn';
-            btn.innerText = opt;
-            btn.onclick = () => selectAnswer(idx, btn);
-            container.appendChild(btn);
+        q.a.forEach((opt, index) => {
+            const button = document.createElement('button');
+            button.innerText = opt;
+            button.classList.add('btn-option', 'fade-in');
+            button.onclick = () => checkAnswer(index, button);
+            optionsContainer.appendChild(button);
         });
 
-        timer = setInterval(() => {
+        timerInterval = setInterval(() => {
             timeLeft--;
-            updateTimerDisplay();
+            document.getElementById('timer').innerText = timeLeft;
+            if(timeLeft <= 5) document.getElementById('timer').style.borderColor = "#ff85a2";
             if (timeLeft <= 0) {
-                clearInterval(timer);
-                selectAnswer(-1, null); // Time out
+                clearInterval(timerInterval);
+                autoWrong();
             }
         }, 1000);
     }
 
-    function updateTimerDisplay() {
-        document.getElementById('time-left').innerText = timeLeft;
-    }
+    function checkAnswer(selectedIndex, button) {
+        if(!canAnswer) return;
+        canAnswer = false;
+        clearInterval(timerInterval);
 
-    function selectAnswer(idx, btn) {
-        clearInterval(timer);
-        const qData = questions[currentIdx];
-        const correctIdx = qData.correct;
-        const btns = document.querySelectorAll('#options-container .btn');
-        
-        btns.forEach(b => b.disabled = true);
+        const correctIndex = questions[currentQuestionIndex].correct;
+        const allButtons = document.querySelectorAll('.btn-option');
 
-        if (idx === correctIdx) {
-            btn.classList.add('correct');
-            document.getElementById('feedback').innerText = "Pinter banget! Betul! ✨";
+        if (selectedIndex === correctIndex) {
+            button.classList.add('correct');
             score++;
         } else {
-            if (btn) btn.classList.add('wrong');
-            btns[correctIdx].classList.add('correct');
-            document.getElementById('feedback').innerText = "Yah, salah! Jawaban benar: " + qData.a[correctIdx];
+            button.classList.add('wrong');
+            allButtons[correctIndex].classList.add('correct');
         }
 
-        setTimeout(() => {
-            currentIdx++;
+        setTimeout(nextQuestion, 1500);
+    }
+
+    function autoWrong() {
+        canAnswer = false;
+        const correctIndex = questions[currentQuestionIndex].correct;
+        const allButtons = document.querySelectorAll('.btn-option');
+        allButtons[correctIndex].classList.add('correct');
+        setTimeout(nextQuestion, 1500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
             showQuestion();
-        }, 2500);
+        } else {
+            showResult();
+        }
     }
 
     function showResult() {
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-        document.getElementById('final-score').innerText = "Skor Kamu: " + score + " / " + questions.length;
+        document.getElementById('final-score').innerText = `Skor: ${score} / ${questions.length}`;
+        
+        let msg = "";
+        if(score === questions.length) msg = "Wih! Kamu emang pacar terbaik, hafal semua! 😍";
+        else if(score > 5) msg = "Lumayan lah ya, tapi harus lebih sayang lagi sama mereka! 😜";
+        else msg = "Wah parah, besok belajar lagi ya! 😤";
+        
+        document.getElementById('closing-msg').innerHTML = `${msg}<br><br>Makasih sudah perhatian sama Ntu, Mpui, Ici, dan Heli! Semangat ujiannya besok, Sayang! 💖`;
     }
 </script>
 
