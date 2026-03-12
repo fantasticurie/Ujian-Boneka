@@ -3,480 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ujian Morfologi Boneka 🧸✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <title>Ujian Morfologi Boneka - Muhammad Fairuz Azri Irwanto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fdfbf7; /* Krem soft */
-            --primary-pink: #ffd1dc; /* Baby pink */
-            --primary-blue: #b5e2ff; /* Soft blue */
-            --text-color: #5c4b51; /* Coklat keabuan yang soft untuk teks */
-            --correct-color: #a8e6cf; /* Pastel green */
-            --wrong-color: #ffb3ba; /* Pastel red */
-            --card-bg: rgba(255, 255, 255, 0.9);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Quicksand', sans-serif;
+            --soft-pink: #ffdae9;
+            --soft-blue: #d4f1f9;
+            --soft-yellow: #fcf4dd;
+            --soft-green: #e1f8dc;
+            --soft-purple: #ede7f6;
+            --text-color: #5d5d5d;
         }
 
         body {
-            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue) 100%);
-            min-height: 100vh;
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(45deg, var(--soft-pink), var(--soft-blue), var(--soft-yellow), var(--soft-green));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            margin: 0;
             color: var(--text-color);
-            overflow: hidden; /* Mencegah scroll karena ornamen melayang */
-            position: relative;
         }
 
-        /* Ornamen Background Melayang */
-        .bg-ornament {
-            position: absolute;
-            z-index: 0;
-            opacity: 0.6;
-            animation: float 6s ease-in-out infinite;
-        }
-        .bg-ornament:nth-child(1) { top: 10%; left: 10%; font-size: 3rem; animation-delay: 0s; }
-        .bg-ornament:nth-child(2) { bottom: 15%; right: 10%; font-size: 4rem; animation-delay: 1.5s; }
-        .bg-ornament:nth-child(3) { top: 20%; right: 15%; font-size: 2.5rem; animation-delay: 3s; }
-        .bg-ornament:nth-child(4) { bottom: 20%; left: 15%; font-size: 3.5rem; animation-delay: 4.5s; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* Container Utama */
-        .app-container {
-            background: var(--card-bg);
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             width: 90%;
             max-width: 500px;
-            padding: 40px 30px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border: 3px solid #ffffff;
-            position: relative;
-            z-index: 1;
             text-align: center;
+            border: 5px solid white;
         }
 
-        /* Pengaturan Layar */
-        .screen {
-            display: none;
-            animation: fadeIn 0.5s ease-out;
-        }
-        .screen.active {
-            display: block;
-        }
+        h1 { color: #ff85a1; font-weight: 700; }
+        p { font-weight: 600; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Tipografi */
-        h1 {
-            color: #ff8eaa;
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-        h2 {
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-        p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-
-        /* Tombol Utama */
-        .btn-main {
-            background-color: #ff9aae;
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 700;
-            box-shadow: 0 8px 20px rgba(255, 154, 174, 0.4);
-            transition: all 0.3s ease;
-        }
-        .btn-main:hover {
-            background-color: #ff7d96;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 154, 174, 0.5);
-        }
-
-        /* Header Kuis (Timer & Info Soal) */
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            font-weight: 700;
-            color: #8bbce0;
-        }
-
-        /* Timer Bar */
-        .timer-container {
-            width: 100%;
-            height: 12px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-        .timer-bar {
-            height: 100%;
-            background-color: #ff9aae;
-            width: 100%;
-            transition: width 1s linear, background-color 0.3s ease;
-        }
-
-        /* Opsi Jawaban */
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .option-btn {
-            background-color: var(--bg-color);
-            border: 2px solid #e8e8e8;
-            color: var(--text-color);
-            padding: 15px 20px;
-            font-size: 1rem;
+        .btn {
+            background-color: white;
+            border: 2px solid #ffdae9;
+            padding: 12px 20px;
+            margin: 10px 0;
             border-radius: 15px;
             cursor: pointer;
-            text-align: left;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-        .option-btn:hover:not(:disabled) {
-            background-color: var(--primary-pink);
-            border-color: var(--primary-pink);
-            transform: scale(1.02);
-        }
-        .option-btn:disabled {
-            cursor: not-allowed;
-        }
-        
-        /* Status Jawaban */
-        .option-btn.correct {
-            background-color: var(--correct-color);
-            border-color: var(--correct-color);
-            color: #2d6a4f;
-        }
-        .option-btn.wrong {
-            background-color: var(--wrong-color);
-            border-color: var(--wrong-color);
-            color: #7a1b24;
+            width: 100%;
+            font-size: 1rem;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s;
+            color: #5d5d5d;
         }
 
-        /* Skor Akhir */
-        .score-box {
-            font-size: 4rem;
-            font-weight: 700;
-            color: #ff9aae;
-            margin: 20px 0;
-        }
-        .final-msg {
+        .btn:hover { background-color: var(--soft-blue); transform: scale(1.02); }
+        
+        .correct { background-color: #a8e6cf !important; border-color: #81c784 !important; }
+        .wrong { background-color: #ff8b94 !important; border-color: #e57373 !important; }
+
+        #timer-container {
             font-size: 1.2rem;
-            color: #8bbce0;
-            font-weight: 700;
-            margin-bottom: 30px;
+            font-weight: bold;
+            color: #ff85a1;
+            margin-bottom: 10px;
         }
-        .cute-img {
-            width: 120px;
-            margin-bottom: 15px;
-            border-radius: 20px;
+
+        .koala-icon { font-size: 80px; margin-bottom: 10px; }
+        .hidden { display: none; }
+        
+        .progress-bar {
+            height: 12px;
+            background: #eee;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
+        #progress { height: 100%; width: 0%; background: #ff85a1; transition: 0.5s; }
+
+        #feedback { font-weight: bold; margin-top: 10px; min-height: 24px; }
     </style>
 </head>
 <body>
 
-    <!-- Ornamen Background -->
-    <div class="bg-ornament">🎀</div>
-    <div class="bg-ornament">🦊</div>
-    <div class="bg-ornament">💖</div>
-    <div class="bg-ornament">🦦</div>
-
-    <div class="app-container">
-        
-        <!-- Layar 1: Welcome Screen -->
-        <div id="welcome-screen" class="screen active">
-            <img src="https://media.tenor.com/T0W-z278qO8AAAAi/milk-and-mocha-bear.gif" alt="Cute Bears" class="cute-img">
-            <h1>Ujian Morfologi Boneka 🌸</h1>
-            <p>
-                Selamat Datang Peserta Ujian:<br>
-                <strong>Muhammad Fairuz Azri Irwanto</strong>.<br><br>
-                Siap untuk tes kasih sayang dan ingatan tentang boneka kita? 💕
-            </p>
-            <button class="btn-main" onclick="startQuiz()">Mulai Ujian ✨</button>
-        </div>
-
-        <!-- Layar 2: Quiz Screen -->
-        <div id="quiz-screen" class="screen">
-            <div class="quiz-header">
-                <span id="question-tracker">Soal 1 / 10</span>
-                <span id="time-tracker">⏳ 10s</span>
-            </div>
-            <div class="timer-container">
-                <div id="timer-bar" class="timer-bar"></div>
-            </div>
-            <h2 id="question-text">Pertanyaan akan muncul di sini...</h2>
-            <div class="options-container" id="options-container">
-                <!-- Tombol opsi di-generate oleh JS -->
-            </div>
-        </div>
-
-        <!-- Layar 3: Result Screen -->
-        <div id="result-screen" class="screen">
-            <img src="https://media.tenor.com/0z-m7mI9b_UAAAAi/cute-love.gif" alt="Hugs" class="cute-img">
-            <h1>Ujian Selesai! 🎉</h1>
-            <p style="margin-bottom: 0;">Skor Kasih Sayang kamu:</p>
-            <div class="score-box" id="score-text">0/10</div>
-            <div class="final-msg" id="final-message">Makasih sudah sayang sama Ntu, Mpui, dkk! 🥰</div>
-            <button class="btn-main" onclick="location.reload()">Ulangi Ujian 🔄</button>
-        </div>
-
+<div class="container" id="main-container">
+    <div id="welcome-screen">
+        <div class="koala-icon">🐨</div>
+        <h1>Halo, Kak Azri! 💖</h1>
+        <p>Selamat Datang Peserta Ujian: <br><strong>Muhammad Fairuz Azri Irwanto</strong></p>
+        <p>Siap untuk tes kasih sayang dan ingatan tentang <b>boneka aku</b>?</p>
+        <button class="btn" onclick="startQuiz()">Mulai Ujian ✨</button>
     </div>
 
-    <script>
-        // Data Soal dari Prompt (Total 10 Soal)
-        const rawQuestions = [
-            {
-                q: "Bagaimana saat Ntu menangis?",
-                correct: "kedua tangannya menutup mata",
-                wrong: ["Menutup telinga", "Sembunyi di bantal", "Berteriak kencang"]
-            },
-            {
-                q: "Bagaimana tekstur bulu Ntu?",
-                correct: "tidak halus, tetapi tidak kasar juga",
-                wrong: ["Sangat halus", "Seperti handuk kasar", "Licin sekali"]
-            },
-            {
-                q: "Ntu punya pita warna apa?",
-                correct: "biru dan kuning",
-                wrong: ["Merah dan hijau", "Pink dan putih", "Hitam dan ungu"]
-            },
-            {
-                q: "Nama boneka rubah?",
-                correct: "mpui",
-                wrong: ["foxy", "mochi", "lulu"]
-            },
-            {
-                q: "Bagaimana tekstur bulu Mpui?",
-                correct: "Halus dan lembut",
-                wrong: ["Kasar", "Tipis", "Agak lengket"]
-            },
-            {
-                q: "Ici kalo marah namanya jadi siapa?",
-                correct: "icung",
-                wrong: ["ica", "ici-ici", "cungir"]
-            },
-            {
-                q: "Boneka capibara namanya siapa?",
-                correct: "heli",
-                wrong: ["capy", "bara", "gembul"]
-            },
-            {
-                q: "Mpui diberi nama pada tahun berapa?",
-                correct: "2024",
-                wrong: ["2022", "2023", "2025"]
-            },
-            {
-                q: "Mpui diberi nama dimana?",
-                correct: "di lampu merah",
-                wrong: ["di taman", "di mall", "di toko buku"]
-            },
-            {
-                q: "Tahun berapa Heli ditemukan?",
-                correct: "2026",
-                wrong: ["2023", "2024", "2025"]
-            }
-        ];
+    <div id="quiz-screen" class="hidden">
+        <div id="timer-container">Sisa Waktu: <span id="time-left">20</span>s</div>
+        <div class="progress-bar"><div id="progress"></div></div>
+        <h3 id="question-text">Memuat pertanyaan...</h3>
+        <div id="options-container"></div>
+        <div id="feedback"></div>
+    </div>
 
-        // Format Soal (Menggabungkan jawaban benar & salah, lalu mengacak posisinya)
-        let questions = rawQuestions.map(item => {
-            let options = [...item.wrong, item.correct];
-            // Algoritma pengacak opsi (Fisher-Yates Shuffle)
-            for (let i = options.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [options[i], options[j]] = [options[j], options[i]];
-            }
-            return {
-                question: item.q,
-                options: options,
-                answer: item.correct
-            };
+    <div id="result-screen" class="hidden">
+        <div class="koala-icon">🎉</div>
+        <h1>Ujian Selesai!</h1>
+        <p id="final-score"></p>
+        <p id="final-msg">Makasih sudah sayang sama Ntu, Mpui, dkk! 🎀</p>
+        <button class="btn" onclick="location.reload()">Ulangi Ujian</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "Bagaimana saat Ntu menangis?", a: ["kedua tangannya menutup mata", "Menutup telinga", "Sembunyi di bantal", "Berteriak kencang"], correct: 0 },
+        { q: "Bagaimana tekstur bulu Ntu?", a: ["Sangat halus", "tidak halus, tetapi tidak kasar juga", "Seperti handuk kasar", "Licin sekali"], correct: 1 },
+        { q: "Ntu punya pita warna apa?", a: ["Merah dan hijau", "Pink dan putih", "biru dan kuning", "Hitam dan ungu"], correct: 2 },
+        { q: "Nama boneka rubah?", a: ["foxy", "mochi", "mpui", "lulu"], correct: 2 },
+        { q: "Bagaimana tekstur bulu Mpui?", a: ["Halus dan lembut", "Kasar", "Tipis", "Agak lengket"], correct: 0 },
+        { q: "Ici kalo marah namanya jadi siapa?", a: ["ica", "ici-ici", "cungir", "icung"], correct: 3 },
+        { q: "Boneka capibara namanya siapa?", a: ["capy", "bara", "heli", "gembul"], correct: 2 },
+        { q: "Mpui diberi nama pada tahun berapa?", a: ["2022", "2023", "2024", "2025"], correct: 2 },
+        { q: "Mpui diberi nama dimana?", a: ["di taman", "di lampu merah", "di mall", "di toko buku"], correct: 1 },
+        { q: "Tahun berapa Heli ditemukan?", a: ["2023", "2024", "2025", "2026"], correct: 3 }
+    ];
+
+    let currentIdx = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 20;
+
+    function startQuiz() {
+        document.getElementById('welcome-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        if (currentIdx >= questions.length) {
+            return showResult();
+        }
+
+        clearInterval(timer);
+        timeLeft = 20;
+        updateTimerDisplay();
+        document.getElementById('feedback').innerText = "";
+
+        const qData = questions[currentIdx];
+        document.getElementById('question-text').innerText = qData.q;
+        document.getElementById('progress').style.width = ((currentIdx / questions.length) * 100) + "%";
+
+        const container = document.getElementById('options-container');
+        container.innerHTML = "";
+
+        qData.a.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.innerText = opt;
+            btn.onclick = () => selectAnswer(idx, btn);
+            container.appendChild(btn);
         });
 
-        // Variabel Status Ujian
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let timeLeft = 10;
-        let timerInterval;
-        let isAnswered = false;
+        timer = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                selectAnswer(-1, null); // Time out
+            }
+        }, 1000);
+    }
 
-        // Elemen DOM
-        const screenWelcome = document.getElementById('welcome-screen');
-        const screenQuiz = document.getElementById('quiz-screen');
-        const screenResult = document.getElementById('result-screen');
+    function updateTimerDisplay() {
+        document.getElementById('time-left').innerText = timeLeft;
+    }
+
+    function selectAnswer(idx, btn) {
+        clearInterval(timer);
+        const qData = questions[currentIdx];
+        const correctIdx = qData.correct;
+        const btns = document.querySelectorAll('#options-container .btn');
         
-        const questionText = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const timerBar = document.getElementById('timer-bar');
-        const timeTracker = document.getElementById('time-tracker');
-        const questionTracker = document.getElementById('question-tracker');
+        btns.forEach(b => b.disabled = true);
 
-        function startQuiz() {
-            screenWelcome.classList.remove('active');
-            screenQuiz.classList.add('active');
-            loadQuestion();
+        if (idx === correctIdx) {
+            btn.classList.add('correct');
+            document.getElementById('feedback').innerText = "Pinter banget! Betul! ✨";
+            score++;
+        } else {
+            if (btn) btn.classList.add('wrong');
+            btns[correctIdx].classList.add('correct');
+            document.getElementById('feedback').innerText = "Yah, salah! Jawaban benar: " + qData.a[correctIdx];
         }
 
-        function loadQuestion() {
-            // Reset status tiap soal
-            isAnswered = false;
-            clearInterval(timerInterval);
-            timeLeft = 10;
-            updateTimerUI();
+        setTimeout(() => {
+            currentIdx++;
+            showQuestion();
+        }, 2500);
+    }
 
-            const currentQ = questions[currentQuestionIndex];
-            
-            // Update teks soal dan indikator nomor
-            questionTracker.innerText = `Soal ${currentQuestionIndex + 1} / ${questions.length}`;
-            questionText.innerText = currentQ.question;
-            
-            // Bersihkan opsi sebelumnya
-            optionsContainer.innerHTML = '';
-            
-            // Render tombol opsi baru
-            currentQ.options.forEach((opt) => {
-                const btn = document.createElement('button');
-                btn.classList.add('option-btn');
-                btn.innerText = opt;
-                btn.onclick = () => handleAnswer(btn, opt, currentQ.answer);
-                optionsContainer.appendChild(btn);
-            });
+    function showResult() {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('final-score').innerText = "Skor Kamu: " + score + " / " + questions.length;
+    }
+</script>
 
-            // Mulai penghitung waktu
-            startTimer();
-        }
-
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimerUI();
-
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    handleTimeOut();
-                }
-            }, 1000);
-        }
-
-        function updateTimerUI() {
-            timeTracker.innerText = `⏳ ${timeLeft}s`;
-            const percentage = (timeLeft / 10) * 100;
-            timerBar.style.width = `${percentage}%`;
-            
-            // Ubah warna timer jadi merah jika sisa waktu <= 3 detik
-            if (timeLeft <= 3) {
-                timerBar.style.backgroundColor = 'var(--wrong-color)';
-                timeTracker.style.color = '#e77c86';
-            } else {
-                timerBar.style.backgroundColor = '#ff9aae';
-                timeTracker.style.color = '#8bbce0';
-            }
-        }
-
-        function handleAnswer(selectedBtn, selectedOpt, correctOpt) {
-            if (isAnswered) return; // Mencegah klik berkali-kali
-            isAnswered = true;
-            clearInterval(timerInterval);
-
-            const buttons = optionsContainer.querySelectorAll('.option-btn');
-            
-            // Kunci semua tombol agar tidak bisa diklik lagi
-            buttons.forEach(btn => btn.disabled = true);
-
-            // Cek benar atau salah
-            if (selectedOpt === correctOpt) {
-                selectedBtn.classList.add('correct');
-                score++;
-            } else {
-                selectedBtn.classList.add('wrong');
-                // Beritahu jawaban yang benar dengan menyalakannya menjadi hijau
-                buttons.forEach(btn => {
-                    if (btn.innerText === correctOpt) {
-                        btn.classList.add('correct');
-                    }
-                });
-            }
-
-            // Lanjut ke soal berikutnya setelah jeda 2 detik
-            setTimeout(nextQuestion, 2000);
-        }
-
-        function handleTimeOut() {
-            if (isAnswered) return;
-            isAnswered = true;
-            
-            const currentQ = questions[currentQuestionIndex];
-            const buttons = optionsContainer.querySelectorAll('.option-btn');
-            
-            // Kunci semua tombol dan tunjukkan mana yang benar
-            buttons.forEach(btn => {
-                btn.disabled = true;
-                if (btn.innerText === currentQ.answer) {
-                    btn.classList.add('correct'); // Jawaban benar menyala hijau
-                } else {
-                    btn.classList.add('wrong'); // Sisanya jadi merah (karena waktu habis = salah)
-                }
-            });
-
-            setTimeout(nextQuestion, 2000);
-        }
-
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                loadQuestion();
-            } else {
-                showResult();
-            }
-        }
-
-        function showResult() {
-            screenQuiz.classList.remove('active');
-            screenResult.classList.add('active');
-            
-            // Tampilkan Skor
-            document.getElementById('score-text').innerText = `${score} / 10`;
-            
-            // Tampilkan Pesan Penutup yang Lucu
-            const finalMsg = document.getElementById('final-message');
-            if(score === 10) {
-                finalMsg.innerText = "Wowww! 100% Benar! Pintar banget sih pacarku! Makasih sudah sayang sama Ntu, Mpui, dkk! 🥰💖";
-            } else if(score >= 7) {
-                finalMsg.innerText = "Yayy hebat! Ingatanmu bagus! Makasih sudah sayang sama Ntu, Mpui, dkk! 🥰🎀";
-            } else if(score >= 4) {
-                finalMsg.innerText = "Lumayan lah yaa, tapi ayo hafalin lagi biar nggak lupa! Tapi tetep sayang kok! 🥺🧸";
-            } else {
-                finalMsg.innerText = "Waduh... banyak lupanya nih! Harus dihukum cium Ntu dan Mpui! 😤💕";
-            }
-        }
-    </script>
 </body>
 </html>
