@@ -2,647 +2,777 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ujian Morfologi Boneka Aku - Sayangg</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Planner 2026 | Future Engineer</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ========================================== -->
+    <!-- BLOK CSS: STYLING, ANIMASI & GLASSMORPHISM -->
+    <!-- ========================================== -->
     <style>
         :root {
-            --text-dark: #5d4037;
-            --highlight-pink: #ff4d85;
-            --highlight-blue: #4d94ff;
-            --danger-red: #ff4d4d;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            --pastel-yellow: #fff9d2;
+            --soft-pink: #ffd1dc;
+            --rose-gold: #f4aeb8;
+            --white-glass: rgba(255, 255, 255, 0.75);
+            --text-dark: #4a4a4a;
+            --warning-red: #ff7675;
+            --warning-bg: #ffeaa7;
         }
 
         body {
-            font-family: 'Fredoka', sans-serif;
-            /* Transisi Background Warna Warni: Pink -> Kuning -> Biru -> Ungu -> Hijau */
-            background: linear-gradient(-45deg, #ffcce5, #ffffcc, #cce5ff, #e5ccff, #b8f2e6);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            /* Gradient background Kuning - Putih - Pink Soft */
+            background: linear-gradient(135deg, var(--pastel-yellow) 0%, #ffffff 50%, var(--soft-pink) 100%);
+            background-attachment: fixed;
+            color: var(--text-dark);
             min-height: 100vh;
-            overflow: hidden; /* Mencegah scrollbar bocor dari animasi background */
-            position: relative;
-            padding: 15px;
-            color: var(--text-dark);
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Container Animasi Elemen Melayang */
-        #bg-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Animasi Elemen Melayang Diperbesar */
-        .floating-element {
-            position: absolute;
-            opacity: 0;
-            z-index: 0;
-            user-select: none;
-            bottom: -150px;
-            animation: floatBackground linear infinite;
-            filter: drop-shadow(0 5px 15px rgba(255, 255, 255, 0.5));
-        }
-
-        @keyframes floatBackground {
-            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
-            10% { opacity: 0.85; }
-            90% { opacity: 0.85; }
-            100% { transform: translateY(-120vh) rotate(360deg) scale(1.2); opacity: 0; }
-        }
-
-        /* Bubble Card Dinamis & Responsif */
-        #main-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-            border-radius: 40px;
-            padding: 40px 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 550px;
-            max-height: 90vh; /* Memastikan tidak jebol di HP */
-            overflow-y: auto; /* Bisa discroll ke bawah jika konten panjang */
             overflow-x: hidden;
-            text-align: center;
-            border: 6px solid rgba(255, 255, 255, 0.8);
             position: relative;
-            z-index: 10;
-            transition: background 0.8s ease, box-shadow 0.8s ease;
-            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Scrollbar Aesthetic untuk Main Card */
-        #main-card::-webkit-scrollbar { width: 8px; }
-        #main-card::-webkit-scrollbar-track { background: transparent; }
-        #main-card::-webkit-scrollbar-thumb { background: #ffb3c6; border-radius: 10px; }
-
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        /* Animasi transisi soal */
-        .fade-transition {
-            animation: slideFade 0.5s ease forwards;
+        h1, h2, h3, .calendar-header {
+            font-family: 'Nunito', sans-serif;
         }
 
-        @keyframes slideFade {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Welcome Screen Koala Emoji */
-        .emoji-header {
-            font-size: 5rem; /* Lebih besar */
-            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.15));
-            margin-bottom: 10px;
-            display: inline-block;
-            animation: bounce 2.5s infinite;
-        }
-        
-        .sparkles {
-            font-size: 2rem;
-            position: absolute;
-            animation: pulse 1.5s infinite alternate;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.05); }
-        }
-        @keyframes pulse {
-            from { transform: scale(0.8); opacity: 0.7; }
-            to { transform: scale(1.2); opacity: 1; }
-        }
-
-        h1 { 
-            color: var(--highlight-pink); 
-            font-size: 2.2rem; 
-            font-weight: 700; 
-            margin-bottom: 15px; 
-            text-shadow: 2px 2px 0px white;
-            line-height: 1.2;
-        }
-        
-        p { 
-            line-height: 1.6; 
-            font-weight: 500; 
-            font-size: 1.15rem; 
-            margin-bottom: 10px;
-        }
-
-        /* Highlight text styling */
-        .hl-pink { color: var(--highlight-pink); font-weight: 700; }
-        .hl-blue { color: var(--highlight-blue); font-weight: 700; }
-        .hl-green { color: #0f9d58; font-weight: 700; }
-
-        /* Timer UI */
-        .timer-container {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 25px;
-        }
-
-        .timer-circle {
-            width: 100%;
-            height: 100%;
-            background: #ff8eaa;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: white;
-            border: 5px solid white;
-            box-shadow: 0 8px 20px rgba(255, 142, 170, 0.4);
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
-        }
-
-        .timer-warning {
-            animation: pulse-red 0.8s infinite !important;
-        }
-
-        @keyframes pulse-red {
-            0% { transform: scale(1); background-color: var(--danger-red); box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
-            50% { transform: scale(1.15); background-color: #d60000; box-shadow: 0 0 0 15px rgba(255, 77, 77, 0); }
-            100% { transform: scale(1); background-color: var(--danger-red); box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
-        }
-
-        /* Opsi Jawaban (Button) */
-        .options-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .btn-option {
-            background: white;
-            border: 4px solid #cce5ff;
-            padding: 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1.1rem;
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 600;
-            color: var(--text-dark);
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 6px 0 #cce5ff;
-            text-align: center;
-            line-height: 1.3;
-        }
-
-        .btn-option:hover:not(:disabled) {
-            transform: translateY(-4px);
-            background: #fffbe6;
-            border-color: #ffd93d;
-            box-shadow: 0 10px 0 #ffd93d;
-        }
-
-        .btn-option:active:not(:disabled) {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #ffd93d;
-        }
-
-        .btn-option:disabled {
-            cursor: not-allowed;
-        }
-
-        .correct { 
-            background: #d1f2eb !important; 
-            border-color: #1abc9c !important; 
-            box-shadow: 0 6px 0 #16a085 !important; 
-            color: #0b504c !important; 
-            transform: scale(1.03);
-            font-weight: 700;
-            animation: popCorrect 0.4s ease;
-            z-index: 2;
-        }
-        
-        @keyframes popCorrect {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1.03); }
-        }
-
-        .wrong { 
-            background: #ffe6e6 !important; 
-            border-color: #ff6b6b !important; 
-            box-shadow: 0 6px 0 #ee5253 !important; 
-            color: #c0392b !important; 
-            opacity: 0.7;
-        }
-
-        /* Tombol Aksi Bawah */
-        .action-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .btn-primary, .btn-secondary {
-            color: white;
-            border: none;
-            padding: 18px 30px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 100%;
-            font-family: 'Fredoka', sans-serif;
-            text-transform: uppercase;
+        /* --- Header Glowing --- */
+        .header-glow {
+            background: linear-gradient(to right, #e84393, #fd79a8, #ff9ff3);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0px 4px 15px rgba(253, 121, 168, 0.4);
             letter-spacing: 1px;
         }
 
-        .btn-primary {
-            background: #ff6b9d;
-            box-shadow: 0 8px 0 #d45d7d;
-        }
-
-        .btn-primary:hover {
-            background: #ff4d85;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 0 #d45d7d;
-        }
-
-        .btn-primary:active { transform: translateY(4px); box-shadow: 0 2px 0 #d45d7d; }
-
-        .btn-secondary {
-            background: #4d94ff;
-            box-shadow: 0 8px 0 #2b6bd4;
-        }
-
-        .btn-secondary:hover {
-            background: #3380ff;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 0 #2b6bd4;
-        }
-
-        .btn-secondary:active { transform: translateY(4px); box-shadow: 0 2px 0 #2b6bd4; }
-
-        /* Teks Pertanyaan */
-        #question-text {
-            color: var(--text-dark); 
-            margin-bottom: 25px; 
-            font-weight: 700; 
-            font-size: 1.4rem;
-            line-height: 1.4;
-        }
-
-        .q-counter {
-            font-size: 1rem; 
-            color: #ff8eaa; 
-            display: block; 
-            margin-bottom: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Rangkuman Jawaban */
-        .summary-container {
-            text-align: left;
-            margin-top: 25px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.95);
+        /* --- Glassmorphism Cards (3D Effect) --- */
+        .glass-card {
+            background: var(--white-glass);
             border-radius: 20px;
-            border: 3px dashed #ff8eaa;
-            display: none; 
-            animation: slideFade 0.4s ease;
+            box-shadow: 0 10px 30px 0 rgba(253, 121, 168, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px 0 rgba(253, 121, 168, 0.25);
         }
 
-        .summary-item {
-            margin-bottom: 15px;
-            border-bottom: 2px dotted #ffcce5;
-            padding-bottom: 10px;
-            font-size: 1.05rem;
-        }
-        .summary-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        /* --- Form Elements --- */
+        input[type="text"], input[type="date"], select, textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(253, 121, 168, 0.4);
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.3s ease;
         }
 
-        .summary-q { font-weight: 600; color: var(--text-dark); margin-bottom: 5px; line-height: 1.4; }
-        .summary-a { color: #1abc9c; font-weight: 700; background: #e8f8f5; padding: 5px 10px; border-radius: 8px; display: inline-block;}
-
-        .hidden { display: none !important; }
-
-        /* Responsive Fix untuk Mobile Kecil */
-        @media (max-width: 480px) {
-            #main-card {
-                padding: 30px 20px;
-                border-radius: 30px;
-            }
-            .emoji-header { font-size: 4.5rem; }
-            h1 { font-size: 1.8rem; }
-            #question-text { font-size: 1.25rem; }
-            .btn-option { padding: 15px; font-size: 1rem; }
-            .btn-primary, .btn-secondary { padding: 15px 20px; font-size: 1.1rem; }
+        input:focus, select:focus {
+            background: #ffffff;
+            border-color: #fd79a8;
+            box-shadow: 0 0 10px rgba(253, 121, 168, 0.3);
         }
+
+        button.btn-cute {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fd79a8 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(253, 121, 168, 0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        button.btn-cute:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(253, 121, 168, 0.5);
+        }
+
+        /* --- Checkbox --- */
+        .custom-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fd79a8;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            background: white;
+            transition: all 0.2s ease;
+        }
+        
+        .custom-checkbox:checked {
+            background: #fd79a8;
+            border-color: #fd79a8;
+        }
+        
+        .custom-checkbox:checked::after {
+            content: '\f00c';
+            font-family: 'FontAwesome';
+            color: white;
+            font-size: 12px;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* --- List Items --- */
+        .list-item {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid #fd79a8;
+            transition: all 0.3s ease;
+        }
+        
+        .list-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            border-left-color: #dfe6e9;
+        }
+
+        /* --- Panic Warning System (Deadline < 3 Hari) --- */
+        .panic-warning {
+            background: #fff0f0 !important;
+            border-left: 5px solid var(--warning-red) !important;
+            animation: pulse-panic 2s infinite;
+        }
+        .panic-text {
+            color: var(--warning-red);
+            font-weight: 700;
+        }
+
+        @keyframes pulse-panic {
+            0% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 118, 117, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0); }
+        }
+
+        /* --- Calendar UI --- */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+        .calendar-day {
+            padding: 8px 5px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .calendar-day:hover {
+            background: #ffeaa7;
+            transform: scale(1.05);
+        }
+        .calendar-day.today {
+            background: #fd79a8;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(253, 121, 168, 0.4);
+        }
+        .calendar-day.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: #e84393;
+            border-radius: 50%;
+        }
+
+        /* --- Modal --- */
+        .modal-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            justify-content: center; align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+
+        /* --- Animations (Dream Chaser) --- */
+        .bg-animation-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: -1; overflow: hidden;
+        }
+        .anim-element {
+            position: absolute;
+            color: rgba(253, 121, 168, 0.15); /* Soft pink */
+        }
+        .float-star { animation: float-up 15s infinite linear; }
+        .spin-gear { animation: spin-slow 20s infinite linear; }
+
+        @keyframes float-up {
+            0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+        @keyframes spin-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Anim positioning */
+        .anim-1 { left: 10%; font-size: 2rem; animation-duration: 18s; }
+        .anim-2 { left: 30%; font-size: 4rem; top: 20%; color: rgba(255, 234, 167, 0.2); } /* Yellow gear */
+        .anim-3 { left: 60%; font-size: 1.5rem; animation-duration: 12s; animation-delay: 2s; }
+        .anim-4 { left: 85%; font-size: 5rem; top: 60%; }
+        .anim-5 { left: 45%; font-size: 3rem; animation-duration: 25s; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #fd79a8; border-radius: 10px; }
     </style>
 </head>
-<body>
+<body class="antialiased flex flex-col min-h-screen">
 
-<!-- Latar Belakang Melayang Dinamis -->
-<div id="bg-elements"></div>
+    <!-- Background Animations -->
+    <div class="bg-animation-container">
+        <i class="fas fa-star anim-element float-star anim-1"></i>
+        <i class="fas fa-cog anim-element spin-gear anim-2"></i>
+        <i class="fas fa-hard-hat anim-element float-star anim-3"></i>
+        <i class="fas fa-cogs anim-element spin-gear anim-4"></i>
+        <i class="fas fa-star anim-element float-star anim-5"></i>
+    </div>
 
-<div id="main-card">
-    <!-- WELCOME SCREEN -->
-    <div id="welcome-screen">
-        <div style="position: relative; display: inline-block;">
-            <span class="sparkles" style="top: -10px; left: -20px;">✨</span>
-            <div class="emoji-header">🧸💕</div>
-            <span class="sparkles" style="bottom: 10px; right: -20px; animation-delay: 0.5s;">✨</span>
-        </div>
-        <h1>Halo Sayangg!</h1>
-        <p>Selamat Datang Peserta Ujian Kesayangan:<br>
-            <b style="font-size: 1.4rem;" class="hl-blue">Muhammad Fairuz Azri I.</b>
-        </p>
-        <p style="margin-top: 20px; font-size: 1.1rem; padding: 0 10px;">
-            Siap untuk tes ingatan tentang <span class="hl-pink">Ntu</span>, <span class="hl-blue">Mpui</span>, dan kawan-kawan?<br>
-            <span style="color: #ff4d85; font-weight: 700;">Jangan sampai salah ya! 🧸✨</span>
-        </p>
-        <div class="action-group">
-            <button class="btn-primary" onclick="startQuiz()">Mulai Ujian! 🚀</button>
+    <!-- Modal for Calendar Events -->
+    <div class="modal-overlay" id="event-modal">
+        <div class="glass-card p-6 w-11/12 max-w-md relative">
+            <button onclick="closeModal()" class="absolute top-3 right-4 text-gray-400 hover:text-pink-500"><i class="fas fa-times"></i></button>
+            <h3 class="text-xl font-bold mb-2 text-pink-500" id="modal-date-title">Jadwal Tanggal...</h3>
+            <div id="modal-event-list" class="mb-4 max-h-40 overflow-y-auto"></div>
+            <form id="form-modal-event" class="flex gap-2">
+                <input type="text" id="input-modal-event" placeholder="Tambahkan acara/jadwal..." required>
+                <button type="submit" class="btn-cute"><i class="fas fa-plus"></i></button>
+            </form>
         </div>
     </div>
 
-    <!-- QUIZ SCREEN -->
-    <div id="quiz-screen" class="hidden">
-        <div class="timer-container">
-            <div id="timer" class="timer-circle">20</div>
-        </div>
-        <h2 id="question-text">Pertanyaan</h2>
-        <div class="options-grid" id="options-container"></div>
+    <div class="container mx-auto px-4 py-8 max-w-7xl flex-grow">
+        
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold header-glow mb-3">
+                be the kind author of your own story
+            </h1>
+            <p class="text-gray-600 font-medium text-lg">
+                <i class="fas fa-graduation-cap text-yellow-500 mr-2"></i> 2026 Future Engineer Dashboard
+            </p>
+        </header>
+
+        <!-- Main Grid Layout -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- KIRI: Calendar & Daily Planner -->
+            <div class="lg:col-span-1 flex flex-col gap-6">
+                
+                <!-- 1. Interactive Calendar 2026 -->
+                <section class="glass-card p-5">
+                    <div class="flex justify-between items-center mb-4">
+                        <button id="prev-month" class="text-pink-500 hover:text-pink-700"><i class="fas fa-chevron-left"></i></button>
+                        <h2 id="calendar-month-year" class="text-lg font-bold text-gray-700 calendar-header">Bulan Tahun</h2>
+                        <button id="next-month" class="text-pink-500 hover:text-pink-700"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid text-xs font-bold text-gray-500 mb-2">
+                        <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+                    </div>
+                    <div id="calendar-days" class="calendar-grid">
+                        <!-- Days generated by JS -->
+                    </div>
+                </section>
+
+                <!-- 2. Daily Planner & Tracker -->
+                <section class="glass-card p-5 flex flex-col flex-grow" style="min-height: 350px;">
+                    <h2 class="text-xl font-bold mb-1 text-pink-500 flex items-center">
+                        <i class="fas fa-list-check mr-3 text-yellow-500"></i> Daily Planner
+                    </h2>
+                    <p class="text-xs text-gray-500 mb-4" id="daily-date-display">Today: ...</p>
+                    <div class="flex-grow overflow-y-auto mb-4 pr-1" id="daily-list"></div>
+                    <form id="form-daily" class="mt-auto flex gap-2">
+                        <input type="text" id="input-daily" placeholder="Fokus hari ini..." required>
+                        <button type="submit" class="btn-cute"><i class="fas fa-plus"></i></button>
+                    </form>
+                </section>
+            </div>
+
+            <!-- TENGAH & KANAN: Goals, Coursework, Deadlines, Beasiswa -->
+            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- 3. Long-Term Goals -->
+                <section class="glass-card p-5 flex flex-col md:col-span-2">
+                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
+                        <i class="fas fa-rocket mr-3 text-yellow-500"></i> Long-Term Goals
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 flex-grow overflow-y-auto max-h-40" id="goals-list"></div>
+                    <form id="form-goals" class="mt-auto flex gap-2">
+                        <input type="text" id="input-goals" placeholder="Tuliskan impian besarmu (S2, IPK, Karir)..." required>
+                        <button type="submit" class="btn-cute"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </section>
+
+                <!-- 4. Coursework (Matkul) Planner -->
+                <section class="glass-card p-5 flex flex-col h-80">
+                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
+                        <i class="fas fa-book-open mr-3 text-yellow-500"></i> Coursework (TMB)
+                    </h2>
+                    <div class="flex-grow overflow-y-auto mb-4 pr-1" id="coursework-list"></div>
+                    <form id="form-coursework" class="mt-auto flex flex-col gap-2">
+                        <input type="text" id="input-course" placeholder="Nama Matkul (Cth: Termodinamika)" required class="text-sm">
+                        <div class="flex gap-2">
+                            <input type="text" id="input-course-detail" placeholder="Tugas / Bab" required class="text-sm">
+                            <button type="submit" class="btn-cute px-3"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- 5. Organization Planner -->
+                <section class="glass-card p-5 flex flex-col h-80">
+                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
+                        <i class="fas fa-users mr-3 text-yellow-500"></i> Organization
+                    </h2>
+                    <div class="flex-grow overflow-y-auto mb-4 pr-1" id="org-list"></div>
+                    <form id="form-org" class="mt-auto flex flex-col gap-2">
+                        <input type="text" id="input-org-name" placeholder="Nama Organisasi (Cth: BEM/IPB Mengajar)" required class="text-sm">
+                        <div class="flex gap-2">
+                            <input type="text" id="input-org-role" placeholder="Peran / Divisi" required class="text-sm">
+                            <button type="submit" class="btn-cute px-3"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- 6. Deadline Tracker & Warning System -->
+                <section class="glass-card p-5 flex flex-col md:col-span-2 h-80">
+                    <h2 class="text-xl font-bold mb-1 text-pink-500 flex items-center">
+                        <i class="fas fa-hourglass-half mr-3 text-yellow-500"></i> Deadline Tracker
+                    </h2>
+                    <p class="text-xs text-red-400 mb-3">*Akan menyala merah jika deadline < 3 Hari!</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
+                    <form id="form-deadlines" class="mt-auto flex flex-col md:flex-row gap-2">
+                        <input type="text" id="input-deadline-task" placeholder="Nama Tugas / Laporan..." required class="md:w-1/2">
+                        <input type="date" id="input-deadline-date" required class="md:w-1/3">
+                        <button type="submit" class="btn-cute md:w-1/6"><i class="fas fa-plus"></i> Add</button>
+                    </form>
+                </section>
+
+                <!-- 7. Beasiswa Tracker -->
+                <section class="glass-card p-5 flex flex-col md:col-span-2">
+                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
+                        <i class="fas fa-award mr-3 text-yellow-500"></i> Beasiswa Tracker
+                    </h2>
+                    <div class="flex-grow overflow-y-auto mb-4 max-h-48" id="scholarship-list"></div>
+                    <form id="form-scholarship" class="mt-auto flex flex-col md:flex-row gap-2">
+                        <input type="text" id="input-scholarship-name" placeholder="Nama Beasiswa / Syarat..." required class="md:w-1/2">
+                        <select id="input-scholarship-status" class="md:w-1/3 text-sm">
+                            <option value="To Do">📝 To Do</option>
+                            <option value="In Progress">⏳ In Progress</option>
+                            <option value="Done">✅ Done</option>
+                        </select>
+                        <button type="submit" class="btn-cute md:w-1/6"><i class="fas fa-plus"></i></button>
+                    </form>
+                </section>
+
+            </div>
+        </main>
     </div>
 
-    <!-- RESULT SCREEN -->
-    <div id="result-screen" class="hidden">
-        <div class="emoji-header" id="result-emoji">🏆</div>
-        <h1 id="result-title">Ujian Selesai! 🎉</h1>
-        <p id="final-score" style="font-size: 3.5rem; font-weight: 800; color: #ff6b9d; text-shadow: 3px 3px 0px #ffe6ef; margin: 5px 0;"></p>
+    <!-- Footer -->
+    <footer class="mt-auto py-6 text-center text-gray-500 text-sm font-medium">
+        <p>&copy; 2026 byl.tasya | Engineered with <i class="fas fa-heart text-pink-400"></i> & <i class="fas fa-coffee text-yellow-600"></i></p>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- BLOK JAVASCRIPT: LOGIKA & LOCALSTORAGE     -->
+    <!-- ========================================== -->
+    <script>
+        /**
+         * ==============================================================
+         * PANDUAN MIGRASI KE FIREBASE (Untuk masa depan)
+         * ==============================================================
+         * Saat ini aplikasi menggunakan `localStorage` agar bisa langsung 
+         * dipakai tanpa setup server/database.
+         * * Jika kamu ingin menyambungkannya ke Firebase nanti agar sinkron 
+         * antara HP dan Laptop:
+         * 1. Hapus fungsi `saveData()` dan modifikasi `appData` di bawah.
+         * 2. Import Firebase Firestore (seperti di kode versi sebelumnya).
+         * 3. Ganti fungsi `renderX()` agar membaca dari `onSnapshot()` Firestore.
+         * 4. Ganti fungsi penambahan array (misal: `appData.goals.push(...)`) 
+         * menjadi `addDoc(collection(db, "goals"), {...})`.
+         * 5. Ganti penghapusan array menjadi `deleteDoc(doc(db, "goals", id))`.
+         * ==============================================================
+         */
+
+        // --- 1. INISIALISASI DATA (LocalStorage) ---
+        const STORAGE_KEY = 'planner_2026_data';
         
-        <!-- Pesan Penutup Dinamis -->
-        <p id="closing-msg" style="font-size: 1.2rem; font-weight: 600; line-height: 1.5; padding: 10px; margin-bottom: 10px;"></p>
-        
-        <!-- Rangkuman Jawaban -->
-        <div id="summary" class="summary-container">
-            <h3 style="margin-top: 0; color: #ff4d85; text-align: center; margin-bottom: 20px;">📖 Kunci Jawaban</h3>
-        </div>
-        
-        <div class="action-group">
-            <button class="btn-primary" onclick="location.reload()">Ulangi Ujian 🔄</button>
-            <button class="btn-secondary" id="btn-toggle-summary" onclick="toggleSummary()">Lihat Kunci Jawaban 📖</button>
-        </div>
-    </div>
-</div>
+        // Data Default (Placeholders) jika localStorage masih kosong
+        const defaultData = {
+            goals: [
+                { id: Date.now()+1, text: "Lulus Teknik Mesin & Biosistem IPB dengan IPK Tinggi" },
+                { id: Date.now()+2, text: "Persiapan S2 Engineering di Luar Negeri" }
+            ],
+            daily: [
+                { id: Date.now()+3, text: "Review materi Termodinamika", completed: false }
+            ],
+            coursework: [
+                { id: Date.now()+4, course: "Elektronika Dasar", detail: "Buat Laporan Praktikum" }
+            ],
+            organizations: [
+                { id: Date.now()+5, name: "IPB Mengajar", role: "Divisi Kurikulum" },
+                { id: Date.now()+6, name: "Sekbendiv BEM", role: "Sekretaris" }
+            ],
+            deadlines: [],
+            scholarships: [
+                { id: Date.now()+7, name: "LPDP - Sertifikat TOEFL ITP", status: "To Do" }
+            ],
+            calendarEvents: {} // Format: { "YYYY-MM-DD": ["Event 1", "Event 2"] }
+        };
 
-<script>
-    const questions = [
-        { q: "Bagaimana saat <span class='hl-pink'>Ntu</span> menangis?", a: "Kedua tangannya menutup mata", options: ["Kedua tangannya menutup mata", "Menutup telinga", "Sembunyi di bantal", "Berteriak kencang"] },
-        { q: "Bagaimana tekstur bulu <span class='hl-pink'>Ntu</span>?", a: "Tidak halus, tetapi tidak kasar juga", options: ["Sangat halus", "Tidak halus, tetapi tidak kasar juga", "Seperti handuk kasar", "Licin sekali"] },
-        { q: "<span class='hl-pink'>Ntu</span> punya pita warna apa?", a: "Biru dan kuning", options: ["Merah dan hijau", "Pink dan putih", "Biru dan kuning", "Hitam dan ungu"] },
-        { q: "Siapa nama boneka <span class='hl-pink'>rubah</span> kita?", a: "mpui", options: ["foxy", "mochi", "mpui", "lulu"] },
-        { q: "Bagaimana tekstur bulu <span class='hl-blue'>Mpui</span>?", a: "Halus dan lembut", options: ["Kasar", "Tipis", "Agak lengket", "Halus dan lembut"] },
-        { q: "Kalo <span class='hl-pink'>Ici</span> marah, namanya berubah jadi siapa?", a: "icung", options: ["icung", "ica", "ici-ici", "cungir"] },
-        { q: "Siapa nama boneka <span class='hl-green'>capibara</span> kita?", a: "heli", options: ["capy", "bara", "gembul", "heli"] },
-        { q: "<span class='hl-blue'>Mpui</span> diberi nama pada tahun berapa?", a: "2024", options: ["2022", "2023", "2024", "2025"] },
-        { q: "<span class='hl-blue'>Mpui</span> pertama kali diberi nama dimana?", a: "di lampu merah", options: ["di taman", "di mall", "di lampu merah", "di toko buku"] },
-        { q: "Tahun berapa <span class='hl-green'>Heli</span> ditemukan?", a: "2026", options: ["2023", "2024", "2025", "2026"] },
-        { q: "Sebenarnya, hewan apakah <span class='hl-pink'>Ntu</span> itu?", a: "Koala", options: ["Panda", "Koala", "Beruang", "Kelinci"] },
-        
-        // --- 5 PERTANYAAN BARU ---
-        { q: "Apa nama boneka yang berbentuk <span class='hl-green'>ulat</span>?", a: "mbui", options: ["momo", "mbui", "ulil", "cater"] },
-        { q: "<span class='hl-blue'>Mbui</span> memiliki berapa bagian kepala?", a: "3", options: ["1", "2", "3", "4"] },
-        { q: "<span class='hl-blue'>Mbui</span> memiliki berapa mata?", a: "6", options: ["2", "4", "6", "8"] },
-        { q: "<span class='hl-blue'>Mbui</span> berwarna apa?", a: "cream", options: ["hijau", "putih", "kuning", "cream"] },
-        { q: "Ciri-ciri kuping <span class='hl-pink'>Nja</span>?", a: "kedua kupingnya di belakang kepala", options: ["menghadap ke depan", "kedua kupingnya di belakang kepala", "satu di atas satu di bawah", "panjang dan menjuntai"] }
-    ];
+        let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
 
-    // Array warna pastel untuk mengubah mood background card tiap soal
-    const bubbleColors = [
-        "rgba(255, 235, 245, 0.95)", // Soft Pink
-        "rgba(255, 250, 230, 0.95)", // Soft Yellow
-        "rgba(235, 245, 255, 0.95)", // Soft Blue
-        "rgba(240, 255, 245, 0.95)", // Soft Green
-        "rgba(250, 240, 255, 0.95)"  // Soft Purple
-    ];
+        // Fungsi menyimpan data ke LocalStorage setiap ada perubahan
+        const saveData = () => {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            renderAll(); // Re-render UI
+        };
 
-    let currentQuestionIndex = 0;
-    let score = 0;
-    const TOTAL_TIME = 20;
-    let timeLeft = TOTAL_TIME;
-    let timerInterval;
-    let canAnswer = true;
+        // --- 2. LOGIKA RENDER TAMPILAN ---
 
-    // --- SETUP ANIMASI BACKGROUND ---
-    function setupBackground() {
-        // Memperbanyak Koala (🐨) agar lebih sering muncul
-        const emojis = ['🐨', '🐨', '🦊', '🐹', '🌈', '💖', '✨', '☁️', '🎀', '🌸', '🧸', '🐨'];
-        const bgContainer = document.getElementById('bg-elements');
-        const totalElements = 18; // Jumlah elemen ditingkatkan
-
-        for (let i = 0; i < totalElements; i++) {
-            let el = document.createElement('div');
-            el.className = 'floating-element';
-            el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            
-            // Posisi X diatur secara merata dengan sedikit random offset
-            let randomX = Math.random() * 100;
-            el.style.left = `${randomX}vw`;
-            
-            // Delay, Durasi, dan Ukuran (DIPERBESAR)
-            el.style.animationDelay = (Math.random() * 8) + 's';
-            el.style.animationDuration = (10 + Math.random() * 10) + 's'; 
-            el.style.fontSize = (Math.random() * 40 + 40) + 'px'; // Ukuran random antara 40px - 80px
-            bgContainer.appendChild(el);
-        }
-    }
-    setupBackground();
-
-    // --- LOGIKA KUIS ---
-    function startQuiz() {
-        document.getElementById('welcome-screen').classList.add('hidden');
-        document.getElementById('quiz-screen').classList.remove('hidden');
-        showQuestion();
-    }
-
-    function showQuestion() {
-        canAnswer = true;
-        clearInterval(timerInterval);
-        timeLeft = TOTAL_TIME;
-        
-        // Ganti warna card secara dinamis
-        const card = document.getElementById('main-card');
-        const currentColor = bubbleColors[currentQuestionIndex % bubbleColors.length];
-        card.style.background = currentColor;
-        
-        // Memaksa animasi restart
-        const quizScreen = document.getElementById('quiz-screen');
-        quizScreen.classList.remove('fade-transition');
-        void quizScreen.offsetWidth; 
-        quizScreen.classList.add('fade-transition');
-
-        const timerEl = document.getElementById('timer');
-        timerEl.innerText = timeLeft;
-        timerEl.classList.remove('timer-warning');
-        
-        const q = questions[currentQuestionIndex];
-        document.getElementById('question-text').innerHTML = `
-            <span class="q-counter">Soal ${currentQuestionIndex + 1} / ${questions.length}</span>
-            ${q.q}
-        `;
-        
-        const optionsContainer = document.getElementById('options-container');
-        optionsContainer.innerHTML = '';
-
-        q.options.forEach((opt) => {
-            const button = document.createElement('button');
-            button.innerText = opt;
-            button.classList.add('btn-option');
-            button.onclick = () => checkAnswer(opt, button);
-            optionsContainer.appendChild(button);
-        });
-
-        // Jalankan Timer
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            timerEl.innerText = timeLeft;
-            
-            if(timeLeft <= 5 && timeLeft > 0) {
-                timerEl.classList.add('timer-warning');
-            }
-
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                checkAnswer("", null); // Waktu habis dianggap salah
-            }
-        }, 1000);
-    }
-
-    function checkAnswer(selected, button) {
-        if(!canAnswer) return;
-        canAnswer = false;
-        clearInterval(timerInterval);
-        document.getElementById('timer').classList.remove('timer-warning');
-
-        const correctAns = questions[currentQuestionIndex].a;
-        const buttons = document.querySelectorAll('.btn-option');
-
-        // Kunci semua tombol
-        buttons.forEach(btn => btn.disabled = true);
-
-        if (selected === correctAns) {
-            button.classList.add('correct');
-            score++;
-        } else {
-            if(button) button.classList.add('wrong');
-            // Tunjukkan yang benar
-            buttons.forEach(btn => {
-                if(btn.innerText === correctAns) btn.classList.add('correct');
+        // Render Goals
+        const renderGoals = () => {
+            const container = document.getElementById('goals-list');
+            container.innerHTML = appData.goals.length === 0 ? '<p class="text-sm text-gray-400">Belum ada impian.</p>' : '';
+            appData.goals.forEach(item => {
+                container.innerHTML += `
+                    <div class="list-item flex-col items-start relative h-fit">
+                        <span class="font-medium text-sm pr-6">${item.text}</span>
+                        <button onclick="deleteItem('goals', ${item.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
             });
-        }
+        };
 
-        // Lanjut soal setelah 1.5 detik
-        setTimeout(() => {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                showQuestion();
-            } else {
-                showResult();
+        // Render Daily Planner
+        const renderDaily = () => {
+            const container = document.getElementById('daily-list');
+            // Menampilkan tanggal hari ini
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('daily-date-display').innerText = `Today: ${new Date().toLocaleDateString('id-ID', options)}`;
+
+            container.innerHTML = appData.daily.length === 0 ? '<p class="text-sm text-gray-400">Belum ada target hari ini.</p>' : '';
+            appData.daily.forEach(item => {
+                const checked = item.completed ? 'checked' : '';
+                const completedClass = item.completed ? 'completed' : '';
+                container.innerHTML += `
+                    <div class="list-item ${completedClass}">
+                        <input type="checkbox" class="custom-checkbox mr-3" ${checked} onchange="toggleComplete(${item.id}, this.checked)">
+                        <span class="font-medium flex-1 text-sm">${item.text}</span>
+                        <button onclick="deleteItem('daily', ${item.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+        };
+
+        // Render Coursework & Organization
+        const renderCourseOrg = () => {
+            // Coursework
+            const courseContainer = document.getElementById('coursework-list');
+            courseContainer.innerHTML = appData.coursework.length === 0 ? '<p class="text-sm text-gray-400">Belum ada tugas matkul.</p>' : '';
+            appData.coursework.forEach(item => {
+                courseContainer.innerHTML += `
+                    <div class="list-item flex-col items-start relative">
+                        <span class="text-xs font-bold text-pink-500 bg-pink-100 px-2 py-1 rounded mb-1">${item.course}</span>
+                        <span class="font-medium text-sm pr-6 mt-1">${item.detail}</span>
+                        <button onclick="deleteItem('coursework', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+
+            // Organization
+            const orgContainer = document.getElementById('org-list');
+            orgContainer.innerHTML = appData.organizations.length === 0 ? '<p class="text-sm text-gray-400">Belum ada agenda organisasi.</p>' : '';
+            appData.organizations.forEach(item => {
+                orgContainer.innerHTML += `
+                    <div class="list-item flex-col items-start relative">
+                        <span class="font-bold text-sm text-gray-700">${item.name}</span>
+                        <span class="text-xs text-yellow-600 mt-1"><i class="fas fa-user-tag mr-1"></i>${item.role}</span>
+                        <button onclick="deleteItem('organizations', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+        };
+
+        // Render Deadlines & Panic Warning Logic
+        const renderDeadlines = () => {
+            const container = document.getElementById('deadlines-list');
+            
+            // Urutkan berdasarkan tanggal terdekat
+            let sortedDeadlines = [...appData.deadlines].sort((a, b) => new Date(a.date) - new Date(b.date));
+            container.innerHTML = sortedDeadlines.length === 0 ? '<p class="text-sm text-gray-400">Tidak ada deadline. Santai dulu!</p>' : '';
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            sortedDeadlines.forEach(item => {
+                const deadlineDate = new Date(item.date);
+                const diffDays = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+                
+                let isPanic = false;
+                let statusBadge = '';
+
+                if (diffDays < 0) {
+                    statusBadge = `<span class="text-xs font-bold bg-gray-300 text-gray-700 px-2 py-1 rounded mt-2">Terlewat</span>`;
+                } else if (diffDays <= 3) {
+                    isPanic = true; // PANIC WARNING AKTIF!
+                    statusBadge = `<span class="text-xs font-bold bg-red-500 text-white px-2 py-1 rounded mt-2 animate-pulse"><i class="fas fa-exclamation-triangle mr-1"></i> ${diffDays === 0 ? 'HARI INI!' : diffDays + ' Hari Lagi'}</span>`;
+                } else {
+                    statusBadge = `<span class="text-xs font-bold bg-green-100 text-green-700 px-2 py-1 rounded mt-2">${diffDays} Hari Lagi</span>`;
+                }
+
+                container.innerHTML += `
+                    <div class="list-item flex-col items-start relative h-fit ${isPanic ? 'panic-warning' : ''}">
+                        <span class="font-medium text-sm pr-6 ${isPanic ? 'panic-text' : ''}">${item.task}</span>
+                        <div class="flex justify-between items-center w-full mt-1">
+                            <span class="text-xs text-gray-500"><i class="far fa-calendar-alt"></i> ${item.date}</span>
+                            ${statusBadge}
+                        </div>
+                        <button onclick="deleteItem('deadlines', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+        };
+
+        // Render Scholarship Tracker
+        const renderScholarships = () => {
+            const container = document.getElementById('scholarship-list');
+            container.innerHTML = appData.scholarships.length === 0 ? '<p class="text-sm text-gray-400">Belum ada persiapan beasiswa.</p>' : '';
+            
+            appData.scholarships.forEach(item => {
+                let badgeClass = '';
+                if(item.status === 'To Do') badgeClass = 'bg-gray-200 text-gray-700';
+                if(item.status === 'In Progress') badgeClass = 'bg-yellow-200 text-yellow-800';
+                if(item.status === 'Done') badgeClass = 'bg-green-200 text-green-800 text-decoration-line-through';
+
+                container.innerHTML += `
+                    <div class="list-item flex justify-between relative">
+                        <div class="flex flex-col pr-6">
+                            <span class="font-medium text-sm">${item.name}</span>
+                            <span class="text-xs font-bold px-2 py-1 rounded w-max mt-1 ${badgeClass}">${item.status}</span>
+                        </div>
+                        <button onclick="deleteItem('scholarships', ${item.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+        };
+
+        // --- 3. KALENDER INTERAKTIF LOGIC ---
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        const renderCalendar = () => {
+            const daysContainer = document.getElementById('calendar-days');
+            const monthYearDisplay = document.getElementById('calendar-month-year');
+            daysContainer.innerHTML = '';
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            monthYearDisplay.innerText = `${monthNames[currentMonth]} ${currentYear}`;
+
+            const today = new Date();
+
+            // Isi sel kosong di awal bulan
+            for (let i = 0; i < firstDay; i++) {
+                daysContainer.innerHTML += `<div></div>`;
             }
-        }, 1500);
-    }
 
-    function showResult() {
-        document.getElementById('quiz-screen').classList.add('hidden');
-        document.getElementById('result-screen').classList.remove('hidden');
-        document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
-        
-        // Kembalikan warna putih agar teks terbaca jelas
-        document.getElementById('main-card').style.background = "rgba(255, 255, 255, 0.95)";
-        
-        const emojiEl = document.getElementById('result-emoji');
-        const titleEl = document.getElementById('result-title');
-        const msgEl = document.getElementById('closing-msg');
-        
-        if (score === questions.length) {
-            emojiEl.innerText = "🏆💖";
-            titleEl.innerText = "WOAAAH SEMPURNA! 🌟";
-            msgEl.innerHTML = "Yeayyy! 100%! 🥰<br><span style='color: var(--highlight-pink); font-weight: 700;'>wahh, kamu terbukti sayang sama aku!!!</span> Ntu, Mpui, dan Heli bangga banget!! Makin sayanggg! 💕✨";
-            msgEl.style.color = "#d45d7d";
-        } else if (score > 9) { // Disesuaikan dengan total pertanyaan baru (16 soal)
-            emojiEl.innerText = "🥰🧸";
-            titleEl.innerText = "Hebat Sayangg! 🎉";
-            msgEl.innerHTML = "Yeyyy nilainya bagus! 🥰<br>Seneng banget rasanya kamuu merhatiin dan inget mereka. Makasih ya kamuu udah sayang sama Ntu, Mpui dkk! Luv youuu! 💖✨";
-            msgEl.style.color = "#2d6a4f";
-        } else {
-            emojiEl.innerText = "🥺💔";
-            titleEl.innerText = "Yahhh... Lupa ya?";
-            msgEl.innerHTML = "Sayangg banyak lupanya ya? 🥺💔<br><span style='color: var(--danger-red);'>Sedih deh Ntu sama Mpui...</span> Tapi gak apa-apa, habis ini dibaca kuncinya dan dihafalin lagi ya? Janji yaa? 🧸💕";
-            msgEl.style.color = "#c0392b";
-        }
+            // Isi tanggal
+            for (let i = 1; i <= daysInMonth; i++) {
+                // Format YYYY-MM-DD
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                let isToday = (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) ? 'today' : '';
+                let hasEvent = appData.calendarEvents[dateStr] && appData.calendarEvents[dateStr].length > 0 ? 'has-event' : '';
 
-        // Isi kontainer Rangkuman
-        const summaryCont = document.getElementById('summary');
-        // Kosongkan isi summary sebelumnya jika di-refresh
-        summaryCont.innerHTML = '<h3 style="margin-top: 0; color: #ff4d85; text-align: center; margin-bottom: 20px;">📖 Kunci Jawaban</h3>';
-        
-        questions.forEach((item, index) => {
-            summaryCont.innerHTML += `
-                <div class="summary-item">
-                    <div class="summary-q">${index + 1}. ${item.q}</div>
-                    <div class="summary-a">✅ ${item.a}</div>
-                </div>
-            `;
+                daysContainer.innerHTML += `<div class="calendar-day ${isToday} ${hasEvent}" onclick="openModal('${dateStr}')">${i}</div>`;
+            }
+        };
+
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+            renderCalendar();
         });
-    }
 
-    function toggleSummary() {
-        const summaryCont = document.getElementById('summary');
-        const btnToggle = document.getElementById('btn-toggle-summary');
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+            renderCalendar();
+        });
+
+
+        // --- MODAL & EVENT CALENDAR LOGIC ---
+        let selectedDate = '';
         
-        if (summaryCont.style.display === "none" || summaryCont.style.display === "") {
-            summaryCont.style.display = "block";
-            btnToggle.innerText = "Sembunyikan Kunci 🙈";
-            // Scroll sedikit ke bawah agar rangkuman terlihat
-            setTimeout(() => {
-                document.getElementById('main-card').scrollBy({ top: 300, behavior: 'smooth' });
-            }, 100);
-        } else {
-            summaryCont.style.display = "none";
-            btnToggle.innerText = "Lihat Kunci Jawaban 📖";
-        }
-    }
-</script>
+        window.openModal = (dateStr) => {
+            selectedDate = dateStr;
+            document.getElementById('modal-date-title').innerText = `Jadwal: ${dateStr}`;
+            document.getElementById('event-modal').classList.add('active');
+            renderModalEvents();
+        };
 
+        window.closeModal = () => {
+            document.getElementById('event-modal').classList.remove('active');
+            renderCalendar(); // Update dots on calendar
+        };
+
+        const renderModalEvents = () => {
+            const list = document.getElementById('modal-event-list');
+            const events = appData.calendarEvents[selectedDate] || [];
+            list.innerHTML = events.length === 0 ? '<p class="text-sm text-gray-500 italic">Tidak ada jadwal.</p>' : '';
+            
+            events.forEach((ev, idx) => {
+                list.innerHTML += `
+                    <div class="flex justify-between items-center bg-pink-50 p-2 rounded mb-2 text-sm border border-pink-200">
+                        <span>${ev}</span>
+                        <button onclick="deleteCalendarEvent(${idx})" class="text-red-400"><i class="fas fa-times"></i></button>
+                    </div>`;
+            });
+        };
+
+        window.deleteCalendarEvent = (index) => {
+            appData.calendarEvents[selectedDate].splice(index, 1);
+            if (appData.calendarEvents[selectedDate].length === 0) {
+                delete appData.calendarEvents[selectedDate];
+            }
+            saveData();
+            renderModalEvents();
+        };
+
+        document.getElementById('form-modal-event').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.getElementById('input-modal-event');
+            if(input.value.trim()){
+                if(!appData.calendarEvents[selectedDate]) appData.calendarEvents[selectedDate] = [];
+                appData.calendarEvents[selectedDate].push(input.value.trim());
+                input.value = '';
+                saveData();
+                renderModalEvents();
+            }
+        });
+
+
+        // --- 4. GLOBAL HELPER FUNCTIONS (Hapus & Toggle) ---
+        window.deleteItem = (category, id) => {
+            appData[category] = appData[category].filter(item => item.id !== id);
+            saveData();
+        };
+
+        window.toggleComplete = (id, status) => {
+            const index = appData.daily.findIndex(item => item.id === id);
+            if (index > -1) {
+                appData.daily[index].completed = status;
+                saveData();
+            }
+        };
+
+        // --- 5. FORM SUBMISSIONS ---
+        const handleFormSubmit = (formId, handler) => {
+            document.getElementById(formId).addEventListener('submit', (e) => {
+                e.preventDefault();
+                handler();
+                saveData();
+            });
+        };
+
+        handleFormSubmit('form-goals', () => {
+            const input = document.getElementById('input-goals');
+            if(input.value.trim()) appData.goals.push({ id: Date.now(), text: input.value });
+            input.value = '';
+        });
+
+        handleFormSubmit('form-daily', () => {
+            const input = document.getElementById('input-daily');
+            if(input.value.trim()) appData.daily.push({ id: Date.now(), text: input.value, completed: false });
+            input.value = '';
+        });
+
+        handleFormSubmit('form-coursework', () => {
+            const iCourse = document.getElementById('input-course');
+            const iDetail = document.getElementById('input-course-detail');
+            if(iCourse.value && iDetail.value) {
+                appData.coursework.push({ id: Date.now(), course: iCourse.value, detail: iDetail.value });
+                iCourse.value = ''; iDetail.value = '';
+            }
+        });
+
+        handleFormSubmit('form-org', () => {
+            const iName = document.getElementById('input-org-name');
+            const iRole = document.getElementById('input-org-role');
+            if(iName.value && iRole.value) {
+                appData.organizations.push({ id: Date.now(), name: iName.value, role: iRole.value });
+                iName.value = ''; iRole.value = '';
+            }
+        });
+
+        handleFormSubmit('form-deadlines', () => {
+            const iTask = document.getElementById('input-deadline-task');
+            const iDate = document.getElementById('input-deadline-date');
+            if(iTask.value && iDate.value) {
+                appData.deadlines.push({ id: Date.now(), task: iTask.value, date: iDate.value });
+                iTask.value = ''; iDate.value = '';
+            }
+        });
+
+        handleFormSubmit('form-scholarship', () => {
+            const iName = document.getElementById('input-scholarship-name');
+            const iStatus = document.getElementById('input-scholarship-status');
+            if(iName.value) {
+                appData.scholarships.push({ id: Date.now(), name: iName.value, status: iStatus.value });
+                iName.value = ''; iStatus.value = 'To Do';
+            }
+        });
+
+        // --- 6. INITIAL RENDER ---
+        const renderAll = () => {
+            renderGoals();
+            renderDaily();
+            renderCourseOrg();
+            renderDeadlines();
+            renderScholarships();
+            renderCalendar();
+        };
+
+        // Eksekusi render pertama kali saat web diload
+        renderAll();
+
+    </script>
 </body>
 </html>
