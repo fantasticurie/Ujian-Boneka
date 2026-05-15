@@ -8,6 +8,8 @@
     <meta name="theme-color" content="#ffd1dc">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -508,7 +510,7 @@
             scholarships: [
                 { id: Date.now()+7, name: "LPDP - Sertifikat TOEFL ITP", status: "To Do" }
             ],
-            calendarEvents: {}, // Format: { "YYYY-MM-DD": [{time: "10:00", text: "Rapat BEM"}] }
+            calendarEvents: {}, 
             photos: {
                 family: null,
                 friends: null,
@@ -521,9 +523,8 @@
 
         let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
 
-        // Ensure old data structures are updated if they exist
         if(!appData.photos) appData.photos = defaultData.photos;
-        if(appData.photos.support !== undefined) { // Migration logic from previous iteration
+        if(appData.photos.support !== undefined) { 
             appData.photos.family = appData.photos.support;
             delete appData.photos.support;
         }
@@ -559,7 +560,6 @@
                 const checked = item.completed ? 'checked' : '';
                 const completedClass = item.completed ? 'completed' : '';
                 
-                // Extra Jam & Tanggal
                 let extraInfo = '';
                 if(item.date || item.time) {
                     extraInfo = `<div class="flex gap-2 mt-1 pl-8 w-full">`;
@@ -592,7 +592,6 @@
                     </div>`;
             });
 
-            // Organisasi dengan Peringatan Deadline
             const orgContainer = document.getElementById('org-list');
             orgContainer.innerHTML = appData.organizations.length === 0 ? '<p class="text-sm text-gray-400">Belum ada agenda organisasi.</p>' : '';
             
@@ -604,8 +603,12 @@
                 let isPanic = false;
 
                 if (item.date) {
-                    const deadlineDate = new Date(item.date);
-                    const diffDays = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+                    // PERBAIKAN: Parsing tanggal manual agar tidak salah hitung zona waktu
+                    const [year, month, day] = item.date.split('-');
+                    const deadlineDate = new Date(year, month - 1, day);
+                    deadlineDate.setHours(0, 0, 0, 0);
+
+                    const diffDays = Math.round((deadlineDate - today) / (1000 * 60 * 60 * 24));
 
                     if (diffDays < 0) {
                         statusBadge = `<span class="text-[10px] font-bold bg-gray-300 text-gray-700 px-1.5 py-0.5 rounded ml-2">Lewat</span>`;
@@ -638,8 +641,12 @@
             today.setHours(0,0,0,0);
 
             sortedDeadlines.forEach(item => {
-                const deadlineDate = new Date(item.date);
-                const diffDays = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+                // PERBAIKAN: Parsing tanggal manual agar tidak salah hitung zona waktu
+                const [year, month, day] = item.date.split('-');
+                const deadlineDate = new Date(year, month - 1, day);
+                deadlineDate.setHours(0, 0, 0, 0);
+
+                const diffDays = Math.round((deadlineDate - today) / (1000 * 60 * 60 * 24));
                 
                 let isPanic = false;
                 let statusBadge = '';
@@ -744,12 +751,10 @@
             
             let events = appData.calendarEvents[activeDate] || [];
             
-            // Konversi format lama (array of string) ke format baru (array of objects) kalau ada sisa
             events = events.map(ev => typeof ev === 'string' ? {time: "00:00", text: ev} : ev);
 
             list.innerHTML = events.length === 0 ? '<p class="text-xs text-gray-400 italic">Jadwal kosong. Saatnya me-time atau kerjain tugas!</p>' : '';
             
-            // Urutkan berdasarkan waktu jam
             events.sort((a, b) => a.time.localeCompare(b.time)).forEach((ev, idx) => {
                 list.innerHTML += `
                     <div class="flex justify-between items-center bg-white bg-opacity-70 p-2 rounded mb-2 text-sm border border-pink-200">
@@ -795,7 +800,6 @@
             document.getElementById('input-inspiration-desc').value = appData.inspirationDesc;
         };
 
-        // Fungsi agar LocalStorage tidak penuh saat upload gambar (Resize via Canvas)
         const setupImageUpload = (inputId, imgId, photoKey) => {
             document.getElementById(inputId).addEventListener('change', function(e) {
                 const file = e.target.files[0];
@@ -806,7 +810,7 @@
                     const img = new Image();
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 300; // Kompresi
+                        const MAX_WIDTH = 300; 
                         const scaleSize = MAX_WIDTH / img.width;
                         canvas.width = MAX_WIDTH;
                         canvas.height = img.height * scaleSize;
@@ -830,7 +834,6 @@
         setupImageUpload('upload-partner', 'img-partner', 'partner');
         setupImageUpload('upload-inspiration', 'img-inspiration', 'inspiration');
 
-        // Simpan otomatis saat mengetik di textarea
         document.getElementById('input-motivation').addEventListener('input', (e) => {
             appData.motivation = e.target.value;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
@@ -939,7 +942,6 @@
             renderPhotosAndText();
         };
 
-        // Eksekusi render pertama kali saat web diload
         renderAll();
 
         // --- DAFTARKAN SERVICE WORKER UNTUK PWA ---
