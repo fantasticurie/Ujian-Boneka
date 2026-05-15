@@ -1,0 +1,22 @@
+{
+  "name": "My Personal Planner 2026 | Future Engineer",
+  "short_name": "Tasya Planner",
+  "description": "Daily planner dan tracker cerdas untuk mahasiswa Teknik Mesin dan Biosistem.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff9d2",
+  "theme_color": "#ffd1dc",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
