@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Personal Planner 2026 | Future Engineer</title>
+    
     <meta name="theme-color" content="#ffd1dc">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -939,18 +940,6 @@
         };
 
         // Eksekusi render pertama kali saat web diload
-        // --- INITIAL RENDER ---
-        const renderAll = () => {
-            renderGoals();
-            renderDaily();
-            renderCourseOrg();
-            renderDeadlines();
-            renderScholarships();
-            renderCalendar();
-            renderPhotosAndText();
-        };
-
-        // Eksekusi render pertama kali saat web diload
         renderAll();
 
         // --- DAFTARKAN SERVICE WORKER UNTUK PWA ---
@@ -961,10 +950,6 @@
                     .catch((err) => console.log('Service Worker gagal didaftarkan:', err));
             });
         }
-
-    </script>
-</body>
-</html>
 
     </script>
 </body>
