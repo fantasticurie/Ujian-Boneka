@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Planner 2026 | Future Engineer</title>
+    <title>My Personal Dashboard 2026</title>
     
     <meta name="theme-color" content="#ffd1dc">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -26,7 +23,7 @@
             --white-glass: rgba(255, 255, 255, 0.75);
             --text-dark: #4a4a4a;
             --warning-red: #ff7675;
-            --warning-bg: #ffeaa7;
+            --finance-green: #55efc4;
         }
 
         body {
@@ -39,20 +36,15 @@
             position: relative;
         }
 
-        h1, h2, h3, .calendar-header {
-            font-family: 'Nunito', sans-serif;
-        }
+        h1, h2, h3, .heading-font { font-family: 'Nunito', sans-serif; }
 
-        /* --- Header Glowing --- */
         .header-glow {
             background: linear-gradient(to right, #e84393, #fd79a8, #ff9ff3);
             -webkit-background-clip: text;
             color: transparent;
             text-shadow: 0px 4px 15px rgba(253, 121, 168, 0.4);
-            letter-spacing: 1px;
         }
 
-        /* --- Glassmorphism Cards (3D Effect) --- */
         .glass-card {
             background: var(--white-glass);
             border-radius: 20px;
@@ -62,14 +54,16 @@
             border: 1px solid rgba(255, 255, 255, 0.9);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
-        .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 40px 0 rgba(253, 121, 168, 0.25);
-        }
+        .glass-card:hover { transform: translateY(-4px); box-shadow: 0 15px 40px 0 rgba(253, 121, 168, 0.25); }
 
-        /* --- Form Elements --- */
-        input[type="text"], input[type="date"], input[type="time"], select, textarea {
+        /* Menu Card Styles */
+        .menu-card {
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .menu-card:hover { border-color: #fd79a8; }
+
+        input[type="text"], input[type="number"], input[type="date"], input[type="time"], select, textarea {
             width: 100%;
             background: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(253, 121, 168, 0.4);
@@ -77,1025 +71,552 @@
             padding: 10px 15px;
             font-family: 'Poppins', sans-serif;
             font-size: 0.9rem;
-            color: var(--text-dark);
             outline: none;
             transition: all 0.3s ease;
         }
-
-        input:focus, select:focus, textarea:focus {
-            background: #ffffff;
-            border-color: #fd79a8;
-            box-shadow: 0 0 10px rgba(253, 121, 168, 0.3);
-        }
+        input:focus, select:focus, textarea:focus { border-color: #fd79a8; box-shadow: 0 0 10px rgba(253, 121, 168, 0.3); }
 
         button.btn-cute {
             background: linear-gradient(135deg, #ffeaa7 0%, #fd79a8 100%);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(253, 121, 168, 0.3);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(253, 121, 168, 0.3);
         }
-
-        button.btn-cute:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(253, 121, 168, 0.5);
-        }
-
-        /* --- Checkbox --- */
-        .custom-checkbox {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #fd79a8;
-            border-radius: 5px;
-            cursor: pointer;
-            position: relative;
-            background: white;
-            transition: all 0.2s ease;
-        }
+        button.btn-cute:hover { transform: scale(1.05); }
         
-        .custom-checkbox:checked {
-            background: #fd79a8;
-            border-color: #fd79a8;
+        button.btn-finance {
+            background: linear-gradient(135deg, #81ecec 0%, #00b894 100%);
+            color: #fff; border: none; border-radius: 10px; padding: 10px 20px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
         }
-        
-        .custom-checkbox:checked::after {
-            content: '\f00c';
-            font-family: 'FontAwesome';
-            color: white;
-            font-size: 12px;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-        }
+        button.btn-finance:hover { transform: scale(1.05); }
 
-        /* --- List Items --- */
         .list-item {
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-left: 4px solid #fd79a8;
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 12px;
+            margin-bottom: 10px; display: flex; justify-content: space-between;
+            border-left: 4px solid #fd79a8; transition: all 0.3s ease;
         }
-        
-        .list-item.completed {
-            opacity: 0.6;
-            text-decoration: line-through;
-            border-left-color: #dfe6e9;
-        }
+        .list-item-finance { border-left-color: #00b894; }
 
-        /* --- Panic Warning System --- */
-        .panic-warning {
-            background: #fff0f0 !important;
-            border-left: 5px solid var(--warning-red) !important;
-            animation: pulse-panic 2s infinite;
-        }
-        .panic-text {
-            color: var(--warning-red);
-            font-weight: 700;
-        }
+        /* Calendar */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
+        .calendar-day { padding: 8px 5px; background: rgba(255, 255, 255, 0.5); border-radius: 8px; font-size: 0.85rem; cursor: pointer; }
+        .calendar-day.today { background: #fd79a8 !important; color: white; font-weight: bold; }
+        .calendar-day.holiday { color: #e74c3c !important; font-weight: 800; background-color: rgba(253, 164, 175, 0.3); }
+        .calendar-day.selected { border: 2px solid #e84393; background: #ffeaa7 !important; }
 
-        @keyframes pulse-panic {
-            0% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 118, 117, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0); }
+        /* Toast Notif */
+        #in-app-toast {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: white; border-left: 5px solid #fd79a8; border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); padding: 15px 20px; z-index: 999;
+            transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            width: 90%; max-width: 400px; display: flex; align-items: center; gap: 15px;
         }
+        #in-app-toast.show { top: 20px; }
 
-        /* --- Calendar UI --- */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            text-align: center;
-        }
-        .calendar-day {
-            padding: 8px 5px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 8px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .calendar-day:hover {
-            background: #ffeaa7;
-            transform: scale(1.05);
-        }
-        .calendar-day.today {
-            background: #fd79a8 !important;
-            color: white !important;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(253, 121, 168, 0.4);
-        }
-        
-        /* GAYA KHUSUS HARI LIBUR & MINGGU */
-        .calendar-day.holiday {
-            color: #e74c3c !important; 
-            font-weight: 800;
-            background-color: rgba(253, 164, 175, 0.3); 
-        }
-
-        .calendar-day.has-event::after {
-            content: '';
-            position: absolute;
-            bottom: 3px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 6px;
-            background-color: #e84393;
-            border-radius: 50%;
-        }
-        .calendar-day.selected {
-            border: 2px solid #e84393;
-            transform: scale(1.05);
-            background: #ffeaa7 !important;
-            color: #4a4a4a !important;
-        }
-
-        /* --- Polaroid & Pinned Image --- */
-        .polaroid-frame {
-            background: #fff;
-            padding: 10px 10px 30px 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-radius: 4px;
-            position: relative;
-            transition: transform 0.3s ease;
-            width: 100%;
-        }
-        .polaroid-frame:hover { z-index: 10; }
-        
-        .pin-icon {
-            position: absolute;
-            top: -12px; left: 50%; transform: translateX(-50%);
-            font-size: 1.8rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 5;
-        }
-        .polaroid-img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 2px;
-            background-color: #f8f9fa;
-        }
-
-        .tilt-left { transform: rotate(-3deg); }
-        .tilt-left:hover { transform: rotate(0deg) scale(1.05); }
-        .tilt-right { transform: rotate(3deg); }
-        .tilt-right:hover { transform: rotate(0deg) scale(1.05); }
-        .tilt-straight { transform: rotate(1deg); }
-        .tilt-straight:hover { transform: rotate(0deg) scale(1.05); }
-
-        /* --- Animations --- */
-        .bg-animation-container {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: -1; overflow: hidden;
-        }
-        .anim-element {
-            position: absolute;
-            color: rgba(253, 121, 168, 0.15);
-        }
-        .float-star { animation: float-up 15s infinite linear; }
-        .spin-gear { animation: spin-slow 20s infinite linear; }
-
+        /* Animations */
+        .bg-animation-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; }
+        .anim-element { position: absolute; color: rgba(253, 121, 168, 0.15); animation: float-up 15s infinite linear; }
         @keyframes float-up {
             0% { transform: translateY(110vh) scale(0.5); opacity: 0; }
             20% { opacity: 1; }
-            80% { opacity: 1; }
             100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
-        @keyframes spin-slow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         .anim-1 { left: 10%; font-size: 2rem; animation-duration: 18s; }
-        .anim-2 { left: 30%; font-size: 4rem; top: 20%; color: rgba(255, 234, 167, 0.2); }
-        .anim-3 { left: 60%; font-size: 1.5rem; animation-duration: 12s; animation-delay: 2s; }
-        .anim-4 { left: 85%; font-size: 5rem; top: 60%; }
-        .anim-5 { left: 45%; font-size: 3rem; animation-duration: 25s; }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #fd79a8; border-radius: 10px; }
-        
-        /* Notif Status */
-        #notif-status {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        #notif-status:hover { transform: scale(1.1); }
+        .anim-2 { left: 40%; font-size: 4rem; animation-duration: 22s; }
+        .anim-3 { left: 80%; font-size: 3rem; animation-duration: 15s; }
     </style>
 </head>
 <body class="antialiased flex flex-col min-h-screen">
 
     <div class="bg-animation-container">
-        <i class="fas fa-star anim-element float-star anim-1"></i>
-        <i class="fas fa-cog anim-element spin-gear anim-2"></i>
-        <i class="fas fa-hard-hat anim-element float-star anim-3"></i>
-        <i class="fas fa-cogs anim-element spin-gear anim-4"></i>
-        <i class="fas fa-star anim-element float-star anim-5"></i>
+        <i class="fas fa-star anim-element anim-1"></i>
+        <i class="fas fa-cog anim-element anim-2"></i>
+        <i class="fas fa-wallet anim-element anim-3"></i>
+    </div>
+
+    <div id="in-app-toast">
+        <div class="bg-pink-100 p-3 rounded-full text-pink-500">
+            <i class="fas fa-bell text-xl"></i>
+        </div>
+        <div>
+            <h4 class="font-bold text-gray-800 text-sm" id="toast-title">Notifikasi</h4>
+            <p class="text-xs text-gray-600" id="toast-body">Deskripsi</p>
+        </div>
     </div>
 
     <div class="container mx-auto px-4 py-8 max-w-7xl flex-grow">
         
-        <header class="text-center mb-10 relative">
-            <div class="absolute right-0 top-0 text-xl" id="notif-status" onclick="requestNotificationPermission()" title="Aktifkan Notifikasi">
+        <header class="text-center mb-8 relative">
+            <div class="absolute right-0 top-0 text-xl cursor-pointer" onclick="requestNotificationPermission()" title="Aktifkan Notifikasi Sistem">
                 <i class="fas fa-bell text-gray-400" id="notif-icon"></i>
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold header-glow mb-3">
-                be the kind author of your own story
+            <h1 class="text-4xl md:text-5xl font-extrabold header-glow mb-2 heading-font">
+                Tasya's Space
             </h1>
-            <p class="text-gray-600 font-medium text-lg">
-                <i class="fas fa-graduation-cap text-yellow-500 mr-2"></i> 2026 Future Engineer Dashboard
+            <p class="text-gray-600 font-medium text-sm md:text-base">
+                Engineer Mindset • Financial Freedom
             </p>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <main id="view-home" class="flex flex-col items-center justify-center gap-6 w-full max-w-3xl mx-auto mt-10">
+            <h2 class="text-xl font-bold text-gray-700 mb-4">Mau buka apa hari ini?</h2>
             
-            <div class="lg:col-span-1 flex flex-col gap-6">
-                
-                <section class="glass-card p-5">
-                    <div class="flex justify-between items-center mb-4">
-                        <button id="prev-month" class="text-pink-500 hover:text-pink-700"><i class="fas fa-chevron-left"></i></button>
-                        <h2 id="calendar-month-year" class="text-lg font-bold text-gray-700 calendar-header">Bulan Tahun</h2>
-                        <button id="next-month" class="text-pink-500 hover:text-pink-700"><i class="fas fa-chevron-right"></i></button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                <div onclick="switchView('view-planner')" class="glass-card menu-card p-8 flex flex-col items-center text-center">
+                    <div class="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                        <i class="fas fa-calendar-alt text-4xl text-pink-500"></i>
                     </div>
-                    <div class="calendar-grid text-xs font-bold text-gray-500 mb-2">
-                        <div class="text-red-500">Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
-                    </div>
-                    <div id="calendar-days" class="calendar-grid">
-                        </div>
+                    <h3 class="text-2xl font-bold text-pink-600 mb-2">My Planner</h3>
+                    <p class="text-xs text-gray-500">Jadwal, Tugas TMB, Organisasi, dan Goals S2.</p>
+                </div>
 
-                    <div class="mt-4 pt-4 border-t border-pink-200">
-                        <h3 class="font-bold text-sm text-pink-500 mb-2">
-                            <i class="far fa-calendar-check mr-1"></i> Jadwal: <span id="selected-date-display" class="text-gray-600 font-medium">...</span>
-                        </h3>
-                        <div id="calendar-event-list-below" class="max-h-32 overflow-y-auto mb-3 pr-1">
-                            </div>
-                        <form id="form-calendar-event" class="flex flex-col gap-2">
-                            <div class="flex gap-2">
+                <div onclick="switchView('view-finance')" class="glass-card menu-card p-8 flex flex-col items-center text-center">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                        <i class="fas fa-wallet text-4xl text-green-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-green-600 mb-2">Keuangan Kos</h3>
+                    <p class="text-xs text-gray-500">Pantau saldo, jajan, dan pengeluaran harian.</p>
+                </div>
+            </div>
+        </main>
+
+
+        <main id="view-planner" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="switchView('view-home')" class="bg-white px-4 py-2 rounded-lg shadow text-sm font-bold text-gray-600 hover:text-pink-500 transition">
+                    <i class="fas fa-arrow-left mr-2"></i> Menu Utama
+                </button>
+                <h2 class="text-xl font-bold text-pink-500"><i class="fas fa-book-open mr-2"></i> 2026 Planner</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-1 flex flex-col gap-6">
+                    <section class="glass-card p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <button id="prev-month" class="text-pink-500"><i class="fas fa-chevron-left"></i></button>
+                            <h2 id="calendar-month-year" class="text-lg font-bold text-gray-700 heading-font">Bulan</h2>
+                            <button id="next-month" class="text-pink-500"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="calendar-grid text-xs font-bold text-gray-500 mb-2">
+                            <div class="text-red-500">Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+                        </div>
+                        <div id="calendar-days" class="calendar-grid"></div>
+                        <div class="mt-4 pt-4 border-t border-pink-200">
+                            <h3 class="font-bold text-sm text-pink-500 mb-2"><i class="far fa-calendar-check mr-1"></i> Jadwal: <span id="selected-date-display">...</span></h3>
+                            <div id="calendar-event-list-below" class="max-h-32 overflow-y-auto mb-3 pr-1"></div>
+                            <form id="form-calendar-event" class="flex gap-2">
                                 <input type="time" id="input-cal-time" class="w-1/3 text-xs" required>
-                                <input type="text" id="input-cal-event" placeholder="Nama acara/kegiatan..." required class="w-2/3 text-xs">
+                                <input type="text" id="input-cal-event" placeholder="Acara..." required class="w-2/3 text-xs">
                                 <button type="submit" class="btn-cute px-3 py-1"><i class="fas fa-plus"></i></button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <section class="glass-card p-5 flex flex-col min-h-[400px]">
+                        <h2 class="text-xl font-bold mb-1 text-pink-500"><i class="fas fa-list-check text-yellow-500 mr-2"></i> Daily Planner</h2>
+                        <div class="flex-grow overflow-y-auto mb-4" id="daily-list"></div>
+                        <form id="form-daily" class="mt-auto flex flex-col gap-2">
+                            <input type="text" id="input-daily" placeholder="Fokus hari ini..." required>
+                            <div class="flex gap-2">
+                                <input type="time" id="input-daily-time" class="w-1/2 text-xs">
+                                <button type="submit" class="btn-cute w-1/2 text-sm"><i class="fas fa-plus"></i> Add</button>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+
+                <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <section class="glass-card p-5 flex flex-col md:col-span-2 border-2 border-pink-300 min-h-[300px]">
+                        <h2 class="text-xl font-bold mb-1 text-pink-500"><i class="fas fa-hourglass-half text-yellow-500 mr-2"></i> Deadline Tracker</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4" id="deadlines-list"></div>
+                        <form id="form-deadlines" class="mt-auto flex flex-col md:flex-row gap-2">
+                            <input type="text" id="input-deadline-task" placeholder="Tugas / Laporan..." required class="md:w-1/2">
+                            <input type="date" id="input-deadline-date" required class="md:w-1/3">
+                            <button type="submit" class="btn-cute md:w-1/6"><i class="fas fa-plus"></i></button>
+                        </form>
+                    </section>
+                    
+                    <section class="glass-card p-5 flex flex-col min-h-[300px]">
+                        <h2 class="text-xl font-bold mb-3 text-pink-500"><i class="fas fa-book-open text-yellow-500 mr-2"></i> Coursework (TMB)</h2>
+                        <div class="flex-grow overflow-y-auto mb-4" id="coursework-list"></div>
+                        <form id="form-coursework" class="mt-auto flex flex-col gap-2">
+                            <input type="text" id="input-course" placeholder="Matkul (Cth: Termo)" required class="text-sm">
+                            <div class="flex gap-2">
+                                <input type="text" id="input-course-detail" placeholder="Tugas" required class="text-sm">
+                                <button type="submit" class="btn-cute px-3"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="glass-card p-5 flex flex-col min-h-[300px]">
+                        <h2 class="text-xl font-bold mb-3 text-pink-500"><i class="fas fa-users text-yellow-500 mr-2"></i> Organization</h2>
+                        <div class="flex-grow overflow-y-auto mb-4" id="org-list"></div>
+                        <form id="form-org" class="mt-auto flex flex-col gap-2">
+                            <input type="text" id="input-org-name" placeholder="Organisasi..." required class="text-sm">
+                            <div class="flex gap-2">
+                                <input type="text" id="input-org-role" placeholder="Divisi" required class="text-sm w-1/2">
+                                <button type="submit" class="btn-cute px-3 w-1/2"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+
+        <main id="view-finance" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="switchView('view-home')" class="bg-white px-4 py-2 rounded-lg shadow text-sm font-bold text-gray-600 hover:text-green-500 transition">
+                    <i class="fas fa-arrow-left mr-2"></i> Menu Utama
+                </button>
+                <h2 class="text-xl font-bold text-green-600"><i class="fas fa-wallet mr-2"></i> Keuangan Kos</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <section class="glass-card p-6 md:col-span-3 flex flex-col md:flex-row gap-6 items-center justify-between border-l-8 border-green-400">
+                    <div class="w-full md:w-1/2">
+                        <p class="text-sm text-gray-500 font-bold mb-1">Sisa Saldo Saat Ini</p>
+                        <h2 class="text-4xl md:text-5xl font-extrabold text-green-600" id="display-sisa-saldo">Rp 0</h2>
+                    </div>
+                    <div class="w-full md:w-1/2 bg-green-50 p-4 rounded-xl border border-green-200">
+                        <form id="form-saldo-awal" class="flex flex-col gap-2">
+                            <label class="text-xs font-bold text-gray-600">Set Ulang Saldo Awal / Tabungan (Bulanan):</label>
+                            <div class="flex gap-2">
+                                <span class="bg-white border border-green-200 px-3 py-2 rounded-lg font-bold text-gray-500">Rp</span>
+                                <input type="number" id="input-saldo-awal" placeholder="Contoh: 1500000" required class="w-full">
+                                <button type="submit" class="btn-finance"><i class="fas fa-save"></i></button>
                             </div>
                         </form>
                     </div>
                 </section>
 
-                <section class="glass-card p-5 flex flex-col flex-grow min-h-[500px]">
-                    <h2 class="text-xl font-bold mb-1 text-pink-500 flex items-center">
-                        <i class="fas fa-list-check mr-3 text-yellow-500"></i> Daily Planner
-                    </h2>
-                    <p class="text-xs text-gray-500 mb-4" id="daily-date-display">Today: ...</p>
-                    <div class="flex-grow overflow-y-auto mb-4 pr-1" id="daily-list"></div>
-                    <form id="form-daily" class="mt-auto flex flex-col gap-2">
-                        <input type="text" id="input-daily" placeholder="Fokus/Target hari ini..." required>
-                        <div class="flex gap-2">
-                            <input type="date" id="input-daily-date" class="w-1/2 text-xs">
-                            <input type="time" id="input-daily-time" class="w-1/3 text-xs">
-                            <button type="submit" class="btn-cute w-1/6 px-0"><i class="fas fa-plus"></i></button>
+                <section class="glass-card p-5 md:col-span-1 flex flex-col min-h-[350px]">
+                    <h2 class="text-lg font-bold mb-4 text-green-600"><i class="fas fa-cart-arrow-down mr-2"></i> Catat Pengeluaran</h2>
+                    <form id="form-expense" class="flex flex-col gap-3">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 mb-1 block">Nominal (Rp)</label>
+                            <input type="number" id="input-exp-amount" placeholder="Cth: 15000" required>
                         </div>
-                    </form>
-                </section>
-            </div>
-
-            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 items-start content-start">
-                
-                <section class="glass-card p-5 flex flex-col md:col-span-2 min-h-[500px] border-2 border-pink-300">
-                    <h2 class="text-xl font-bold mb-1 text-pink-500 flex items-center">
-                        <i class="fas fa-hourglass-half mr-3 text-yellow-500"></i> Deadline Tracker
-                    </h2>
-                    <p class="text-xs text-red-400 mb-3 font-semibold">*Akan menyala merah jika deadline < 3 Hari!</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
-                    <form id="form-deadlines" class="mt-auto flex flex-col md:flex-row gap-2">
-                        <input type="text" id="input-deadline-task" placeholder="Nama Tugas / Laporan..." required class="md:w-1/2">
-                        <input type="date" id="input-deadline-date" required class="md:w-1/3">
-                        <button type="submit" class="btn-cute md:w-1/6"><i class="fas fa-plus"></i> Add</button>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 mb-1 block">Kategori</label>
+                            <select id="input-exp-category" required>
+                                <option value="Makan/Minum">🍔 Makan/Minum</option>
+                                <option value="Transportasi">🛵 Transport (Bensin/Ojol)</option>
+                                <option value="Tugas/Kampus">📚 Tugas Kampus/Print</option>
+                                <option value="Kebutuhan Kos">🧴 Kebutuhan Kos (Sabun, dll)</option>
+                                <option value="Jajan/Nongkrong">🧋 Jajan/Nongkrong</option>
+                                <option value="Lain-lain">📦 Lain-lain</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 mb-1 block">Keterangan Singkat</label>
+                            <input type="text" id="input-exp-desc" placeholder="Cth: Nasi padang depan gerbang" required>
+                        </div>
+                        <button type="submit" class="btn-finance mt-2 w-full"><i class="fas fa-plus-circle mr-2"></i> Catat</button>
                     </form>
                 </section>
 
-                <section class="glass-card p-5 flex flex-col md:col-span-2">
-                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
-                        <i class="fas fa-rocket mr-3 text-yellow-500"></i> Long-Term Goals
+                <section class="glass-card p-5 md:col-span-2 flex flex-col min-h-[350px]">
+                    <h2 class="text-lg font-bold mb-2 text-gray-700 flex justify-between">
+                        <span><i class="fas fa-history text-green-500 mr-2"></i> History Pengeluaran</span>
+                        <span class="text-sm text-red-500">Total Keluar: <span id="display-total-keluar">Rp 0</span></span>
                     </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 flex-grow overflow-y-auto max-h-40" id="goals-list"></div>
-                    <form id="form-goals" class="mt-auto flex gap-2">
-                        <input type="text" id="input-goals" placeholder="Tuliskan impian besarmu (S2, IPK, Karir)..." required>
-                        <button type="submit" class="btn-cute"><i class="fas fa-paper-plane"></i></button>
-                    </form>
-                </section>
-
-                <section class="glass-card p-5 flex flex-col min-h-[350px]">
-                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
-                        <i class="fas fa-book-open mr-3 text-yellow-500"></i> Coursework (TMB)
-                    </h2>
-                    <div class="flex-grow overflow-y-auto mb-4 pr-1" id="coursework-list"></div>
-                    <form id="form-coursework" class="mt-auto flex flex-col gap-2">
-                        <input type="text" id="input-course" placeholder="Nama Matkul (Cth: Termodinamika)" required class="text-sm">
-                        <div class="flex gap-2">
-                            <input type="text" id="input-course-detail" placeholder="Tugas / Bab" required class="text-sm">
-                            <button type="submit" class="btn-cute px-3"><i class="fas fa-plus"></i></button>
+                    <div class="flex-grow overflow-y-auto mt-2 pr-2" id="expense-list">
                         </div>
-                    </form>
-                </section>
-
-                <section class="glass-card p-5 flex flex-col min-h-[350px]">
-                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
-                        <i class="fas fa-users mr-3 text-yellow-500"></i> Organization
-                    </h2>
-                    <div class="flex-grow overflow-y-auto mb-4 pr-1" id="org-list"></div>
-                    <form id="form-org" class="mt-auto flex flex-col gap-2">
-                        <input type="text" id="input-org-name" placeholder="Organisasi/Kepanitiaan..." required class="text-sm">
-                        <div class="flex gap-2">
-                            <input type="text" id="input-org-role" placeholder="Tugas/Divisi" required class="text-sm w-1/3">
-                            <input type="date" id="input-org-date" class="text-sm w-1/3" required title="Tanggal / Deadline">
-                            <button type="submit" class="btn-cute px-3 w-1/3"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </form>
-                </section>
-
-                <section class="glass-card p-5 flex flex-col md:col-span-2">
-                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
-                        <i class="fas fa-award mr-3 text-yellow-500"></i> Beasiswa Tracker
-                    </h2>
-                    <div class="flex-grow overflow-y-auto mb-4 max-h-48" id="scholarship-list"></div>
-                    <form id="form-scholarship" class="mt-auto flex flex-col md:flex-row gap-2">
-                        <input type="text" id="input-scholarship-name" placeholder="Nama Beasiswa / Syarat..." required class="md:w-1/2">
-                        <select id="input-scholarship-status" class="md:w-1/3 text-sm">
-                            <option value="To Do">📝 To Do</option>
-                            <option value="In Progress">⏳ In Progress</option>
-                            <option value="Done">✅ Done</option>
-                        </select>
-                        <button type="submit" class="btn-cute md:w-1/6"><i class="fas fa-plus"></i></button>
-                    </form>
-                </section>
-
-                <section class="glass-card p-5 flex flex-col md:col-span-2 relative">
-                    <h2 class="text-xl font-bold mb-4 text-pink-500 flex items-center justify-center">
-                        <i class="fas fa-heart text-red-400 mr-2"></i> My Support System
-                    </h2>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
-                        <div class="flex flex-col items-center">
-                            <div class="polaroid-frame tilt-left">
-                                <i class="fas fa-thumbtack pin-icon text-pink-400"></i>
-                                <img id="img-family" src="https://placehold.co/300x300/ffeaa7/fd79a8?text=Keluarga" alt="Keluarga" class="polaroid-img">
-                            </div>
-                            <input type="file" id="upload-family" accept="image/*" class="text-[10px] mt-2 w-3/4">
-                        </div>
-                        
-                        <div class="flex flex-col items-center">
-                            <div class="polaroid-frame tilt-straight">
-                                <i class="fas fa-thumbtack pin-icon text-yellow-400"></i>
-                                <img id="img-friends" src="https://placehold.co/300x300/ffd1dc/e84393?text=Teman" alt="Teman" class="polaroid-img">
-                            </div>
-                            <input type="file" id="upload-friends" accept="image/*" class="text-[10px] mt-2 w-3/4">
-                        </div>
-
-                        <div class="flex flex-col items-center">
-                            <div class="polaroid-frame tilt-right">
-                                <i class="fas fa-thumbtack pin-icon text-red-400"></i>
-                                <img id="img-partner" src="https://placehold.co/300x300/f4aeb8/ffffff?text=Pacar" alt="Pacar" class="polaroid-img">
-                            </div>
-                            <input type="file" id="upload-partner" accept="image/*" class="text-[10px] mt-2 w-3/4">
-                        </div>
-                    </div>
-
-                    <div class="w-full bg-pink-50 bg-opacity-50 p-3 rounded-lg border border-pink-200">
-                        <textarea id="input-motivation" rows="2" class="w-full text-center italic text-base md:text-lg font-bold text-pink-600 bg-transparent outline-none resize-none" placeholder="Tulis kalimat penyemangatmu di sini..."></textarea>
-                    </div>
-                </section>
-
-                <section class="glass-card p-5 flex flex-col items-center md:col-span-2">
-                    <h2 class="text-xl font-bold mb-4 text-pink-500 flex items-center">
-                        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i> My Inspiration
-                    </h2>
-                    <div class="flex flex-col sm:flex-row gap-6 w-full items-center justify-center">
-                        <div class="w-full sm:w-1/2 max-w-[250px]">
-                            <div class="polaroid-frame tilt-left">
-                                <i class="fas fa-thumbtack pin-icon text-blue-400"></i>
-                                <img id="img-inspiration" src="https://placehold.co/300x200/e0f7fa/00acc1?text=Inspirasi" alt="Inspirasi" class="polaroid-img" style="height: 180px;">
-                            </div>
-                            <input type="file" id="upload-inspiration" accept="image/*" class="text-[10px] mt-2 w-full">
-                        </div>
-                        <div class="w-full sm:w-1/2">
-                            <textarea id="input-inspiration-desc" rows="4" class="w-full text-sm font-medium text-gray-700 bg-white bg-opacity-60 p-3 rounded-lg border border-pink-200 outline-none resize-none focus:border-pink-500" placeholder="Keterangan inspirasimu (Misal: Kampus S2 Jerman, Karir Engineer impian...)"></textarea>
-                        </div>
-                    </div>
                 </section>
 
             </div>
         </main>
+
     </div>
 
-    <footer class="mt-auto py-6 text-center text-gray-500 text-sm font-medium">
-        <p>&copy; 2026 byl.tasya | Engineered with <i class="fas fa-heart text-pink-400"></i> & <i class="fas fa-coffee text-yellow-600"></i></p>
-    </footer>
-
     <script>
-        const STORAGE_KEY = 'planner_2026_data';
-        
+        // 1. DATA MANAGEMENT
+        const STORAGE_KEY = 'tasya_dashboard_2026';
         const defaultData = {
-            goals: [
-                { id: Date.now()+1, text: "Lulus Teknik Mesin & Biosistem IPB dengan IPK Tinggi" },
-                { id: Date.now()+2, text: "Persiapan S2 Engineering di Luar Negeri" }
-            ],
-            daily: [
-                { id: Date.now()+3, text: "Review materi Termodinamika", date: "", time: "", completed: false, notified: false }
-            ],
-            coursework: [
-                { id: Date.now()+4, course: "Elektronika Dasar", detail: "Buat Laporan Praktikum" }
-            ],
-            organizations: [
-                { id: Date.now()+5, name: "IPB Mengajar", role: "Divisi Kurikulum", date: "2026-05-20" },
-                { id: Date.now()+6, name: "Sekbendiv EDELDIS 2026", role: "RAB", date: "" }
-            ],
-            deadlines: [],
-            scholarships: [
-                { id: Date.now()+7, name: "LPDP - Sertifikat TOEFL ITP", status: "To Do" }
-            ],
-            calendarEvents: {}, 
-            photos: {
-                family: null,
-                friends: null,
-                partner: null,
-                inspiration: null
-            },
-            motivation: "I can achieve anything I set my mind to! Semangat LDR-nya bareng Fairuz! ✨",
-            inspirationDesc: "Target kampus impian S2 Engineering. I will be there!"
+            goals: [], daily: [], coursework: [], organizations: [], deadlines: [], calendarEvents: {},
+            finance: { saldoAwal: 0, expenses: [] }
         };
 
         let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
+        
+        // Patcher jika data lama belum ada finance
+        if(!appData.finance) appData.finance = { saldoAwal: 0, expenses: [] };
 
-        if(!appData.photos) appData.photos = defaultData.photos;
-        if(!appData.motivation) appData.motivation = defaultData.motivation;
-        if(!appData.inspirationDesc) appData.inspirationDesc = defaultData.inspirationDesc;
+        const saveData = () => { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); renderAll(); };
 
-        appData.daily.forEach(d => { if(d.notified === undefined) d.notified = false; });
-        Object.keys(appData.calendarEvents).forEach(date => {
-            appData.calendarEvents[date].forEach(ev => {
-                if(ev.notified === undefined) ev.notified = false;
+        // 2. NAVIGATION LOGIC
+        const switchView = (viewId) => {
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-planner').classList.add('hidden');
+            document.getElementById('view-finance').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+            window.scrollTo(0,0);
+        };
+
+        // 3. FORMATTER RUPIAH
+        const formatRupiah = (number) => {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+        };
+
+        // 4. FINANCE LOGIC
+        const renderFinance = () => {
+            const expList = document.getElementById('expense-list');
+            let totalKeluar = 0;
+            expList.innerHTML = '';
+
+            // Sort dari yang terbaru
+            const sortedExp = [...appData.finance.expenses].sort((a, b) => b.id - a.id);
+
+            if(sortedExp.length === 0) {
+                expList.innerHTML = '<p class="text-sm text-gray-400 italic text-center mt-10">Belum ada pengeluaran. Hemat banget!</p>';
+            }
+
+            sortedExp.forEach(exp => {
+                totalKeluar += parseInt(exp.amount);
+                
+                // Set Icon berdasarkan Kategori
+                let icon = 'fa-receipt';
+                if(exp.category.includes('Makan')) icon = 'fa-hamburger';
+                if(exp.category.includes('Transportasi')) icon = 'fa-motorcycle';
+                if(exp.category.includes('Kampus')) icon = 'fa-book';
+                if(exp.category.includes('Kebutuhan')) icon = 'fa-pump-soap';
+                if(exp.category.includes('Jajan')) icon = 'fa-coffee';
+
+                expList.innerHTML += `
+                    <div class="list-item list-item-finance flex-row items-center">
+                        <div class="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="flex-grow flex flex-col">
+                            <span class="font-bold text-sm text-gray-700">${exp.desc}</span>
+                            <span class="text-[10px] text-gray-500">${exp.category} • ${exp.date}</span>
+                        </div>
+                        <div class="text-right flex flex-col items-end">
+                            <span class="font-bold text-red-500 text-sm">-${formatRupiah(exp.amount)}</span>
+                            <button onclick="deleteExpense(${exp.id})" class="text-gray-400 hover:text-red-500 mt-1"><i class="fas fa-trash text-[10px]"></i></button>
+                        </div>
+                    </div>
+                `;
             });
+
+            const sisaSaldo = appData.finance.saldoAwal - totalKeluar;
+            document.getElementById('display-sisa-saldo').innerText = formatRupiah(sisaSaldo);
+            document.getElementById('display-total-keluar').innerText = formatRupiah(totalKeluar);
+            document.getElementById('input-saldo-awal').value = appData.finance.saldoAwal;
+
+            // Peringatan Saldo Sekarat
+            if(sisaSaldo < 50000 && appData.finance.saldoAwal > 0) {
+                document.getElementById('display-sisa-saldo').classList.remove('text-green-600');
+                document.getElementById('display-sisa-saldo').classList.add('text-red-600', 'animate-pulse');
+            } else {
+                document.getElementById('display-sisa-saldo').classList.add('text-green-600');
+                document.getElementById('display-sisa-saldo').classList.remove('text-red-600', 'animate-pulse');
+            }
+        };
+
+        document.getElementById('form-saldo-awal').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const val = document.getElementById('input-saldo-awal').value;
+            appData.finance.saldoAwal = parseInt(val) || 0;
+            saveData();
+            showToast("Berhasil", "Saldo awal tabungan/kos berhasil diupdate!");
         });
 
-        const saveData = () => {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-            renderAll(); 
+        document.getElementById('form-expense').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const amt = document.getElementById('input-exp-amount').value;
+            const cat = document.getElementById('input-exp-category').value;
+            const desc = document.getElementById('input-exp-desc').value;
+
+            const today = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+
+            appData.finance.expenses.push({
+                id: Date.now(), amount: amt, category: cat, desc: desc, date: today
+            });
+
+            document.getElementById('input-exp-amount').value = '';
+            document.getElementById('input-exp-desc').value = '';
+            saveData();
+        });
+
+        window.deleteExpense = (id) => {
+            appData.finance.expenses = appData.finance.expenses.filter(e => e.id !== id);
+            saveData();
         };
 
-        // --- SISTEM HARI LIBUR (HOLIDAYS) ---
-        const getHoliday = (dateStr) => {
-            const [y, m, d] = dateStr.split('-');
-            const md = `${m}-${d}`;
-            
-            // Libur Tetap
-            const fixedHolidays = {
-                '01-01': 'Tahun Baru Masehi',
-                '05-01': 'Hari Buruh Internasional',
-                '06-01': 'Hari Lahir Pancasila',
-                '08-17': 'Hari Kemerdekaan RI',
-                '12-25': 'Hari Raya Natal'
-            };
-
-            // Libur Keagamaan 2026
-            const dynamicHolidays = {
-                '2026-02-17': 'Tahun Baru Imlek',
-                '2026-02-18': 'Isra Mi\'raj',
-                '2026-03-19': 'Hari Suci Nyepi',
-                '2026-03-20': 'Cuti Bersama Idul Fitri',
-                '2026-03-21': 'Hari Raya Idul Fitri',
-                '2026-03-22': 'Hari Raya Idul Fitri',
-                '2026-04-03': 'Wafat Isa Almasih',
-                '2026-05-14': 'Kenaikan Isa Almasih',
-                '2026-05-27': 'Hari Raya Idul Adha',
-                '2026-05-31': 'Hari Raya Waisak',
-                '2026-06-16': 'Tahun Baru Islam',
-                '2026-08-26': 'Maulid Nabi Muhammad SAW'
-            };
-
-            return fixedHolidays[md] || dynamicHolidays[dateStr] || null;
-        };
-
-
-        // --- SISTEM NOTIFIKASI ALARM ---
+        // 5. NOTIFICATION SYSTEM (NATIVE + TOAST FALLBACK)
         const notifIcon = document.getElementById('notif-icon');
-
-        function updateNotifIcon() {
-            if (!("Notification" in window)) {
-                notifIcon.className = "fas fa-bell-slash text-gray-300";
-            } else if (Notification.permission === "granted") {
-                notifIcon.className = "fas fa-bell text-yellow-500 animate-pulse";
-            } else if (Notification.permission === "denied") {
-                notifIcon.className = "fas fa-bell-slash text-red-400";
-            } else {
-                notifIcon.className = "fas fa-bell text-gray-400";
-            }
-        }
-
+        
         window.requestNotificationPermission = () => {
             if ("Notification" in window) {
                 Notification.requestPermission().then(permission => {
-                    updateNotifIcon();
                     if (permission === "granted") {
-                        new Notification("Yay!", { body: "Notifikasi Pengingat Planner sudah aktif!", icon: "icon-192.png" });
+                        notifIcon.className = "fas fa-bell text-yellow-500 animate-pulse";
+                        showToast("Aktif!", "Sistem alarm berhasil menyala.");
+                    } else {
+                        showToast("Izin Ditolak", "Browser memblokir alarm. Tapi tenang, notif in-app tetap jalan!");
                     }
                 });
             } else {
-                alert("Browser ini tidak mendukung notifikasi.");
+                showToast("Oops", "Browsermu ga support Native Notif, pakai In-App Toast aja ya.");
             }
         };
 
-        function checkAlarms() {
-            if (!("Notification" in window) || Notification.permission !== "granted") return;
+        // Custom Toast Function
+        const showToast = (title, message) => {
+            const toast = document.getElementById('in-app-toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-body').innerText = message;
+            
+            toast.classList.add('show');
+            // Sembunyikan otomatis setelah 5 detik
+            setTimeout(() => { toast.classList.remove('show'); }, 5000);
+        };
 
+        function checkAlarms() {
             const now = new Date();
             const currentTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
             const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-            
             let dataChanged = false;
 
             appData.daily.forEach(item => {
                 if (!item.completed && item.time === currentTime && !item.notified) {
                     if (!item.date || item.date === currentDate) {
-                        new Notification("🎯 Waktunya Fokus!", { body: item.text, icon: "icon-192.png" });
-                        item.notified = true;
-                        dataChanged = true;
+                        // Native Notif
+                        if ("Notification" in window && Notification.permission === "granted") {
+                            new Notification("🎯 Daily Task!", { body: item.text, icon: "icon-192.png" });
+                        }
+                        // Fallback In-App Toast
+                        showToast("🎯 Saatnya Fokus!", item.text);
+                        item.notified = true; dataChanged = true;
                     }
                 }
             });
-
-            if (appData.calendarEvents[currentDate]) {
-                appData.calendarEvents[currentDate].forEach(ev => {
-                    if (ev.time === currentTime && !ev.notified) {
-                        new Notification("📅 Jadwal Kalender!", { body: ev.text, icon: "icon-192.png" });
-                        ev.notified = true;
-                        dataChanged = true;
-                    }
-                });
-            }
 
             if(dataChanged) saveData();
         }
+        setInterval(checkAlarms, 60000); // Cek tiap 1 menit
 
-        setInterval(checkAlarms, 60000);
-        updateNotifIcon();
 
-        // --- RENDER LOGIC ---
+        // 6. RENDER PLANNER BASIC (Kodingan ringkas dari yang sebelumnya)
+        window.deleteItem = (cat, id) => { appData[cat] = appData[cat].filter(i => i.id !== id); saveData(); };
 
-        const renderGoals = () => {
-            const container = document.getElementById('goals-list');
-            container.innerHTML = appData.goals.length === 0 ? '<p class="text-sm text-gray-400">Belum ada impian.</p>' : '';
-            appData.goals.forEach(item => {
-                container.innerHTML += `
-                    <div class="list-item flex-col items-start relative h-fit">
-                        <span class="font-medium text-sm pr-6">${item.text}</span>
-                        <button onclick="deleteItem('goals', ${item.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
-                    </div>`;
-            });
-        };
-
-        const renderDaily = () => {
-            const container = document.getElementById('daily-list');
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('daily-date-display').innerText = `Today: ${new Date().toLocaleDateString('id-ID', options)}`;
-
-            container.innerHTML = appData.daily.length === 0 ? '<p class="text-sm text-gray-400">Belum ada target hari ini.</p>' : '';
+        const renderPlanner = () => {
+            // Daily
+            const dailyC = document.getElementById('daily-list');
+            dailyC.innerHTML = '';
             appData.daily.forEach(item => {
-                const checked = item.completed ? 'checked' : '';
-                const completedClass = item.completed ? 'completed' : '';
-                
-                let extraInfo = '';
-                if(item.date || item.time) {
-                    extraInfo = `<div class="flex gap-2 mt-1 pl-8 w-full">`;
-                    if(item.date) extraInfo += `<span class="text-[10px] text-pink-600 bg-pink-100 px-2 py-0.5 rounded-full"><i class="far fa-calendar-alt"></i> ${item.date}</span>`;
-                    if(item.time) extraInfo += `<span class="text-[10px] text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded-full"><i class="far fa-clock"></i> ${item.time}</span>`;
-                    extraInfo += `</div>`;
-                }
-
-                container.innerHTML += `
-                    <div class="list-item flex-col items-start ${completedClass} py-2">
-                        <div class="flex items-center w-full">
-                            <input type="checkbox" class="custom-checkbox mr-3" ${checked} onchange="toggleComplete(${item.id}, this.checked)">
-                            <span class="font-medium flex-1 text-sm">${item.text}</span>
-                            <button onclick="deleteItem('daily', ${item.id})" class="text-red-400 hover:text-red-600 ml-2"><i class="fas fa-trash text-xs"></i></button>
+                dailyC.innerHTML += `
+                    <div class="list-item flex items-center justify-between py-2">
+                        <div class="flex flex-col w-full">
+                            <span class="text-sm font-bold text-gray-700">${item.text}</span>
+                            ${item.time ? `<span class="text-[10px] text-pink-500"><i class="far fa-clock"></i> ${item.time}</span>` : ''}
                         </div>
-                        ${extraInfo}
+                        <button onclick="deleteItem('daily', ${item.id})" class="text-red-400"><i class="fas fa-trash"></i></button>
                     </div>`;
             });
-        };
 
-        const renderCourseOrg = () => {
-            const courseContainer = document.getElementById('coursework-list');
-            courseContainer.innerHTML = appData.coursework.length === 0 ? '<p class="text-sm text-gray-400">Belum ada tugas matkul.</p>' : '';
+            // Coursework
+            document.getElementById('coursework-list').innerHTML = '';
             appData.coursework.forEach(item => {
-                courseContainer.innerHTML += `
-                    <div class="list-item flex-col items-start relative">
-                        <span class="text-xs font-bold text-pink-500 bg-pink-100 px-2 py-1 rounded mb-1">${item.course}</span>
-                        <span class="font-medium text-sm pr-6 mt-1">${item.detail}</span>
-                        <button onclick="deleteItem('coursework', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                document.getElementById('coursework-list').innerHTML += `
+                    <div class="list-item flex flex-col items-start relative">
+                        <span class="text-[10px] font-bold text-white bg-pink-400 px-2 rounded">${item.course}</span>
+                        <span class="text-sm mt-1">${item.detail}</span>
+                        <button onclick="deleteItem('coursework', ${item.id})" class="absolute top-2 right-2 text-red-400"><i class="fas fa-trash text-xs"></i></button>
                     </div>`;
             });
-
-            const orgContainer = document.getElementById('org-list');
-            orgContainer.innerHTML = appData.organizations.length === 0 ? '<p class="text-sm text-gray-400">Belum ada agenda organisasi.</p>' : '';
             
-            const today = new Date();
-            today.setHours(0,0,0,0);
-
+            // Orgs
+            document.getElementById('org-list').innerHTML = '';
             appData.organizations.forEach(item => {
-                let statusBadge = '';
-                let isPanic = false;
-
-                if (item.date) {
-                    const [year, month, day] = item.date.split('-');
-                    const deadlineDate = new Date(year, month - 1, day);
-                    deadlineDate.setHours(0, 0, 0, 0);
-
-                    const diffDays = Math.round((deadlineDate - today) / (1000 * 60 * 60 * 24));
-
-                    if (diffDays < 0) {
-                        statusBadge = `<span class="text-[10px] font-bold bg-gray-300 text-gray-700 px-1.5 py-0.5 rounded ml-2">Lewat</span>`;
-                    } else if (diffDays <= 3) {
-                        isPanic = true;
-                        statusBadge = `<span class="text-[10px] font-bold bg-red-500 text-white px-1.5 py-0.5 rounded ml-2 animate-pulse">DL DEKAT!</span>`;
-                    } else {
-                        statusBadge = `<span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded ml-2"><i class="far fa-calendar"></i> ${item.date}</span>`;
-                    }
-                }
-
-                orgContainer.innerHTML += `
-                    <div class="list-item flex-col items-start relative ${isPanic ? 'panic-warning' : ''}">
-                        <span class="font-bold text-sm text-gray-700">${item.name}</span>
-                        <div class="flex items-center mt-1">
-                            <span class="text-xs text-yellow-600"><i class="fas fa-user-tag mr-1"></i>${item.role}</span>
-                            ${statusBadge}
-                        </div>
-                        <button onclick="deleteItem('organizations', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                document.getElementById('org-list').innerHTML += `
+                    <div class="list-item flex flex-col items-start relative">
+                        <span class="text-sm font-bold">${item.name}</span>
+                        <span class="text-xs text-gray-500">${item.role}</span>
+                        <button onclick="deleteItem('organizations', ${item.id})" class="absolute top-2 right-2 text-red-400"><i class="fas fa-trash text-xs"></i></button>
                     </div>`;
             });
-        };
 
-        const renderDeadlines = () => {
-            const container = document.getElementById('deadlines-list');
-            let sortedDeadlines = [...appData.deadlines].sort((a, b) => new Date(a.date) - new Date(b.date));
-            container.innerHTML = sortedDeadlines.length === 0 ? '<p class="text-sm text-gray-400">Tidak ada deadline. Santai dulu!</p>' : '';
-            
-            const today = new Date();
-            today.setHours(0,0,0,0);
-
-            sortedDeadlines.forEach(item => {
-                const [year, month, day] = item.date.split('-');
-                const deadlineDate = new Date(year, month - 1, day);
-                deadlineDate.setHours(0, 0, 0, 0);
-
-                const diffDays = Math.round((deadlineDate - today) / (1000 * 60 * 60 * 24));
-                
-                let isPanic = false;
-                let statusBadge = '';
-
-                if (diffDays < 0) {
-                    statusBadge = `<span class="text-sm md:text-base font-bold bg-gray-300 text-gray-700 px-3 py-1.5 rounded mt-2 shadow-sm">Terlewat</span>`;
-                } else if (diffDays <= 3) {
-                    isPanic = true;
-                    statusBadge = `<span class="text-sm md:text-base font-extrabold bg-red-500 text-white px-3 py-1.5 rounded mt-2 shadow-sm animate-pulse"><i class="fas fa-exclamation-triangle mr-1"></i> ${diffDays === 0 ? 'HARI INI!' : diffDays + ' Hari Lagi'}</span>`;
-                } else {
-                    statusBadge = `<span class="text-sm md:text-base font-bold bg-green-100 text-green-700 px-3 py-1.5 rounded mt-2 shadow-sm">${diffDays} Hari Lagi</span>`;
-                }
-
-                container.innerHTML += `
-                    <div class="list-item flex-col items-start relative h-fit ${isPanic ? 'panic-warning' : ''}">
-                        <span class="font-medium text-base pr-6 ${isPanic ? 'panic-text' : ''}">${item.task}</span>
-                        <div class="flex justify-between items-center w-full mt-2">
-                            <span class="text-sm text-gray-500 font-medium"><i class="far fa-calendar-alt"></i> ${item.date}</span>
-                            ${statusBadge}
-                        </div>
-                        <button onclick="deleteItem('deadlines', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-sm"></i></button>
+            // Deadlines
+            document.getElementById('deadlines-list').innerHTML = '';
+            appData.deadlines.forEach(item => {
+                document.getElementById('deadlines-list').innerHTML += `
+                    <div class="list-item flex flex-col items-start relative bg-red-50 border-red-300">
+                        <span class="text-sm font-bold text-red-600">${item.task}</span>
+                        <span class="text-xs font-bold text-gray-600">${item.date}</span>
+                        <button onclick="deleteItem('deadlines', ${item.id})" class="absolute top-2 right-2 text-red-400"><i class="fas fa-trash text-xs"></i></button>
                     </div>`;
             });
+            
+            renderCalendarBasic();
         };
 
-        const renderScholarships = () => {
-            const container = document.getElementById('scholarship-list');
-            container.innerHTML = appData.scholarships.length === 0 ? '<p class="text-sm text-gray-400">Belum ada persiapan beasiswa.</p>' : '';
+        let cMonth = new Date().getMonth(), cYear = new Date().getFullYear(), actDate = new Date().toISOString().split('T')[0];
+        const renderCalendarBasic = () => {
+            const daysC = document.getElementById('calendar-days');
+            daysC.innerHTML = '';
+            document.getElementById('calendar-month-year').innerText = new Date(cYear, cMonth).toLocaleDateString('id-ID', {month: 'long', year:'numeric'});
             
-            appData.scholarships.forEach(item => {
-                let badgeClass = '';
-                if(item.status === 'To Do') badgeClass = 'bg-gray-200 text-gray-700';
-                if(item.status === 'In Progress') badgeClass = 'bg-yellow-200 text-yellow-800';
-                if(item.status === 'Done') badgeClass = 'bg-green-200 text-green-800 text-decoration-line-through';
-
-                container.innerHTML += `
-                    <div class="list-item flex justify-between relative">
-                        <div class="flex flex-col pr-6">
-                            <span class="font-medium text-sm">${item.name}</span>
-                            <span class="text-xs font-bold px-2 py-1 rounded w-max mt-1 ${badgeClass}">${item.status}</span>
-                        </div>
-                        <button onclick="deleteItem('scholarships', ${item.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
-                    </div>`;
-            });
-        };
-
-        // --- KALENDER INTERAKTIF LOGIC ---
-        let currentMonth = new Date().getMonth();
-        let currentYear = new Date().getFullYear();
-        let activeDate = new Date().toISOString().split('T')[0];
-
-        const renderCalendar = () => {
-            const daysContainer = document.getElementById('calendar-days');
-            const monthYearDisplay = document.getElementById('calendar-month-year');
-            daysContainer.innerHTML = '';
-
-            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            let firstDay = new Date(cYear, cMonth, 1).getDay();
+            let daysInMonth = new Date(cYear, cMonth + 1, 0).getDate();
             
-            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-            monthYearDisplay.innerText = `${monthNames[currentMonth]} ${currentYear}`;
-
-            const today = new Date();
-
-            for (let i = 0; i < firstDay; i++) {
-                daysContainer.innerHTML += `<div></div>`;
+            for(let i=0; i<firstDay; i++) daysC.innerHTML += `<div></div>`;
+            for(let i=1; i<=daysInMonth; i++) {
+                let dStr = `${cYear}-${String(cMonth+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                let isSun = new Date(cYear, cMonth, i).getDay() === 0 ? 'holiday' : '';
+                let isSel = dStr === actDate ? 'selected' : '';
+                daysC.innerHTML += `<div class="calendar-day ${isSun} ${isSel}" onclick="actDate='${dStr}'; renderCalendarBasic()">${i}</div>`;
             }
-
-            for (let i = 1; i <= daysInMonth; i++) {
-                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-                
-                // DETEKSI HARI MINGGU
-                const dateObj = new Date(currentYear, currentMonth, i);
-                const isSunday = dateObj.getDay() === 0;
-
-                let isToday = (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) ? 'today' : '';
-                let isSelected = (dateStr === activeDate) ? 'selected' : '';
-                let hasEvent = appData.calendarEvents[dateStr] && appData.calendarEvents[dateStr].length > 0 ? 'has-event' : '';
-                
-                // Cek apakah hari ini adalah hari libur atau hari minggu
-                let holidayName = getHoliday(dateStr);
-                let isHolidayClass = (holidayName || isSunday) ? 'holiday' : '';
-                let holidayTitle = holidayName ? holidayName : (isSunday ? 'Hari Minggu' : '');
-
-                daysContainer.innerHTML += `<div class="calendar-day ${isToday} ${isSelected} ${hasEvent} ${isHolidayClass}" onclick="selectDate('${dateStr}')" title="${holidayTitle}">${i}</div>`;
+            
+            // Events below
+            const listB = document.getElementById('calendar-event-list-below');
+            document.getElementById('selected-date-display').innerText = actDate;
+            listB.innerHTML = '';
+            if(appData.calendarEvents[actDate]) {
+                appData.calendarEvents[actDate].forEach((ev, i) => {
+                    listB.innerHTML += `<div class="flex justify-between items-center bg-white p-2 text-xs rounded mb-1 border border-pink-200"><span><b>${ev.time}</b> - ${ev.text}</span> <button onclick="appData.calendarEvents['${actDate}'].splice(${i},1); saveData()" class="text-red-400"><i class="fas fa-times"></i></button></div>`;
+                });
             }
-
-            renderEventsBelowCalendar();
         };
 
-        document.getElementById('prev-month').addEventListener('click', () => {
-            currentMonth--;
-            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-            renderCalendar();
+        // Form Planners
+        document.getElementById('form-daily').addEventListener('submit', (e) => {
+            e.preventDefault();
+            appData.daily.push({ id: Date.now(), text: document.getElementById('input-daily').value, time: document.getElementById('input-daily-time').value, completed: false, notified: false });
+            document.getElementById('input-daily').value=''; saveData();
         });
-
-        document.getElementById('next-month').addEventListener('click', () => {
-            currentMonth++;
-            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-            renderCalendar();
+        document.getElementById('form-coursework').addEventListener('submit', (e) => {
+            e.preventDefault();
+            appData.coursework.push({ id: Date.now(), course: document.getElementById('input-course').value, detail: document.getElementById('input-course-detail').value });
+            document.getElementById('input-course').value=''; document.getElementById('input-course-detail').value=''; saveData();
         });
-
-        window.selectDate = (dateStr) => {
-            activeDate = dateStr;
-            renderCalendar(); 
-        };
-
-        const renderEventsBelowCalendar = () => {
-            const list = document.getElementById('calendar-event-list-below');
-            document.getElementById('selected-date-display').innerText = activeDate;
-            
-            list.innerHTML = '';
-
-            // Tampilkan Info Hari Libur/Minggu jika ada (DIBAWAH KALENDER)
-            const holidayName = getHoliday(activeDate);
-            const activeDateObj = new Date(activeDate);
-            const isSunday = activeDateObj.getDay() === 0;
-
-            if (holidayName) {
-                list.innerHTML += `
-                    <div class="flex items-center bg-red-50 p-2 rounded mb-2 text-sm border border-red-200 shadow-sm">
-                        <span class="text-red-500 font-bold text-xs"><i class="fas fa-flag mr-2"></i> Libur Nasional: ${holidayName}</span>
-                    </div>`;
-            } else if (isSunday) {
-                list.innerHTML += `
-                    <div class="flex items-center bg-red-50 p-2 rounded mb-2 text-sm border border-red-200 shadow-sm">
-                        <span class="text-red-500 font-bold text-xs"><i class="fas fa-bed mr-2"></i> Hari Minggu: Waktunya istirahat atau nugas!</span>
-                    </div>`;
-            }
-
-            let events = appData.calendarEvents[activeDate] || [];
-            events = events.map(ev => typeof ev === 'string' ? {time: "00:00", text: ev, notified: false} : ev);
-
-            if (events.length === 0 && !holidayName && !isSunday) {
-                list.innerHTML = '<p class="text-xs text-gray-400 italic">Jadwal kosong. Saatnya produktif!</p>';
-            }
-            
-            events.sort((a, b) => a.time.localeCompare(b.time)).forEach((ev, idx) => {
-                list.innerHTML += `
-                    <div class="flex justify-between items-center bg-white bg-opacity-70 p-2 rounded mb-2 text-sm border border-pink-200">
-                        <div class="flex items-center gap-2">
-                            <span class="text-[10px] font-bold text-yellow-600 bg-yellow-100 px-1 rounded"><i class="far fa-clock"></i> ${ev.time}</span>
-                            <span class="font-medium text-xs">${ev.text}</span>
-                        </div>
-                        <button onclick="deleteCalendarEvent(${idx})" class="text-red-400 hover:text-red-600 ml-2"><i class="fas fa-trash text-xs"></i></button>
-                    </div>`;
-            });
-        };
-
-        window.deleteCalendarEvent = (index) => {
-            appData.calendarEvents[activeDate].splice(index, 1);
-            if (appData.calendarEvents[activeDate].length === 0) {
-                delete appData.calendarEvents[activeDate];
-            }
-            saveData();
-        };
-
+        document.getElementById('form-org').addEventListener('submit', (e) => {
+            e.preventDefault();
+            appData.organizations.push({ id: Date.now(), name: document.getElementById('input-org-name').value, role: document.getElementById('input-org-role').value });
+            document.getElementById('input-org-name').value=''; document.getElementById('input-org-role').value=''; saveData();
+        });
+        document.getElementById('form-deadlines').addEventListener('submit', (e) => {
+            e.preventDefault();
+            appData.deadlines.push({ id: Date.now(), task: document.getElementById('input-deadline-task').value, date: document.getElementById('input-deadline-date').value });
+            document.getElementById('input-deadline-task').value=''; saveData();
+        });
         document.getElementById('form-calendar-event').addEventListener('submit', (e) => {
             e.preventDefault();
-            const inputTime = document.getElementById('input-cal-time');
-            const inputText = document.getElementById('input-cal-event');
-            
-            if(inputText.value.trim() && inputTime.value){
-                if(!appData.calendarEvents[activeDate]) appData.calendarEvents[activeDate] = [];
-                appData.calendarEvents[activeDate].push({ 
-                    time: inputTime.value, 
-                    text: inputText.value.trim(),
-                    notified: false
-                });
-                inputText.value = ''; inputTime.value = '';
-                saveData();
-            }
+            if(!appData.calendarEvents[actDate]) appData.calendarEvents[actDate] = [];
+            appData.calendarEvents[actDate].push({ time: document.getElementById('input-cal-time').value, text: document.getElementById('input-cal-event').value, notified: false });
+            document.getElementById('input-cal-event').value=''; saveData();
         });
 
+        document.getElementById('prev-month').addEventListener('click', () => { cMonth--; if(cMonth<0){cMonth=11; cYear--;} renderCalendarBasic(); });
+        document.getElementById('next-month').addEventListener('click', () => { cMonth++; if(cMonth>11){cMonth=0; cYear++;} renderCalendarBasic(); });
 
-        // --- PHOTOS & TEXT LOGIC ---
-        const renderPhotosAndText = () => {
-            if(appData.photos.family) document.getElementById('img-family').src = appData.photos.family;
-            if(appData.photos.friends) document.getElementById('img-friends').src = appData.photos.friends;
-            if(appData.photos.partner) document.getElementById('img-partner').src = appData.photos.partner;
-            if(appData.photos.inspiration) document.getElementById('img-inspiration').src = appData.photos.inspiration;
-            
-            document.getElementById('input-motivation').value = appData.motivation;
-            document.getElementById('input-inspiration-desc').value = appData.inspirationDesc;
-        };
-
-        const setupImageUpload = (inputId, imgId, photoKey) => {
-            document.getElementById(inputId).addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 300; 
-                        const scaleSize = MAX_WIDTH / img.width;
-                        canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scaleSize;
-                        
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        const base64Str = canvas.toDataURL('image/jpeg', 0.8);
-                        document.getElementById(imgId).src = base64Str;
-                        appData.photos[photoKey] = base64Str;
-                        saveData();
-                    }
-                    img.src = event.target.result;
-                }
-                reader.readAsDataURL(file);
-            });
-        };
-
-        setupImageUpload('upload-family', 'img-family', 'family');
-        setupImageUpload('upload-friends', 'img-friends', 'friends');
-        setupImageUpload('upload-partner', 'img-partner', 'partner');
-        setupImageUpload('upload-inspiration', 'img-inspiration', 'inspiration');
-
-        document.getElementById('input-motivation').addEventListener('input', (e) => {
-            appData.motivation = e.target.value;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-        });
-        document.getElementById('input-inspiration-desc').addEventListener('input', (e) => {
-            appData.inspirationDesc = e.target.value;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-        });
-
-        // --- GLOBAL HELPER FUNCTIONS ---
-        window.deleteItem = (category, id) => {
-            appData[category] = appData[category].filter(item => item.id !== id);
-            saveData();
-        };
-
-        window.toggleComplete = (id, status) => {
-            const index = appData.daily.findIndex(item => item.id === id);
-            if (index > -1) {
-                appData.daily[index].completed = status;
-                saveData();
-            }
-        };
-
-        // --- FORM SUBMISSIONS ---
-        const handleFormSubmit = (formId, handler) => {
-            document.getElementById(formId).addEventListener('submit', (e) => {
-                e.preventDefault();
-                handler();
-                saveData();
-            });
-        };
-
-        handleFormSubmit('form-goals', () => {
-            const input = document.getElementById('input-goals');
-            if(input.value.trim()) appData.goals.push({ id: Date.now(), text: input.value });
-            input.value = '';
-        });
-
-        handleFormSubmit('form-daily', () => {
-            const inputTxt = document.getElementById('input-daily');
-            const inputDate = document.getElementById('input-daily-date');
-            const inputTime = document.getElementById('input-daily-time');
-            if(inputTxt.value.trim()) {
-                appData.daily.push({ 
-                    id: Date.now(), 
-                    text: inputTxt.value, 
-                    date: inputDate.value,
-                    time: inputTime.value,
-                    completed: false,
-                    notified: false
-                });
-                inputTxt.value = ''; inputDate.value = ''; inputTime.value = '';
-            }
-        });
-
-        handleFormSubmit('form-coursework', () => {
-            const iCourse = document.getElementById('input-course');
-            const iDetail = document.getElementById('input-course-detail');
-            if(iCourse.value && iDetail.value) {
-                appData.coursework.push({ id: Date.now(), course: iCourse.value, detail: iDetail.value });
-                iCourse.value = ''; iDetail.value = '';
-            }
-        });
-
-        handleFormSubmit('form-org', () => {
-            const iName = document.getElementById('input-org-name');
-            const iRole = document.getElementById('input-org-role');
-            const iDate = document.getElementById('input-org-date');
-            if(iName.value && iRole.value && iDate.value) {
-                appData.organizations.push({ 
-                    id: Date.now(), 
-                    name: iName.value, 
-                    role: iRole.value,
-                    date: iDate.value
-                });
-                iName.value = ''; iRole.value = ''; iDate.value = '';
-            }
-        });
-
-        handleFormSubmit('form-deadlines', () => {
-            const iTask = document.getElementById('input-deadline-task');
-            const iDate = document.getElementById('input-deadline-date');
-            if(iTask.value && iDate.value) {
-                appData.deadlines.push({ id: Date.now(), task: iTask.value, date: iDate.value });
-                iTask.value = ''; iDate.value = '';
-            }
-        });
-
-        handleFormSubmit('form-scholarship', () => {
-            const iName = document.getElementById('input-scholarship-name');
-            const iStatus = document.getElementById('input-scholarship-status');
-            if(iName.value) {
-                appData.scholarships.push({ id: Date.now(), name: iName.value, status: iStatus.value });
-                iName.value = ''; iStatus.value = 'To Do';
-            }
-        });
-
-        const renderAll = () => {
-            renderGoals();
-            renderDaily();
-            renderCourseOrg();
-            renderDeadlines();
-            renderScholarships();
-            renderCalendar();
-            renderPhotosAndText();
-        };
-
+        const renderAll = () => { renderPlanner(); renderFinance(); };
         renderAll();
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                    .then((reg) => console.log('Service Worker berhasil didaftarkan!', reg.scope))
-                    .catch((err) => console.log('Service Worker gagal didaftarkan:', err));
-            });
-        }
     </script>
 </body>
 </html>
