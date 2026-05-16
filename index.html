@@ -9,6 +9,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <meta name="apple-mobile-web-app-title" content="Tasya Planner">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,7 +44,7 @@
             font-family: 'Nunito', sans-serif;
         }
 
-        /* --- SPLASH SCREEN INTRO (ADDED FEATURE) --- */
+        /* --- SPLASH SCREEN INTRO --- */
         #intro-splash {
             position: fixed;
             top: 0;
@@ -51,7 +52,7 @@
             width: 100vw;
             height: 100vh;
             background: linear-gradient(135deg, #2d3436 0%, #e84393 100%);
-            z-index: 99999; /* Pastikan selalu paling atas */
+            z-index: 99999; 
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -62,9 +63,15 @@
         
         .intro-icon {
             font-size: 5rem;
-            color: #fff9d2; /* Pastel yellow */
+            color: #fff9d2; 
             margin-bottom: 20px;
             animation: pulse-glow 1.5s infinite;
+            cursor: pointer; /* Menandakan bisa diklik */
+            transition: transform 0.2s ease;
+        }
+        
+        .intro-icon:hover {
+            transform: scale(1.1);
         }
 
         .intro-title {
@@ -82,7 +89,7 @@
             font-size: 1rem;
             font-weight: 300;
             text-align: center;
-            color: #ffd1dc; /* Soft pink */
+            color: #ffd1dc; 
             max-width: 80%;
             line-height: 1.5;
         }
@@ -92,7 +99,6 @@
             50% { transform: scale(1.15); text-shadow: 0 0 30px rgba(255, 249, 210, 1); }
             100% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 249, 210, 0.5); }
         }
-        /* --- END OF SPLASH SCREEN INTRO --- */
 
         /* --- Header Glowing --- */
         .header-glow {
@@ -248,7 +254,6 @@
             box-shadow: 0 2px 10px rgba(253, 121, 168, 0.4);
         }
         
-        /* GAYA KHUSUS HARI LIBUR & MINGGU */
         .calendar-day.holiday {
             color: #e74c3c !important; 
             font-weight: 800;
@@ -340,33 +345,27 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #fd79a8; border-radius: 10px; }
         
-        /* Nav & Notif Status */
-        #notif-status {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        #notif-status:hover { transform: scale(1.1); }
-        
         .menu-btn-giant {
-            width: 100%;
-            max-width: 300px;
+            flex: 1 1 240px;
+            max-width: 280px;
             height: 150px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             gap: 15px;
             border-radius: 25px;
             cursor: pointer;
+            text-align: center;
         }
-        .menu-btn-giant i { font-size: 3rem; }
+        .menu-btn-giant i { font-size: 2.8rem; }
     </style>
 </head>
 <body class="antialiased flex flex-col min-h-screen">
 
     <div id="intro-splash">
-        <i class="fas fa-crown intro-icon"></i>
+        <i class="fas fa-crown intro-icon" onclick="skipIntro()" title="Klik untuk Mulai"></i>
         <h1 class="intro-title">Welcome, Tasya.</h1>
         <p class="intro-subtitle">Write your own story.<br>Make your dreams happen today, Tasya. ✨</p>
     </div>
@@ -398,7 +397,12 @@
             </p>
         </header>
 
-        <section id="home-section" class="flex flex-col md:flex-row items-center justify-center gap-8 mt-10">
+        <section id="home-section" class="flex flex-wrap items-center justify-center gap-6 mt-10">
+            <div class="glass-card menu-btn-giant bg-white bg-opacity-80 border-4 border-orange-200 hover:border-orange-400 text-orange-600" onclick="showSection('schedule-section')">
+                <i class="fas fa-calendar-days text-orange-500"></i>
+                <span class="font-extrabold font-nunito">Jadwal Kuliah & Kuis</span>
+            </div>
+
             <div class="glass-card menu-btn-giant bg-white bg-opacity-80 border-4 border-pink-200 hover:border-pink-400 text-pink-600" onclick="showSection('planner-section')">
                 <i class="far fa-calendar-alt text-pink-500"></i>
                 <span class="font-extrabold font-nunito">My Planner</span>
@@ -410,8 +414,79 @@
             </div>
         </section>
 
+        <main id="schedule-section" class="grid grid-cols-1 md:grid-cols-3 gap-6 hidden">
+            <section class="glass-card p-5 flex flex-col md:col-span-1 border-2 border-orange-300">
+                <h2 class="text-xl font-bold mb-4 text-orange-600 flex items-center">
+                    <i class="fas fa-folder-plus mr-2 text-orange-400"></i> Input Jadwal Baru
+                </h2>
+                <form id="form-schedule" class="flex flex-col gap-3">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 ml-1">Jenis Agenda</label>
+                        <select id="input-sch-type" required class="text-sm mt-1">
+                            <option value="Kuliah">📚 Mata Kuliah</option>
+                            <option value="Praktikum">🛠️ Praktikum</option>
+                            <option value="Kuis">📝 Kuis / Ujian</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 ml-1">Nama Matkul</label>
+                        <input type="text" id="input-sch-name" placeholder="Cth: Termodinamika" required class="text-sm mt-1">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 ml-1">Hari</label>
+                        <select id="input-sch-day" required class="text-sm mt-1">
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                            <option value="Sabtu">Sabtu</option>
+                            <option value="Minggu">Minggu</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <div class="w-1/2">
+                            <label class="text-[10px] text-gray-500 font-bold ml-1">Jam Mulai</label>
+                            <input type="time" id="input-sch-start" required class="text-sm">
+                        </div>
+                        <div class="w-1/2">
+                            <label class="text-[10px] text-gray-500 font-bold ml-1">Jam Selesai</label>
+                            <input type="time" id="input-sch-end" required class="text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 ml-1">Ruangan / Kelas</label>
+                        <input type="text" id="input-sch-room" placeholder="Cth: RK TMB / Ruang Lab" required class="text-sm mt-1">
+                    </div>
+
+                    <button type="submit" class="btn-cute mt-3 !bg-gradient-to-r !from-amber-200 !to-orange-400 !shadow-orange-200"><i class="fas fa-plus"></i> Tambah ke Jadwal</button>
+                </form>
+            </section>
+
+            <section class="glass-card p-5 flex flex-col md:col-span-2 min-h-[500px]">
+                <h2 class="text-xl font-bold mb-4 text-orange-600 flex items-center">
+                    <i class="fas fa-list-ol mr-2 text-orange-400"></i> Jadwal Tasya Minggu Ini
+                </h2>
+                
+                <div class="flex gap-2 mb-4 overflow-x-auto pb-2" id="sch-day-filters">
+                    <button class="px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 text-xs font-bold whitespace-nowrap shadow-sm hover:bg-orange-200 transition" onclick="filterSchedule('All')" id="btn-filter-All">Semua Hari</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white bg-opacity-50 border border-gray-200 text-gray-600 text-xs font-bold whitespace-nowrap hover:bg-orange-50 transition" onclick="filterSchedule('Senin')" id="btn-filter-Senin">Senin</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white bg-opacity-50 border border-gray-200 text-gray-600 text-xs font-bold whitespace-nowrap hover:bg-orange-50 transition" onclick="filterSchedule('Selasa')" id="btn-filter-Selasa">Selasa</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white bg-opacity-50 border border-gray-200 text-gray-600 text-xs font-bold whitespace-nowrap hover:bg-orange-50 transition" onclick="filterSchedule('Rabu')" id="btn-filter-Rabu">Rabu</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white bg-opacity-50 border border-gray-200 text-gray-600 text-xs font-bold whitespace-nowrap hover:bg-orange-50 transition" onclick="filterSchedule('Kamis')" id="btn-filter-Kamis">Kamis</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white bg-opacity-50 border border-gray-200 text-gray-600 text-xs font-bold whitespace-nowrap hover:bg-orange-50 transition" onclick="filterSchedule('Jumat')" id="btn-filter-Jumat">Jumat</button>
+                </div>
+
+                <div class="flex-grow overflow-y-auto pr-2 grid grid-cols-1 md:grid-cols-2 gap-4 content-start" id="schedule-list">
+                    </div>
+            </section>
+        </main>
+
         <main id="finance-section" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
-            
             <section class="glass-card p-6 flex flex-col relative overflow-hidden">
                 <div class="absolute -right-10 -top-10 opacity-10 text-9xl text-yellow-500"><i class="fas fa-coins"></i></div>
                 <h2 class="text-2xl font-bold mb-4 text-yellow-600 flex items-center">
@@ -482,7 +557,6 @@
         <main id="planner-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
             
             <div class="lg:col-span-1 flex flex-col gap-6">
-                
                 <section class="glass-card p-5">
                     <div class="flex justify-between items-center mb-4">
                         <button id="prev-month" class="text-pink-500 hover:text-pink-700"><i class="fas fa-chevron-left"></i></button>
@@ -534,7 +608,7 @@
                     <h2 class="text-xl font-bold mb-1 text-pink-500 flex items-center">
                         <i class="fas fa-hourglass-half mr-3 text-yellow-500"></i> Deadline Tracker
                     </h2>
-                    <p class="text-xs text-red-400 mb-3 font-semibold">*Akan menyala merah jika deadline < 3 Hari!</p>
+                    <p class="text-xs text-red-400 mb-3 font-semibold">*Akan menyala merah jika deadline &lt; 3 Hari!</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
                     
                     <form id="form-deadlines" class="mt-auto flex flex-col md:flex-row gap-2">
@@ -664,21 +738,28 @@
     </footer>
 
     <script>
-        // --- LOGIC HILANGKAN SPLASH SCREEN SETELAH LOAD ---
+        // --- SEKARANG BISA SKIPPED JIKA MAHKOTA DIKLIK ---
+        let introTimeout;
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                const splash = document.getElementById('intro-splash');
-                if (splash) {
-                    splash.style.opacity = '0';
-                    splash.style.visibility = 'hidden';
-                    setTimeout(() => splash.remove(), 800); 
-                }
+            introTimeout = setTimeout(() => {
+                skipIntro();
             }, 3500); 
         });
+
+        window.skipIntro = () => {
+            clearTimeout(introTimeout);
+            const splash = document.getElementById('intro-splash');
+            if (splash) {
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+                setTimeout(() => splash.remove(), 800); 
+            }
+        };
 
         const STORAGE_KEY = 'planner_2026_data';
         
         const defaultData = {
+            schedule: [], // Array penampung baru untuk matkul/praktikum/kuis
             goals: [
                 { id: Date.now()+1, text: "Lulus Teknik Mesin & Biosistem IPB dengan IPK Tinggi" },
                 { id: Date.now()+2, text: "Persiapan S2 Engineering di Luar Negeri" }
@@ -715,12 +796,14 @@
 
         let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
 
+        // Sync structure array baru jika user punya storage lama
+        if(!appData.schedule) appData.schedule = defaultData.schedule;
         if(!appData.photos) appData.photos = defaultData.photos;
         if(!appData.motivation) appData.motivation = defaultData.motivation;
         if(!appData.inspirationDesc) appData.inspirationDesc = defaultData.inspirationDesc;
         if(!appData.finance) appData.finance = defaultData.finance;
 
-        // Reset Notif
+        // Reset Notif State
         appData.daily.forEach(d => { if(d.notified === undefined) d.notified = false; });
         appData.deadlines.forEach(d => { 
             if(d.notified === undefined) d.notified = false; 
@@ -737,11 +820,12 @@
             renderAll(); 
         };
 
-        // --- SISTEM NAVIGASI MENU ---
+        // --- SISTEM NAVIGASI MENU (KINI MENAMPUNG JADWAL SECARA TERPISAH) ---
         window.showSection = (sectionId) => {
             document.getElementById('home-section').classList.add('hidden');
             document.getElementById('planner-section').classList.add('hidden');
             document.getElementById('finance-section').classList.add('hidden');
+            document.getElementById('schedule-section').classList.add('hidden');
             
             document.getElementById(sectionId).classList.remove('hidden');
             
@@ -761,6 +845,10 @@
                 btnBack.classList.remove('hidden');
                 mainTitle.innerText = "Keuangan Anak Kos";
                 mainSubtitle.innerHTML = '<i class="fas fa-wallet text-green-500 mr-2"></i> Tracker Pengeluaran & Tabungan';
+            } else if (sectionId === 'schedule-section') {
+                btnBack.classList.remove('hidden');
+                mainTitle.innerText = "Jadwal Perkuliahan";
+                mainSubtitle.innerHTML = '<i class="fas fa-calendar-alt text-orange-500 mr-2"></i> Kalender Matkul, Praktikum & Kuis';
             }
         };
 
@@ -838,7 +926,6 @@
             
             let dataChanged = false;
 
-            // Alarm Daily Planner
             appData.daily.forEach(item => {
                 if (!item.completed && item.time === currentTime && !item.notified) {
                     if (!item.date || item.date === currentDate) {
@@ -849,7 +936,6 @@
                 }
             });
 
-            // Alarm Kalender
             if (appData.calendarEvents[currentDate]) {
                 appData.calendarEvents[currentDate].forEach(ev => {
                     if (ev.time === currentTime && !ev.notified) {
@@ -860,7 +946,6 @@
                 });
             }
 
-            // Alarm Deadline Tracker
             appData.deadlines.forEach(item => {
                 if (item.date === currentDate && item.time === currentTime && !item.notified) {
                     triggerAlarm("🚨 Peringatan Deadline!", `Waktunya mengumpulkan: ${item.task}`);
@@ -874,6 +959,92 @@
 
         setInterval(checkAlarms, 10000); 
         updateNotifIcon();
+
+        // --- MANAJEMEN DATA LOGIC JADWAL (BARU) ---
+        let schFilterDay = 'All';
+
+        window.filterSchedule = (day) => {
+            schFilterDay = day;
+            const days = ['All', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            days.forEach(d => {
+                const btn = document.getElementById(`btn-filter-${d}`);
+                if (btn) {
+                    if (d === day) {
+                        btn.className = "px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 text-xs font-bold whitespace-nowrap shadow-sm hover:bg-orange-200 transition";
+                    } else {
+                        btn.className = "px-4 py-1.5 rounded-full bg-white bg-opacity-50 border border-gray-200 text-gray-600 text-xs font-bold whitespace-nowrap hover:bg-orange-50 transition";
+                    }
+                }
+            });
+            renderSchedule();
+        };
+
+        const renderSchedule = () => {
+            const container = document.getElementById('schedule-list');
+            container.innerHTML = '';
+
+            let filtered = appData.schedule;
+            if(schFilterDay !== 'All') {
+                filtered = appData.schedule.filter(item => item.day === schFilterDay);
+            }
+
+            const dayMap = { "Senin": 1, "Selasa": 2, "Rabu": 3, "Kamis": 4, "Jumat": 5, "Sabtu": 6, "Minggu": 7 };
+            filtered.sort((a, b) => {
+                if (dayMap[a.day] !== dayMap[b.day]) return dayMap[a.day] - dayMap[b.day];
+                return a.start.localeCompare(b.start);
+            });
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<p class="text-sm text-gray-400 italic md:col-span-2">Belum ada agenda kelas / kuis hari ${schFilterDay === 'All' ? 'ini' : schFilterDay}.</p>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                let badgeClass = 'bg-blue-100 text-blue-700';
+                let iconClass = 'fas fa-book';
+
+                if(item.type === 'Praktikum') { badgeClass = 'bg-amber-100 text-amber-800'; iconClass = 'fas fa-flask'; }
+                if(item.type === 'Kuis') { badgeClass = 'bg-red-100 text-red-700'; iconClass = 'fas fa-bolt'; }
+
+                container.innerHTML += `
+                    <div class="bg-white bg-opacity-70 p-4 rounded-xl relative border border-orange-100 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${badgeClass}"><i class="${iconClass} mr-1"></i>${item.type}</span>
+                                <span class="text-[11px] font-bold text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">${item.day}</span>
+                            </div>
+                            <h4 class="font-bold text-gray-800 text-sm leading-snug mb-2">${item.name}</h4>
+                        </div>
+                        <div class="border-t border-dashed border-gray-200 pt-2 flex flex-col gap-1 text-xs text-gray-600">
+                            <span><i class="far fa-clock text-orange-400 mr-2"></i>${item.start} - ${item.end}</span>
+                            <span><i class="fas fa-map-marker-alt text-pink-400 mr-2"></i>${item.room}</span>
+                        </div>
+                        <button onclick="deleteItem('schedule', ${item.id})" class="absolute top-3 right-3 text-red-300 hover:text-red-500 transition"><i class="fas fa-trash text-xs"></i></button>
+                    </div>
+                `;
+            });
+        };
+
+        document.getElementById('form-schedule').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const type = document.getElementById('input-sch-type').value;
+            const name = document.getElementById('input-sch-name').value;
+            const day = document.getElementById('input-sch-day').value;
+            const start = document.getElementById('input-sch-start').value;
+            const end = document.getElementById('input-sch-end').value;
+            const room = document.getElementById('input-sch-room').value;
+
+            if (name && start && end) {
+                appData.schedule.push({
+                    id: Date.now(),
+                    type, name, day, start, end, room: room || 'TBA'
+                });
+                document.getElementById('input-sch-name').value = '';
+                document.getElementById('input-sch-room').value = '';
+                saveData();
+                filterSchedule('All');
+            }
+        });
 
         // --- RENDER LOGIC PLANNER ---
         const renderGoals = () => {
@@ -996,7 +1167,6 @@
                     statusBadge = `<span class="text-sm md:text-base font-bold bg-green-100 text-green-700 px-3 py-1.5 rounded mt-2 shadow-sm">${diffDays} Hari Lagi</span>`;
                 }
 
-                // Tampilkan Jam di UI
                 let timeDisplay = item.time ? `<span class="text-sm text-yellow-600 font-medium ml-2"><i class="far fa-clock"></i> ${item.time}</span>` : '';
 
                 container.innerHTML += `
@@ -1157,7 +1327,7 @@
             }
         });
 
-        // --- RENDER LOGIC KEUANGAN (BARU) ---
+        // --- RENDER LOGIC KEUANGAN ---
         const formatRupiah = (angka) => {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
         };
@@ -1384,7 +1554,6 @@
             }
         });
 
-        // FORM DEADLINE YANG BARU DENGAN FITUR JAM
         handleFormSubmit('form-deadlines', () => {
             const iTask = document.getElementById('input-deadline-task');
             const iDate = document.getElementById('input-deadline-date');
@@ -1395,7 +1564,7 @@
                     task: iTask.value, 
                     date: iDate.value,
                     time: iTime.value,
-                    notified: false // Tambahkan ini agar bisa memicu alarm
+                    notified: false 
                 });
                 iTask.value = ''; iDate.value = ''; iTime.value = '';
             }
@@ -1411,6 +1580,7 @@
         });
 
         const renderAll = () => {
+            renderSchedule();
             renderGoals();
             renderDaily();
             renderCourseOrg();
