@@ -479,10 +479,12 @@
                     </h2>
                     <p class="text-xs text-red-400 mb-3 font-semibold">*Akan menyala merah jika deadline < 3 Hari!</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
+                    
                     <form id="form-deadlines" class="mt-auto flex flex-col md:flex-row gap-2">
-                        <input type="text" id="input-deadline-task" placeholder="Nama Tugas / Laporan..." required class="md:w-1/2">
-                        <input type="date" id="input-deadline-date" required class="md:w-1/3">
-                        <button type="submit" class="btn-cute md:w-1/6"><i class="fas fa-plus"></i> Add</button>
+                        <input type="text" id="input-deadline-task" placeholder="Nama Tugas / Laporan..." required class="md:w-2/5 text-sm">
+                        <input type="date" id="input-deadline-date" required class="md:w-1/4 text-sm" title="Tanggal Deadline">
+                        <input type="time" id="input-deadline-time" required class="md:w-1/4 text-sm" title="Jam Deadline">
+                        <button type="submit" class="btn-cute md:w-auto px-3"><i class="fas fa-plus"></i> Add</button>
                     </form>
                 </section>
 
@@ -649,7 +651,13 @@
         if(!appData.inspirationDesc) appData.inspirationDesc = defaultData.inspirationDesc;
         if(!appData.finance) appData.finance = defaultData.finance;
 
+        // Reset Notif
         appData.daily.forEach(d => { if(d.notified === undefined) d.notified = false; });
+        // PERBAIKAN: Set default jam dan reset notif untuk deadline lama agar tidak error
+        appData.deadlines.forEach(d => { 
+            if(d.notified === undefined) d.notified = false; 
+            if(!d.time) d.time = "23:59"; // Default jam jika data lama tidak ada
+        });
         Object.keys(appData.calendarEvents).forEach(date => {
             appData.calendarEvents[date].forEach(ev => {
                 if(ev.notified === undefined) ev.notified = false;
@@ -719,8 +727,7 @@
             return fixedHolidays[md] || dynamicHolidays[dateStr] || null;
         };
 
-
-        // --- SISTEM NOTIFIKASI ALARM (IMPROVED VERSION) ---
+        // --- SISTEM NOTIFIKASI ALARM ---
         const notifIcon = document.getElementById('notif-icon');
 
         function updateNotifIcon() {
@@ -763,6 +770,7 @@
             
             let dataChanged = false;
 
+            // Alarm Daily Planner
             appData.daily.forEach(item => {
                 if (!item.completed && item.time === currentTime && !item.notified) {
                     if (!item.date || item.date === currentDate) {
@@ -773,6 +781,7 @@
                 }
             });
 
+            // Alarm Kalender
             if (appData.calendarEvents[currentDate]) {
                 appData.calendarEvents[currentDate].forEach(ev => {
                     if (ev.time === currentTime && !ev.notified) {
@@ -783,10 +792,19 @@
                 });
             }
 
+            // Alarm Deadline Tracker
+            appData.deadlines.forEach(item => {
+                if (item.date === currentDate && item.time === currentTime && !item.notified) {
+                    triggerAlarm("🚨 Peringatan Deadline!", `Waktunya mengumpulkan: ${item.task}`);
+                    item.notified = true;
+                    dataChanged = true;
+                }
+            });
+
             if(dataChanged) saveData();
         }
 
-        setInterval(checkAlarms, 10000); // Mengecek setiap 10 detik
+        setInterval(checkAlarms, 10000); 
         updateNotifIcon();
 
         // --- RENDER LOGIC PLANNER ---
@@ -910,11 +928,14 @@
                     statusBadge = `<span class="text-sm md:text-base font-bold bg-green-100 text-green-700 px-3 py-1.5 rounded mt-2 shadow-sm">${diffDays} Hari Lagi</span>`;
                 }
 
+                // Tampilkan Jam di UI
+                let timeDisplay = item.time ? `<span class="text-sm text-yellow-600 font-medium ml-2"><i class="far fa-clock"></i> ${item.time}</span>` : '';
+
                 container.innerHTML += `
                     <div class="list-item flex-col items-start relative h-fit ${isPanic ? 'panic-warning' : ''}">
                         <span class="font-medium text-base pr-6 ${isPanic ? 'panic-text' : ''}">${item.task}</span>
                         <div class="flex justify-between items-center w-full mt-2">
-                            <span class="text-sm text-gray-500 font-medium"><i class="far fa-calendar-alt"></i> ${item.date}</span>
+                            <span class="text-sm text-gray-500 font-medium"><i class="far fa-calendar-alt"></i> ${item.date} ${timeDisplay}</span>
                             ${statusBadge}
                         </div>
                         <button onclick="deleteItem('deadlines', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-sm"></i></button>
@@ -1295,12 +1316,20 @@
             }
         });
 
+        // FORM DEADLINE YANG BARU DENGAN FITUR JAM
         handleFormSubmit('form-deadlines', () => {
             const iTask = document.getElementById('input-deadline-task');
             const iDate = document.getElementById('input-deadline-date');
-            if(iTask.value && iDate.value) {
-                appData.deadlines.push({ id: Date.now(), task: iTask.value, date: iDate.value });
-                iTask.value = ''; iDate.value = '';
+            const iTime = document.getElementById('input-deadline-time');
+            if(iTask.value && iDate.value && iTime.value) {
+                appData.deadlines.push({ 
+                    id: Date.now(), 
+                    task: iTask.value, 
+                    date: iDate.value,
+                    time: iTime.value,
+                    notified: false // Tambahkan ini agar bisa memicu alarm
+                });
+                iTask.value = ''; iDate.value = ''; iTime.value = '';
             }
         });
 
