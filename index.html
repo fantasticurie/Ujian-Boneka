@@ -191,20 +191,17 @@
             transform: scale(1.05);
         }
         .calendar-day.today {
-            background: #fd79a8;
-            color: white;
+            background: #fd79a8 !important;
+            color: white !important;
             font-weight: bold;
             box-shadow: 0 2px 10px rgba(253, 121, 168, 0.4);
         }
         
-        /* Gaya Khusus Hari Libur */
+        /* GAYA KHUSUS HARI LIBUR & MINGGU (UPDATE) */
         .calendar-day.holiday {
-            color: #d63031;
-            font-weight: bold;
-        }
-        .calendar-day.today.holiday {
-            background: #d63031;
-            color: white;
+            color: #e74c3c !important; /* Warna merah */
+            font-weight: 800;
+            background-color: rgba(253, 164, 175, 0.3); /* Background merah muda tipis */
         }
 
         .calendar-day.has-event::after {
@@ -221,7 +218,8 @@
         .calendar-day.selected {
             border: 2px solid #e84393;
             transform: scale(1.05);
-            background: #ffeaa7;
+            background: #ffeaa7 !important;
+            color: #4a4a4a !important;
         }
 
         /* --- Polaroid & Pinned Image --- */
@@ -561,7 +559,7 @@
             const [y, m, d] = dateStr.split('-');
             const md = `${m}-${d}`;
             
-            // Libur Tetap (Akan selalu benar tiap tahun)
+            // Libur Tetap
             const fixedHolidays = {
                 '01-01': 'Tahun Baru Masehi',
                 '05-01': 'Hari Buruh Internasional',
@@ -570,7 +568,7 @@
                 '12-25': 'Hari Raya Natal'
             };
 
-            // Prediksi Libur Keagamaan 2026 (Di-hardcode agar akurat tanpa API external)
+            // Libur Keagamaan 2026
             const dynamicHolidays = {
                 '2026-02-17': 'Tahun Baru Imlek',
                 '2026-02-18': 'Isra Mi\'raj',
@@ -610,7 +608,7 @@
                 Notification.requestPermission().then(permission => {
                     updateNotifIcon();
                     if (permission === "granted") {
-                        new Notification("Yay!", { body: "Notifikasi Pengingat Planner Tasya sudah aktif!", icon: "icon-192.png" });
+                        new Notification("Yay!", { body: "Notifikasi Pengingat Planner sudah aktif!", icon: "icon-192.png" });
                     }
                 });
             } else {
@@ -766,7 +764,6 @@
                 let isPanic = false;
                 let statusBadge = '';
 
-                // UKURAN BUBBLE DIPERBESAR (text-sm md:text-base px-3 py-1.5)
                 if (diffDays < 0) {
                     statusBadge = `<span class="text-sm md:text-base font-bold bg-gray-300 text-gray-700 px-3 py-1.5 rounded mt-2 shadow-sm">Terlewat</span>`;
                 } else if (diffDays <= 3) {
@@ -834,15 +831,20 @@
             for (let i = 1; i <= daysInMonth; i++) {
                 const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 
+                // DETEKSI HARI MINGGU
+                const dateObj = new Date(currentYear, currentMonth, i);
+                const isSunday = dateObj.getDay() === 0;
+
                 let isToday = (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) ? 'today' : '';
                 let isSelected = (dateStr === activeDate) ? 'selected' : '';
                 let hasEvent = appData.calendarEvents[dateStr] && appData.calendarEvents[dateStr].length > 0 ? 'has-event' : '';
                 
-                // Cek apakah hari ini adalah hari libur
-                let isHoliday = getHoliday(dateStr) ? 'holiday' : '';
-                let holidayTitle = getHoliday(dateStr) || '';
+                // Cek apakah hari ini adalah hari libur atau hari minggu
+                let holidayName = getHoliday(dateStr);
+                let isHolidayClass = (holidayName || isSunday) ? 'holiday' : '';
+                let holidayTitle = holidayName ? holidayName : (isSunday ? 'Hari Minggu' : '');
 
-                daysContainer.innerHTML += `<div class="calendar-day ${isToday} ${isSelected} ${hasEvent} ${isHoliday}" onclick="selectDate('${dateStr}')" title="${holidayTitle}">${i}</div>`;
+                daysContainer.innerHTML += `<div class="calendar-day ${isToday} ${isSelected} ${hasEvent} ${isHolidayClass}" onclick="selectDate('${dateStr}')" title="${holidayTitle}">${i}</div>`;
             }
 
             renderEventsBelowCalendar();
@@ -871,20 +873,28 @@
             
             list.innerHTML = '';
 
-            // Tampilkan Info Hari Libur jika ada
+            // Tampilkan Info Hari Libur/Minggu jika ada (DIBAWAH KALENDER)
             const holidayName = getHoliday(activeDate);
+            const activeDateObj = new Date(activeDate);
+            const isSunday = activeDateObj.getDay() === 0;
+
             if (holidayName) {
                 list.innerHTML += `
                     <div class="flex items-center bg-red-50 p-2 rounded mb-2 text-sm border border-red-200 shadow-sm">
                         <span class="text-red-500 font-bold text-xs"><i class="fas fa-flag mr-2"></i> Libur Nasional: ${holidayName}</span>
+                    </div>`;
+            } else if (isSunday) {
+                list.innerHTML += `
+                    <div class="flex items-center bg-red-50 p-2 rounded mb-2 text-sm border border-red-200 shadow-sm">
+                        <span class="text-red-500 font-bold text-xs"><i class="fas fa-bed mr-2"></i> Hari Minggu: Waktunya istirahat atau nugas!</span>
                     </div>`;
             }
 
             let events = appData.calendarEvents[activeDate] || [];
             events = events.map(ev => typeof ev === 'string' ? {time: "00:00", text: ev, notified: false} : ev);
 
-            if (events.length === 0 && !holidayName) {
-                list.innerHTML = '<p class="text-xs text-gray-400 italic">Jadwal kosong. Saatnya me-time atau kerjain tugas!</p>';
+            if (events.length === 0 && !holidayName && !isSunday) {
+                list.innerHTML = '<p class="text-xs text-gray-400 italic">Jadwal kosong. Saatnya produktif!</p>';
             }
             
             events.sort((a, b) => a.time.localeCompare(b.time)).forEach((ev, idx) => {
