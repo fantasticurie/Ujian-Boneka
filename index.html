@@ -418,7 +418,7 @@
 
                 <h3 class="text-sm font-bold text-gray-500 mb-2 border-b pb-1">Riwayat Pengeluaran</h3>
                 <div class="flex-grow overflow-y-auto pr-1" id="pengeluaran-list">
-                    </div>
+                </div>
             </section>
         </main>
 
@@ -635,7 +635,6 @@
             },
             motivation: "I can achieve anything I set my mind to! Semangat LDR-nya bareng Fairuz! ✨",
             inspirationDesc: "Target kampus impian S2 Engineering. I will be there!",
-            // --- DATA KEUANGAN BARU ---
             finance: {
                 saldoAwal: 0,
                 tabungan: 0,
@@ -645,7 +644,6 @@
 
         let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
 
-        // Fallback jika data lama belum punya struktur baru
         if(!appData.photos) appData.photos = defaultData.photos;
         if(!appData.motivation) appData.motivation = defaultData.motivation;
         if(!appData.inspirationDesc) appData.inspirationDesc = defaultData.inspirationDesc;
@@ -722,7 +720,7 @@
         };
 
 
-        // --- SISTEM NOTIFIKASI ALARM ---
+        // --- SISTEM NOTIFIKASI ALARM (IMPROVED VERSION) ---
         const notifIcon = document.getElementById('notif-icon');
 
         function updateNotifIcon() {
@@ -742,17 +740,23 @@
                 Notification.requestPermission().then(permission => {
                     updateNotifIcon();
                     if (permission === "granted") {
-                        new Notification("Yay!", { body: "Notifikasi Pengingat Planner sudah aktif!", icon: "icon-192.png" });
+                        new Notification("Yay!", { body: "Sistem alarm Planner Tasya sudah aktif!", icon: "icon-192.png" });
                     }
                 });
             } else {
-                alert("Browser ini tidak mendukung notifikasi.");
+                alert("Browser ini tidak mendukung notifikasi modern. Alarm akan menggunakan pop-up standar.");
             }
         };
 
-        function checkAlarms() {
-            if (!("Notification" in window) || Notification.permission !== "granted") return;
+        function triggerAlarm(title, message) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, { body: message, icon: "icon-192.png" });
+            } else {
+                alert(`🔔 ALARM PLANNER TASYA!\n\n${title}\n${message}`);
+            }
+        }
 
+        function checkAlarms() {
             const now = new Date();
             const currentTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
             const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -762,7 +766,7 @@
             appData.daily.forEach(item => {
                 if (!item.completed && item.time === currentTime && !item.notified) {
                     if (!item.date || item.date === currentDate) {
-                        new Notification("🎯 Waktunya Fokus!", { body: item.text, icon: "icon-192.png" });
+                        triggerAlarm("🎯 Waktunya Fokus!", item.text);
                         item.notified = true;
                         dataChanged = true;
                     }
@@ -772,7 +776,7 @@
             if (appData.calendarEvents[currentDate]) {
                 appData.calendarEvents[currentDate].forEach(ev => {
                     if (ev.time === currentTime && !ev.notified) {
-                        new Notification("📅 Jadwal Kalender!", { body: ev.text, icon: "icon-192.png" });
+                        triggerAlarm("📅 Jadwal Kalender!", ev.text);
                         ev.notified = true;
                         dataChanged = true;
                     }
@@ -782,11 +786,10 @@
             if(dataChanged) saveData();
         }
 
-        setInterval(checkAlarms, 60000);
+        setInterval(checkAlarms, 10000); // Mengecek setiap 10 detik
         updateNotifIcon();
 
         // --- RENDER LOGIC PLANNER ---
-        // (Semua render function lama dibiarkan utuh)
         const renderGoals = () => {
             const container = document.getElementById('goals-list');
             container.innerHTML = appData.goals.length === 0 ? '<p class="text-sm text-gray-400">Belum ada impian.</p>' : '';
@@ -1073,17 +1076,14 @@
         const renderFinance = () => {
             const { saldoAwal, tabungan, expenses } = appData.finance;
             
-            // Hitung Total Pengeluaran
             const totalKeluar = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
             const sisaSaldo = Number(saldoAwal) - Number(tabungan) - totalKeluar;
 
-            // Update UI Ringkasan
             document.getElementById('display-saldo-awal').innerText = formatRupiah(saldoAwal);
             document.getElementById('display-tabungan').innerText = formatRupiah(tabungan);
             document.getElementById('display-total-keluar').innerText = formatRupiah(totalKeluar);
             document.getElementById('display-sisa-saldo').innerText = formatRupiah(sisaSaldo);
 
-            // Kalau sisa saldo minus, warnai merah
             const sisaSaldoEl = document.getElementById('display-sisa-saldo');
             if(sisaSaldo < 0) {
                 sisaSaldoEl.classList.remove('text-gray-800');
@@ -1093,11 +1093,9 @@
                 sisaSaldoEl.classList.remove('text-red-600');
             }
 
-            // Render List Pengeluaran
             const container = document.getElementById('pengeluaran-list');
             container.innerHTML = expenses.length === 0 ? '<p class="text-sm text-gray-400 italic">Belum ada pengeluaran dicatat.</p>' : '';
             
-            // Urutkan dari yang terbaru
             const sortedExpenses = [...expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
 
             sortedExpenses.forEach(item => {
@@ -1137,7 +1135,6 @@
             saveData();
         };
 
-        // Form Submit Finance
         document.getElementById('form-saldo').addEventListener('submit', (e) => {
             e.preventDefault();
             const inputSaldo = document.getElementById('input-saldo-awal').value;
@@ -1324,12 +1321,11 @@
             renderScholarships();
             renderCalendar();
             renderPhotosAndText();
-            renderFinance(); // Render fitur baru
+            renderFinance(); 
         };
 
         renderAll();
 
-        // Pastikan saat awal load, yang muncul adalah Menu Utama
         showSection('home-section');
 
         if ('serviceWorker' in navigator) {
