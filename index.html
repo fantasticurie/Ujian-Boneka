@@ -424,3 +424,1014 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="bg-green-50 rounded-lg p-3 border border-green-200">
+                        <p class="text-xs text-green-600 font-bold mb-1"><i class="fas fa-plus-circle"></i> Saldo Awal</p>
+                        <p class="font-bold text-sm" id="display-saldo-awal">Rp 0</p>
+                    </div>
+                    <div class="bg-red-50 rounded-lg p-3 border border-red-200">
+                        <p class="text-xs text-red-600 font-bold mb-1"><i class="fas fa-minus-circle"></i> Pengeluaran</p>
+                        <p class="font-bold text-sm" id="display-total-keluar">Rp 0</p>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-lg p-3 border border-blue-200 mb-6">
+                    <p class="text-xs text-blue-600 font-bold mb-1"><i class="fas fa-lock"></i> Tabungan / Darurat</p>
+                    <p class="font-bold text-sm" id="display-tabungan">Rp 0</p>
+                </div>
+
+                <form id="form-saldo" class="mt-auto flex flex-col gap-2 pt-4 border-t border-gray-200">
+                    <p class="text-xs font-bold text-gray-500">Update Keuangan (Bulanan):</p>
+                    <div class="flex gap-2">
+                        <input type="number" id="input-saldo-awal" placeholder="Set Saldo Awal (Cth: 1500000)" class="text-sm">
+                        <input type="number" id="input-tabungan" placeholder="Set Tabungan" class="text-sm">
+                        <button type="submit" class="btn-cute px-3"><i class="fas fa-save"></i></button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="glass-card p-6 flex flex-col min-h-[500px]">
+                <h2 class="text-xl font-bold mb-4 text-pink-500 flex items-center">
+                    <i class="fas fa-receipt mr-3 text-yellow-500"></i> Catatan Pengeluaran
+                </h2>
+                
+                <form id="form-pengeluaran" class="mb-6 flex flex-col gap-2 bg-pink-50 p-3 rounded-xl border border-pink-100">
+                    <div class="flex gap-2">
+                        <input type="date" id="input-pengeluaran-date" required class="text-sm w-1/3">
+                        <select id="input-pengeluaran-kategori" required class="text-sm w-2/3">
+                            <option value="Makan & Minum">🍔 Makan & Minum</option>
+                            <option value="Transportasi">🛵 Transportasi</option>
+                            <option value="Kebutuhan Kos">🧻 Kebutuhan Kos</option>
+                            <option value="Keperluan Kuliah">📚 Keperluan Kuliah</option>
+                            <option value="Skincare/Selfcare">✨ Skincare</option>
+                            <option value="Lainnya">📦 Lainnya</option>
+                        </select>
+                    </div>
+                    <input type="text" id="input-pengeluaran-desc" placeholder="Keterangan (Cth: Beli galon, Gojek...)" required class="text-sm">
+                    <div class="flex gap-2">
+                        <input type="number" id="input-pengeluaran-jumlah" placeholder="Nominal (Cth: 15000)" required class="text-sm w-3/4">
+                        <button type="submit" class="btn-cute px-0 w-1/4"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                </form>
+
+                <h3 class="text-sm font-bold text-gray-500 mb-2 border-b pb-1">Riwayat Pengeluaran</h3>
+                <div class="flex-grow overflow-y-auto pr-1" id="pengeluaran-list">
+                </div>
+            </section>
+        </main>
+
+        <main id="planner-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
+            
+            <div class="lg:col-span-1 flex flex-col gap-6">
+                
+                <section class="glass-card p-5">
+                    <div class="flex justify-between items-center mb-4">
+                        <button id="prev-month" class="text-pink-500 hover:text-pink-700"><i class="fas fa-chevron-left"></i></button>
+                        <h2 id="calendar-month-year" class="text-lg font-bold text-gray-700 calendar-header">Bulan Tahun</h2>
+                        <button id="next-month" class="text-pink-500 hover:text-pink-700"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid text-xs font-bold text-gray-500 mb-2">
+                        <div class="text-red-500">Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+                    </div>
+                    <div id="calendar-days" class="calendar-grid">
+                        </div>
+
+                    <div class="mt-4 pt-4 border-t border-pink-200">
+                        <h3 class="font-bold text-sm text-pink-500 mb-2">
+                            <i class="far fa-calendar-check mr-1"></i> Jadwal: <span id="selected-date-display" class="text-gray-600 font-medium">...</span>
+                        </h3>
+                        <div id="calendar-event-list-below" class="max-h-32 overflow-y-auto mb-3 pr-1">
+                            </div>
+                        <form id="form-calendar-event" class="flex flex-col gap-2">
+                            <div class="flex gap-2">
+                                <input type="time" id="input-cal-time" class="w-1/3 text-xs" required>
+                                <input type="text" id="input-cal-event" placeholder="Nama acara/kegiatan..." required class="w-2/3 text-xs">
+                                <button type="submit" class="btn-cute px-3 py-1"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <section class="glass-card p-5 flex flex-col flex-grow min-h-[500px]">
+                    <h2 class="text-xl font-bold mb-1 text-pink-500 flex items-center">
+                        <i class="fas fa-list-check mr-3 text-yellow-500"></i> Daily Planner
+                    </h2>
+                    <p class="text-xs text-gray-500 mb-4" id="daily-date-display">Today: ...</p>
+                    <div class="flex-grow overflow-y-auto mb-4 pr-1" id="daily-list"></div>
+                    <form id="form-daily" class="mt-auto flex flex-col gap-2">
+                        <input type="text" id="input-daily" placeholder="Fokus/Target hari ini..." required>
+                        <div class="flex gap-2">
+                            <input type="date" id="input-daily-date" class="w-1/2 text-xs">
+                            <input type="time" id="input-daily-time" class="w-1/3 text-xs">
+                            <button type="submit" class="btn-cute w-1/6 px-0"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 items-start content-start">
+                
+                <section class="glass-card p-5 flex flex-col md:col-span-2 min-h-[500px] border-2 border-pink-300">
+                    <h2 class="text-xl font-bold mb-1 text-pink-500 flex items-center">
+                        <i class="fas fa-hourglass-half mr-3 text-yellow-500"></i> Deadline Tracker
+                    </h2>
+                    <p class="text-xs text-red-400 mb-3 font-semibold">*Akan menyala merah jika deadline < 3 Hari!</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
+                    
+                    <form id="form-deadlines" class="mt-auto flex flex-col md:flex-row gap-2">
+                        <input type="text" id="input-deadline-task" placeholder="Nama Tugas / Laporan..." required class="md:w-2/5 text-sm">
+                        <input type="date" id="input-deadline-date" required class="md:w-1/4 text-sm" title="Tanggal Deadline">
+                        <input type="time" id="input-deadline-time" required class="md:w-1/4 text-sm" title="Jam Deadline">
+                        <button type="submit" class="btn-cute md:w-auto px-3"><i class="fas fa-plus"></i> Add</button>
+                    </form>
+                </section>
+
+                <section class="glass-card p-5 flex flex-col md:col-span-2">
+                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
+                        <i class="fas fa-rocket mr-3 text-yellow-500"></i> Long-Term Goals
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 flex-grow overflow-y-auto max-h-40" id="goals-list"></div>
+                    <form id="form-goals" class="mt-auto flex gap-2">
+                        <input type="text" id="input-goals" placeholder="Tuliskan impian besarmu (S2, IPK, Karir)..." required>
+                        <button type="submit" class="btn-cute"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </section>
+
+                <section class="glass-card p-5 flex flex-col min-h-[350px]">
+                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
+                        <i class="fas fa-book-open mr-3 text-yellow-500"></i> Coursework (TMB)
+                    </h2>
+                    <div class="flex-grow overflow-y-auto mb-4 pr-1" id="coursework-list"></div>
+                    <form id="form-coursework" class="mt-auto flex flex-col gap-2">
+                        <input type="text" id="input-course" placeholder="Nama Matkul (Cth: Termodinamika)" required class="text-sm">
+                        <div class="flex gap-2">
+                            <input type="text" id="input-course-detail" placeholder="Tugas / Bab" required class="text-sm">
+                            <button type="submit" class="btn-cute px-3"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="glass-card p-5 flex flex-col min-h-[350px]">
+                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
+                        <i class="fas fa-users mr-3 text-yellow-500"></i> Organization
+                    </h2>
+                    <div class="flex-grow overflow-y-auto mb-4 pr-1" id="org-list"></div>
+                    <form id="form-org" class="mt-auto flex flex-col gap-2">
+                        <input type="text" id="input-org-name" placeholder="Organisasi/Kepanitiaan..." required class="text-sm">
+                        <div class="flex gap-2">
+                            <input type="text" id="input-org-role" placeholder="Tugas/Divisi" required class="text-sm w-1/3">
+                            <input type="date" id="input-org-date" class="text-sm w-1/3" required title="Tanggal / Deadline">
+                            <button type="submit" class="btn-cute px-3 w-1/3"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="glass-card p-5 flex flex-col md:col-span-2">
+                    <h2 class="text-xl font-bold mb-3 text-pink-500 flex items-center">
+                        <i class="fas fa-award mr-3 text-yellow-500"></i> Beasiswa Tracker
+                    </h2>
+                    <div class="flex-grow overflow-y-auto mb-4 max-h-48" id="scholarship-list"></div>
+                    <form id="form-scholarship" class="mt-auto flex flex-col md:flex-row gap-2">
+                        <input type="text" id="input-scholarship-name" placeholder="Nama Beasiswa / Syarat..." required class="md:w-1/2">
+                        <select id="input-scholarship-status" class="md:w-1/3 text-sm">
+                            <option value="To Do">📝 To Do</option>
+                            <option value="In Progress">⏳ In Progress</option>
+                            <option value="Done">✅ Done</option>
+                        </select>
+                        <button type="submit" class="btn-cute md:w-1/6"><i class="fas fa-plus"></i></button>
+                    </form>
+                </section>
+
+                <section class="glass-card p-5 flex flex-col md:col-span-2 relative">
+                    <h2 class="text-xl font-bold mb-4 text-pink-500 flex items-center justify-center">
+                        <i class="fas fa-heart text-red-400 mr-2"></i> My Support System
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+                        <div class="flex flex-col items-center">
+                            <div class="polaroid-frame tilt-left">
+                                <i class="fas fa-thumbtack pin-icon text-pink-400"></i>
+                                <img id="img-family" src="https://placehold.co/300x300/ffeaa7/fd79a8?text=Keluarga" alt="Keluarga" class="polaroid-img">
+                            </div>
+                            <input type="file" id="upload-family" accept="image/*" class="text-[10px] mt-2 w-3/4">
+                        </div>
+                        
+                        <div class="flex flex-col items-center">
+                            <div class="polaroid-frame tilt-straight">
+                                <i class="fas fa-thumbtack pin-icon text-yellow-400"></i>
+                                <img id="img-friends" src="https://placehold.co/300x300/ffd1dc/e84393?text=Teman" alt="Teman" class="polaroid-img">
+                            </div>
+                            <input type="file" id="upload-friends" accept="image/*" class="text-[10px] mt-2 w-3/4">
+                        </div>
+
+                        <div class="flex flex-col items-center">
+                            <div class="polaroid-frame tilt-right">
+                                <i class="fas fa-thumbtack pin-icon text-red-400"></i>
+                                <img id="img-partner" src="https://placehold.co/300x300/f4aeb8/ffffff?text=Pacar" alt="Pacar" class="polaroid-img">
+                            </div>
+                            <input type="file" id="upload-partner" accept="image/*" class="text-[10px] mt-2 w-3/4">
+                        </div>
+                    </div>
+
+                    <div class="w-full bg-pink-50 bg-opacity-50 p-3 rounded-lg border border-pink-200">
+                        <textarea id="input-motivation" rows="2" class="w-full text-center italic text-base md:text-lg font-bold text-pink-600 bg-transparent outline-none resize-none" placeholder="Tulis kalimat penyemangatmu di sini..."></textarea>
+                    </div>
+                </section>
+
+                <section class="glass-card p-5 flex flex-col items-center md:col-span-2">
+                    <h2 class="text-xl font-bold mb-4 text-pink-500 flex items-center">
+                        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i> My Inspiration
+                    </h2>
+                    <div class="flex flex-col sm:flex-row gap-6 w-full items-center justify-center">
+                        <div class="w-full sm:w-1/2 max-w-[250px]">
+                            <div class="polaroid-frame tilt-left">
+                                <i class="fas fa-thumbtack pin-icon text-blue-400"></i>
+                                <img id="img-inspiration" src="https://placehold.co/300x200/e0f7fa/00acc1?text=Inspirasi" alt="Inspirasi" class="polaroid-img" style="height: 180px;">
+                            </div>
+                            <input type="file" id="upload-inspiration" accept="image/*" class="text-[10px] mt-2 w-full">
+                        </div>
+                        <div class="w-full sm:w-1/2">
+                            <textarea id="input-inspiration-desc" rows="4" class="w-full text-sm font-medium text-gray-700 bg-white bg-opacity-60 p-3 rounded-lg border border-pink-200 outline-none resize-none focus:border-pink-500" placeholder="Keterangan inspirasimu (Misal: Kampus S2 Jerman, Karir Engineer impian...)"></textarea>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <footer class="mt-auto py-6 text-center text-gray-500 text-sm font-medium">
+        <p>&copy; 2026 byl.tasya | Engineered with <i class="fas fa-heart text-pink-400"></i> & <i class="fas fa-coffee text-yellow-600"></i></p>
+    </footer>
+
+    <script>
+        // --- LOGIC HILANGKAN SPLASH SCREEN SETELAH LOAD ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('intro-splash');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    splash.style.visibility = 'hidden';
+                    setTimeout(() => splash.remove(), 800); 
+                }
+            }, 3500); 
+        });
+
+        const STORAGE_KEY = 'planner_2026_data';
+        
+        const defaultData = {
+            goals: [
+                { id: Date.now()+1, text: "Lulus Teknik Mesin & Biosistem IPB dengan IPK Tinggi" },
+                { id: Date.now()+2, text: "Persiapan S2 Engineering di Luar Negeri" }
+            ],
+            daily: [
+                { id: Date.now()+3, text: "Review materi Termodinamika", date: "", time: "", completed: false, notified: false }
+            ],
+            coursework: [
+                { id: Date.now()+4, course: "Elektronika Dasar", detail: "Buat Laporan Praktikum" }
+            ],
+            organizations: [
+                { id: Date.now()+5, name: "IPB Mengajar", role: "Divisi Kurikulum", date: "2026-05-20" },
+                { id: Date.now()+6, name: "Sekbendiv EDELDIS 2026", role: "RAB", date: "" }
+            ],
+            deadlines: [],
+            scholarships: [
+                { id: Date.now()+7, name: "LPDP - Sertifikat TOEFL ITP", status: "To Do" }
+            ],
+            calendarEvents: {}, 
+            photos: {
+                family: null,
+                friends: null,
+                partner: null,
+                inspiration: null
+            },
+            motivation: "I can achieve anything I set my mind to! Semangat LDR-nya bareng Fairuz! ✨",
+            inspirationDesc: "Target kampus impian S2 Engineering. I will be there!",
+            finance: {
+                saldoAwal: 0,
+                tabungan: 0,
+                expenses: []
+            }
+        };
+
+        let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
+
+        if(!appData.photos) appData.photos = defaultData.photos;
+        if(!appData.motivation) appData.motivation = defaultData.motivation;
+        if(!appData.inspirationDesc) appData.inspirationDesc = defaultData.inspirationDesc;
+        if(!appData.finance) appData.finance = defaultData.finance;
+
+        // Reset Notif
+        appData.daily.forEach(d => { if(d.notified === undefined) d.notified = false; });
+        appData.deadlines.forEach(d => { 
+            if(d.notified === undefined) d.notified = false; 
+            if(!d.time) d.time = "23:59";
+        });
+        Object.keys(appData.calendarEvents).forEach(date => {
+            appData.calendarEvents[date].forEach(ev => {
+                if(ev.notified === undefined) ev.notified = false;
+            });
+        });
+
+        const saveData = () => {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            renderAll(); 
+        };
+
+        // --- SISTEM NAVIGASI MENU ---
+        window.showSection = (sectionId) => {
+            document.getElementById('home-section').classList.add('hidden');
+            document.getElementById('planner-section').classList.add('hidden');
+            document.getElementById('finance-section').classList.add('hidden');
+            
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            const btnBack = document.getElementById('btn-back-home');
+            const mainTitle = document.getElementById('main-title');
+            const mainSubtitle = document.getElementById('main-subtitle');
+
+            if (sectionId === 'home-section') {
+                btnBack.classList.add('hidden');
+                mainTitle.innerText = "be the kind author of your own story";
+                mainSubtitle.innerHTML = '<i class="fas fa-graduation-cap text-yellow-500 mr-2"></i> 2026 Future Engineer Dashboard';
+            } else if (sectionId === 'planner-section') {
+                btnBack.classList.remove('hidden');
+                mainTitle.innerText = "My Personal Planner";
+                mainSubtitle.innerHTML = '<i class="far fa-calendar-check text-pink-500 mr-2"></i> Jadwal & Target Studi';
+            } else if (sectionId === 'finance-section') {
+                btnBack.classList.remove('hidden');
+                mainTitle.innerText = "Keuangan Anak Kos";
+                mainSubtitle.innerHTML = '<i class="fas fa-wallet text-green-500 mr-2"></i> Tracker Pengeluaran & Tabungan';
+            }
+        };
+
+        // --- SISTEM HARI LIBUR (HOLIDAYS) ---
+        const getHoliday = (dateStr) => {
+            const [y, m, d] = dateStr.split('-');
+            const md = `${m}-${d}`;
+            
+            const fixedHolidays = {
+                '01-01': 'Tahun Baru Masehi',
+                '05-01': 'Hari Buruh Internasional',
+                '06-01': 'Hari Lahir Pancasila',
+                '08-17': 'Hari Kemerdekaan RI',
+                '12-25': 'Hari Raya Natal'
+            };
+
+            const dynamicHolidays = {
+                '2026-02-17': 'Tahun Baru Imlek',
+                '2026-02-18': 'Isra Mi\'raj',
+                '2026-03-19': 'Hari Suci Nyepi',
+                '2026-03-20': 'Cuti Bersama Idul Fitri',
+                '2026-03-21': 'Hari Raya Idul Fitri',
+                '2026-03-22': 'Hari Raya Idul Fitri',
+                '2026-04-03': 'Wafat Isa Almasih',
+                '2026-05-14': 'Kenaikan Isa Almasih',
+                '2026-05-27': 'Hari Raya Idul Adha',
+                '2026-05-31': 'Hari Raya Waisak',
+                '2026-06-16': 'Tahun Baru Islam',
+                '2026-08-26': 'Maulid Nabi Muhammad SAW'
+            };
+
+            return fixedHolidays[md] || dynamicHolidays[dateStr] || null;
+        };
+
+        // --- SISTEM NOTIFIKASI ALARM ---
+        const notifIcon = document.getElementById('notif-icon');
+
+        function updateNotifIcon() {
+            if (!("Notification" in window)) {
+                notifIcon.className = "fas fa-bell-slash text-gray-300";
+            } else if (Notification.permission === "granted") {
+                notifIcon.className = "fas fa-bell text-yellow-500 animate-pulse";
+            } else if (Notification.permission === "denied") {
+                notifIcon.className = "fas fa-bell-slash text-red-400";
+            } else {
+                notifIcon.className = "fas fa-bell text-gray-400";
+            }
+        }
+
+        window.requestNotificationPermission = () => {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    updateNotifIcon();
+                    if (permission === "granted") {
+                        new Notification("Yay!", { body: "Sistem alarm Planner Tasya sudah aktif!", icon: "icon-192.png" });
+                    }
+                });
+            } else {
+                alert("Browser ini tidak mendukung notifikasi modern. Alarm akan menggunakan pop-up standar.");
+            }
+        };
+
+        function triggerAlarm(title, message) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, { body: message, icon: "icon-192.png" });
+            } else {
+                alert(`🔔 ALARM PLANNER TASYA!\n\n${title}\n${message}`);
+            }
+        }
+
+        function checkAlarms() {
+            const now = new Date();
+            const currentTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            
+            let dataChanged = false;
+
+            // Alarm Daily Planner
+            appData.daily.forEach(item => {
+                if (!item.completed && item.time === currentTime && !item.notified) {
+                    if (!item.date || item.date === currentDate) {
+                        triggerAlarm("🎯 Waktunya Fokus!", item.text);
+                        item.notified = true;
+                        dataChanged = true;
+                    }
+                }
+            });
+
+            // Alarm Kalender
+            if (appData.calendarEvents[currentDate]) {
+                appData.calendarEvents[currentDate].forEach(ev => {
+                    if (ev.time === currentTime && !ev.notified) {
+                        triggerAlarm("📅 Jadwal Kalender!", ev.text);
+                        ev.notified = true;
+                        dataChanged = true;
+                    }
+                });
+            }
+
+            // Alarm Deadline Tracker
+            appData.deadlines.forEach(item => {
+                if (item.date === currentDate && item.time === currentTime && !item.notified) {
+                    triggerAlarm("🚨 Peringatan Deadline!", `Waktunya mengumpulkan: ${item.task}`);
+                    item.notified = true;
+                    dataChanged = true;
+                }
+            });
+
+            if(dataChanged) saveData();
+        }
+
+        setInterval(checkAlarms, 10000); 
+        updateNotifIcon();
+
+        // --- RENDER LOGIC PLANNER ---
+        const renderGoals = () => {
+            const container = document.getElementById('goals-list');
+            container.innerHTML = appData.goals.length === 0 ? '<p class="text-sm text-gray-400">Belum ada impian.</p>' : '';
+            appData.goals.forEach(item => {
+                container.innerHTML += `
+                    <div class="list-item flex-col items-start relative h-fit">
+                        <span class="font-medium text-sm pr-6">${item.text}</span>
+                        <button onclick="deleteItem('goals', ${item.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+        };
+
+        const renderDaily = () => {
+            const container = document.getElementById('daily-list');
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('daily-date-display').innerText = `Today: ${new Date().toLocaleDateString('id-ID', options)}`;
+
+            container.innerHTML = appData.daily.length === 0 ? '<p class="text-sm text-gray-400">Belum ada target hari ini.</p>' : '';
+            appData.daily.forEach(item => {
+                const checked = item.completed ? 'checked' : '';
+                const completedClass = item.completed ? 'completed' : '';
+                
+                let extraInfo = '';
+                if(item.date || item.time) {
+                    extraInfo = `<div class="flex gap-2 mt-1 pl-8 w-full">`;
+                    if(item.date) extraInfo += `<span class="text-[10px] text-pink-600 bg-pink-100 px-2 py-0.5 rounded-full"><i class="far fa-calendar-alt"></i> ${item.date}</span>`;
+                    if(item.time) extraInfo += `<span class="text-[10px] text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded-full"><i class="far fa-clock"></i> ${item.time}</span>`;
+                    extraInfo += `</div>`;
+                }
+
+                container.innerHTML += `
+                    <div class="list-item flex-col items-start ${completedClass} py-2">
+                        <div class="flex items-center w-full">
+                            <input type="checkbox" class="custom-checkbox mr-3" ${checked} onchange="toggleComplete(${item.id}, this.checked)">
+                            <span class="font-medium flex-1 text-sm">${item.text}</span>
+                            <button onclick="deleteItem('daily', ${item.id})" class="text-red-400 hover:text-red-600 ml-2"><i class="fas fa-trash text-xs"></i></button>
+                        </div>
+                        ${extraInfo}
+                    </div>`;
+            });
+        };
+
+        const renderCourseOrg = () => {
+            const courseContainer = document.getElementById('coursework-list');
+            courseContainer.innerHTML = appData.coursework.length === 0 ? '<p class="text-sm text-gray-400">Belum ada tugas matkul.</p>' : '';
+            appData.coursework.forEach(item => {
+                courseContainer.innerHTML += `
+                    <div class="list-item flex-col items-start relative">
+                        <span class="text-xs font-bold text-pink-500 bg-pink-100 px-2 py-1 rounded mb-1">${item.course}</span>
+                        <span class="font-medium text-sm pr-6 mt-1">${item.detail}</span>
+                        <button onclick="deleteItem('coursework', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+
+            const orgContainer = document.getElementById('org-list');
+            orgContainer.innerHTML = appData.organizations.length === 0 ? '<p class="text-sm text-gray-400">Belum ada agenda organisasi.</p>' : '';
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            appData.organizations.forEach(item => {
+                let statusBadge = '';
+                let isPanic = false;
+
+                if (item.date) {
+                    const [year, month, day] = item.date.split('-');
+                    const deadlineDate = new Date(year, month - 1, day);
+                    deadlineDate.setHours(0, 0, 0, 0);
+
+                    const diffDays = Math.round((deadlineDate - today) / (1000 * 60 * 60 * 24));
+
+                    if (diffDays < 0) {
+                        statusBadge = `<span class="text-[10px] font-bold bg-gray-300 text-gray-700 px-1.5 py-0.5 rounded ml-2">Lewat</span>`;
+                    } else if (diffDays <= 3) {
+                        isPanic = true;
+                        statusBadge = `<span class="text-[10px] font-bold bg-red-500 text-white px-1.5 py-0.5 rounded ml-2 animate-pulse">DL DEKAT!</span>`;
+                    } else {
+                        statusBadge = `<span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded ml-2"><i class="far fa-calendar"></i> ${item.date}</span>`;
+                    }
+                }
+
+                orgContainer.innerHTML += `
+                    <div class="list-item flex-col items-start relative ${isPanic ? 'panic-warning' : ''}">
+                        <span class="font-bold text-sm text-gray-700">${item.name}</span>
+                        <div class="flex items-center mt-1">
+                            <span class="text-xs text-yellow-600"><i class="fas fa-user-tag mr-1"></i>${item.role}</span>
+                            ${statusBadge}
+                        </div>
+                        <button onclick="deleteItem('organizations', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+        };
+
+        const renderDeadlines = () => {
+            const container = document.getElementById('deadlines-list');
+            let sortedDeadlines = [...appData.deadlines].sort((a, b) => new Date(a.date) - new Date(b.date));
+            container.innerHTML = sortedDeadlines.length === 0 ? '<p class="text-sm text-gray-400">Tidak ada deadline. Santai dulu!</p>' : '';
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            sortedDeadlines.forEach(item => {
+                const [year, month, day] = item.date.split('-');
+                const deadlineDate = new Date(year, month - 1, day);
+                deadlineDate.setHours(0, 0, 0, 0);
+
+                const diffDays = Math.round((deadlineDate - today) / (1000 * 60 * 60 * 24));
+                
+                let isPanic = false;
+                let statusBadge = '';
+
+                if (diffDays < 0) {
+                    statusBadge = `<span class="text-sm md:text-base font-bold bg-gray-300 text-gray-700 px-3 py-1.5 rounded mt-2 shadow-sm">Terlewat</span>`;
+                } else if (diffDays <= 3) {
+                    isPanic = true;
+                    statusBadge = `<span class="text-sm md:text-base font-extrabold bg-red-500 text-white px-3 py-1.5 rounded mt-2 shadow-sm animate-pulse"><i class="fas fa-exclamation-triangle mr-1"></i> ${diffDays === 0 ? 'HARI INI!' : diffDays + ' Hari Lagi'}</span>`;
+                } else {
+                    statusBadge = `<span class="text-sm md:text-base font-bold bg-green-100 text-green-700 px-3 py-1.5 rounded mt-2 shadow-sm">${diffDays} Hari Lagi</span>`;
+                }
+
+                // Tampilkan Jam di UI
+                let timeDisplay = item.time ? `<span class="text-sm text-yellow-600 font-medium ml-2"><i class="far fa-clock"></i> ${item.time}</span>` : '';
+
+                container.innerHTML += `
+                    <div class="list-item flex-col items-start relative h-fit ${isPanic ? 'panic-warning' : ''}">
+                        <span class="font-medium text-base pr-6 ${isPanic ? 'panic-text' : ''}">${item.task}</span>
+                        <div class="flex justify-between items-center w-full mt-2">
+                            <span class="text-sm text-gray-500 font-medium"><i class="far fa-calendar-alt"></i> ${item.date} ${timeDisplay}</span>
+                            ${statusBadge}
+                        </div>
+                        <button onclick="deleteItem('deadlines', ${item.id})" class="absolute top-3 right-3 text-red-400 hover:text-red-600"><i class="fas fa-trash text-sm"></i></button>
+                    </div>`;
+            });
+        };
+
+        const renderScholarships = () => {
+            const container = document.getElementById('scholarship-list');
+            container.innerHTML = appData.scholarships.length === 0 ? '<p class="text-sm text-gray-400">Belum ada persiapan beasiswa.</p>' : '';
+            
+            appData.scholarships.forEach(item => {
+                let badgeClass = '';
+                if(item.status === 'To Do') badgeClass = 'bg-gray-200 text-gray-700';
+                if(item.status === 'In Progress') badgeClass = 'bg-yellow-200 text-yellow-800';
+                if(item.status === 'Done') badgeClass = 'bg-green-200 text-green-800 text-decoration-line-through';
+
+                container.innerHTML += `
+                    <div class="list-item flex justify-between relative">
+                        <div class="flex flex-col pr-6">
+                            <span class="font-medium text-sm">${item.name}</span>
+                            <span class="text-xs font-bold px-2 py-1 rounded w-max mt-1 ${badgeClass}">${item.status}</span>
+                        </div>
+                        <button onclick="deleteItem('scholarships', ${item.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+        };
+
+        // --- KALENDER INTERAKTIF LOGIC ---
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let activeDate = new Date().toISOString().split('T')[0];
+
+        const renderCalendar = () => {
+            const daysContainer = document.getElementById('calendar-days');
+            const monthYearDisplay = document.getElementById('calendar-month-year');
+            daysContainer.innerHTML = '';
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            monthYearDisplay.innerText = `${monthNames[currentMonth]} ${currentYear}`;
+
+            const today = new Date();
+
+            for (let i = 0; i < firstDay; i++) {
+                daysContainer.innerHTML += `<div></div>`;
+            }
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                const dateObj = new Date(currentYear, currentMonth, i);
+                const isSunday = dateObj.getDay() === 0;
+
+                let isToday = (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) ? 'today' : '';
+                let isSelected = (dateStr === activeDate) ? 'selected' : '';
+                let hasEvent = appData.calendarEvents[dateStr] && appData.calendarEvents[dateStr].length > 0 ? 'has-event' : '';
+                
+                let holidayName = getHoliday(dateStr);
+                let isHolidayClass = (holidayName || isSunday) ? 'holiday' : '';
+                let holidayTitle = holidayName ? holidayName : (isSunday ? 'Hari Minggu' : '');
+
+                daysContainer.innerHTML += `<div class="calendar-day ${isToday} ${isSelected} ${hasEvent} ${isHolidayClass}" onclick="selectDate('${dateStr}')" title="${holidayTitle}">${i}</div>`;
+            }
+
+            renderEventsBelowCalendar();
+        };
+
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+            renderCalendar();
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+            renderCalendar();
+        });
+
+        window.selectDate = (dateStr) => {
+            activeDate = dateStr;
+            renderCalendar(); 
+        };
+
+        const renderEventsBelowCalendar = () => {
+            const list = document.getElementById('calendar-event-list-below');
+            document.getElementById('selected-date-display').innerText = activeDate;
+            
+            list.innerHTML = '';
+
+            const holidayName = getHoliday(activeDate);
+            const activeDateObj = new Date(activeDate);
+            const isSunday = activeDateObj.getDay() === 0;
+
+            if (holidayName) {
+                list.innerHTML += `
+                    <div class="flex items-center bg-red-50 p-2 rounded mb-2 text-sm border border-red-200 shadow-sm">
+                        <span class="text-red-500 font-bold text-xs"><i class="fas fa-flag mr-2"></i> Libur Nasional: ${holidayName}</span>
+                    </div>`;
+            } else if (isSunday) {
+                list.innerHTML += `
+                    <div class="flex items-center bg-red-50 p-2 rounded mb-2 text-sm border border-red-200 shadow-sm">
+                        <span class="text-red-500 font-bold text-xs"><i class="fas fa-bed mr-2"></i> Hari Minggu: Waktunya istirahat atau nugas!</span>
+                    </div>`;
+            }
+
+            let events = appData.calendarEvents[activeDate] || [];
+            events = events.map(ev => typeof ev === 'string' ? {time: "00:00", text: ev, notified: false} : ev);
+
+            if (events.length === 0 && !holidayName && !isSunday) {
+                list.innerHTML = '<p class="text-xs text-gray-400 italic">Jadwal kosong. Saatnya produktif!</p>';
+            }
+            
+            events.sort((a, b) => a.time.localeCompare(b.time)).forEach((ev, idx) => {
+                list.innerHTML += `
+                    <div class="flex justify-between items-center bg-white bg-opacity-70 p-2 rounded mb-2 text-sm border border-pink-200">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-yellow-600 bg-yellow-100 px-1 rounded"><i class="far fa-clock"></i> ${ev.time}</span>
+                            <span class="font-medium text-xs">${ev.text}</span>
+                        </div>
+                        <button onclick="deleteCalendarEvent(${idx})" class="text-red-400 hover:text-red-600 ml-2"><i class="fas fa-trash text-xs"></i></button>
+                    </div>`;
+            });
+        };
+
+        window.deleteCalendarEvent = (index) => {
+            appData.calendarEvents[activeDate].splice(index, 1);
+            if (appData.calendarEvents[activeDate].length === 0) {
+                delete appData.calendarEvents[activeDate];
+            }
+            saveData();
+        };
+
+        document.getElementById('form-calendar-event').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inputTime = document.getElementById('input-cal-time');
+            const inputText = document.getElementById('input-cal-event');
+            
+            if(inputText.value.trim() && inputTime.value){
+                if(!appData.calendarEvents[activeDate]) appData.calendarEvents[activeDate] = [];
+                appData.calendarEvents[activeDate].push({ 
+                    time: inputTime.value, 
+                    text: inputText.value.trim(),
+                    notified: false
+                });
+                inputText.value = ''; inputTime.value = '';
+                saveData();
+            }
+        });
+
+        // --- RENDER LOGIC KEUANGAN (BARU) ---
+        const formatRupiah = (angka) => {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+        };
+
+        const renderFinance = () => {
+            const { saldoAwal, tabungan, expenses } = appData.finance;
+            
+            const totalKeluar = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
+            const sisaSaldo = Number(saldoAwal) - Number(tabungan) - totalKeluar;
+
+            document.getElementById('display-saldo-awal').innerText = formatRupiah(saldoAwal);
+            document.getElementById('display-tabungan').innerText = formatRupiah(tabungan);
+            document.getElementById('display-total-keluar').innerText = formatRupiah(totalKeluar);
+            document.getElementById('display-sisa-saldo').innerText = formatRupiah(sisaSaldo);
+
+            const sisaSaldoEl = document.getElementById('display-sisa-saldo');
+            if(sisaSaldo < 0) {
+                sisaSaldoEl.classList.remove('text-gray-800');
+                sisaSaldoEl.classList.add('text-red-600');
+            } else {
+                sisaSaldoEl.classList.add('text-gray-800');
+                sisaSaldoEl.classList.remove('text-red-600');
+            }
+
+            const container = document.getElementById('pengeluaran-list');
+            container.innerHTML = expenses.length === 0 ? '<p class="text-sm text-gray-400 italic">Belum ada pengeluaran dicatat.</p>' : '';
+            
+            const sortedExpenses = [...expenses].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedExpenses.forEach(item => {
+                let catIcon = 'fas fa-box';
+                let catColor = 'bg-gray-100 text-gray-600';
+
+                if(item.category === 'Makan & Minum') { catIcon = 'fas fa-hamburger'; catColor = 'bg-orange-100 text-orange-600'; }
+                if(item.category === 'Transportasi') { catIcon = 'fas fa-motorcycle'; catColor = 'bg-blue-100 text-blue-600'; }
+                if(item.category === 'Kebutuhan Kos') { catIcon = 'fas fa-home'; catColor = 'bg-purple-100 text-purple-600'; }
+                if(item.category === 'Keperluan Kuliah') { catIcon = 'fas fa-book'; catColor = 'bg-green-100 text-green-600'; }
+                if(item.category === 'Skincare/Selfcare') { catIcon = 'fas fa-sparkles'; catColor = 'bg-pink-100 text-pink-600'; }
+
+                container.innerHTML += `
+                    <div class="bg-white bg-opacity-70 p-3 rounded-lg mb-2 flex justify-between items-center border border-gray-200">
+                        <div class="flex items-center gap-3 w-full">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center ${catColor}">
+                                <i class="${catIcon}"></i>
+                            </div>
+                            <div class="flex flex-col flex-1">
+                                <span class="font-bold text-sm text-gray-800">${item.desc}</span>
+                                <div class="flex gap-2 items-center">
+                                    <span class="text-[10px] text-gray-500"><i class="far fa-calendar-alt"></i> ${item.date}</span>
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded ${catColor}">${item.category}</span>
+                                </div>
+                            </div>
+                            <div class="text-right flex flex-col items-end">
+                                <span class="font-bold text-sm text-red-500">-${formatRupiah(item.amount)}</span>
+                                <button onclick="deleteFinanceItem(${item.id})" class="text-[10px] text-red-400 hover:text-red-600 mt-1"><i class="fas fa-trash"></i> Hapus</button>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        };
+
+        window.deleteFinanceItem = (id) => {
+            appData.finance.expenses = appData.finance.expenses.filter(item => item.id !== id);
+            saveData();
+        };
+
+        document.getElementById('form-saldo').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inputSaldo = document.getElementById('input-saldo-awal').value;
+            const inputTabungan = document.getElementById('input-tabungan').value;
+            
+            if(inputSaldo) appData.finance.saldoAwal = Number(inputSaldo);
+            if(inputTabungan) appData.finance.tabungan = Number(inputTabungan);
+            
+            document.getElementById('input-saldo-awal').value = '';
+            document.getElementById('input-tabungan').value = '';
+            saveData();
+        });
+
+        document.getElementById('form-pengeluaran').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const date = document.getElementById('input-pengeluaran-date').value;
+            const category = document.getElementById('input-pengeluaran-kategori').value;
+            const desc = document.getElementById('input-pengeluaran-desc').value;
+            const amount = document.getElementById('input-pengeluaran-jumlah').value;
+
+            if(date && desc && amount) {
+                appData.finance.expenses.push({
+                    id: Date.now(),
+                    date: date,
+                    category: category,
+                    desc: desc,
+                    amount: Number(amount)
+                });
+                
+                document.getElementById('input-pengeluaran-desc').value = '';
+                document.getElementById('input-pengeluaran-jumlah').value = '';
+                saveData();
+            }
+        });
+
+
+        // --- PHOTOS & TEXT LOGIC ---
+        const renderPhotosAndText = () => {
+            if(appData.photos.family) document.getElementById('img-family').src = appData.photos.family;
+            if(appData.photos.friends) document.getElementById('img-friends').src = appData.photos.friends;
+            if(appData.photos.partner) document.getElementById('img-partner').src = appData.photos.partner;
+            if(appData.photos.inspiration) document.getElementById('img-inspiration').src = appData.photos.inspiration;
+            
+            document.getElementById('input-motivation').value = appData.motivation;
+            document.getElementById('input-inspiration-desc').value = appData.inspirationDesc;
+        };
+
+        const setupImageUpload = (inputId, imgId, photoKey) => {
+            document.getElementById(inputId).addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 300; 
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+                        
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        const base64Str = canvas.toDataURL('image/jpeg', 0.8);
+                        document.getElementById(imgId).src = base64Str;
+                        appData.photos[photoKey] = base64Str;
+                        saveData();
+                    }
+                    img.src = event.target.result;
+                }
+                reader.readAsDataURL(file);
+            });
+        };
+
+        setupImageUpload('upload-family', 'img-family', 'family');
+        setupImageUpload('upload-friends', 'img-friends', 'friends');
+        setupImageUpload('upload-partner', 'img-partner', 'partner');
+        setupImageUpload('upload-inspiration', 'img-inspiration', 'inspiration');
+
+        document.getElementById('input-motivation').addEventListener('input', (e) => {
+            appData.motivation = e.target.value;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        });
+        document.getElementById('input-inspiration-desc').addEventListener('input', (e) => {
+            appData.inspirationDesc = e.target.value;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        });
+
+        // --- GLOBAL HELPER FUNCTIONS ---
+        window.deleteItem = (category, id) => {
+            appData[category] = appData[category].filter(item => item.id !== id);
+            saveData();
+        };
+
+        window.toggleComplete = (id, status) => {
+            const index = appData.daily.findIndex(item => item.id === id);
+            if (index > -1) {
+                appData.daily[index].completed = status;
+                saveData();
+            }
+        };
+
+        // --- FORM SUBMISSIONS PLANNER ---
+        const handleFormSubmit = (formId, handler) => {
+            document.getElementById(formId).addEventListener('submit', (e) => {
+                e.preventDefault();
+                handler();
+                saveData();
+            });
+        };
+
+        handleFormSubmit('form-goals', () => {
+            const input = document.getElementById('input-goals');
+            if(input.value.trim()) appData.goals.push({ id: Date.now(), text: input.value });
+            input.value = '';
+        });
+
+        handleFormSubmit('form-daily', () => {
+            const inputTxt = document.getElementById('input-daily');
+            const inputDate = document.getElementById('input-daily-date');
+            const inputTime = document.getElementById('input-daily-time');
+            if(inputTxt.value.trim()) {
+                appData.daily.push({ 
+                    id: Date.now(), 
+                    text: inputTxt.value, 
+                    date: inputDate.value,
+                    time: inputTime.value,
+                    completed: false,
+                    notified: false
+                });
+                inputTxt.value = ''; inputDate.value = ''; inputTime.value = '';
+            }
+        });
+
+        handleFormSubmit('form-coursework', () => {
+            const iCourse = document.getElementById('input-course');
+            const iDetail = document.getElementById('input-course-detail');
+            if(iCourse.value && iDetail.value) {
+                appData.coursework.push({ id: Date.now(), course: iCourse.value, detail: iDetail.value });
+                iCourse.value = ''; iDetail.value = '';
+            }
+        });
+
+        handleFormSubmit('form-org', () => {
+            const iName = document.getElementById('input-org-name');
+            const iRole = document.getElementById('input-org-role');
+            const iDate = document.getElementById('input-org-date');
+            if(iName.value && iRole.value && iDate.value) {
+                appData.organizations.push({ 
+                    id: Date.now(), 
+                    name: iName.value, 
+                    role: iRole.value,
+                    date: iDate.value
+                });
+                iName.value = ''; iRole.value = ''; iDate.value = '';
+            }
+        });
+
+        // FORM DEADLINE YANG BARU DENGAN FITUR JAM
+        handleFormSubmit('form-deadlines', () => {
+            const iTask = document.getElementById('input-deadline-task');
+            const iDate = document.getElementById('input-deadline-date');
+            const iTime = document.getElementById('input-deadline-time');
+            if(iTask.value && iDate.value && iTime.value) {
+                appData.deadlines.push({ 
+                    id: Date.now(), 
+                    task: iTask.value, 
+                    date: iDate.value,
+                    time: iTime.value,
+                    notified: false // Tambahkan ini agar bisa memicu alarm
+                });
+                iTask.value = ''; iDate.value = ''; iTime.value = '';
+            }
+        });
+
+        handleFormSubmit('form-scholarship', () => {
+            const iName = document.getElementById('input-scholarship-name');
+            const iStatus = document.getElementById('input-scholarship-status');
+            if(iName.value) {
+                appData.scholarships.push({ id: Date.now(), name: iName.value, status: iStatus.value });
+                iName.value = ''; iStatus.value = 'To Do';
+            }
+        });
+
+        const renderAll = () => {
+            renderGoals();
+            renderDaily();
+            renderCourseOrg();
+            renderDeadlines();
+            renderScholarships();
+            renderCalendar();
+            renderPhotosAndText();
+            renderFinance(); 
+        };
+
+        renderAll();
+
+        showSection('home-section');
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then((reg) => console.log('Service Worker berhasil didaftarkan!', reg.scope))
+                    .catch((err) => console.log('Service Worker gagal didaftarkan:', err));
+            });
+        }
+    </script>
+</body>
+</html>
