@@ -494,7 +494,7 @@
         // Fungsi Auth Google
         window.signInGoogle = () => {
             if(!isFirebaseActive) return alert("Ups! Kamu belum memasukkan konfigurasi Firebase di kode (baris 450-an). Fitur Cloud Sync tertunda.");
-            auth.signInWithPopup(provider).catch(err => alert(err.message));
+            auth.signInWithRedirect(provider).catch(err => alert(err.message));
         };
         
         window.signOutGoogle = () => {
