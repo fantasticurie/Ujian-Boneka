@@ -491,9 +491,9 @@
             renderAll(); 
         };
 
-        // Fungsi Auth Google
+        // Fungsi Auth Google (Menggunakan Redirect untuk kenyamanan Mobile & Laptop)
         window.signInGoogle = () => {
-            if(!isFirebaseActive) return alert("Ups! Kamu belum memasukkan konfigurasi Firebase di kode (baris 450-an). Fitur Cloud Sync tertunda.");
+            if(!isFirebaseActive) return alert("Ups! Kamu belum memasukkan konfigurasi Firebase di kode.");
             auth.signInWithRedirect(provider).catch(err => alert(err.message));
         };
         
@@ -555,7 +555,7 @@
             container.innerHTML = sortedDiary.length === 0 ? '<p class="text-sm text-gray-400 italic text-center mt-4 col-span-2">Belum ada surat. Tulis jurnal pertamamu hari ini!</p>' : '';
             
             sortedDiary.forEach(item => {
-                const title = item.title || "Surat Tanpa Judul"; // Kompatibilitas data lama
+                const title = item.title || "Surat Tanpa Judul";
                 container.innerHTML += `
                     <div class="envelope-card flex flex-col justify-center items-center text-center group" onclick="openLetter(${item.id})">
                         <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center text-pink-400 text-xl mb-3 group-hover:scale-110 transition-transform shadow-inner">
@@ -673,7 +673,6 @@
             ['home-section', 'planner-section', 'finance-section', 'schedule-section', 'diary-section', 'quotes-section'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById(sectionId).classList.remove('hidden');
             
-            // Re-hide overlay PIN jika keluar masuk menu Diary
             if(sectionId !== 'diary-section') document.getElementById('pin-overlay').style.display = 'flex';
 
             const btnBack = document.getElementById('btn-back-home');
@@ -923,7 +922,6 @@
 
         const handleFormSubmit = (formId, handler) => { document.getElementById(formId).addEventListener('submit', (e) => { e.preventDefault(); handler(); saveData(); }); };
         
-        // --- PROPER RE-ATTACHED HANDLERS ---
         handleFormSubmit('form-schedule', () => {
             const type = document.getElementById('input-sch-type').value;
             const name = document.getElementById('input-sch-name').value;
