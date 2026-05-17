@@ -335,7 +335,7 @@
                     <h2 class="text-xl font-bold mb-1 text-pink-500">Daily Planner</h2><p class="text-xs text-gray-500 mb-2" id="daily-date-display">Today: ...</p>
                     <div id="urgent-notes-display" class="mb-3 w-full flex flex-col gap-2"></div>
                     <div class="flex-grow overflow-y-auto mb-4 pr-1" id="daily-list"></div>
-                    <form id="form-daily" class="mt-auto flex flex-col gap-2"><input type="text" id="input-daily" placeholder="Fokus hari ini..." required><div class="flex gap-2"><input type="date" id="input-daily-date" class="w-1/2 text-xs"><input type="time" id="input-daily-time" class="w-1/3 text-xs"><button type="submit" class="btn-cute w-1/6 px-0"><i class="fas fa-plus"></i></button></div></form>
+                    <div class="flex gap-2 mt-auto"><form id="form-daily" class="w-full flex flex-col gap-2"><input type="text" id="input-daily" placeholder="Fokus hari ini..." required><div class="flex gap-2"><input type="date" id="input-daily-date" class="w-1/2 text-xs"><input type="time" id="input-daily-time" class="w-1/3 text-xs"><button type="submit" class="btn-cute w-1/6 px-0"><i class="fas fa-plus"></i></button></div></form></div>
                 </section>
             </div>
             <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 items-start content-start">
@@ -451,7 +451,6 @@
             measurementId: "G-B5N4NM4M8N"
         };
 
-        // Cek apakah user sudah mengisi config, kalau belum, hindari error
         let isFirebaseActive = false;
         if(firebaseConfig.apiKey !== "ISI_API_KEY_KAMU") {
             firebase.initializeApp(firebaseConfig);
@@ -478,12 +477,10 @@
 
         let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
 
-        // Fungsi sinkronisasi data pintar (Save ke Cloud kalo login, Local kalo belum)
         const saveData = () => {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); // Selalu backup lokal
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
             
             if(isFirebaseActive && currentUserUid) {
-                // Simpan ke Firestore
                 db.collection('users').doc(currentUserUid).set(appData)
                   .then(() => console.log("Data synced to cloud!"))
                   .catch((error) => console.error("Error syncing to cloud: ", error));
@@ -491,9 +488,8 @@
             renderAll(); 
         };
 
-        // Fungsi Auth Google (Menggunakan Redirect untuk kenyamanan Mobile & Laptop)
         window.signInGoogle = () => {
-            if(!isFirebaseActive) return alert("Ups! Kamu belum memasukkan konfigurasi Firebase di kode.");
+            if(!isFirebaseActive) return alert("Firebase tidak aktif.");
             auth.signInWithRedirect(provider).catch(err => alert(err.message));
         };
         
@@ -501,7 +497,6 @@
             if(isFirebaseActive) auth.signOut();
         };
 
-        // Listener Status Login
         if(isFirebaseActive) {
             auth.onAuthStateChanged((user) => {
                 if (user) {
@@ -512,14 +507,12 @@
                     document.getElementById('user-avatar').src = user.photoURL;
                     document.getElementById('user-name').innerText = user.displayName.split(" ")[0];
 
-                    // Download data dari Cloud ketika berhasil login
                     db.collection('users').doc(user.uid).get().then((doc) => {
                         if (doc.exists) {
                             appData = doc.data();
                             localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
                             renderAll();
                         } else {
-                            // User baru, simpan data lokal ke cloud
                             saveData();
                         }
                     });
@@ -537,7 +530,7 @@
         window.checkPin = () => {
             const pin = document.getElementById('diary-pin-input').value;
             const errorText = document.getElementById('pin-error');
-            if(pin === "6136") { // PIN Hardcoded sesuai pesanan
+            if(pin === "6136") {
                 document.getElementById('pin-overlay').style.display = 'none';
                 document.getElementById('diary-pin-input').value = '';
                 errorText.classList.remove('opacity-100');
@@ -547,11 +540,9 @@
             }
         };
 
-        // Render Diary sebagai Amplop Tertutup
         const renderDiary = () => {
             const container = document.getElementById('diary-list');
             const sortedDiary = [...appData.diary].sort((a, b) => new Date(b.date) - new Date(a.date));
-            
             container.innerHTML = sortedDiary.length === 0 ? '<p class="text-sm text-gray-400 italic text-center mt-4 col-span-2">Belum ada surat. Tulis jurnal pertamamu hari ini!</p>' : '';
             
             sortedDiary.forEach(item => {
@@ -569,7 +560,6 @@
             });
         };
 
-        // Fungsi membuka Pop-up Surat
         window.openLetter = (id) => {
             const item = appData.diary.find(d => d.id === id);
             if(item) {
@@ -810,7 +800,7 @@
             if(text) { appData.quotesList.push({ id: Date.now(), text, image: image || null }); document.getElementById('quote-text').value = ''; document.getElementById('quote-upload').value = ''; document.getElementById('quote-img-base64').value = ''; saveData(); }
         });
 
-        // LOGIC PLANNER LAMA (Goals, Daily, Coursework, Deadlines, Calendar)
+        // LOGIC PLANNER LAMA
         const renderGoals = () => {
             const container = document.getElementById('goals-list'); container.innerHTML = appData.goals.length === 0 ? '<p class="text-sm text-gray-400">Belum ada impian.</p>' : '';
             appData.goals.forEach(item => { container.innerHTML += `<div class="list-item flex-col items-start relative h-fit"><span class="font-medium text-sm pr-6">${item.text}</span><button onclick="deleteItem('goals', ${item.id})" class="absolute top-2 right-2 text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button></div>`; });
