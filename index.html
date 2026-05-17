@@ -441,25 +441,16 @@
         // ==========================================
         // 1. FIREBASE CONFIGURATION (CLOUD SYNC)
         // ==========================================
-        /* ⚠️ TASYA, PERHATIAN! ⚠️
-           Ganti isi 'firebaseConfig' di bawah ini dengan konfigurasi dari project Firebase kamu.
-           Cara buat: Buka firebase.google.com -> Create Project -> Web App (ikon </>) -> Copy config-nya ke sini.
-           Pastikan Firestore dan Authentication (Google Sign-In) sudah diaktifkan di Console Firebase.
-        */
-const firebaseConfig = {
-  apiKey: "AIzaSyBff1UGP6qGM5VLJg-4h6OvdXD_1EzI8XA",
-  authDomain: "planner-ku-2026.firebaseapp.com",
-  projectId: "planner-ku-2026",
-  storageBucket: "planner-ku-2026.firebasestorage.app",
-  messagingSenderId: "195776457664",
-  appId: "1:195776457664:web:099fdf59ba106824b4b625",
-  measurementId: "G-B5N4NM4M8N"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyBff1UGP6qGM5VLJg-4h6OvdXD_1EzI8XA",
+            authDomain: "planner-ku-2026.firebaseapp.com",
+            projectId: "planner-ku-2026",
+            storageBucket: "planner-ku-2026.firebasestorage.app",
+            messagingSenderId: "195776457664",
+            appId: "1:195776457664:web:099fdf59ba106824b4b625",
+            measurementId: "G-B5N4NM4M8N"
+        };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);;
-        
         // Cek apakah user sudah mengisi config, kalau belum, hindari error
         let isFirebaseActive = false;
         if(firebaseConfig.apiKey !== "ISI_API_KEY_KAMU") {
@@ -645,9 +636,6 @@ const analytics = getAnalytics(app);;
             });
         };
 
-        // (Sisanya adalah kode fungsional aslimu yang tidak kusentuh logikanya agar aman dari bug)
-        // [ALL PREVIOUS SCRIPT LOGIC MIGRATED BELOW THIS LINE]
-
         let introTimeout;
         window.addEventListener('load', () => { introTimeout = setTimeout(() => { skipIntro(); }, 3500); });
         window.skipIntro = () => {
@@ -704,7 +692,7 @@ const analytics = getAnalytics(app);;
             }
         };
 
-        const getHoliday = (dateStr) => { /* Logic Holiday (asli) */
+        const getHoliday = (dateStr) => { 
             const [y, m, d] = dateStr.split('-'); const md = `${m}-${d}`;
             const fixedHolidays = { '01-01': 'Tahun Baru Masehi', '05-01': 'Hari Buruh Internasional', '06-01': 'Hari Lahir Pancasila', '08-17': 'Hari Kemerdekaan RI', '12-25': 'Hari Raya Natal' };
             const dynamicHolidays = { '2026-02-17': 'Tahun Baru Imlek', '2026-02-18': 'Isra Mi\'raj', '2026-03-19': 'Hari Suci Nyepi', '2026-03-20': 'Cuti Bersama Idul Fitri', '2026-03-21': 'Hari Raya Idul Fitri', '2026-03-22': 'Hari Raya Idul Fitri', '2026-04-03': 'Wafat Isa Almasih', '2026-05-14': 'Kenaikan Isa Almasih', '2026-05-27': 'Hari Raya Idul Adha', '2026-05-31': 'Hari Raya Waisak', '2026-06-16': 'Tahun Baru Islam', '2026-08-26': 'Maulid Nabi Muhammad SAW' };
