@@ -342,7 +342,7 @@
                 <section class="glass-card p-5 flex flex-col md:col-span-2 min-h-[500px] border-2 border-pink-300">
                     <h2 class="text-xl font-bold mb-1 text-pink-500">Deadline Tracker</h2><p class="text-xs text-red-400 mb-3 font-semibold">*Akan menyala merah jika deadline &lt; 3 Hari!</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
-                    <form id="form-deadlines" class="mt-auto flex flex-col md:flex-row gap-2"><input type="text" id="input-deadline-task" placeholder="Nama Tugas..." required class="md:w-2/5 text-sm"><input type="date" id="input-deadline-date" required class="md:w-1/4 text-sm"><input type="time" id="input-deadline-time" required class="md:w-1/4 text-sm"><button type="submit" class="btn-cute md:w-auto px-3"><i class="fas fa-plus"></i> Add</button></form>
+                    <div class="mt-auto flex flex-col md:flex-row gap-2"><form id="form-deadlines" class="w-full flex flex-col md:flex-row gap-2"><input type="text" id="input-deadline-task" placeholder="Nama Tugas..." required class="md:w-2/5 text-sm"><input type="date" id="input-deadline-date" required class="md:w-1/4 text-sm"><input type="time" id="input-deadline-time" required class="md:w-1/4 text-sm"><button type="submit" class="btn-cute md:w-auto px-3"><i class="fas fa-plus"></i> Add</button></form></div>
                 </section>
                 <section class="glass-card p-5 flex flex-col md:col-span-2"><h2 class="text-xl font-bold mb-3 text-pink-500">Long-Term Goals</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 flex-grow overflow-y-auto max-h-40" id="goals-list"></div><form id="form-goals" class="mt-auto flex gap-2"><input type="text" id="input-goals" placeholder="Tuliskan impian besarmu..." required><button type="submit" class="btn-cute"><i class="fas fa-paper-plane"></i></button></form></section>
                 <section class="glass-card p-5 flex flex-col min-h-[350px]"><h2 class="text-xl font-bold mb-3 text-pink-500">Coursework (TMB)</h2><div class="flex-grow overflow-y-auto mb-4 pr-1" id="coursework-list"></div><form id="form-coursework" class="mt-auto flex flex-col gap-2"><input type="text" id="input-course" placeholder="Nama Matkul" required class="text-sm"><div class="flex gap-2"><input type="text" id="input-course-detail" placeholder="Tugas / Bab" required class="text-sm"><button type="submit" class="btn-cute px-3"><i class="fas fa-plus"></i></button></div></form></section>
@@ -922,6 +922,50 @@
         window.toggleComplete = (id, status) => { const index = appData.daily.findIndex(item => item.id === id); if (index > -1) { appData.daily[index].completed = status; saveData(); } };
 
         const handleFormSubmit = (formId, handler) => { document.getElementById(formId).addEventListener('submit', (e) => { e.preventDefault(); handler(); saveData(); }); };
+        
+        // --- PROPER RE-ATTACHED HANDLERS ---
+        handleFormSubmit('form-schedule', () => {
+            const type = document.getElementById('input-sch-type').value;
+            const name = document.getElementById('input-sch-name').value;
+            const day = document.getElementById('input-sch-day').value;
+            const start = document.getElementById('input-sch-start').value;
+            const end = document.getElementById('input-sch-end').value;
+            const room = document.getElementById('input-sch-room').value;
+            if(type && name && day && start && end && room) {
+                appData.schedule.push({ id: Date.now(), type, name, day, start, end, room });
+                document.getElementById('input-sch-name').value = '';
+                document.getElementById('input-sch-start').value = '';
+                document.getElementById('input-sch-end').value = '';
+                document.getElementById('input-sch-room').value = '';
+            }
+        });
+
+        handleFormSubmit('form-rab', () => {
+            const category = document.getElementById('rab-kategori').value;
+            const target = document.getElementById('rab-target').value;
+            const amount = parseFloat(document.getElementById('rab-nominal').value);
+            if(category && target && amount) {
+                appData.finance.rab.push({ id: Date.now(), category, target, amount });
+                document.getElementById('rab-kategori').value = '';
+                document.getElementById('rab-target').value = '';
+                document.getElementById('rab-nominal').value = '';
+            }
+        });
+
+        handleFormSubmit('form-transaksi', () => {
+            const wallet = document.getElementById('trans-wallet').value;
+            const type = document.getElementById('trans-type').value;
+            const date = document.getElementById('trans-date').value;
+            const category = document.getElementById('trans-category').value;
+            const desc = document.getElementById('trans-desc').value;
+            const amount = parseFloat(document.getElementById('trans-amount').value);
+            if(wallet && type && date && category && desc && amount) {
+                appData.finance.wallets[wallet].push({ id: Date.now(), type, date, category, desc, amount });
+                document.getElementById('trans-desc').value = '';
+                document.getElementById('trans-amount').value = '';
+            }
+        });
+
         handleFormSubmit('form-goals', () => { const input = document.getElementById('input-goals'); if(input.value.trim()) appData.goals.push({ id: Date.now(), text: input.value }); input.value = ''; });
         handleFormSubmit('form-daily', () => { const inputTxt = document.getElementById('input-daily'); const inputDate = document.getElementById('input-daily-date'); const inputTime = document.getElementById('input-daily-time'); if(inputTxt.value.trim()) { appData.daily.push({ id: Date.now(), text: inputTxt.value, date: inputDate.value, time: inputTime.value, completed: false, notified: false }); inputTxt.value = ''; inputDate.value = ''; inputTime.value = ''; } });
         handleFormSubmit('form-coursework', () => { const iCourse = document.getElementById('input-course'); const iDetail = document.getElementById('input-course-detail'); if(iCourse.value && iDetail.value) { appData.coursework.push({ id: Date.now(), course: iCourse.value, detail: iDetail.value }); iCourse.value = ''; iDetail.value = ''; } });
