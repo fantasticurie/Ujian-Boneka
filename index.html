@@ -491,10 +491,18 @@
         window.signInGoogle = () => {
             if(!isFirebaseActive) return alert("Firebase tidak aktif.");
             
-            // Solusi HP: Coba pakai Popup dulu, kalau gagal (misal diblokir) baru pakai Redirect
-            auth.signInWithPopup(provider).catch(err => {
-                console.log("Popup login diblokir/gagal, beralih ke mode redirect...");
-                auth.signInWithRedirect(provider);
+            const btn = document.getElementById('btn-login-google');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Loading...';
+            
+            auth.signInWithPopup(provider)
+            .then((result) => {
+                console.log("Login sukses!");
+            })
+            .catch((error) => {
+                console.error(error);
+                alert("Oops, Login Gagal!\n\nAlasan: " + error.message + "\n\nPastikan web ini sudah di-hosting (punya link HTTPS) dan bukan dibuka dari File Manager HP.");
+                btn.innerHTML = originalText;
             });
         };
         
@@ -503,11 +511,6 @@
         };
 
         if(isFirebaseActive) {
-            // Wajib ada untuk menangkap data kalau HP terpaksa pakai mode redirect
-            auth.getRedirectResult().catch((error) => {
-                console.error("Login redirect error:", error);
-            });
-
             auth.onAuthStateChanged((user) => {
                 if (user) {
                     currentUserUid = user.uid;
