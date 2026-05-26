@@ -490,7 +490,12 @@
 
         window.signInGoogle = () => {
             if(!isFirebaseActive) return alert("Firebase tidak aktif.");
-            auth.signInWithRedirect(provider).catch(err => alert(err.message));
+            
+            // Solusi HP: Coba pakai Popup dulu, kalau gagal (misal diblokir) baru pakai Redirect
+            auth.signInWithPopup(provider).catch(err => {
+                console.log("Popup login diblokir/gagal, beralih ke mode redirect...");
+                auth.signInWithRedirect(provider);
+            });
         };
         
         window.signOutGoogle = () => {
@@ -498,6 +503,11 @@
         };
 
         if(isFirebaseActive) {
+            // Wajib ada untuk menangkap data kalau HP terpaksa pakai mode redirect
+            auth.getRedirectResult().catch((error) => {
+                console.error("Login redirect error:", error);
+            });
+
             auth.onAuthStateChanged((user) => {
                 if (user) {
                     currentUserUid = user.uid;
