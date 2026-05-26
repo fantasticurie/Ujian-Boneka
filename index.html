@@ -228,7 +228,7 @@
                     <i class="fas fa-bell text-gray-400" id="notif-icon"></i>
                 </div>
                 <button id="btn-login-google" onclick="signInGoogle()" class="bg-white border border-gray-200 shadow-sm px-3 py-1.5 rounded-full text-xs font-bold text-gray-600 flex items-center hover:bg-gray-50 transition">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="w-4 h-4 mr-2" alt="Google"> Login Sync
+                    <i class="fab fa-google text-red-500 mr-2"></i> Login Sync
                 </button>
                 <div id="user-profile" class="hidden flex items-center gap-2 bg-white px-2 py-1 rounded-full shadow-sm border border-pink-100">
                     <img id="user-avatar" src="" class="w-6 h-6 rounded-full" alt="Avatar">
@@ -482,8 +482,8 @@
             
             if(isFirebaseActive && currentUserUid) {
                 db.collection('users').doc(currentUserUid).set(appData)
-                  .then(() => console.log("Data synced to cloud!"))
-                  .catch((error) => console.error("Error syncing to cloud: ", error));
+                    .then(() => console.log("Data synced to cloud!"))
+                    .catch((error) => console.error("Error syncing to cloud: ", error));
             }
             renderAll(); 
         };
@@ -866,7 +866,7 @@
             const container = document.getElementById('scholarship-list'); container.innerHTML = appData.scholarships.length === 0 ? '<p class="text-sm text-gray-400">Belum ada persiapan beasiswa.</p>' : '';
             appData.scholarships.forEach(item => {
                 let badgeClass = ''; if(item.status === 'To Do') badgeClass = 'bg-gray-200 text-gray-700'; if(item.status === 'In Progress') badgeClass = 'bg-yellow-200 text-yellow-800'; if(item.status === 'Done') badgeClass = 'bg-green-200 text-green-800 text-decoration-line-through';
-                container.innerHTML += `<div class="list-item flex justify-between relative"><div class="flex flex-col pr-6"><span class="font-medium text-sm">${item.name}</span><span class="text-xs font-bold px-2 py-1 rounded w-max mt-1 ${badgeClass}">${item.status}</span></div><button onclick="deleteItem('scholarships', ${item.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button></div>`;
+                container.innerHTML += `<div class="list-item flex justify-between relative"><div class="flex flex-col pr-6"><span class="font-medium text-sm">${item.name}</span><span class="text-xs font-bold px-2 py-1 rounded w-max mt-1 ${badgeClass}</span></div><button onclick="deleteItem('scholarships', ${item.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button></div>`;
             });
         };
 
