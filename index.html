@@ -269,6 +269,12 @@
                 <div class="glass-card p-5 border-t-4 border-green-400 bg-green-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-green-700 mb-1">Tabungan</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-tabungan">Rp 0</h2></div></div>
                 <div class="glass-card p-5 border-t-4 border-purple-400 bg-purple-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-purple-700 mb-1">Wishlist</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-wishlist">Rp 0</h2></div></div>
             </section>
+            
+            <section class="glass-card p-5 w-full border-2 border-yellow-300">
+                <h2 class="text-lg font-bold text-yellow-700 mb-4"><i class="fas fa-calendar-day mr-2"></i> Rekap Pengeluaran Minggu Ini (Senin - Minggu)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-7 gap-3 text-center" id="weekly-expense-grid">
+                    </div>
+            </section>
 
             <section class="glass-card p-5 md:p-6 w-full border-2 border-pink-300">
                 <div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-pink-600 flex items-center"><i class="fas fa-table mr-2 text-pink-400"></i> Estimasi RAB (Guideline)</h2></div>
@@ -364,6 +370,23 @@
 
                     <div id="recipes-list" class="max-h-60 overflow-y-auto pr-1 flex flex-col gap-3"></div>
                 </div>
+
+                <div class="glass-card p-5 border-2 border-orange-300 w-full md:col-span-2">
+                    <h2 class="text-xl font-bold text-orange-600 mb-4"><i class="fas fa-shopping-cart mr-2 text-orange-400"></i> Catatan Belanja Kos</h2>
+                    <p class="text-xs text-gray-500 mb-4">*Catat barang yang mau dibeli biar nggak lupa (contoh: Gas Portable, Minyak), sekalian track perubahan harganya!</p>
+                    
+                    <form id="form-shopping" class="flex flex-col md:flex-row gap-2 mb-4">
+                        <input type="text" id="shop-item" placeholder="Nama Barang..." required class="text-sm md:w-1/3 border-orange-200">
+                        <input type="number" id="shop-price" placeholder="Harga Estimasi Rp" required class="text-sm md:w-1/4 border-orange-200">
+                        <input type="text" id="shop-note" placeholder="Keterangan tambahan..." class="text-sm md:w-1/3 border-orange-200">
+                        <button type="submit" class="btn-cute !bg-gradient-to-r !from-orange-300 !to-red-400 md:w-auto px-4"><i class="fas fa-plus"></i> Add</button>
+                    </form>
+                    
+                    <div class="overflow-x-auto bg-white bg-opacity-80 rounded-lg shadow-sm border border-gray-100 p-3">
+                        <ul id="shopping-list-container" class="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2"></ul>
+                    </div>
+                </div>
+
             </section>
         </main>
 
@@ -602,13 +625,14 @@
             motivation: "I can achieve anything I set my mind to!", inspirationDesc: "",
             finance: { rab: [], wallets: { utama: [], tabungan: [], wishlist: [] } },
             diary: [], quotesList: [],
-            recipes: [], mealPlan: [], academicNotes: [], secureNotes: []
+            recipes: [], mealPlan: [], shoppingNotes: [], academicNotes: [], secureNotes: [] // Added shoppingNotes
         };
 
         let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
         // Ensure new data structures exist if updating from old local storage
         if(!appData.recipes) appData.recipes = [];
         if(!appData.mealPlan) appData.mealPlan = [];
+        if(!appData.shoppingNotes) appData.shoppingNotes = []; // Initialization for Shopping Notes
         if(!appData.academicNotes) appData.academicNotes = [];
         if(!appData.secureNotes) appData.secureNotes = [];
 
@@ -831,21 +855,66 @@
         setInterval(checkAlarms, 10000); updateNotifIcon();
 
         // ==========================================
-        // FINANCE SECTION LOGIC
+        // FINANCE SECTION LOGIC & WEEKLY CALENDAR
         // ==========================================
         const formatRupiah = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
-        const isThisWeek = (dateString) => { const date = new Date(dateString); const today = new Date(); const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1))); firstDayOfWeek.setHours(0,0,0,0); const lastDayOfWeek = new Date(firstDayOfWeek); lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6); lastDayOfWeek.setHours(23,59,59,999); return date >= firstDayOfWeek && date <= lastDayOfWeek; };
+        const isThisWeek = (dateString) => { 
+            const date = new Date(dateString); 
+            const today = new Date(); 
+            const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1))); 
+            firstDayOfWeek.setHours(0,0,0,0); 
+            const lastDayOfWeek = new Date(firstDayOfWeek); 
+            lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6); 
+            lastDayOfWeek.setHours(23,59,59,999); 
+            return date >= firstDayOfWeek && date <= lastDayOfWeek; 
+        };
         const isTodayStr = (dateString) => { const today = new Date(); const date = new Date(dateString); return date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear(); };
+
+        const getDayName = (dateStr) => {
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            return days[new Date(dateStr).getDay()];
+        };
 
         const renderFinance = () => {
             let balanceUtama = 0, balanceTabungan = 0, balanceWishlist = 0; let mingguIniMasuk = 0, mingguIniKeluar = 0; let hariIniKeluar = 0;
-            appData.finance.wallets.utama.forEach(trx => { if(trx.type === 'in') { balanceUtama += trx.amount; if(isThisWeek(trx.date)) mingguIniMasuk += trx.amount; } else { balanceUtama -= trx.amount; if(isThisWeek(trx.date)) mingguIniKeluar += trx.amount; if(isTodayStr(trx.date)) hariIniKeluar += trx.amount; } });
+            
+            // For Weekly Tracking
+            let dailyExpenses = { 'Senin': 0, 'Selasa': 0, 'Rabu': 0, 'Kamis': 0, 'Jumat': 0, 'Sabtu': 0, 'Minggu': 0 };
+
+            appData.finance.wallets.utama.forEach(trx => { 
+                if(trx.type === 'in') { 
+                    balanceUtama += trx.amount; 
+                    if(isThisWeek(trx.date)) mingguIniMasuk += trx.amount; 
+                } else { 
+                    balanceUtama -= trx.amount; 
+                    if(isThisWeek(trx.date)) {
+                        mingguIniKeluar += trx.amount; 
+                        dailyExpenses[getDayName(trx.date)] += trx.amount;
+                    }
+                    if(isTodayStr(trx.date)) hariIniKeluar += trx.amount; 
+                } 
+            });
             appData.finance.wallets.tabungan.forEach(trx => { if(trx.type === 'in') balanceTabungan += trx.amount; else balanceTabungan -= trx.amount; });
             appData.finance.wallets.wishlist.forEach(trx => { if(trx.type === 'in') balanceWishlist += trx.amount; else balanceWishlist -= trx.amount; });
             
             document.getElementById('display-utama').innerText = formatRupiah(balanceUtama); document.getElementById('display-tabungan').innerText = formatRupiah(balanceTabungan); document.getElementById('display-wishlist').innerText = formatRupiah(balanceWishlist); document.getElementById('display-utama-in').innerText = '+ ' + formatRupiah(mingguIniMasuk); document.getElementById('display-utama-out').innerText = '- ' + formatRupiah(mingguIniKeluar);
             document.getElementById('display-daily-out').innerText = '- ' + formatRupiah(hariIniKeluar); document.getElementById('display-weekly-in').innerText = '+ ' + formatRupiah(mingguIniMasuk);
             
+            // Render Weekly Grid
+            const weeklyGrid = document.getElementById('weekly-expense-grid');
+            weeklyGrid.innerHTML = '';
+            const hariList = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+            const hariIniName = getDayName(new Date().toISOString().split('T')[0]);
+
+            hariList.forEach(day => {
+                const isCurrentDay = (day === hariIniName) ? 'border-2 border-red-400 bg-red-50 scale-105' : 'border border-yellow-200 bg-white bg-opacity-60';
+                weeklyGrid.innerHTML += `
+                    <div class="p-2 flex flex-col justify-center rounded-lg shadow-sm transition-transform ${isCurrentDay}">
+                        <div class="text-[10px] md:text-xs font-bold text-gray-600 uppercase mb-1">${day}</div>
+                        <div class="text-[10px] md:text-xs font-black ${dailyExpenses[day] > 0 ? 'text-red-500' : 'text-gray-400'}">${formatRupiah(dailyExpenses[day])}</div>
+                    </div>`;
+            });
+
             const rabContainer = document.getElementById('rab-list'); rabContainer.innerHTML = appData.finance.rab.length === 0 ? '<tr><td colspan="5" class="text-center text-gray-400 italic">Belum ada target RAB.</td></tr>' : '';
             appData.finance.rab.forEach(item => { let realisasi = 0; appData.finance.wallets.utama.forEach(trx => { if (trx.type === 'out' && trx.category === item.category) { realisasi += trx.amount; } }); let textClass = 'text-green-600'; if (realisasi > item.amount) textClass = 'text-red-600 font-bold'; else if (realisasi > (item.amount * 0.8)) textClass = 'text-yellow-600 font-bold'; rabContainer.innerHTML += `<tr><td class="font-bold text-gray-700">${item.category}</td><td class="text-gray-600">${item.target}</td><td class="text-gray-600 font-medium">${formatRupiah(item.amount)}</td><td class="${textClass}">${formatRupiah(realisasi)}</td><td class="text-center"><button onclick="deleteRAB(${item.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button></td></tr>`; }); renderTransactions();
         };
@@ -865,7 +934,7 @@
         window.deleteTransaction = (wallet, id) => { appData.finance.wallets[wallet] = appData.finance.wallets[wallet].filter(item => item.id !== id); saveData(); };
 
         // ==========================================
-        // RECIPE & MEAL PLAN LOGIC (NEW)
+        // RECIPE, MEAL PLAN & SHOPPING NOTES LOGIC
         // ==========================================
         let tempIngredients = [];
         window.addIngredientTemp = () => {
@@ -894,8 +963,27 @@
             });
         };
 
+        const renderShoppingList = () => {
+            const container = document.getElementById('shopping-list-container');
+            container.innerHTML = appData.shoppingNotes.length === 0 ? '<p class="text-sm text-gray-400 italic p-2 text-center">Catatan belanja masih kosong.</p>' : '';
+            appData.shoppingNotes.forEach(item => {
+                container.innerHTML += `
+                    <li class="flex justify-between items-center bg-orange-50 p-2 rounded border border-orange-100 shadow-sm">
+                        <div class="flex flex-col flex-1">
+                            <span class="font-bold text-sm text-orange-800">${item.name}</span>
+                            ${item.note ? `<span class="text-[10px] text-gray-500 italic"><i class="fas fa-info-circle"></i> ${item.note}</span>` : ''}
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="font-black text-sm text-gray-700">${formatRupiah(item.price)}</span>
+                            <button onclick="deleteItem('shoppingNotes', ${item.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-check-circle"></i></button>
+                        </div>
+                    </li>
+                `;
+            });
+        };
+
         // ==========================================
-        // ACADEMIC CANVAS LOGIC (NEW)
+        // ACADEMIC CANVAS LOGIC 
         // ==========================================
         const canvas = document.getElementById('academic-canvas'); const ctx = canvas.getContext('2d');
         let isDrawing = false; let lastX = 0; let lastY = 0;
@@ -930,7 +1018,7 @@
         };
 
         // ==========================================
-        // SECURE VAULT LOGIC (NEW)
+        // SECURE VAULT LOGIC 
         // ==========================================
         const renderVault = () => {
             const container = document.getElementById('vault-list'); container.innerHTML = appData.secureNotes.length === 0 ? '<p class="text-sm text-gray-400 italic">Vault kosong. Aman!</p>' : '';
@@ -940,7 +1028,7 @@
         };
 
         // ==========================================
-        // GAME LOGIC (NEW)
+        // GAME LOGIC 
         // ==========================================
         const gameBoard = document.getElementById('game-board');
         const gridTiles = []; const winCondition = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0]; // 0 degrees rotation = win
@@ -978,6 +1066,20 @@
         document.getElementById('form-add-recipe').addEventListener('submit', (e) => { e.preventDefault(); const name = document.getElementById('recipe-name').value; if(name && tempIngredients.length > 0) { appData.recipes.push({ id: Date.now(), name, ingredients: [...tempIngredients] }); tempIngredients = []; document.getElementById('recipe-name').value = ''; renderTempIngredients(); saveData(); } else { alert('Mohon masukkan nama resep dan minimal 1 bahan ya Tasya!'); } });
         document.getElementById('form-meal-plan').addEventListener('submit', (e) => { e.preventDefault(); const date = document.getElementById('meal-date').value; const breakType = document.getElementById('meal-break-type').value; const breakDesc = document.getElementById('meal-break-desc').value; const lunchType = document.getElementById('meal-lunch-type').value; const lunchDesc = document.getElementById('meal-lunch-desc').value; const dinnerType = document.getElementById('meal-dinner-type').value; const dinnerDesc = document.getElementById('meal-dinner-desc').value; let habits = []; if(document.getElementById('habit-susu').checked) habits.push('susu'); if(document.getElementById('habit-buah').checked) habits.push('buah'); if(date) { appData.mealPlan.push({ id: Date.now(), date, breakType, breakDesc, lunchType, lunchDesc, dinnerType, dinnerDesc, habits }); document.getElementById('form-meal-plan').reset(); saveData(); } });
         document.getElementById('form-vault').addEventListener('submit', (e) => { e.preventDefault(); const title = document.getElementById('vault-title').value; const data = document.getElementById('vault-data').value; if(title && data) { appData.secureNotes.push({ id: Date.now(), title, data }); document.getElementById('vault-title').value = ''; document.getElementById('vault-data').value = ''; saveData(); } });
+        
+        document.getElementById('form-shopping').addEventListener('submit', (e) => { 
+            e.preventDefault(); 
+            const name = document.getElementById('shop-item').value; 
+            const price = parseFloat(document.getElementById('shop-price').value); 
+            const note = document.getElementById('shop-note').value;
+            if(name && price) { 
+                appData.shoppingNotes.push({ id: Date.now(), name, price, note }); 
+                document.getElementById('shop-item').value = ''; 
+                document.getElementById('shop-price').value = ''; 
+                document.getElementById('shop-note').value = '';
+                saveData(); 
+            } 
+        });
 
         // General functions from original (Schedule, Planner, Deadlines, etc.)
         let schFilterDay = 'All';
@@ -1047,7 +1149,7 @@
         const renderAll = () => { 
             renderSchedule(); renderGoals(); renderDaily(); renderCourseOrg(); renderDeadlines(); renderScholarships(); 
             renderCalendar(); renderPhotosAndText(); renderFinance(); renderImportantNotes(); renderDiary(); renderQuotes();
-            renderRecipes(); renderMealPlan(); renderAcademicNotes(); renderVault(); initGame();
+            renderRecipes(); renderMealPlan(); renderShoppingList(); renderAcademicNotes(); renderVault(); initGame();
         };
 
         const todayStr = new Date().toISOString().split('T')[0]; document.getElementById('trans-date').value = todayStr; document.getElementById('diary-date').value = todayStr; document.getElementById('meal-date').value = todayStr;
