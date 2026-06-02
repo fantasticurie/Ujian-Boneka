@@ -439,7 +439,7 @@
 
     <script>
         // ==========================================
-        // 1. FIREBASE CONFIGURATION (CLOUD SYNC)
+        // 1. FIREBASE CONFIGURATION (CLOUD SYNC) & OFFLINE FIX
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyBff1UGP6qGM5VLJg-4h6OvdXD_1EzI8XA",
@@ -452,9 +452,17 @@
         };
 
         let isFirebaseActive = false;
-        if(firebaseConfig.apiKey !== "ISI_API_KEY_KAMU") {
-            firebase.initializeApp(firebaseConfig);
-            isFirebaseActive = true;
+        
+        // FIX: Cek apakah library firebase berhasil ter-load dari internet sebelum digunakan
+        if(typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "ISI_API_KEY_KAMU") {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                isFirebaseActive = true;
+            } catch(e) {
+                console.log("Firebase inisialisasi gagal. Berjalan dalam Mode Offline.");
+            }
+        } else {
+            console.log("Internet mati atau file Firebase tidak dimuat. Berjalan dalam Mode Offline.");
         }
 
         const auth = isFirebaseActive ? firebase.auth() : null;
@@ -480,7 +488,7 @@
         const saveData = () => {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
             
-            if(isFirebaseActive && currentUserUid) {
+            if(isFirebaseActive && currentUserUid && db) {
                 db.collection('users').doc(currentUserUid).set(appData)
                     .then(() => console.log("Data synced to cloud!"))
                     .catch((error) => console.error("Error syncing to cloud: ", error));
@@ -489,7 +497,7 @@
         };
 
         window.signInGoogle = () => {
-            if(!isFirebaseActive) return alert("Firebase tidak aktif.");
+            if(!isFirebaseActive) return alert("Sistem sinkronisasi sedang offline. Harap hidupkan koneksi internetmu.");
             
             const btn = document.getElementById('btn-login-google');
             const originalText = btn.innerHTML;
