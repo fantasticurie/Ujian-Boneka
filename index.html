@@ -399,15 +399,10 @@
                     <div id="meal-history-list" class="mt-4 max-h-40 overflow-y-auto pr-1 flex flex-col gap-2"></div>
                 </div>
 
-                <div class="glass-card p-5 border-2 border-cyan-300">
-                    <h2 class="text-xl font-bold text-cyan-600 mb-2"><i class="fas fa-book-open mr-2 text-cyan-400"></i> Buku Resep Kos</h2>
+                <div class="glass-card p-5 border-2 border-cyan-300 flex flex-col">
+                    <h2 class="text-xl font-bold text-cyan-600 mb-3"><i class="fas fa-folder-plus mr-2 text-cyan-400"></i> Tambah Resep Kos</h2>
                     
-                    <div class="flex items-center gap-2 mb-4 bg-white bg-opacity-60 p-2 rounded-lg border border-cyan-100">
-                        <i class="fas fa-search text-gray-400 ml-2"></i>
-                        <input type="text" id="search-recipe" placeholder="Cari di arsip resep..." class="bg-transparent border-none focus:ring-0 text-sm py-1 w-full" oninput="renderRecipes()">
-                    </div>
-
-                    <form id="form-add-recipe" class="flex flex-col gap-2 mb-4 p-3 bg-cyan-50 bg-opacity-40 rounded-lg border border-cyan-200">
+                    <form id="form-add-recipe" class="flex flex-col gap-2 mb-4 p-3 bg-cyan-50 bg-opacity-40 rounded-lg border border-cyan-200 shadow-sm">
                         <input type="text" id="recipe-name" placeholder="Nama Masakan..." required class="text-sm">
                         <div class="flex gap-2">
                             <input type="text" id="recipe-ingredient" placeholder="Bahan (ex: Telur)" class="text-sm w-1/2">
@@ -419,7 +414,16 @@
                         <button type="submit" class="btn-cute w-full !bg-gradient-to-r !from-cyan-300 !to-blue-400 mt-2">Simpan ke Buku Resep</button>
                     </form>
 
-                    <div id="recipes-list" class="max-h-[350px] overflow-y-auto pr-1 flex flex-col gap-3 custom-scrollbar"></div>
+                    <div class="mt-2 pt-4 border-t-2 border-dashed border-cyan-200 flex-grow flex flex-col">
+                        <h2 class="text-xl font-bold text-cyan-600 mb-3"><i class="fas fa-book-open mr-2 text-cyan-400"></i> Buku Resep Tasya</h2>
+                        
+                        <div class="flex items-center gap-2 mb-4 bg-white bg-opacity-80 p-2 rounded-lg border border-cyan-100 shadow-sm">
+                            <i class="fas fa-search text-gray-400 ml-2"></i>
+                            <input type="text" id="search-recipe" placeholder="Cari di arsip resep..." class="bg-transparent border-none focus:ring-0 outline-none text-sm py-1 w-full" oninput="renderRecipes()">
+                        </div>
+
+                        <div id="recipes-list" class="max-h-[350px] overflow-y-auto pr-1 flex flex-col gap-3 custom-scrollbar"></div>
+                    </div>
                 </div>
                 
                 <div class="glass-card p-5 border-2 border-orange-300 w-full md:col-span-2">
