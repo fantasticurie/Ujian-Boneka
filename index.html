@@ -172,6 +172,9 @@
         .level-indicator { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
         .level-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; transition: 0.3s; }
         .level-dot.active { background: #e84393; box-shadow: 0 0 10px #fd79a8; }
+        
+        /* Timer Custom Spin */
+        .animate-spin-slow { animation: spin-slow 15s linear infinite; }
     </style>
 </head>
 <body class="antialiased flex flex-col min-h-screen">
@@ -203,6 +206,20 @@
                 <span class="font-bold text-purple-700 text-xs block mb-1"><i class="fas fa-lightbulb text-yellow-500 mr-1"></i> Evaluasi Diri:</span>
                 <p class="text-gray-600 italic text-sm" id="letter-eval">Evaluasi...</p>
             </div>
+        </div>
+    </div>
+
+    <div id="recipe-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 z-[9999] hidden flex items-center justify-center transition-opacity opacity-0" onclick="closeRecipeBook()">
+        <div id="recipe-modal-content" class="w-11/12 max-w-2xl rounded-2xl shadow-2xl p-6 relative transform scale-95 transition-transform bg-white h-[80vh] flex flex-col" onclick="event.stopPropagation()">
+            <button onclick="closeRecipeBook()" class="absolute top-4 right-4 text-gray-400 hover:text-cyan-500 text-xl"><i class="fas fa-times"></i></button>
+            <div class="text-center mb-4 border-b-2 border-cyan-200 pb-3">
+                <h2 class="text-2xl font-bold text-cyan-600 font-nunito"><i class="fas fa-book-open mr-2"></i> Buku Resep Tasya</h2>
+            </div>
+            <div class="flex items-center gap-2 mb-4 bg-gray-50 p-2 rounded-lg border border-cyan-100 shadow-sm">
+                <i class="fas fa-search text-gray-400 ml-2"></i>
+                <input type="text" id="search-recipe" placeholder="Cari di arsip resep..." class="bg-transparent border-none focus:ring-0 outline-none text-sm py-1 w-full" oninput="renderRecipes()">
+            </div>
+            <div id="recipes-list" class="flex-grow overflow-y-auto pr-1 flex flex-col gap-3 custom-scrollbar"></div>
         </div>
     </div>
 
@@ -245,6 +262,7 @@
         <section id="home-section" class="flex flex-wrap items-center justify-center gap-4 mt-10">
             <div class="glass-card menu-btn-giant border-4 border-orange-200 hover:border-orange-400 text-orange-600" onclick="showSection('schedule-section')"><i class="fas fa-calendar-days text-orange-500"></i><span class="font-extrabold font-nunito">Jadwal & Kuis</span></div>
             <div class="glass-card menu-btn-giant border-4 border-pink-200 hover:border-pink-400 text-pink-600" onclick="showSection('planner-section')"><i class="far fa-calendar-alt text-pink-500"></i><span class="font-extrabold font-nunito">My Planner</span></div>
+            <div class="glass-card menu-btn-giant border-4 border-red-200 hover:border-red-400 text-red-600" onclick="showSection('timer-section')"><i class="fas fa-stopwatch text-red-500"></i><span class="font-extrabold font-nunito">Focus Engine</span></div>
             <div class="glass-card menu-btn-giant border-4 border-yellow-200 hover:border-yellow-400 text-yellow-700" onclick="showSection('finance-section')"><i class="fas fa-wallet text-yellow-500"></i><span class="font-extrabold font-nunito">Keuangan Kos</span></div>
             <div class="glass-card menu-btn-giant border-4 border-teal-200 hover:border-teal-400 text-teal-600" onclick="showSection('recipes-section')"><i class="fas fa-utensils text-teal-500"></i><span class="font-extrabold font-nunito">Resep & Gizi</span></div>
             <div class="glass-card menu-btn-giant border-4 border-cyan-200 hover:border-cyan-400 text-cyan-600" onclick="showSection('academic-canvas-section')"><i class="fas fa-paint-brush text-cyan-500"></i><span class="font-extrabold font-nunito">Academic Canvas</span></div>
@@ -253,6 +271,30 @@
             <div class="glass-card menu-btn-giant border-4 border-blue-200 hover:border-blue-400 text-blue-600" onclick="showSection('quotes-section')"><i class="fas fa-quote-right text-blue-500"></i><span class="font-extrabold font-nunito">Motivasi & Quotes</span></div>
             <div class="glass-card menu-btn-giant border-4 border-gray-300 hover:border-gray-500 text-gray-700" onclick="showSection('game-section')"><i class="fas fa-robot text-gray-600"></i><span class="font-extrabold font-nunito">Robotic Puzzle</span></div>
         </section>
+
+        <main id="timer-section" class="flex flex-col gap-6 hidden max-w-2xl mx-auto w-full text-center">
+            <section class="glass-card p-8 border-2 border-red-300 relative overflow-hidden">
+                <i class="fas fa-cogs absolute top-4 right-4 text-4xl text-red-100 animate-spin-slow"></i>
+                <h2 class="text-3xl font-black text-red-600 mb-2"><i class="fas fa-stopwatch mr-2 text-red-500"></i> Engine Focus Timer</h2>
+                <p class="text-sm text-gray-500 mb-6 font-medium">Bakar semangat belajarmu, Calon Engineer! Set waktu dan fokus penuh tanpa interupsi.</p>
+
+                <div class="w-64 h-64 mx-auto rounded-full border-8 border-red-200 flex items-center justify-center bg-white shadow-inner relative mb-6">
+                    <div id="timer-display" class="text-6xl font-black text-gray-800 font-nunito tracking-widest z-10">25:00</div>
+                </div>
+
+                <div class="flex justify-center gap-4 mb-6 flex-wrap">
+                    <button onclick="setTimer(25)" class="px-4 py-2 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200 shadow-sm transition"><i class="fas fa-fire mr-1"></i> 25 Min</button>
+                    <button onclick="setTimer(50)" class="px-4 py-2 bg-blue-100 text-blue-700 font-bold rounded-lg hover:bg-blue-200 shadow-sm transition"><i class="fas fa-brain mr-1"></i> 50 Min (Deep Work)</button>
+                    <button onclick="setTimer(5)" class="px-4 py-2 bg-green-100 text-green-700 font-bold rounded-lg hover:bg-green-200 shadow-sm transition"><i class="fas fa-mug-hot mr-1"></i> 5 Min (Break)</button>
+                </div>
+
+                <div class="flex justify-center gap-4">
+                    <button id="btn-timer-start" onclick="startTimer()" class="btn-cute !bg-red-400 text-lg px-8 py-3"><i class="fas fa-play mr-2"></i> Ignite Engine</button>
+                    <button id="btn-timer-pause" onclick="pauseTimer()" class="btn-cute !bg-yellow-400 text-lg px-6 py-3 hidden text-yellow-900"><i class="fas fa-pause mr-2"></i> Pause</button>
+                    <button onclick="resetTimer()" class="btn-cute !bg-gray-400 text-lg px-6 py-3"><i class="fas fa-redo mr-2"></i> Reset</button>
+                </div>
+            </section>
+        </main>
 
         <main id="schedule-section" class="grid grid-cols-1 md:grid-cols-3 gap-6 hidden">
              <section class="glass-card p-5 flex flex-col md:col-span-1 border-2 border-orange-300">
@@ -414,15 +456,9 @@
                         <button type="submit" class="btn-cute w-full !bg-gradient-to-r !from-cyan-300 !to-blue-400 mt-2">Simpan ke Buku Resep</button>
                     </form>
 
-                    <div class="mt-2 pt-4 border-t-2 border-dashed border-cyan-200 flex-grow flex flex-col">
-                        <h2 class="text-xl font-bold text-cyan-600 mb-3"><i class="fas fa-book-open mr-2 text-cyan-400"></i> Buku Resep Tasya</h2>
-                        
-                        <div class="flex items-center gap-2 mb-4 bg-white bg-opacity-80 p-2 rounded-lg border border-cyan-100 shadow-sm">
-                            <i class="fas fa-search text-gray-400 ml-2"></i>
-                            <input type="text" id="search-recipe" placeholder="Cari di arsip resep..." class="bg-transparent border-none focus:ring-0 outline-none text-sm py-1 w-full" oninput="renderRecipes()">
-                        </div>
-
-                        <div id="recipes-list" class="max-h-[350px] overflow-y-auto pr-1 flex flex-col gap-3 custom-scrollbar"></div>
+                    <div class="mt-2 pt-4 border-t-2 border-dashed border-cyan-200 flex-grow flex flex-col items-center justify-center">
+                        <h3 class="text-sm font-bold text-cyan-600 mb-2 italic text-center">Buku resep Tasya sekarang ada di dalam *pop-up* biar lebih rapi!</h3>
+                        <button type="button" onclick="openRecipeBook()" class="btn-cute w-full !bg-gradient-to-r !from-cyan-400 !to-blue-500 py-3 shadow-lg hover:scale-105"><i class="fas fa-book-open mr-2"></i> Buka Buku Resep</button>
                     </div>
                 </div>
                 
@@ -795,7 +831,7 @@
         };
 
         window.showSection = (sectionId) => {
-            ['home-section', 'planner-section', 'finance-section', 'schedule-section', 'diary-section', 'quotes-section', 'recipes-section', 'academic-canvas-section', 'vault-section', 'game-section'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            ['home-section', 'planner-section', 'finance-section', 'schedule-section', 'diary-section', 'quotes-section', 'recipes-section', 'academic-canvas-section', 'vault-section', 'game-section', 'timer-section'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById(sectionId).classList.remove('hidden');
             
             // Handle Overlay Displays
@@ -811,6 +847,7 @@
             } else {
                 btnBack.classList.remove('hidden');
                 if (sectionId === 'planner-section') { mainTitle.innerText = "My Personal Planner"; mainSubtitle.innerHTML = '<i class="far fa-calendar-check text-pink-500 mr-2"></i> Jadwal & Target Studi'; }
+                else if (sectionId === 'timer-section') { mainTitle.innerText = "Pomodoro Timer"; mainSubtitle.innerHTML = '<i class="fas fa-fire text-red-500 mr-2"></i> Engine Focus & Deep Work Mode'; }
                 else if (sectionId === 'finance-section') { mainTitle.innerText = "Keuangan Anak Kos"; mainSubtitle.innerHTML = '<i class="fas fa-wallet text-green-500 mr-2"></i> Tracker Pengeluaran Mingguan & Harian'; }
                 else if (sectionId === 'schedule-section') { mainTitle.innerText = "Jadwal Perkuliahan"; mainSubtitle.innerHTML = '<i class="fas fa-calendar-alt text-orange-500 mr-2"></i> Kalender Matkul, Praktikum & Kuis'; }
                 else if (sectionId === 'diary-section') { mainTitle.innerText = "My Diary & Reflection"; mainSubtitle.innerHTML = '<i class="fas fa-book-heart text-purple-500 mr-2"></i> Tulis Jurnal dan Evaluasi Diri'; }
@@ -838,6 +875,63 @@
             if(dataChanged) saveData();
         }
         setInterval(checkAlarms, 10000); updateNotifIcon();
+
+        // ==========================================
+        // FOCUS TIMER LOGIC (NEW)
+        // ==========================================
+        let timerInterval;
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let isTimerRunning = false;
+
+        window.setTimer = (minutes) => {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timeLeft = minutes * 60;
+            updateTimerDisplay();
+            document.getElementById('btn-timer-start').classList.remove('hidden');
+            document.getElementById('btn-timer-pause').classList.add('hidden');
+        };
+
+        window.startTimer = () => {
+            if (isTimerRunning) return;
+            isTimerRunning = true;
+            document.getElementById('btn-timer-start').classList.add('hidden');
+            document.getElementById('btn-timer-pause').classList.remove('hidden');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    isTimerRunning = false;
+                    document.getElementById('btn-timer-start').classList.remove('hidden');
+                    document.getElementById('btn-timer-pause').classList.add('hidden');
+                    triggerAlarm("Engine Stopped!", "Waktu fokusmu sudah habis. Great job, Engineer!");
+                }
+            }, 1000);
+        };
+
+        window.pauseTimer = () => {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            document.getElementById('btn-timer-start').classList.remove('hidden');
+            document.getElementById('btn-timer-pause').classList.add('hidden');
+        };
+
+        window.resetTimer = () => {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timeLeft = 25 * 60; // Default back to 25 mins
+            updateTimerDisplay();
+            document.getElementById('btn-timer-start').classList.remove('hidden');
+            document.getElementById('btn-timer-pause').classList.add('hidden');
+        };
+
+        const updateTimerDisplay = () => {
+            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const s = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('timer-display').innerText = `${m}:${s}`;
+        };
 
         // ==========================================
         // FINANCE SECTION LOGIC & WEEKLY CALENDAR
@@ -938,13 +1032,35 @@
             } else { alert('Mohon lengkapi nama resep, minimal 1 bahan, dan langkah-langkah ya Tasya!'); } 
         });
 
+        // --- RECIPE MODAL LOGIC (NEW) ---
+        window.openRecipeBook = () => {
+            const modal = document.getElementById('recipe-modal');
+            const content = document.getElementById('recipe-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => { 
+                modal.classList.remove('opacity-0'); 
+                content.classList.remove('scale-95'); 
+                content.classList.add('scale-100'); 
+            }, 10);
+            renderRecipes(); // Render data saat dibuka
+        };
+
+        window.closeRecipeBook = () => {
+            const modal = document.getElementById('recipe-modal');
+            const content = document.getElementById('recipe-modal-content');
+            modal.classList.add('opacity-0'); 
+            content.classList.remove('scale-100'); 
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
         window.renderRecipes = () => {
             const container = document.getElementById('recipes-list'); 
             const searchQ = document.getElementById('search-recipe').value.toLowerCase(); container.innerHTML = '';
             
             const filtered = appData.recipes.filter(r => r.name.toLowerCase().includes(searchQ) || r.ingredients.some(i => i.name.toLowerCase().includes(searchQ)));
             
-            if(filtered.length === 0) { container.innerHTML = '<p class="text-sm text-gray-400 italic">Arsip resep masih kosong/tidak ditemukan.</p>'; return; }
+            if(filtered.length === 0) { container.innerHTML = '<p class="text-sm text-gray-400 italic text-center mt-4">Arsip resep masih kosong/tidak ditemukan.</p>'; return; }
             
             filtered.forEach(recipe => {
                 let total = recipe.ingredients.reduce((sum, item) => sum + item.price, 0);
@@ -1189,7 +1305,6 @@
                 saveData(); 
             } 
         });
-
 
         const renderAll = () => { 
             renderSchedule(); renderGoals(); renderDaily(); renderCourseOrg(); renderDeadlines(); renderScholarships(); 
