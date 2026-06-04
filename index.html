@@ -6,14 +6,6 @@
     <title>My Personal Planner 2026 | Future Engineer</title>
     
     <meta name="theme-color" content="#ffd1dc">
-    <link rel="manifest" href="manifest.json<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Planner 2026 | Future Engineer</title>
-    
-    <meta name="theme-color" content="#ffd1dc">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -51,9 +43,7 @@
             position: relative;
         }
 
-        h1, h2, h3, .calendar-header {
-            font-family: 'Nunito', sans-serif;
-        }
+        h1, h2, h3, .calendar-header { font-family: 'Nunito', sans-serif; }
 
         /* --- SPLASH SCREEN INTRO --- */
         #intro-splash {
@@ -65,7 +55,7 @@
         }
         .intro-icon { font-size: 5rem; color: #fff9d2; margin-bottom: 20px; animation: pulse-glow 1.5s infinite; cursor: pointer; transition: transform 0.2s ease; }
         .intro-icon:hover { transform: scale(1.1); }
-        .intro-title { font-family: 'Nunito', sans-serif; font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 10px; letter-spacing: 1px; padding: 0 20px; }
+        .intro-title { font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 10px; letter-spacing: 1px; padding: 0 20px; }
         .intro-subtitle { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 300; text-align: center; color: #ffd1dc; max-width: 80%; line-height: 1.5; }
 
         @keyframes pulse-glow {
@@ -74,11 +64,7 @@
             100% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 249, 210, 0.5); }
         }
 
-        .header-glow {
-            background: linear-gradient(to right, #e84393, #fd79a8, #ff9ff3);
-            -webkit-background-clip: text; color: transparent;
-            text-shadow: 0px 4px 15px rgba(253, 121, 168, 0.4); letter-spacing: 1px;
-        }
+        .header-glow { background: linear-gradient(to right, #e84393, #fd79a8, #ff9ff3); -webkit-background-clip: text; color: transparent; text-shadow: 0px 4px 15px rgba(253, 121, 168, 0.4); letter-spacing: 1px; }
 
         /* --- Glassmorphism Cards (Enhanced) --- */
         .glass-card {
@@ -126,7 +112,7 @@
         .calendar-day.has-event::after { content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background-color: #e84393; border-radius: 50%; }
         .calendar-day.selected { border: 2px solid #e84393; transform: scale(1.05); background: #ffeaa7 !important; color: #4a4a4a !important; }
 
-        /* --- Polaroid & Pinned Image --- */
+        /* --- Polaroid --- */
         .polaroid-frame { background: #fff; padding: 10px 10px 30px 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 4px; position: relative; transition: transform 0.3s ease; width: 100%; }
         .polaroid-frame:hover { z-index: 10; }
         .pin-icon { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-size: 1.8rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 5; }
@@ -162,16 +148,30 @@
         .envelope-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 30px; background: #fce7f3; border-bottom: 2px solid #fbcfe8; clip-path: polygon(0 0, 100% 0, 50% 100%); transition: all 0.3s ease; }
         .envelope-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(244, 114, 182, 0.2); }
         .envelope-card:hover::before { background: #fbcfe8; }
-        
         #letter-modal-content { background: #fff; background-image: radial-gradient(#fbcfe8 1px, transparent 1px); background-size: 20px 20px; }
         #pin-overlay, #vault-pin-overlay { backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
 
-        /* Game Custom Styles */
-        .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 auto; width: 100%; max-width: 300px;}
-        .game-part { background: #ecf0f1; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-size: 1.5rem; color: #2980b9; padding: 15px; font-weight: bold; flex-direction: column; text-align: center;}
-        .game-part:hover { transform: scale(1.05); background: #dff9fb; border: 2px solid #22a6b3;}
-        .game-part.selected { background: #2ecc71; color: white; border: 2px solid #27ae60; pointer-events: none;}
-        .game-part i { font-size: 2rem; margin-bottom: 5px; }
+        /* Game Custom Styles - 3D Effect */
+        .game-board-container { perspective: 800px; margin: 20px auto; width: fit-content; }
+        .game-grid { 
+            display: grid; gap: 8px; background: #2c3e50; padding: 15px; border-radius: 12px; 
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.3); 
+            transform: rotateX(15deg); transform-style: preserve-3d; transition: all 0.5s ease;
+        }
+        .game-tile { 
+            width: 60px; height: 60px; background: linear-gradient(145deg, #ecf0f1, #bdc3c7); 
+            border-radius: 8px; display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s; 
+            box-shadow: 0 6px 0 #95a5a6, 0 8px 15px rgba(0,0,0,0.2);
+            font-size: 2rem; color: #2c3e50; user-select: none; position: relative;
+        }
+        .game-tile:active { transform: translateY(4px); box-shadow: 0 2px 0 #95a5a6, 0 2px 5px rgba(0,0,0,0.2); }
+        .game-tile.start-tile { background: linear-gradient(145deg, #2ecc71, #27ae60); color: white; box-shadow: 0 6px 0 #219653; cursor: default; }
+        .game-tile.end-tile { background: linear-gradient(145deg, #e74c3c, #c0392b); color: white; box-shadow: 0 6px 0 #a93226; cursor: default; }
+        
+        .level-indicator { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
+        .level-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; transition: 0.3s; }
+        .level-dot.active { background: #e84393; box-shadow: 0 0 10px #fd79a8; }
     </style>
 </head>
 <body class="antialiased flex flex-col min-h-screen">
@@ -251,232 +251,8 @@
             <div class="glass-card menu-btn-giant border-4 border-purple-200 hover:border-purple-400 text-purple-600" onclick="showSection('diary-section')"><i class="fas fa-book-heart text-purple-500"></i><span class="font-extrabold font-nunito">Diary & Evaluasi</span></div>
             <div class="glass-card menu-btn-giant border-4 border-indigo-200 hover:border-indigo-400 text-indigo-600" onclick="showSection('vault-section')"><i class="fas fa-key text-indigo-500"></i><span class="font-extrabold font-nunito">Secure Notes</span></div>
             <div class="glass-card menu-btn-giant border-4 border-blue-200 hover:border-blue-400 text-blue-600" onclick="showSection('quotes-section')"><i class="fas fa-quote-right text-blue-500"></i><span class="font-extrabold font-nunito">Motivasi & Quotes</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-gray-300 hover:border-gray-500 text-gray-700" onclick="showSection('game-section')"><i class="fas fa-gamepad text-gray-600"></i><span class="font-extrabold font-nunito">TMB Assembly Game</span></div>
+            <div class="glass-card menu-btn-giant border-4 border-gray-300 hover:border-gray-500 text-gray-700" onclick="showSection('game-section')"><i class="fas fa-robot text-gray-600"></i><span class="font-extrabold font-nunito">Robotic Puzzle</span></div>
         </section>
-
-        <main id="finance-section" class="flex flex-col gap-8 hidden max-w-5xl mx-auto">
-            <div class="text-center w-full">
-                <blockquote class="glass-card p-4 mx-auto border-l-8 border-yellow-400 inline-block shadow-sm">
-                    <p class="italic text-gray-700 font-medium">"Uang kos di Dramaga emang cepet banget ngalirnya kalau nggak ditampung. Yuk, hemat hari ini biar besok bisa jajan tanpa *guilty feeling*, Tasya!" ✨</p>
-                </blockquote>
-            </div>
-
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                <div class="glass-card p-5 border-2 border-red-300 bg-red-50 bg-opacity-30">
-                    <h3 class="font-bold text-red-600 mb-2"><i class="fas fa-fire mr-2"></i>Pengeluaran Hari Ini</h3>
-                    <p id="display-daily-out" class="text-3xl font-black text-gray-800">Rp 0</p>
-                    <p class="text-xs text-gray-500 mt-2">*Jaga pengeluaran harian biar target RAB aman!</p>
-                </div>
-                <div class="glass-card p-5 border-2 border-green-300 bg-green-50 bg-opacity-30">
-                    <h3 class="font-bold text-green-600 mb-2"><i class="fas fa-calendar-week mr-2"></i>Pemasukan Minggu Ini</h3>
-                    <p id="display-weekly-in" class="text-3xl font-black text-gray-800">Rp 0</p>
-                </div>
-            </section>
-
-            <section class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                <div class="glass-card p-5 border-t-4 border-blue-400 bg-blue-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-blue-700 mb-1">Saldo Utama</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-utama">Rp 0</h2></div><div class="border-t border-blue-200 pt-3 flex flex-col gap-1 text-xs"><div class="flex justify-between text-green-700"><span>Masuk Mg Ini:</span><strong id="display-utama-in">+ Rp 0</strong></div><div class="flex justify-between text-red-600"><span>Keluar Mg Ini:</span><strong id="display-utama-out">- Rp 0</strong></div></div></div>
-                <div class="glass-card p-5 border-t-4 border-green-400 bg-green-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-green-700 mb-1">Tabungan</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-tabungan">Rp 0</h2></div></div>
-                <div class="glass-card p-5 border-t-4 border-purple-400 bg-purple-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-purple-700 mb-1">Wishlist</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-wishlist">Rp 0</h2></div></div>
-            </section>
-            
-            <section class="glass-card p-5 w-full border-2 border-yellow-300">
-                <h2 class="text-lg font-bold text-yellow-700 mb-4"><i class="fas fa-calendar-day mr-2"></i> Rekap Pengeluaran Minggu Ini (Senin - Minggu)</h2>
-                <div class="grid grid-cols-2 md:grid-cols-7 gap-3 text-center" id="weekly-expense-grid">
-                    </div>
-            </section>
-
-            <section class="glass-card p-5 md:p-6 w-full border-2 border-pink-300">
-                <div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-pink-600 flex items-center"><i class="fas fa-table mr-2 text-pink-400"></i> Estimasi RAB (Guideline)</h2></div>
-                <form id="form-rab" class="flex flex-col md:flex-row gap-2 mb-4 bg-white bg-opacity-60 p-3 rounded-lg border border-pink-100 shadow-sm">
-                    <select id="rab-kategori" required class="text-sm md:w-1/4"><option value="" disabled selected>Pilih Kategori...</option><option value="Makan & Minum">Makan & Minum</option><option value="Transportasi">Transportasi</option><option value="Kebutuhan Kos">Kebutuhan Kos</option><option value="Keperluan Kuliah">Keperluan Kuliah</option><option value="Skincare/Selfcare">Skincare (e.g. LightPlus)</option><option value="Lainnya">Lainnya</option></select>
-                    <input type="text" id="rab-target" placeholder="Target / Item..." required class="text-sm md:w-1/3">
-                    <input type="number" id="rab-nominal" placeholder="Estimasi Rp" required class="text-sm md:w-1/4">
-                    <button type="submit" class="btn-cute px-4 py-2 md:w-auto text-sm"><i class="fas fa-plus"></i> Add</button>
-                </form>
-                <div class="overflow-x-auto bg-white bg-opacity-80 rounded-lg shadow-sm border border-gray-100">
-                    <table class="w-full text-left border-collapse table-rab">
-                        <thead><tr><th>Kategori</th><th>Target / Barang</th><th>Budget Est.</th><th>Realisasi</th><th class="text-center"><i class="fas fa-cog"></i></th></tr></thead>
-                        <tbody id="rab-list"></tbody>
-                    </table>
-                </div>
-            </section>
-            
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full items-start">
-                <div class="glass-card p-5 border border-yellow-200 bg-yellow-50 bg-opacity-30">
-                    <h2 class="text-lg font-bold text-yellow-700 mb-4"><i class="fas fa-pen-nib mr-2"></i> Catat Transaksi</h2>
-                    <form id="form-transaksi" class="flex flex-col gap-3">
-                        <select id="trans-wallet" required class="text-sm bg-white p-2 rounded"><option value="utama">🔵 Saldo Utama</option><option value="tabungan">🟢 Tabungan</option><option value="wishlist">🟣 Wishlist</option></select>
-                        <select id="trans-type" required class="text-sm bg-white p-2 rounded"><option value="out">🔴 Pengeluaran (-)</option><option value="in">🟢 Pemasukan (+)</option></select>
-                        <input type="date" id="trans-date" required class="text-sm p-2 rounded">
-                        <select id="trans-category" required class="text-sm bg-white p-2 rounded"><option value="Uang Saku Mingguan">💰 Uang Saku Mingguan</option><option value="Makan & Minum">🍔 Makan & Minum</option><option value="Transportasi">🛵 Transportasi</option><option value="Kebutuhan Kos">🧻 Kebutuhan Kos</option><option value="Keperluan Kuliah">📚 Keperluan Kuliah</option><option value="Skincare/Selfcare">✨ Skincare</option><option value="Nabung">📥 Nabung (Transfer)</option><option value="Lainnya">📦 Lainnya</option></select>
-                        <input type="text" id="trans-desc" placeholder="Keterangan (Gacoan, Gorengan dll)..." required class="text-sm p-2 rounded">
-                        <input type="number" id="trans-amount" placeholder="Nominal (Rp)" required class="text-sm p-2 rounded font-bold">
-                        <button type="submit" class="btn-cute mt-2 w-full py-3 text-sm shadow-md"><i class="fas fa-save"></i> Simpan Transaksi</button>
-                    </form>
-                </div>
-                <div class="glass-card p-5 min-h-[450px] flex flex-col">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-200 pb-2">
-                        <h2 class="text-lg font-bold text-gray-700"><i class="fas fa-history mr-2"></i> Riwayat</h2>
-                        <select id="filter-history-wallet" class="text-xs p-1 rounded border border-gray-300 font-bold" onchange="renderTransactions()"><option value="utama">Utama</option><option value="tabungan">Tabungan</option><option value="wishlist">Wishlist</option></select>
-                    </div>
-                    <div class="flex-grow overflow-y-auto pr-1" id="transaction-list"></div>
-                </div>
-            </section>
-        </main>
-
-        <main id="recipes-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                
-                <div class="glass-card p-5 border-2 border-teal-300">
-                    <h2 class="text-xl font-bold text-teal-600 mb-4"><i class="fas fa-apple-alt mr-2 text-teal-400"></i> Planner Makan & Gizi</h2>
-                    <form id="form-meal-plan" class="flex flex-col gap-3">
-                        <input type="date" id="meal-date" required class="text-sm p-2 rounded border-teal-200">
-                        <div class="flex items-center gap-2">
-                            <span class="w-1/4 text-xs font-bold text-gray-600">Sarapan</span>
-                            <select id="meal-break-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select>
-                            <input type="text" id="meal-break-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200">
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-1/4 text-xs font-bold text-gray-600">Makan Siang</span>
-                            <select id="meal-lunch-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select>
-                            <input type="text" id="meal-lunch-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200">
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-1/4 text-xs font-bold text-gray-600">Makan Malam</span>
-                            <select id="meal-dinner-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select>
-                            <input type="text" id="meal-dinner-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200">
-                        </div>
-                        
-                        <div class="border-t border-teal-100 mt-2 pt-3 flex flex-wrap gap-4 items-center">
-                            <label class="text-xs font-bold text-gray-600">Habit Harian:</label>
-                            <label class="flex items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="habit-susu" class="custom-checkbox"> Minum Susu</label>
-                            <label class="flex items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="habit-buah" class="custom-checkbox"> Makan Buah</label>
-                        </div>
-                        <button type="submit" class="btn-cute mt-2 w-full !bg-gradient-to-r !from-teal-300 !to-cyan-400">Simpan Menu Harian</button>
-                    </form>
-                    
-                    <div id="meal-history-list" class="mt-4 max-h-40 overflow-y-auto pr-1 flex flex-col gap-2"></div>
-                </div>
-
-                <div class="glass-card p-5 border-2 border-cyan-300 h-full flex flex-col">
-                    <h2 class="text-xl font-bold text-cyan-600 mb-2"><i class="fas fa-book-open mr-2 text-cyan-400"></i> Buku Resep Kos</h2>
-                    
-                    <div class="flex items-center gap-2 mb-4 bg-white bg-opacity-60 p-2 rounded-lg border border-cyan-100">
-                        <i class="fas fa-search text-gray-400 ml-2"></i>
-                        <input type="text" id="search-recipe" placeholder="Cari menu atau bahan (misal: telur)..." class="bg-transparent border-none focus:ring-0 text-sm py-1 w-full" oninput="renderRecipes()">
-                    </div>
-
-                    <form id="form-add-recipe" class="flex flex-col gap-2 mb-4 p-3 bg-cyan-50 bg-opacity-40 rounded-lg border border-cyan-200">
-                        <input type="text" id="recipe-name" placeholder="Nama Masakan..." required class="text-sm">
-                        <div class="flex gap-2">
-                            <input type="text" id="recipe-ingredient" placeholder="Bahan (ex: Telur)" class="text-sm w-1/2">
-                            <input type="number" id="recipe-price" placeholder="Harga Rp" class="text-sm w-1/4">
-                            <button type="button" onclick="addIngredientTemp()" class="btn-cute px-3 w-1/4 !bg-cyan-400 text-xs"><i class="fas fa-plus"></i> Bahan</button>
-                        </div>
-                        <ul id="temp-ingredients-list" class="text-xs text-gray-600 ml-2 list-disc pl-4"></ul>
-                        <textarea id="recipe-steps" placeholder="Langkah-langkah memasak (pisahkan dengan Enter/Baris baru)..." required class="text-sm border-cyan-200 rounded p-2" rows="3"></textarea>
-                        <button type="submit" class="btn-cute w-full !bg-gradient-to-r !from-cyan-300 !to-blue-400 mt-2">Simpan Resep</button>
-                    </form>
-
-                    <div id="recipes-list" class="flex-grow overflow-y-auto pr-1 flex flex-col gap-3 custom-scrollbar" style="max-height: 400px;"></div>
-                </div>
-
-                <div class="glass-card p-5 border-2 border-orange-300 w-full md:col-span-2">
-                    <h2 class="text-xl font-bold text-orange-600 mb-4"><i class="fas fa-shopping-cart mr-2 text-orange-400"></i> Catatan Belanja Kos</h2>
-                    <p class="text-xs text-gray-500 mb-4">*Catat barang yang mau dibeli biar nggak lupa (contoh: Gas Portable, Minyak), sekalian track perubahan harganya!</p>
-                    
-                    <form id="form-shopping" class="flex flex-col md:flex-row gap-2 mb-4">
-                        <input type="text" id="shop-item" placeholder="Nama Barang..." required class="text-sm md:w-1/3 border-orange-200">
-                        <input type="number" id="shop-price" placeholder="Harga Estimasi Rp" required class="text-sm md:w-1/4 border-orange-200">
-                        <input type="text" id="shop-note" placeholder="Keterangan tambahan..." class="text-sm md:w-1/3 border-orange-200">
-                        <button type="submit" class="btn-cute !bg-gradient-to-r !from-orange-300 !to-red-400 md:w-auto px-4"><i class="fas fa-plus"></i> Add</button>
-                    </form>
-                    
-                    <div class="overflow-x-auto bg-white bg-opacity-80 rounded-lg shadow-sm border border-gray-100 p-3">
-                        <ul id="shopping-list-container" class="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2"></ul>
-                    </div>
-                </div>
-
-            </section>
-        </main>
-
-        <main id="academic-canvas-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
-            <section class="glass-card p-5 border-2 border-cyan-300 flex flex-col md:flex-row gap-6">
-                <div class="w-full md:w-2/3 flex flex-col items-center">
-                    <h2 class="text-xl font-bold text-cyan-600 mb-4 w-full"><i class="fas fa-chalkboard mr-2 text-cyan-400"></i> Academic Canvas (Coret-Coret PPT)</h2>
-                    <input type="file" id="upload-ppt-image" accept="image/*" class="text-xs mb-3 w-full border border-cyan-200 p-2 rounded bg-white">
-                    <div class="relative border-2 border-dashed border-cyan-300 bg-white rounded-lg overflow-hidden w-full max-w-[600px] h-[400px] cursor-crosshair">
-                        <canvas id="academic-canvas" width="600" height="400" class="absolute top-0 left-0 touch-none"></canvas>
-                    </div>
-                    <div class="flex gap-4 mt-4 w-full justify-center">
-                        <input type="color" id="pen-color" value="#e84393" class="w-10 h-10 border-0 rounded cursor-pointer p-0">
-                        <button onclick="clearCanvas()" class="btn-cute !bg-red-400 text-sm px-4 py-2"><i class="fas fa-eraser mr-1"></i> Clear</button>
-                    </div>
-                </div>
-                <div class="w-full md:w-1/3 flex flex-col gap-3">
-                    <h3 class="font-bold text-gray-700 mt-4 md:mt-0">Evaluasi & Catatan:</h3>
-                    <input type="text" id="academic-note-title" placeholder="Mata Kuliah / Topik..." class="text-sm p-2 border-cyan-200 rounded">
-                    <textarea id="academic-note-eval" rows="4" placeholder="Pertanyaan untuk Dosen / Evaluasi materi yang belum paham..." class="text-sm p-2 border-cyan-200 rounded flex-grow resize-none"></textarea>
-                    <button onclick="saveAcademicNote()" class="btn-cute !bg-gradient-to-r !from-cyan-400 !to-blue-500 py-3 mt-auto"><i class="fas fa-save mr-2"></i>Simpan Catatan Canvas</button>
-                </div>
-            </section>
-            
-            <section class="glass-card p-5 border-t-4 border-blue-400 w-full">
-                <h3 class="font-bold text-blue-600 mb-4">Arsip Catatan Evaluasi Materi</h3>
-                <div id="academic-notes-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-            </section>
-        </main>
-
-        <main id="vault-section" class="flex flex-col gap-6 hidden max-w-3xl mx-auto w-full relative">
-            
-            <div id="vault-pin-overlay" class="absolute inset-0 bg-indigo-50 bg-opacity-90 backdrop-blur-xl z-40 flex flex-col items-center justify-center rounded-2xl border border-indigo-200 shadow-lg">
-                <div class="glass-card p-8 text-center flex flex-col items-center border-2 border-indigo-300">
-                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-4 text-indigo-500 text-3xl"><i class="fas fa-shield-alt"></i></div>
-                    <h3 class="font-bold text-xl text-indigo-700 mb-1">Secure Vault</h3>
-                    <p class="text-xs text-gray-500 mb-6">Area terbatas. Masukkan PIN untuk membuka catatan rahasia.</p>
-                    <input type="password" id="vault-pin-input" maxlength="4" class="text-center text-3xl tracking-[1em] font-bold border-2 border-indigo-300 w-40 rounded-xl mb-4 bg-white/50 py-3" placeholder="••••">
-                    <button onclick="checkVaultPin()" class="btn-cute w-full !bg-gradient-to-r !from-indigo-400 !to-blue-500 text-lg">Buka Vault</button>
-                    <p id="vault-pin-error" class="text-red-500 text-sm font-bold mt-3 opacity-0 transition-opacity">PIN Salah!</p>
-                </div>
-            </div>
-
-            <section class="glass-card p-6 w-full border-2 border-indigo-300 min-h-[500px]">
-                <h2 class="text-xl font-bold text-indigo-600 flex items-center mb-4"><i class="fas fa-key mr-2 text-indigo-400"></i> Catatan & Password Penting</h2>
-                
-                <form id="form-vault" class="flex flex-col md:flex-row gap-2 mb-6">
-                    <input type="text" id="vault-title" placeholder="Nama Akun / Web (Misal: SIAK)" required class="text-sm md:w-1/3 border-indigo-200">
-                    <input type="text" id="vault-data" placeholder="Username / Link / Info Penting..." required class="text-sm md:w-1/2 border-indigo-200">
-                    <button type="submit" class="btn-cute !bg-indigo-400 md:w-1/6 text-sm py-2"><i class="fas fa-lock"></i> Simpan</button>
-                </form>
-
-                <div id="vault-list" class="flex flex-col gap-3"></div>
-            </section>
-        </main>
-
-        <main id="game-section" class="flex flex-col gap-6 hidden max-w-2xl mx-auto w-full text-center">
-            <section class="glass-card p-6 border-2 border-gray-400 bg-gray-50">
-                <h2 class="text-2xl font-black text-gray-700 mb-2"><i class="fas fa-robot mr-2 text-blue-500"></i> TMB Robot Assembly</h2>
-                <p class="text-sm text-gray-500 mb-4 font-medium">Klik komponen dalam urutan yang tepat untuk merakit sirkuit/robotmu!</p>
-                
-                <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm mb-6">
-                    <h3 id="robot-level-title" class="text-lg font-bold text-blue-600 mb-2 border-b pb-2">Level 1: ...</h3>
-                    <p id="robot-level-mission" class="text-xs text-gray-600 mb-4 italic">Misi: ...</p>
-                    
-                    <div id="robot-assembly-progress" class="flex flex-wrap justify-center gap-2 mb-6 min-h-[50px] p-2 bg-gray-100 rounded-lg">
-                        </div>
-                    
-                    <div class="game-grid" id="robot-parts-container">
-                        </div>
-                </div>
-
-                <div class="flex justify-center gap-4">
-                    <button onclick="resetRobotLevel()" class="btn-cute !bg-gray-400 text-white"><i class="fas fa-redo mr-2"></i> Ulang Level</button>
-                    <button onclick="nextRobotLevel()" id="btn-next-level" class="btn-cute !bg-green-500 text-white hidden">Level Selanjutnya <i class="fas fa-arrow-right ml-2"></i></button>
-                </div>
-                
-                <p id="robot-game-status" class="mt-4 font-bold text-green-600 text-lg opacity-0 transition-opacity">🎉 Rakitan Berhasil! 🎉</p>
-            </section>
-        </main>
 
         <main id="schedule-section" class="grid grid-cols-1 md:grid-cols-3 gap-6 hidden">
              <section class="glass-card p-5 flex flex-col md:col-span-1 border-2 border-orange-300">
@@ -553,6 +329,170 @@
             </div>
         </main>
 
+        <main id="finance-section" class="flex flex-col gap-8 hidden max-w-5xl mx-auto">
+            <div class="text-center w-full"><blockquote class="glass-card p-4 mx-auto border-l-8 border-yellow-400 inline-block shadow-sm"><p class="italic text-gray-700 font-medium">"Uang kos di Dramaga emang cepet banget ngalirnya kalau nggak ditampung. Yuk, hemat hari ini biar besok bisa jajan tanpa *guilty feeling*, Tasya!" ✨</p></blockquote></div>
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full"><div class="glass-card p-5 border-2 border-red-300 bg-red-50 bg-opacity-30"><h3 class="font-bold text-red-600 mb-2"><i class="fas fa-fire mr-2"></i>Pengeluaran Hari Ini</h3><p id="display-daily-out" class="text-3xl font-black text-gray-800">Rp 0</p></div><div class="glass-card p-5 border-2 border-green-300 bg-green-50 bg-opacity-30"><h3 class="font-bold text-green-600 mb-2"><i class="fas fa-calendar-week mr-2"></i>Pemasukan Minggu Ini</h3><p id="display-weekly-in" class="text-3xl font-black text-gray-800">Rp 0</p></div></section>
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                <div class="glass-card p-5 border-t-4 border-blue-400 bg-blue-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-blue-700 mb-1">Saldo Utama</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-utama">Rp 0</h2></div><div class="border-t border-blue-200 pt-3 flex flex-col gap-1 text-xs"><div class="flex justify-between text-green-700"><span>Masuk Mg Ini:</span><strong id="display-utama-in">+ Rp 0</strong></div><div class="flex justify-between text-red-600"><span>Keluar Mg Ini:</span><strong id="display-utama-out">- Rp 0</strong></div></div></div>
+                <div class="glass-card p-5 border-t-4 border-green-400 bg-green-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-green-700 mb-1">Tabungan</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-tabungan">Rp 0</h2></div></div>
+                <div class="glass-card p-5 border-t-4 border-purple-400 bg-purple-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-purple-700 mb-1">Wishlist</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-wishlist">Rp 0</h2></div></div>
+            </section>
+            
+            <section class="glass-card p-5 w-full border-2 border-yellow-300">
+                <h2 class="text-lg font-bold text-yellow-700 mb-4"><i class="fas fa-calendar-day mr-2"></i> Rekap Pengeluaran Minggu Ini (Senin - Minggu)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-7 gap-3 text-center" id="weekly-expense-grid">
+                    </div>
+            </section>
+
+            <section class="glass-card p-5 md:p-6 w-full border-2 border-pink-300">
+                <div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-pink-600 flex items-center"><i class="fas fa-table mr-2 text-pink-400"></i> Estimasi RAB (Guideline)</h2></div>
+                <form id="form-rab" class="flex flex-col md:flex-row gap-2 mb-4 bg-white bg-opacity-60 p-3 rounded-lg border border-pink-100 shadow-sm">
+                    <select id="rab-kategori" required class="text-sm md:w-1/4"><option value="" disabled selected>Pilih Kategori...</option><option value="Makan & Minum">Makan & Minum</option><option value="Transportasi">Transportasi</option><option value="Kebutuhan Kos">Kebutuhan Kos</option><option value="Keperluan Kuliah">Keperluan Kuliah</option><option value="Skincare/Selfcare">Skincare (e.g. LightPlus)</option><option value="Lainnya">Lainnya</option></select>
+                    <input type="text" id="rab-target" placeholder="Target / Item..." required class="text-sm md:w-1/3">
+                    <input type="number" id="rab-nominal" placeholder="Estimasi Rp" required class="text-sm md:w-1/4">
+                    <button type="submit" class="btn-cute px-4 py-2 md:w-auto text-sm"><i class="fas fa-plus"></i> Add</button>
+                </form>
+                <div class="overflow-x-auto bg-white bg-opacity-80 rounded-lg shadow-sm border border-gray-100">
+                    <table class="w-full text-left border-collapse table-rab">
+                        <thead><tr><th>Kategori</th><th>Target / Barang</th><th>Budget Est.</th><th>Realisasi</th><th class="text-center"><i class="fas fa-cog"></i></th></tr></thead>
+                        <tbody id="rab-list"></tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full items-start">
+                <div class="glass-card p-5 border border-yellow-200 bg-yellow-50 bg-opacity-30">
+                    <h2 class="text-lg font-bold text-yellow-700 mb-4"><i class="fas fa-pen-nib mr-2"></i> Catat Transaksi</h2>
+                    <form id="form-transaksi" class="flex flex-col gap-3">
+                        <select id="trans-wallet" required class="text-sm bg-white p-2 rounded"><option value="utama">🔵 Saldo Utama</option><option value="tabungan">🟢 Tabungan</option><option value="wishlist">🟣 Wishlist</option></select>
+                        <select id="trans-type" required class="text-sm bg-white p-2 rounded"><option value="out">🔴 Pengeluaran (-)</option><option value="in">🟢 Pemasukan (+)</option></select>
+                        <input type="date" id="trans-date" required class="text-sm p-2 rounded">
+                        <select id="trans-category" required class="text-sm bg-white p-2 rounded"><option value="Uang Saku Mingguan">💰 Uang Saku Mingguan</option><option value="Makan & Minum">🍔 Makan & Minum</option><option value="Transportasi">🛵 Transportasi</option><option value="Kebutuhan Kos">🧻 Kebutuhan Kos</option><option value="Keperluan Kuliah">📚 Keperluan Kuliah</option><option value="Skincare/Selfcare">✨ Skincare</option><option value="Nabung">📥 Nabung (Transfer)</option><option value="Lainnya">📦 Lainnya</option></select>
+                        <input type="text" id="trans-desc" placeholder="Keterangan (Gacoan, Gorengan dll)..." required class="text-sm p-2 rounded">
+                        <input type="number" id="trans-amount" placeholder="Nominal (Rp)" required class="text-sm p-2 rounded font-bold">
+                        <button type="submit" class="btn-cute mt-2 w-full py-3 text-sm shadow-md"><i class="fas fa-save"></i> Simpan Transaksi</button>
+                    </form>
+                </div>
+                <div class="glass-card p-5 min-h-[450px] flex flex-col">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-200 pb-2">
+                        <h2 class="text-lg font-bold text-gray-700"><i class="fas fa-history mr-2"></i> Riwayat</h2>
+                        <select id="filter-history-wallet" class="text-xs p-1 rounded border border-gray-300 font-bold" onchange="renderTransactions()"><option value="utama">Utama</option><option value="tabungan">Tabungan</option><option value="wishlist">Wishlist</option></select>
+                    </div>
+                    <div class="flex-grow overflow-y-auto pr-1" id="transaction-list"></div>
+                </div>
+            </section>
+        </main>
+        
+        <main id="recipes-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                
+                <div class="glass-card p-5 border-2 border-teal-300">
+                    <h2 class="text-xl font-bold text-teal-600 mb-4"><i class="fas fa-apple-alt mr-2 text-teal-400"></i> Planner Makan & Gizi</h2>
+                    <form id="form-meal-plan" class="flex flex-col gap-3">
+                        <input type="date" id="meal-date" required class="text-sm p-2 rounded border-teal-200">
+                        <div class="flex items-center gap-2"><span class="w-1/4 text-xs font-bold text-gray-600">Sarapan</span><select id="meal-break-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select><input type="text" id="meal-break-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200"></div>
+                        <div class="flex items-center gap-2"><span class="w-1/4 text-xs font-bold text-gray-600">Makan Siang</span><select id="meal-lunch-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select><input type="text" id="meal-lunch-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200"></div>
+                        <div class="flex items-center gap-2"><span class="w-1/4 text-xs font-bold text-gray-600">Makan Malam</span><select id="meal-dinner-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select><input type="text" id="meal-dinner-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200"></div>
+                        <div class="border-t border-teal-100 mt-2 pt-3 flex flex-wrap gap-4 items-center"><label class="text-xs font-bold text-gray-600">Habit Harian:</label><label class="flex items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="habit-susu" class="custom-checkbox"> Minum Susu</label><label class="flex items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="habit-buah" class="custom-checkbox"> Makan Buah</label></div>
+                        <button type="submit" class="btn-cute mt-2 w-full !bg-gradient-to-r !from-teal-300 !to-cyan-400">Simpan Menu Harian</button>
+                    </form>
+                    <div id="meal-history-list" class="mt-4 max-h-40 overflow-y-auto pr-1 flex flex-col gap-2"></div>
+                </div>
+
+                <div class="glass-card p-5 border-2 border-cyan-300">
+                    <h2 class="text-xl font-bold text-cyan-600 mb-2"><i class="fas fa-book-open mr-2 text-cyan-400"></i> Buku Resep Kos</h2>
+                    
+                    <div class="flex items-center gap-2 mb-4 bg-white bg-opacity-60 p-2 rounded-lg border border-cyan-100">
+                        <i class="fas fa-search text-gray-400 ml-2"></i>
+                        <input type="text" id="search-recipe" placeholder="Cari di arsip resep..." class="bg-transparent border-none focus:ring-0 text-sm py-1 w-full" oninput="renderRecipes()">
+                    </div>
+
+                    <form id="form-add-recipe" class="flex flex-col gap-2 mb-4 p-3 bg-cyan-50 bg-opacity-40 rounded-lg border border-cyan-200">
+                        <input type="text" id="recipe-name" placeholder="Nama Masakan..." required class="text-sm">
+                        <div class="flex gap-2">
+                            <input type="text" id="recipe-ingredient" placeholder="Bahan (ex: Telur)" class="text-sm w-1/2">
+                            <input type="number" id="recipe-price" placeholder="Harga Rp" class="text-sm w-1/4">
+                            <button type="button" onclick="addIngredientTemp()" class="btn-cute px-3 w-1/4 !bg-cyan-400 text-xs"><i class="fas fa-plus"></i> Bahan</button>
+                        </div>
+                        <ul id="temp-ingredients-list" class="text-xs text-gray-600 ml-2 list-disc pl-4"></ul>
+                        <textarea id="recipe-steps" rows="3" placeholder="Langkah-langkah memasak (pisahkan dengan nomor / baris baru)..." required class="text-sm p-2 rounded border-cyan-200 resize-none mt-2"></textarea>
+                        <button type="submit" class="btn-cute w-full !bg-gradient-to-r !from-cyan-300 !to-blue-400 mt-2">Simpan ke Buku Resep</button>
+                    </form>
+
+                    <div id="recipes-list" class="max-h-[350px] overflow-y-auto pr-1 flex flex-col gap-3 custom-scrollbar"></div>
+                </div>
+                
+                <div class="glass-card p-5 border-2 border-orange-300 w-full md:col-span-2">
+                    <h2 class="text-xl font-bold text-orange-600 mb-4"><i class="fas fa-shopping-cart mr-2 text-orange-400"></i> Catatan Belanja Kos</h2>
+                    <p class="text-xs text-gray-500 mb-4">*Catat barang yang mau dibeli biar nggak lupa (contoh: Gas Portable, Minyak), sekalian track perubahan harganya!</p>
+                    
+                    <form id="form-shopping" class="flex flex-col md:flex-row gap-2 mb-4">
+                        <input type="text" id="shop-item" placeholder="Nama Barang..." required class="text-sm md:w-1/3 border-orange-200">
+                        <input type="number" id="shop-price" placeholder="Harga Estimasi Rp" required class="text-sm md:w-1/4 border-orange-200">
+                        <input type="text" id="shop-note" placeholder="Keterangan tambahan..." class="text-sm md:w-1/3 border-orange-200">
+                        <button type="submit" class="btn-cute !bg-gradient-to-r !from-orange-300 !to-red-400 md:w-auto px-4"><i class="fas fa-plus"></i> Add</button>
+                    </form>
+                    
+                    <div class="overflow-x-auto bg-white bg-opacity-80 rounded-lg shadow-sm border border-gray-100 p-3">
+                        <ul id="shopping-list-container" class="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2"></ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <main id="academic-canvas-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
+            <section class="glass-card p-5 border-2 border-cyan-300 flex flex-col md:flex-row gap-6">
+                <div class="w-full md:w-2/3 flex flex-col items-center">
+                    <h2 class="text-xl font-bold text-cyan-600 mb-4 w-full"><i class="fas fa-chalkboard mr-2 text-cyan-400"></i> Academic Canvas (Coret-Coret PPT)</h2>
+                    <input type="file" id="upload-ppt-image" accept="image/*" class="text-xs mb-3 w-full border border-cyan-200 p-2 rounded bg-white">
+                    <div class="relative border-2 border-dashed border-cyan-300 bg-white rounded-lg overflow-hidden w-full max-w-[600px] h-[400px] cursor-crosshair">
+                        <canvas id="academic-canvas" width="600" height="400" class="absolute top-0 left-0 touch-none"></canvas>
+                    </div>
+                    <div class="flex gap-4 mt-4 w-full justify-center">
+                        <input type="color" id="pen-color" value="#e84393" class="w-10 h-10 border-0 rounded cursor-pointer p-0">
+                        <button onclick="clearCanvas()" class="btn-cute !bg-red-400 text-sm px-4 py-2"><i class="fas fa-eraser mr-1"></i> Clear</button>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 flex flex-col gap-3">
+                    <h3 class="font-bold text-gray-700 mt-4 md:mt-0">Evaluasi & Catatan:</h3>
+                    <input type="text" id="academic-note-title" placeholder="Mata Kuliah / Topik..." class="text-sm p-2 border-cyan-200 rounded">
+                    <textarea id="academic-note-eval" rows="4" placeholder="Pertanyaan untuk Dosen / Evaluasi materi yang belum paham..." class="text-sm p-2 border-cyan-200 rounded flex-grow resize-none"></textarea>
+                    <button onclick="saveAcademicNote()" class="btn-cute !bg-gradient-to-r !from-cyan-400 !to-blue-500 py-3 mt-auto"><i class="fas fa-save mr-2"></i>Simpan Catatan Canvas</button>
+                </div>
+            </section>
+            
+            <section class="glass-card p-5 border-t-4 border-blue-400 w-full">
+                <h3 class="font-bold text-blue-600 mb-4">Arsip Catatan Evaluasi Materi</h3>
+                <div id="academic-notes-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </section>
+        </main>
+
+        <main id="vault-section" class="flex flex-col gap-6 hidden max-w-3xl mx-auto w-full relative">
+            
+            <div id="vault-pin-overlay" class="absolute inset-0 bg-indigo-50 bg-opacity-90 backdrop-blur-xl z-40 flex flex-col items-center justify-center rounded-2xl border border-indigo-200 shadow-lg">
+                <div class="glass-card p-8 text-center flex flex-col items-center border-2 border-indigo-300">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-4 text-indigo-500 text-3xl"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="font-bold text-xl text-indigo-700 mb-1">Secure Vault</h3>
+                    <p class="text-xs text-gray-500 mb-6">Area terbatas. Masukkan PIN untuk membuka catatan rahasia.</p>
+                    <input type="password" id="vault-pin-input" maxlength="4" class="text-center text-3xl tracking-[1em] font-bold border-2 border-indigo-300 w-40 rounded-xl mb-4 bg-white/50 py-3" placeholder="••••">
+                    <button onclick="checkVaultPin()" class="btn-cute w-full !bg-gradient-to-r !from-indigo-400 !to-blue-500 text-lg">Buka Vault</button>
+                    <p id="vault-pin-error" class="text-red-500 text-sm font-bold mt-3 opacity-0 transition-opacity">PIN Salah!</p>
+                </div>
+            </div>
+
+            <section class="glass-card p-6 w-full border-2 border-indigo-300 min-h-[500px]">
+                <h2 class="text-xl font-bold text-indigo-600 flex items-center mb-4"><i class="fas fa-key mr-2 text-indigo-400"></i> Catatan & Password Penting</h2>
+                
+                <form id="form-vault" class="flex flex-col md:flex-row gap-2 mb-6">
+                    <input type="text" id="vault-title" placeholder="Nama Akun / Web (Misal: SIAK)" required class="text-sm md:w-1/3 border-indigo-200">
+                    <input type="text" id="vault-data" placeholder="Username / Link / Info Penting..." required class="text-sm md:w-1/2 border-indigo-200">
+                    <button type="submit" class="btn-cute !bg-indigo-400 md:w-1/6 text-sm py-2"><i class="fas fa-lock"></i> Simpan</button>
+                </form>
+
+                <div id="vault-list" class="flex flex-col gap-3"></div>
+            </section>
+        </main>
+
         <main id="diary-section" class="gap-6 hidden max-w-5xl mx-auto w-full relative">
             <div id="pin-overlay" class="absolute inset-0 bg-white bg-opacity-80 backdrop-blur-xl z-40 flex flex-col items-center justify-center rounded-2xl border border-purple-200 shadow-lg">
                 <div class="glass-card p-8 text-center flex flex-col items-center border-2 border-purple-300">
@@ -600,6 +540,29 @@
                 </form>
             </section>
             <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full" id="quotes-list"></section>
+        </main>
+
+        <main id="game-section" class="flex flex-col gap-6 hidden max-w-xl mx-auto w-full text-center">
+            <section class="glass-card p-6 border-2 border-gray-400 bg-gray-50">
+                <h2 class="text-2xl font-black text-gray-700 mb-2"><i class="fas fa-microchip mr-2 text-blue-500"></i> Robotic Circuit Builder</h2>
+                <p class="text-sm text-gray-500 mb-4 font-medium">Klik pada komponen untuk merotasi konektornya. Sambungkan dari blok <span class="text-green-500 font-bold">START</span> ke blok <span class="text-red-500 font-bold">END</span> untuk menyelesaikan sirkuit!</p>
+                
+                <div class="level-indicator" id="level-dots">
+                    <div class="level-dot active"></div><div class="level-dot"></div><div class="level-dot"></div><div class="level-dot"></div><div class="level-dot"></div>
+                </div>
+                <h3 class="font-bold text-e84393 mb-4" id="level-title">Level 1: Basic LED Circuit</h3>
+
+                <div class="game-board-container">
+                    <div class="game-grid" id="game-board"></div>
+                </div>
+
+                <div class="mt-6 flex justify-center gap-4">
+                    <button onclick="resetCurrentLevel()" class="btn-cute !bg-gray-600 text-white"><i class="fas fa-redo mr-2"></i> Reset Grid</button>
+                    <button onclick="nextLevel()" id="btn-next-level" class="btn-cute hidden"><i class="fas fa-forward mr-2"></i> Next Level</button>
+                </div>
+                
+                <p id="game-status" class="mt-4 font-bold text-green-600 text-lg opacity-0 transition-opacity">🎉 Circuit Connected, Engineer! 🎉</p>
+            </section>
         </main>
 
     </div>
@@ -895,7 +858,6 @@
 
         const renderFinance = () => {
             let balanceUtama = 0, balanceTabungan = 0, balanceWishlist = 0; let mingguIniMasuk = 0, mingguIniKeluar = 0; let hariIniKeluar = 0;
-            
             let dailyExpenses = { 'Senin': 0, 'Selasa': 0, 'Rabu': 0, 'Kamis': 0, 'Jumat': 0, 'Sabtu': 0, 'Minggu': 0 };
 
             appData.finance.wallets.utama.forEach(trx => { 
@@ -957,57 +919,43 @@
             const ing = document.getElementById('recipe-ingredient').value; const prc = parseFloat(document.getElementById('recipe-price').value);
             if(ing && prc) { tempIngredients.push({ name: ing, price: prc }); document.getElementById('recipe-ingredient').value = ''; document.getElementById('recipe-price').value = ''; renderTempIngredients(); }
         };
-        const renderTempIngredients = () => { const list = document.getElementById('temp-ingredients-list'); list.innerHTML = ''; tempIngredients.forEach((item, index) => { list.innerHTML += `<li>${item.name} - ${formatRupiah(item.price)} <button type="button" onclick="tempIngredients.splice(${index},1); renderTempIngredients()" class="text-red-400 ml-2"><i class="fas fa-times"></i></button></li>`; }); };
+        const renderTempIngredients = () => { const list = document.getElementById('temp-ingredients-list'); list.innerHTML = ''; tempIngredients.forEach((item, index) => { list.innerHTML += `<li>${item.name} - ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(item.price)} <button type="button" onclick="tempIngredients.splice(${index},1); renderTempIngredients()" class="text-red-400 ml-2"><i class="fas fa-times"></i></button></li>`; }); };
 
         document.getElementById('form-add-recipe').addEventListener('submit', (e) => { 
             e.preventDefault(); 
             const name = document.getElementById('recipe-name').value; 
-            const steps = document.getElementById('recipe-steps').value;
+            const steps = document.getElementById('recipe-steps').value; 
             if(name && tempIngredients.length > 0 && steps) { 
                 appData.recipes.push({ id: Date.now(), name, ingredients: [...tempIngredients], steps }); 
                 tempIngredients = []; 
-                document.getElementById('form-add-recipe').reset(); 
-                renderTempIngredients(); 
-                saveData(); 
-            } else { 
-                alert('Mohon masukkan nama resep, minimal 1 bahan, dan langkah-langkah ya Tasya!'); 
-            } 
+                document.getElementById('recipe-name').value = ''; 
+                document.getElementById('recipe-steps').value = ''; 
+                renderTempIngredients(); saveData(); renderRecipes();
+            } else { alert('Mohon lengkapi nama resep, minimal 1 bahan, dan langkah-langkah ya Tasya!'); } 
         });
 
         window.renderRecipes = () => {
-            const container = document.getElementById('recipes-list');
-            const searchQ = document.getElementById('search-recipe').value.toLowerCase();
-            container.innerHTML = '';
+            const container = document.getElementById('recipes-list'); 
+            const searchQ = document.getElementById('search-recipe').value.toLowerCase(); container.innerHTML = '';
+            
             const filtered = appData.recipes.filter(r => r.name.toLowerCase().includes(searchQ) || r.ingredients.some(i => i.name.toLowerCase().includes(searchQ)));
             
-            if(filtered.length === 0) { 
-                container.innerHTML = '<p class="text-sm text-gray-400 italic text-center mt-4">Buku resep masih kosong.</p>'; 
-                return; 
-            }
+            if(filtered.length === 0) { container.innerHTML = '<p class="text-sm text-gray-400 italic">Arsip resep masih kosong/tidak ditemukan.</p>'; return; }
             
             filtered.forEach(recipe => {
                 let total = recipe.ingredients.reduce((sum, item) => sum + item.price, 0);
-                let ingHTML = recipe.ingredients.map(i => `<li class="flex justify-between border-b border-dashed border-cyan-100 py-1"><span>${i.name}</span><span class="font-bold">${formatRupiah(i.price)}</span></li>`).join('');
-                let stepsHTML = recipe.steps ? recipe.steps.split('\n').map(s => `<li class="mb-1">${s}</li>`).join('') : '<li class="italic text-gray-400">Belum ada langkah.</li>';
+                let ingHTML = recipe.ingredients.map(i => `<li class="flex justify-between border-b border-dashed border-gray-200 py-1"><span><i class="fas fa-circle text-[8px] text-cyan-300 mr-2"></i>${i.name}</span><span class="font-bold">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(i.price)}</span></li>`).join('');
+                
+                let stepsHTML = recipe.steps ? `<div class="mt-3 bg-cyan-50 p-2 rounded border-l-4 border-cyan-400"><p class="text-xs font-bold text-cyan-700 mb-1">Cara Masak:</p><p class="text-xs text-gray-600 whitespace-pre-wrap">${recipe.steps}</p></div>` : '';
 
                 container.innerHTML += `
-                <div class="bg-white p-4 rounded-xl border border-cyan-200 shadow-sm relative mb-4">
-                    <button onclick="deleteItem('recipes', ${recipe.id})" class="absolute top-3 right-3 text-red-300 hover:text-red-500 bg-red-50 w-6 h-6 rounded-full flex items-center justify-center"><i class="fas fa-trash text-xs"></i></button>
-                    <h4 class="font-black text-cyan-700 text-lg mb-3 border-b border-cyan-100 pb-2"><i class="fas fa-utensils mr-2 text-cyan-400"></i>${recipe.name}</h4>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-cyan-50 p-3 rounded-lg border border-cyan-100">
-                            <h5 class="text-xs font-black text-cyan-800 mb-2"><i class="fas fa-shopping-basket mr-1"></i> Bahan-bahan:</h5>
-                            <ul class="text-xs text-gray-700 mb-2 font-medium">${ingHTML}</ul>
-                            <div class="text-right text-xs font-black text-blue-700 bg-blue-100 p-1.5 rounded-lg inline-block float-right">Est Biaya: ${formatRupiah(total)}</div>
-                            <div class="clear-both"></div>
-                        </div>
-                        
-                        <div class="bg-blue-50 p-3 rounded-lg border border-blue-100">
-                            <h5 class="text-xs font-black text-blue-800 mb-2"><i class="fas fa-list-ol mr-1"></i> Langkah-langkah:</h5>
-                            <ol class="text-xs text-gray-700 list-decimal pl-4 space-y-1 font-medium">${stepsHTML}</ol>
-                        </div>
-                    </div>
+                <div class="bg-white p-4 rounded-xl border border-cyan-200 shadow-md relative">
+                    <button onclick="deleteItem('recipes', ${recipe.id}); renderRecipes()" class="absolute top-3 right-3 text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                    <h4 class="font-bold text-lg text-cyan-700 border-b border-cyan-100 pb-2 mb-2"><i class="fas fa-utensils text-cyan-400 mr-2"></i>${recipe.name}</h4>
+                    <p class="text-xs font-bold text-gray-500 mb-1">Bahan-bahan:</p>
+                    <ul class="text-xs text-gray-600 mb-2">${ingHTML}</ul>
+                    <div class="text-right text-sm font-black text-blue-600 mb-2">Total Est: ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total)}</div>
+                    ${stepsHTML}
                 </div>`;
             });
         };
@@ -1086,154 +1034,78 @@
         };
 
         // ==========================================
-        // GAME LOGIC: TMB ASSEMBLY (5 LEVELS)
+        // GAME LOGIC (3D ROBOT CIRCUIT)
         // ==========================================
-        const robotLevels = [
-            { 
-                title: "1: Basic LED Circuit", 
-                mission: "Nyalakan lampu! Hubungkan komponen dasar mikrokontroler.",
-                parts: [
-                    { id: 'p1', icon: 'fa-microchip', name: 'Arduino Uno' },
-                    { id: 'p2', icon: 'fa-wave-square', name: 'Resistor 220Ω' },
-                    { id: 'p3', icon: 'fa-lightbulb', name: 'LED Merah' }
-                ]
-            },
-            { 
-                title: "2: DC Motor Drive", 
-                mission: "Bikin motor bergerak! Gunakan driver yang tepat.",
-                parts: [
-                    { id: 'p1', icon: 'fa-microchip', name: 'Arduino Uno' },
-                    { id: 'p2', icon: 'fa-car-battery', name: 'Baterai 9V' },
-                    { id: 'p3', icon: 'fa-server', name: 'Motor Driver L298N' },
-                    { id: 'p4', icon: 'fa-fan', name: 'Motor DC' }
-                ]
-            },
-            { 
-                title: "3: Smart Obstacle Bot", 
-                mission: "Robot anti-nabrak! Pasang sensor pendeteksi jarak.",
-                parts: [
-                    { id: 'p1', icon: 'fa-truck-monster', name: 'Chassis Robot' },
-                    { id: 'p2', icon: 'fa-microchip', name: 'Arduino Uno' },
-                    { id: 'p3', icon: 'fa-satellite-dish', name: 'Sensor Ultrasonik' },
-                    { id: 'p4', icon: 'fa-fan', name: 'Motor DC Kanan/Kiri' }
-                ]
-            },
-            { 
-                title: "4: TMB Robotic Arm", 
-                mission: "Rakit lengan robot untuk memindahkan barang!",
-                parts: [
-                    { id: 'p1', icon: 'fa-layer-group', name: 'Base Lengan' },
-                    { id: 'p2', icon: 'fa-microchip', name: 'Arduino Nano' },
-                    { id: 'p3', icon: 'fa-cogs', name: 'Servo Motor' },
-                    { id: 'p4', icon: 'fa-gamepad', name: 'Joystick Module' }
-                ]
-            },
-            { 
-                title: "5: Smart Agribot TMB", 
-                mission: "Tugas Akhir: Robot penyiram tanaman otomatis bertenaga surya!",
-                parts: [
-                    { id: 'p1', icon: 'fa-tractor', name: 'Tractor Chassis' },
-                    { id: 'p2', icon: 'fa-microchip', name: 'Arduino Mega' },
-                    { id: 'p3', icon: 'fa-seedling', name: 'Soil Moisture Sensor' },
-                    { id: 'p4', icon: 'fa-water', name: 'Water Pump' },
-                    { id: 'p5', icon: 'fa-solar-panel', name: 'Panel Surya' }
-                ]
-            }
+        const gameBoard = document.getElementById('game-board');
+        let currentGameState = [];
+        let currentLevel = 0;
+        
+        const levels = [
+            { size: 3, title: "Level 1: Basic LED Circuit" },
+            { size: 4, title: "Level 2: Sensor Input Module" },
+            { size: 4, title: "Level 3: Motor Driver Layout" },
+            { size: 5, title: "Level 4: Arduino Logic Flow" },
+            { size: 5, title: "Level 5: The Chaotic Mainboard" }
         ];
 
-        let currentLevel = 0;
-        let expectedPartIndex = 0;
-
         window.initGame = () => {
-            currentLevel = 0;
-            loadRobotLevel();
-        };
-
-        window.loadRobotLevel = () => {
-            const levelData = robotLevels[currentLevel];
-            expectedPartIndex = 0;
-            
-            document.getElementById('robot-level-title').innerText = `Level ${levelData.title}`;
-            document.getElementById('robot-level-mission').innerText = `Misi: ${levelData.mission}`;
-            document.getElementById('robot-game-status').classList.remove('opacity-100');
+            gameBoard.innerHTML = ''; currentGameState = []; 
+            document.getElementById('game-status').classList.remove('opacity-100');
             document.getElementById('btn-next-level').classList.add('hidden');
-            document.getElementById('robot-assembly-progress').innerHTML = '';
             
-            const partsContainer = document.getElementById('robot-parts-container');
-            partsContainer.innerHTML = '';
+            const lvl = levels[currentLevel];
+            document.getElementById('level-title').innerText = lvl.title;
+            gameBoard.style.gridTemplateColumns = `repeat(${lvl.size}, 1fr)`;
             
-            // Acak posisi pilihan komponen
-            const shuffledParts = [...levelData.parts].sort(() => Math.random() - 0.5);
-            
-            shuffledParts.forEach(part => {
-                partsContainer.innerHTML += `
-                    <div class="game-part" id="part-${part.id}" onclick="selectRobotPart('${part.id}', '${part.icon}', '${part.name}')">
-                        <i class="fas ${part.icon}"></i>
-                        <span class="text-[10px] uppercase">${part.name}</span>
-                    </div>
-                `;
-            });
-        };
+            // Update UI Dots
+            const dots = document.querySelectorAll('.level-dot');
+            dots.forEach((dot, index) => { dot.classList.toggle('active', index === currentLevel); });
 
-        window.selectRobotPart = (id, icon, name) => {
-            const levelData = robotLevels[currentLevel];
-            const expectedPart = levelData.parts[expectedPartIndex];
-            
-            if(id === expectedPart.id) {
-                // Benar
-                document.getElementById(`part-${id}`).classList.add('selected');
-                document.getElementById('robot-assembly-progress').innerHTML += `
-                    <div class="bg-green-100 border border-green-300 text-green-700 px-3 py-1 rounded-md flex items-center shadow-sm animate-bounce">
-                        <i class="fas ${icon} mr-2"></i> <span class="text-xs font-bold">${name}</span>
-                    </div>
-                `;
-                expectedPartIndex++;
+            const totalTiles = lvl.size * lvl.size;
+            // Tema komponen mesin/elektro
+            const icons = ['fa-grip-lines', 'fa-grip-lines-vertical', 'fa-microchip', 'fa-plug', 'fa-cogs', 'fa-server', 'fa-network-wired'];
+
+            for(let i = 0; i < totalTiles; i++) {
+                const randomRot = Math.floor(Math.random() * 4) * 90; // 0, 90, 180, 270
+                currentGameState.push(randomRot);
+                let extraClass = ''; 
                 
-                if(expectedPartIndex === levelData.parts.length) {
-                    document.getElementById('robot-game-status').innerText = (currentLevel === robotLevels.length - 1) ? '🎓 SELAMAT! Semua Bot TMB Selesai Dirakit! 🎓' : '🎉 Rakitan Berhasil! 🎉';
-                    document.getElementById('robot-game-status').classList.add('opacity-100');
-                    if(currentLevel < robotLevels.length - 1) {
-                        document.getElementById('btn-next-level').classList.remove('hidden');
-                    }
-                }
-            } else {
-                // Salah urutan
-                const el = document.getElementById(`part-${id}`);
-                el.classList.add('bg-red-200', 'border-red-500');
-                setTimeout(() => el.classList.remove('bg-red-200', 'border-red-500'), 500);
+                let iconHTML = `<i class="fas ${icons[Math.floor(Math.random()*icons.length)]} text-gray-600"></i>`;
+                
+                if(i === 0) { extraClass = 'start-tile text-sm'; iconHTML = 'IN'; }
+                if(i === totalTiles - 1) { extraClass = 'end-tile text-sm'; iconHTML = 'OUT'; }
+                
+                gameBoard.innerHTML += `<div class="game-tile ${extraClass}" id="tile-${i}" style="transform: rotate(${randomRot}deg)" onclick="rotateTile(${i}, ${totalTiles})">${iconHTML}</div>`;
             }
         };
 
-        window.nextRobotLevel = () => {
-            currentLevel++;
-            loadRobotLevel();
+        window.rotateTile = (idx, totalTiles) => {
+            if(idx === 0 || idx === totalTiles - 1) return; // IN dan OUT tidak berputar
+            currentGameState[idx] = (currentGameState[idx] + 90) % 360;
+            document.getElementById(`tile-${idx}`).style.transform = `rotate(${currentGameState[idx]}deg)`;
+            checkGameWin(totalTiles);
         };
 
-        window.resetRobotLevel = () => {
-            loadRobotLevel();
+        const checkGameWin = (totalTiles) => {
+            let win = true;
+            for(let i=1; i<totalTiles-1; i++) { if(currentGameState[i] % 180 !== 0) win = false; } 
+            
+            if(win) { 
+                document.getElementById('game-status').classList.add('opacity-100'); 
+                if(currentLevel < levels.length - 1) {
+                    document.getElementById('btn-next-level').classList.remove('hidden');
+                } else {
+                    document.getElementById('game-status').innerText = "🏆 MASTER ENGINEER ACHIEVED! 🏆";
+                }
+            }
         };
+
+        window.resetCurrentLevel = () => { initGame(); };
+        window.nextLevel = () => { if(currentLevel < levels.length - 1) { currentLevel++; initGame(); } };
 
         // ==========================================
         // EVENT LISTENERS & INITIALIZATION
         // ==========================================
-        document.getElementById('form-meal-plan').addEventListener('submit', (e) => { e.preventDefault(); const date = document.getElementById('meal-date').value; const breakType = document.getElementById('meal-break-type').value; const breakDesc = document.getElementById('meal-break-desc').value; const lunchType = document.getElementById('meal-lunch-type').value; const lunchDesc = document.getElementById('meal-lunch-desc').value; const dinnerType = document.getElementById('meal-dinner-type').value; const dinnerDesc = document.getElementById('meal-dinner-desc').value; let habits = []; if(document.getElementById('habit-susu').checked) habits.push('susu'); if(document.getElementById('habit-buah').checked) habits.push('buah'); if(date) { appData.mealPlan.push({ id: Date.now(), date, breakType, breakDesc, lunchType, lunchDesc, dinnerType, dinnerDesc, habits }); document.getElementById('form-meal-plan').reset(); saveData(); } });
-        document.getElementById('form-vault').addEventListener('submit', (e) => { e.preventDefault(); const title = document.getElementById('vault-title').value; const data = document.getElementById('vault-data').value; if(title && data) { appData.secureNotes.push({ id: Date.now(), title, data }); document.getElementById('vault-title').value = ''; document.getElementById('vault-data').value = ''; saveData(); } });
-        
-        document.getElementById('form-shopping').addEventListener('submit', (e) => { 
-            e.preventDefault(); 
-            const name = document.getElementById('shop-item').value; 
-            const price = parseFloat(document.getElementById('shop-price').value); 
-            const note = document.getElementById('shop-note').value;
-            if(name && price) { 
-                appData.shoppingNotes.push({ id: Date.now(), name, price, note }); 
-                document.getElementById('shop-item').value = ''; 
-                document.getElementById('shop-price').value = ''; 
-                document.getElementById('shop-note').value = '';
-                saveData(); 
-            } 
-        });
-
-        // General functions from original (Schedule, Planner, Deadlines, etc.)
         let schFilterDay = 'All';
         window.filterSchedule = (day) => { schFilterDay = day; const days = ['All', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']; days.forEach(d => { const btn = document.getElementById(`btn-filter-${d}`); if (btn) { btn.className = d === day ? "px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 text-xs font-bold whitespace-nowrap shadow-sm hover:bg-orange-200 transition" : "px-4 py-1.5 rounded-full bg-white bg-opacity-50 border border-gray-200 text-gray-600 text-xs font-bold whitespace-nowrap hover:bg-orange-50 transition"; } }); renderSchedule(); };
         const renderSchedule = () => { const container = document.getElementById('schedule-list'); container.innerHTML = ''; let filtered = schFilterDay !== 'All' ? appData.schedule.filter(item => item.day === schFilterDay) : appData.schedule; const dayMap = { "Senin": 1, "Selasa": 2, "Rabu": 3, "Kamis": 4, "Jumat": 5, "Sabtu": 6, "Minggu": 7 }; filtered.sort((a, b) => { if (dayMap[a.day] !== dayMap[b.day]) return dayMap[a.day] - dayMap[b.day]; return a.start.localeCompare(b.start); }); if(filtered.length === 0) { container.innerHTML = `<p class="text-sm text-gray-400 italic md:col-span-2">Belum ada agenda kelas hari ${schFilterDay === 'All' ? 'ini' : schFilterDay}.</p>`; return; } filtered.forEach(item => { let badgeClass = 'bg-blue-100 text-blue-700'; let iconClass = 'fas fa-book'; if(item.type === 'Praktikum') { badgeClass = 'bg-amber-100 text-amber-800'; iconClass = 'fas fa-flask'; } if(item.type === 'Kuis') { badgeClass = 'bg-red-100 text-red-700'; iconClass = 'fas fa-bolt'; } container.innerHTML += `<div class="bg-white bg-opacity-70 p-4 rounded-xl relative border border-orange-100 shadow-sm flex flex-col justify-between"><div><div class="flex justify-between items-center mb-2"><span class="text-[10px] font-bold px-2 py-0.5 rounded ${badgeClass}"><i class="${iconClass} mr-1"></i>${item.type}</span><span class="text-[11px] font-bold text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">${item.day}</span></div><h4 class="font-bold text-gray-800 text-sm leading-snug mb-2">${item.name}</h4></div><div class="border-t border-dashed border-gray-200 pt-2 flex flex-col gap-1 text-xs text-gray-600"><span><i class="far fa-clock text-orange-400 mr-2"></i>${item.start} - ${item.end}</span><span><i class="fas fa-map-marker-alt text-pink-400 mr-2"></i>${item.room}</span></div><button onclick="deleteItem('schedule', ${item.id})" class="absolute top-3 right-3 text-red-300 hover:text-red-500 transition"><i class="fas fa-trash text-xs"></i></button></div>`; }); };
@@ -1297,6 +1169,23 @@
         handleFormSubmit('form-org', () => { const iName = document.getElementById('input-org-name'); const iRole = document.getElementById('input-org-role'); const iDate = document.getElementById('input-org-date'); if(iName.value && iRole.value && iDate.value) { appData.organizations.push({ id: Date.now(), name: iName.value, role: iRole.value, date: iDate.value }); iName.value = ''; iRole.value = ''; iDate.value = ''; } });
         handleFormSubmit('form-deadlines', () => { const iTask = document.getElementById('input-deadline-task'); const iDate = document.getElementById('input-deadline-date'); const iTime = document.getElementById('input-deadline-time'); if(iTask.value && iDate.value && iTime.value) { appData.deadlines.push({ id: Date.now(), task: iTask.value, date: iDate.value, time: iTime.value, notified: false }); iTask.value = ''; iDate.value = ''; iTime.value = ''; } });
         handleFormSubmit('form-scholarship', () => { const iName = document.getElementById('input-scholarship-name'); const iStatus = document.getElementById('input-scholarship-status'); if(iName.value) { appData.scholarships.push({ id: Date.now(), name: iName.value, status: iStatus.value }); iName.value = ''; iStatus.value = 'To Do'; } });
+        document.getElementById('form-meal-plan').addEventListener('submit', (e) => { e.preventDefault(); const date = document.getElementById('meal-date').value; const breakType = document.getElementById('meal-break-type').value; const breakDesc = document.getElementById('meal-break-desc').value; const lunchType = document.getElementById('meal-lunch-type').value; const lunchDesc = document.getElementById('meal-lunch-desc').value; const dinnerType = document.getElementById('meal-dinner-type').value; const dinnerDesc = document.getElementById('meal-dinner-desc').value; let habits = []; if(document.getElementById('habit-susu').checked) habits.push('susu'); if(document.getElementById('habit-buah').checked) habits.push('buah'); if(date) { appData.mealPlan.push({ id: Date.now(), date, breakType, breakDesc, lunchType, lunchDesc, dinnerType, dinnerDesc, habits }); document.getElementById('form-meal-plan').reset(); saveData(); } });
+        document.getElementById('form-vault').addEventListener('submit', (e) => { e.preventDefault(); const title = document.getElementById('vault-title').value; const data = document.getElementById('vault-data').value; if(title && data) { appData.secureNotes.push({ id: Date.now(), title, data }); document.getElementById('vault-title').value = ''; document.getElementById('vault-data').value = ''; saveData(); } });
+        
+        document.getElementById('form-shopping').addEventListener('submit', (e) => { 
+            e.preventDefault(); 
+            const name = document.getElementById('shop-item').value; 
+            const price = parseFloat(document.getElementById('shop-price').value); 
+            const note = document.getElementById('shop-note').value;
+            if(name && price) { 
+                appData.shoppingNotes.push({ id: Date.now(), name, price, note }); 
+                document.getElementById('shop-item').value = ''; 
+                document.getElementById('shop-price').value = ''; 
+                document.getElementById('shop-note').value = '';
+                saveData(); 
+            } 
+        });
+
 
         const renderAll = () => { 
             renderSchedule(); renderGoals(); renderDaily(); renderCourseOrg(); renderDeadlines(); renderScholarships(); 
@@ -1306,474 +1195,6 @@
 
         const todayStr = new Date().toISOString().split('T')[0]; document.getElementById('trans-date').value = todayStr; document.getElementById('diary-date').value = todayStr; document.getElementById('meal-date').value = todayStr;
         renderAll(); showSection('home-section');
-
-        // ==========================================
-        // PWA SERVICE WORKER REGISTRATION
-        // ==========================================
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
-                .then(reg => console.log('ServiceWorker registered successfully!'))
-                .catch(err => console.log('ServiceWorker registration failed: ', err));
-            });
-        }
-    </script>
-</body>
-</html>
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <meta name="apple-mobile-web-app-title" content="Tasya Planner">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-app.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-auth.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-firestore.min.js"></script>
-
-    <style>
-        :root {
-            --pastel-yellow: #fff9d2;
-            --soft-pink: #ffd1dc;
-            --rose-gold: #f4aeb8;
-            --white-glass: rgba(255, 255, 255, 0.75);
-            --text-dark: #4a4a4a;
-            --warning-red: #ff7675;
-            --warning-bg: #ffeaa7;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--pastel-yellow) 0%, #ffffff 50%, var(--soft-pink) 100%);
-            background-attachment: fixed;
-            color: var(--text-dark);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        h1, h2, h3, .calendar-header { font-family: 'Nunito', sans-serif; }
-
-        /* --- SPLASH SCREEN INTRO --- */
-        #intro-splash {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, #2d3436 0%, #e84393 100%);
-            z-index: 99999; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; color: white;
-            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
-        }
-        .intro-icon { font-size: 5rem; color: #fff9d2; margin-bottom: 20px; animation: pulse-glow 1.5s infinite; cursor: pointer; transition: transform 0.2s ease; }
-        .intro-icon:hover { transform: scale(1.1); }
-        .intro-title { font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 10px; letter-spacing: 1px; padding: 0 20px; }
-        .intro-subtitle { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 300; text-align: center; color: #ffd1dc; max-width: 80%; line-height: 1.5; }
-
-        @keyframes pulse-glow {
-            0% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 249, 210, 0.5); }
-            50% { transform: scale(1.15); text-shadow: 0 0 30px rgba(255, 249, 210, 1); }
-            100% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 249, 210, 0.5); }
-        }
-
-        .header-glow { background: linear-gradient(to right, #e84393, #fd79a8, #ff9ff3); -webkit-background-clip: text; color: transparent; text-shadow: 0px 4px 15px rgba(253, 121, 168, 0.4); letter-spacing: 1px; }
-
-        /* --- Glassmorphism Cards (Enhanced) --- */
-        .glass-card {
-            background: var(--white-glass); border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(253, 121, 168, 0.1);
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px 0 rgba(253, 121, 168, 0.2); }
-
-        /* --- Form Elements --- */
-        input[type="text"], input[type="password"], input[type="number"], input[type="date"], input[type="time"], select, textarea {
-            width: 100%; background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(253, 121, 168, 0.3); border-radius: 12px;
-            padding: 10px 15px; font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem; color: var(--text-dark); outline: none; transition: all 0.3s ease;
-        }
-        input:focus, select:focus, textarea:focus { background: #ffffff; border-color: #fd79a8; box-shadow: 0 0 0 3px rgba(253, 121, 168, 0.2); }
-
-        button.btn-cute {
-            background: linear-gradient(135deg, #ffeaa7 0%, #fd79a8 100%); color: #fff;
-            border: none; border-radius: 12px; padding: 10px 20px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(253, 121, 168, 0.3); text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        button.btn-cute:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(253, 121, 168, 0.5); }
-
-        .custom-checkbox { appearance: none; width: 20px; height: 20px; border: 2px solid #fd79a8; border-radius: 5px; cursor: pointer; position: relative; background: white; transition: all 0.2s ease; }
-        .custom-checkbox:checked { background: #fd79a8; border-color: #fd79a8; }
-        .custom-checkbox:checked::after { content: '\f00c'; font-family: 'FontAwesome'; color: white; font-size: 12px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-
-        .list-item { background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; border-left: 4px solid #fd79a8; transition: all 0.3s ease; }
-        .list-item.completed { opacity: 0.6; text-decoration: line-through; border-left-color: #dfe6e9; }
-        .panic-warning { background: #fff0f0 !important; border-left: 5px solid var(--warning-red) !important; animation: pulse-panic 2s infinite; }
-        .panic-text { color: var(--warning-red); font-weight: 700; }
-
-        @keyframes pulse-panic { 0% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 118, 117, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0); } }
-
-        /* --- Calendar UI --- */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .calendar-day { padding: 8px 5px; background: rgba(255, 255, 255, 0.5); border-radius: 8px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; position: relative; }
-        .calendar-day:hover { background: #ffeaa7; transform: scale(1.05); }
-        .calendar-day.today { background: #fd79a8 !important; color: white !important; font-weight: bold; box-shadow: 0 2px 10px rgba(253, 121, 168, 0.4); }
-        .calendar-day.holiday { color: #e74c3c !important; font-weight: 800; background-color: rgba(253, 164, 175, 0.3); }
-        .calendar-day.has-event::after { content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background-color: #e84393; border-radius: 50%; }
-        .calendar-day.selected { border: 2px solid #e84393; transform: scale(1.05); background: #ffeaa7 !important; color: #4a4a4a !important; }
-
-        /* --- Polaroid --- */
-        .polaroid-frame { background: #fff; padding: 10px 10px 30px 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 4px; position: relative; transition: transform 0.3s ease; width: 100%; }
-        .polaroid-frame:hover { z-index: 10; }
-        .pin-icon { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-size: 1.8rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 5; }
-        .polaroid-img { width: 100%; height: 140px; object-fit: cover; object-position: 50% 50%; border-radius: 2px; background-color: #f8f9fa; }
-        .tilt-left { transform: rotate(-3deg); } .tilt-left:hover { transform: rotate(0deg) scale(1.05); }
-        .tilt-right { transform: rotate(3deg); } .tilt-right:hover { transform: rotate(0deg) scale(1.05); }
-        .tilt-straight { transform: rotate(1deg); } .tilt-straight:hover { transform: rotate(0deg) scale(1.05); }
-
-        input[type="range"].pos-slider { -webkit-appearance: none; width: 100%; height: 4px; border-radius: 5px; background: #f4aeb8; outline: none; margin-top: 8px; }
-        input[type="range"].pos-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #e84393; cursor: pointer; }
-
-        /* --- Animations --- */
-        .bg-animation-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; overflow: hidden; }
-        .anim-element { position: absolute; color: rgba(253, 121, 168, 0.15); }
-        .float-star { animation: float-up 15s infinite linear; }
-        .spin-gear { animation: spin-slow 20s infinite linear; }
-
-        @keyframes float-up { 0% { transform: translateY(110vh) scale(0.5); opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-10vh) scale(1.2); opacity: 0; } }
-        @keyframes spin-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .anim-1 { left: 10%; font-size: 2rem; animation-duration: 18s; } .anim-2 { left: 30%; font-size: 4rem; top: 20%; color: rgba(255, 234, 167, 0.2); }
-        .anim-3 { left: 60%; font-size: 1.5rem; animation-duration: 12s; animation-delay: 2s; } .anim-4 { left: 85%; font-size: 5rem; top: 60%; } .anim-5 { left: 45%; font-size: 3rem; animation-duration: 25s; }
-
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #fd79a8; border-radius: 10px; }
-
-        .menu-btn-giant { flex: 1 1 200px; max-width: 280px; height: 150px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 1.1rem; gap: 10px; border-radius: 25px; cursor: pointer; text-align: center; }
-        .menu-btn-giant i { font-size: 2.5rem; }
-        .table-rab th, .table-rab td { padding: 10px; border-bottom: 1px solid rgba(253, 121, 168, 0.2); font-size: 0.85rem; }
-        .table-rab th { background: rgba(253, 121, 168, 0.1); color: #d63031; font-weight: 700; white-space: nowrap; }
-        .table-rab tr:hover { background: rgba(255, 255, 255, 0.5); }
-
-        .envelope-card { background: linear-gradient(145deg, #ffffff, #fdf2f8); border: 2px solid #fbcfe8; border-radius: 16px; padding: 16px; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .envelope-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 30px; background: #fce7f3; border-bottom: 2px solid #fbcfe8; clip-path: polygon(0 0, 100% 0, 50% 100%); transition: all 0.3s ease; }
-        .envelope-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(244, 114, 182, 0.2); }
-        .envelope-card:hover::before { background: #fbcfe8; }
-        #letter-modal-content { background: #fff; background-image: radial-gradient(#fbcfe8 1px, transparent 1px); background-size: 20px 20px; }
-        #pin-overlay, #vault-pin-overlay { backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
-
-        /* Game Custom Styles - 3D Effect */
-        .game-board-container { perspective: 800px; margin: 20px auto; width: fit-content; }
-        .game-grid { 
-            display: grid; gap: 8px; background: #2c3e50; padding: 15px; border-radius: 12px; 
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.3); 
-            transform: rotateX(15deg); transform-style: preserve-3d; transition: all 0.5s ease;
-        }
-        .game-tile { 
-            width: 60px; height: 60px; background: linear-gradient(145deg, #ecf0f1, #bdc3c7); 
-            border-radius: 8px; display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s; 
-            box-shadow: 0 6px 0 #95a5a6, 0 8px 15px rgba(0,0,0,0.2);
-            font-size: 2rem; color: #2c3e50; user-select: none; position: relative;
-        }
-        .game-tile:active { transform: translateY(4px); box-shadow: 0 2px 0 #95a5a6, 0 2px 5px rgba(0,0,0,0.2); }
-        .game-tile.start-tile { background: linear-gradient(145deg, #2ecc71, #27ae60); color: white; box-shadow: 0 6px 0 #219653; cursor: default; }
-        .game-tile.end-tile { background: linear-gradient(145deg, #e74c3c, #c0392b); color: white; box-shadow: 0 6px 0 #a93226; cursor: default; }
-        
-        .level-indicator { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
-        .level-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; transition: 0.3s; }
-        .level-dot.active { background: #e84393; box-shadow: 0 0 10px #fd79a8; }
-    </style>
-</head>
-<body class="antialiased flex flex-col min-h-screen">
-
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end group">
-        <div id="important-bubble-modal" class="hidden mb-3 w-72 glass-card p-4 border-2 border-red-300 transform transition-all origin-bottom-right scale-95 opacity-0">
-            <h3 class="text-red-500 font-bold text-sm mb-2"><i class="fas fa-exclamation-circle mr-1"></i> Quick Urgent Note!</h3>
-            <div class="flex gap-2">
-                <input type="text" id="input-bubble-note" placeholder="Catat cepat yang mendesak..." class="text-xs p-2 border-red-200 focus:border-red-400">
-                <button onclick="saveImportantNote()" class="btn-cute !bg-red-400 px-3"><i class="fas fa-plus"></i></button>
-            </div>
-        </div>
-        <button onclick="toggleBubble()" class="bg-gradient-to-tr from-red-400 to-pink-500 text-white w-14 h-14 rounded-full shadow-lg border-2 border-white animate-bounce hover:animate-none hover:scale-110 transition flex items-center justify-center text-xl" title="Catatan Mendesak">
-            <i class="fas fa-bolt"></i>
-        </button>
-    </div>
-
-    <div id="letter-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 z-[9999] hidden flex items-center justify-center transition-opacity opacity-0" onclick="closeLetter()">
-        <div id="letter-modal-content" class="w-11/12 max-w-lg rounded-2xl shadow-2xl p-6 relative transform scale-95 transition-transform" onclick="event.stopPropagation()">
-            <button onclick="closeLetter()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
-            <div class="text-center mb-4 border-b-2 border-pink-200 pb-3">
-                <span class="text-xs font-bold text-pink-500 bg-pink-100 px-3 py-1 rounded-full inline-block mb-2" id="letter-date">Tanggal</span>
-                <h2 class="text-2xl font-bold text-gray-800 font-nunito" id="letter-title">Judul</h2>
-            </div>
-            <div class="max-h-60 overflow-y-auto mb-4 custom-scrollbar">
-                <p class="text-gray-700 leading-relaxed font-medium text-sm whitespace-pre-wrap" id="letter-story">Cerita...</p>
-            </div>
-            <div class="bg-purple-50 p-3 rounded-xl border-l-4 border-purple-400 mt-4">
-                <span class="font-bold text-purple-700 text-xs block mb-1"><i class="fas fa-lightbulb text-yellow-500 mr-1"></i> Evaluasi Diri:</span>
-                <p class="text-gray-600 italic text-sm" id="letter-eval">Evaluasi...</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="intro-splash">
-        <i class="fas fa-crown intro-icon" onclick="skipIntro()" title="Klik untuk Mulai"></i>
-        <h1 class="intro-title">Welcome, Tasya.</h1>
-        <p class="intro-subtitle">Write your own story.<br>Make your dreams happen today, The Chaotic. ✨</p>
-    </div>
-
-    <div class="bg-animation-container">
-        <i class="fas fa-star anim-element float-star anim-1"></i><i class="fas fa-cog anim-element spin-gear anim-2"></i>
-        <i class="fas fa-hard-hat anim-element float-star anim-3"></i><i class="fas fa-cogs anim-element spin-gear anim-4"></i>
-        <i class="fas fa-star anim-element float-star anim-5"></i>
-    </div>
-
-    <div class="container mx-auto px-4 py-8 max-w-7xl flex-grow relative">
-        <header class="text-center mb-10 relative pt-14 md:pt-4">
-            <button id="btn-back-home" class="absolute left-0 top-0 text-sm font-bold text-pink-600 bg-pink-100 px-3 py-1.5 rounded-lg shadow-sm hidden transition-transform hover:scale-105 z-10" onclick="showSection('home-section')">
-                <i class="fas fa-arrow-left mr-1"></i> Menu
-            </button>
-
-            <div class="absolute right-0 top-0 flex items-center gap-4 z-10">
-                <div class="cursor-pointer transition-transform hover:scale-110" id="notif-status" onclick="requestNotificationPermission()" title="Aktifkan Notifikasi">
-                    <i class="fas fa-bell text-gray-400" id="notif-icon"></i>
-                </div>
-                <button id="btn-login-google" onclick="signInGoogle()" class="bg-white border border-gray-200 shadow-sm px-3 py-1.5 rounded-full text-xs font-bold text-gray-600 flex items-center hover:bg-gray-50 transition">
-                    <i class="fab fa-google text-red-500 mr-2"></i> Login Sync
-                </button>
-                <div id="user-profile" class="hidden flex items-center gap-2 bg-white px-2 py-1 rounded-full shadow-sm border border-pink-100">
-                    <img id="user-avatar" src="" class="w-6 h-6 rounded-full" alt="Avatar">
-                    <span id="user-name" class="text-xs font-bold text-gray-700"></span>
-                    <button onclick="signOutGoogle()" class="text-red-400 hover:text-red-600 ml-1"><i class="fas fa-sign-out-alt"></i></button>
-                </div>
-            </div>
-            
-            <h1 class="text-3xl md:text-5xl font-extrabold header-glow mb-3 leading-tight mt-6 md:mt-0" id="main-title">be the kind author of your own story</h1>
-            <p class="text-gray-600 font-medium text-base md:text-lg" id="main-subtitle"><i class="fas fa-graduation-cap text-yellow-500 mr-2"></i> 2026 Future Engineer Dashboard</p>
-        </header>
-
-        <section id="home-section" class="flex flex-wrap items-center justify-center gap-4 mt-10">
-            <div class="glass-card menu-btn-giant border-4 border-orange-200 hover:border-orange-400 text-orange-600" onclick="showSection('schedule-section')"><i class="fas fa-calendar-days text-orange-500"></i><span class="font-extrabold font-nunito">Jadwal & Kuis</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-pink-200 hover:border-pink-400 text-pink-600" onclick="showSection('planner-section')"><i class="far fa-calendar-alt text-pink-500"></i><span class="font-extrabold font-nunito">My Planner</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-yellow-200 hover:border-yellow-400 text-yellow-700" onclick="showSection('finance-section')"><i class="fas fa-wallet text-yellow-500"></i><span class="font-extrabold font-nunito">Keuangan Kos</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-teal-200 hover:border-teal-400 text-teal-600" onclick="showSection('recipes-section')"><i class="fas fa-utensils text-teal-500"></i><span class="font-extrabold font-nunito">Resep & Gizi</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-cyan-200 hover:border-cyan-400 text-cyan-600" onclick="showSection('academic-canvas-section')"><i class="fas fa-paint-brush text-cyan-500"></i><span class="font-extrabold font-nunito">Academic Canvas</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-purple-200 hover:border-purple-400 text-purple-600" onclick="showSection('diary-section')"><i class="fas fa-book-heart text-purple-500"></i><span class="font-extrabold font-nunito">Diary & Evaluasi</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-indigo-200 hover:border-indigo-400 text-indigo-600" onclick="showSection('vault-section')"><i class="fas fa-key text-indigo-500"></i><span class="font-extrabold font-nunito">Secure Notes</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-blue-200 hover:border-blue-400 text-blue-600" onclick="showSection('quotes-section')"><i class="fas fa-quote-right text-blue-500"></i><span class="font-extrabold font-nunito">Motivasi & Quotes</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-gray-300 hover:border-gray-500 text-gray-700" onclick="showSection('game-section')"><i class="fas fa-robot text-gray-600"></i><span class="font-extrabold font-nunito">Robotic Puzzle</span></div>
-        </section>
-
-        <main id="finance-section" class="flex flex-col gap-8 hidden max-w-5xl mx-auto">
-            <div class="text-center w-full"><blockquote class="glass-card p-4 mx-auto border-l-8 border-yellow-400 inline-block shadow-sm"><p class="italic text-gray-700 font-medium">"Uang kos di Dramaga emang cepet banget ngalirnya kalau nggak ditampung. Yuk, hemat hari ini biar besok bisa jajan tanpa *guilty feeling*, Tasya!" ✨</p></blockquote></div>
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full"><div class="glass-card p-5 border-2 border-red-300 bg-red-50 bg-opacity-30"><h3 class="font-bold text-red-600 mb-2"><i class="fas fa-fire mr-2"></i>Pengeluaran Hari Ini</h3><p id="display-daily-out" class="text-3xl font-black text-gray-800">Rp 0</p></div><div class="glass-card p-5 border-2 border-green-300 bg-green-50 bg-opacity-30"><h3 class="font-bold text-green-600 mb-2"><i class="fas fa-calendar-week mr-2"></i>Pemasukan Minggu Ini</h3><p id="display-weekly-in" class="text-3xl font-black text-gray-800">Rp 0</p></div></section>
-            </main>
-        
-        <main id="recipes-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                
-                <div class="glass-card p-5 border-2 border-teal-300">
-                    <h2 class="text-xl font-bold text-teal-600 mb-4"><i class="fas fa-apple-alt mr-2 text-teal-400"></i> Planner Makan & Gizi</h2>
-                    <form id="form-meal-plan" class="flex flex-col gap-3">
-                        <input type="date" id="meal-date" required class="text-sm p-2 rounded border-teal-200">
-                        <div class="flex items-center gap-2"><span class="w-1/4 text-xs font-bold text-gray-600">Sarapan</span><select id="meal-break-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select><input type="text" id="meal-break-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200"></div>
-                        <div class="flex items-center gap-2"><span class="w-1/4 text-xs font-bold text-gray-600">Makan Siang</span><select id="meal-lunch-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select><input type="text" id="meal-lunch-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200"></div>
-                        <div class="flex items-center gap-2"><span class="w-1/4 text-xs font-bold text-gray-600">Makan Malam</span><select id="meal-dinner-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select><input type="text" id="meal-dinner-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200"></div>
-                        <div class="border-t border-teal-100 mt-2 pt-3 flex flex-wrap gap-4 items-center"><label class="text-xs font-bold text-gray-600">Habit Harian:</label><label class="flex items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="habit-susu" class="custom-checkbox"> Minum Susu</label><label class="flex items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="habit-buah" class="custom-checkbox"> Makan Buah</label></div>
-                        <button type="submit" class="btn-cute mt-2 w-full !bg-gradient-to-r !from-teal-300 !to-cyan-400">Simpan Menu Harian</button>
-                    </form>
-                    <div id="meal-history-list" class="mt-4 max-h-40 overflow-y-auto pr-1 flex flex-col gap-2"></div>
-                </div>
-
-                <div class="glass-card p-5 border-2 border-cyan-300">
-                    <h2 class="text-xl font-bold text-cyan-600 mb-2"><i class="fas fa-book-open mr-2 text-cyan-400"></i> Buku Resep Kos</h2>
-                    
-                    <div class="flex items-center gap-2 mb-4 bg-white bg-opacity-60 p-2 rounded-lg border border-cyan-100">
-                        <i class="fas fa-search text-gray-400 ml-2"></i>
-                        <input type="text" id="search-recipe" placeholder="Cari di arsip resep..." class="bg-transparent border-none focus:ring-0 text-sm py-1 w-full" oninput="renderRecipes()">
-                    </div>
-
-                    <form id="form-add-recipe" class="flex flex-col gap-2 mb-4 p-3 bg-cyan-50 bg-opacity-40 rounded-lg border border-cyan-200">
-                        <input type="text" id="recipe-name" placeholder="Nama Masakan..." required class="text-sm">
-                        <div class="flex gap-2">
-                            <input type="text" id="recipe-ingredient" placeholder="Bahan (ex: Telur)" class="text-sm w-1/2">
-                            <input type="number" id="recipe-price" placeholder="Harga Rp" class="text-sm w-1/4">
-                            <button type="button" onclick="addIngredientTemp()" class="btn-cute px-3 w-1/4 !bg-cyan-400 text-xs"><i class="fas fa-plus"></i> Bahan</button>
-                        </div>
-                        <ul id="temp-ingredients-list" class="text-xs text-gray-600 ml-2 list-disc pl-4"></ul>
-                        <textarea id="recipe-steps" rows="3" placeholder="Langkah-langkah memasak (pisahkan dengan nomor / baris baru)..." required class="text-sm p-2 rounded border-cyan-200 resize-none mt-2"></textarea>
-                        <button type="submit" class="btn-cute w-full !bg-gradient-to-r !from-cyan-300 !to-blue-400 mt-2">Simpan ke Buku Resep</button>
-                    </form>
-
-                    <div id="recipes-list" class="max-h-[350px] overflow-y-auto pr-1 flex flex-col gap-3 custom-scrollbar"></div>
-                </div>
-            </section>
-        </main>
-        <main id="game-section" class="flex flex-col gap-6 hidden max-w-xl mx-auto w-full text-center">
-            <section class="glass-card p-6 border-2 border-gray-400 bg-gray-50">
-                <h2 class="text-2xl font-black text-gray-700 mb-2"><i class="fas fa-microchip mr-2 text-blue-500"></i> Robotic Circuit Builder</h2>
-                <p class="text-sm text-gray-500 mb-4 font-medium">Klik pada komponen untuk merotasi konektornya. Sambungkan dari blok <span class="text-green-500 font-bold">START</span> ke blok <span class="text-red-500 font-bold">END</span> untuk menyelesaikan sirkuit!</p>
-                
-                <div class="level-indicator" id="level-dots">
-                    <div class="level-dot active"></div><div class="level-dot"></div><div class="level-dot"></div><div class="level-dot"></div><div class="level-dot"></div>
-                </div>
-                <h3 class="font-bold text-e84393 mb-4" id="level-title">Level 1: Basic LED Circuit</h3>
-
-                <div class="game-board-container">
-                    <div class="game-grid" id="game-board"></div>
-                </div>
-
-                <div class="mt-6 flex justify-center gap-4">
-                    <button onclick="resetCurrentLevel()" class="btn-cute !bg-gray-600 text-white"><i class="fas fa-redo mr-2"></i> Reset Grid</button>
-                    <button onclick="nextLevel()" id="btn-next-level" class="btn-cute hidden"><i class="fas fa-forward mr-2"></i> Next Level</button>
-                </div>
-                
-                <p id="game-status" class="mt-4 font-bold text-green-600 text-lg opacity-0 transition-opacity">🎉 Circuit Connected, Engineer! 🎉</p>
-            </section>
-        </main>
-        </div>
-
-    <script>
-        // ... (Kode Konfigurasi Firebase & Inisialisasi Data Lama Kamu Tetap Sama) ...
-        const STORAGE_KEY = 'planner_2026_data';
-        const defaultData = {
-            schedule: [], goals: [], daily: [], importantNotes: [], coursework: [], organizations: [], deadlines: [],
-            scholarships: [], calendarEvents: {}, photos: { family: null, friends: null, partner: null, inspiration: null },
-            photoPositions: { family: 50, friends: 50, partner: 50, inspiration: 50 },
-            motivation: "I can achieve anything I set my mind to!", inspirationDesc: "",
-            finance: { rab: [], wallets: { utama: [], tabungan: [], wishlist: [] } },
-            diary: [], quotesList: [],
-            recipes: [], mealPlan: [], shoppingNotes: [], academicNotes: [], secureNotes: []
-        };
-        let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
-        const saveData = () => { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); };
-        
-        // Cukup copas fungsi UI, Firebase, Alarm dll dari kode aslimu di sini.
-
-        // ==========================================
-        // UPDATE BUKU RESEP LOGIC
-        // ==========================================
-        let tempIngredients = [];
-        window.addIngredientTemp = () => {
-            const ing = document.getElementById('recipe-ingredient').value; const prc = parseFloat(document.getElementById('recipe-price').value);
-            if(ing && prc) { tempIngredients.push({ name: ing, price: prc }); document.getElementById('recipe-ingredient').value = ''; document.getElementById('recipe-price').value = ''; renderTempIngredients(); }
-        };
-        const renderTempIngredients = () => { const list = document.getElementById('temp-ingredients-list'); list.innerHTML = ''; tempIngredients.forEach((item, index) => { list.innerHTML += `<li>${item.name} - ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(item.price)} <button type="button" onclick="tempIngredients.splice(${index},1); renderTempIngredients()" class="text-red-400 ml-2"><i class="fas fa-times"></i></button></li>`; }); };
-
-        document.getElementById('form-add-recipe').addEventListener('submit', (e) => { 
-            e.preventDefault(); 
-            const name = document.getElementById('recipe-name').value; 
-            const steps = document.getElementById('recipe-steps').value; // Mengambil text langkah-langkah
-            if(name && tempIngredients.length > 0 && steps) { 
-                appData.recipes.push({ id: Date.now(), name, ingredients: [...tempIngredients], steps }); 
-                tempIngredients = []; 
-                document.getElementById('recipe-name').value = ''; 
-                document.getElementById('recipe-steps').value = ''; 
-                renderTempIngredients(); saveData(); renderRecipes();
-            } else { alert('Mohon lengkapi nama resep, minimal 1 bahan, dan langkah-langkah ya Tasya!'); } 
-        });
-
-        window.renderRecipes = () => {
-            const container = document.getElementById('recipes-list'); 
-            const searchQ = document.getElementById('search-recipe').value.toLowerCase(); container.innerHTML = '';
-            
-            // Selalu tampilkan jika kosong, atau filter jika sedang mencari
-            const filtered = appData.recipes.filter(r => r.name.toLowerCase().includes(searchQ) || r.ingredients.some(i => i.name.toLowerCase().includes(searchQ)));
-            
-            if(filtered.length === 0) { container.innerHTML = '<p class="text-sm text-gray-400 italic">Arsip resep masih kosong/tidak ditemukan.</p>'; return; }
-            
-            filtered.forEach(recipe => {
-                let total = recipe.ingredients.reduce((sum, item) => sum + item.price, 0);
-                let ingHTML = recipe.ingredients.map(i => `<li class="flex justify-between border-b border-dashed border-gray-200 py-1"><span><i class="fas fa-circle text-[8px] text-cyan-300 mr-2"></i>${i.name}</span><span class="font-bold">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(i.price)}</span></li>`).join('');
-                
-                // Render langkah-langkah yang baru ditambahkan
-                let stepsHTML = recipe.steps ? `<div class="mt-3 bg-cyan-50 p-2 rounded border-l-4 border-cyan-400"><p class="text-xs font-bold text-cyan-700 mb-1">Cara Masak:</p><p class="text-xs text-gray-600 whitespace-pre-wrap">${recipe.steps}</p></div>` : '';
-
-                container.innerHTML += `
-                <div class="bg-white p-4 rounded-xl border border-cyan-200 shadow-md relative">
-                    <button onclick="deleteItem('recipes', ${recipe.id}); renderRecipes()" class="absolute top-3 right-3 text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
-                    <h4 class="font-bold text-lg text-cyan-700 border-b border-cyan-100 pb-2 mb-2"><i class="fas fa-utensils text-cyan-400 mr-2"></i>${recipe.name}</h4>
-                    <p class="text-xs font-bold text-gray-500 mb-1">Bahan-bahan:</p>
-                    <ul class="text-xs text-gray-600 mb-2">${ingHTML}</ul>
-                    <div class="text-right text-sm font-black text-blue-600 mb-2">Total Est: ${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total)}</div>
-                    ${stepsHTML}
-                </div>`;
-            });
-        };
-
-        // ==========================================
-        // UPDATE GAME LOGIC (3D ROBOT CIRCUIT)
-        // ==========================================
-        const gameBoard = document.getElementById('game-board');
-        let currentGameState = [];
-        let currentLevel = 0;
-        
-        const levels = [
-            { size: 3, title: "Level 1: Basic LED Circuit" },
-            { size: 4, title: "Level 2: Sensor Input Module" },
-            { size: 4, title: "Level 3: Motor Driver Layout" },
-            { size: 5, title: "Level 4: Arduino Logic Flow" },
-            { size: 5, title: "Level 5: The Chaotic Mainboard" }
-        ];
-
-        window.initGame = () => {
-            gameBoard.innerHTML = ''; currentGameState = []; 
-            document.getElementById('game-status').classList.remove('opacity-100');
-            document.getElementById('btn-next-level').classList.add('hidden');
-            
-            const lvl = levels[currentLevel];
-            document.getElementById('level-title').innerText = lvl.title;
-            gameBoard.style.gridTemplateColumns = `repeat(${lvl.size}, 1fr)`;
-            
-            // Update UI Dots
-            const dots = document.querySelectorAll('.level-dot');
-            dots.forEach((dot, index) => { dot.classList.toggle('active', index === currentLevel); });
-
-            const totalTiles = lvl.size * lvl.size;
-            // Tema komponen mesin/elektro
-            const icons = ['fa-grip-lines', 'fa-grip-lines-vertical', 'fa-microchip', 'fa-plug', 'fa-cogs', 'fa-server', 'fa-network-wired'];
-
-            for(let i = 0; i < totalTiles; i++) {
-                const randomRot = Math.floor(Math.random() * 4) * 90; // 0, 90, 180, 270
-                currentGameState.push(randomRot);
-                let extraClass = ''; 
-                
-                let iconHTML = `<i class="fas ${icons[Math.floor(Math.random()*icons.length)]} text-gray-600"></i>`;
-                
-                if(i === 0) { extraClass = 'start-tile text-sm'; iconHTML = 'IN'; }
-                if(i === totalTiles - 1) { extraClass = 'end-tile text-sm'; iconHTML = 'OUT'; }
-                
-                gameBoard.innerHTML += `<div class="game-tile ${extraClass}" id="tile-${i}" style="transform: rotate(${randomRot}deg)" onclick="rotateTile(${i}, ${totalTiles})">${iconHTML}</div>`;
-            }
-        };
-
-        window.rotateTile = (idx, totalTiles) => {
-            if(idx === 0 || idx === totalTiles - 1) return; // IN dan OUT tidak berputar
-            currentGameState[idx] = (currentGameState[idx] + 90) % 360;
-            document.getElementById(`tile-${idx}`).style.transform = `rotate(${currentGameState[idx]}deg)`;
-            checkGameWin(totalTiles);
-        };
-
-        const checkGameWin = (totalTiles) => {
-            let win = true;
-            // Simulasi puzzle logika rotasi (simplified check for aesthetic win)
-            for(let i=1; i<totalTiles-1; i++) { if(currentGameState[i] % 180 !== 0) win = false; } 
-            
-            if(win) { 
-                document.getElementById('game-status').classList.add('opacity-100'); 
-                if(currentLevel < levels.length - 1) {
-                    document.getElementById('btn-next-level').classList.remove('hidden');
-                } else {
-                    document.getElementById('game-status').innerText = "🏆 MASTER ENGINEER ACHIEVED! 🏆";
-                }
-            }
-        };
-
-        window.resetCurrentLevel = () => { initGame(); };
-        window.nextLevel = () => { if(currentLevel < levels.length - 1) { currentLevel++; initGame(); } };
 
         // ==========================================
         // PWA SERVICE WORKER REGISTRATION
