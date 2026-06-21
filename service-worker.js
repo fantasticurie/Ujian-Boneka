@@ -1,75 +1,75 @@
-const CACHE_NAME = 'tasya-planner-v1';
+const CACHE_NAME = 'planner-cache-v2'; // Versi dinaikkan agar cache lama terhapus
 
-// File utama yang wajib disimpan
+// Daftar link eksternal utama yang WAJIB didownload saat pertama kali buka
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  'https://cdn.tailwindcss.com',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+  'https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap'
 ];
 
-// Install Service Worker & Cache file statis
+// Install & Paksa Aktifkan SW Baru
 self.addEventListener('install', event => {
+  self.skipWaiting(); 
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      // Catch error jika ada link CDN yang gagal diambil, tapi tetap jalankan SW
+      return Promise.allSettled(urlsToCache.map(url => cache.add(url)));
+    })
   );
 });
 
-// Intercept request & gunakan Cache kalau offline
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Kalau ada di cache, langsung pakai (Offline Mode)
-        if (response) {
-          return response;
-        }
-        
-        // Kalau belum ada, ambil dari internet lalu simpan ke cache
-        return fetch(event.request).then(
-          function(networkResponse) {
-            // Pastikan response valid
-            if(!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-              return networkResponse;
-            }
-
-            // Simpan CDN/Resource baru ke dalam cache
-            var responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME)
-              .then(function(cache) {
-                // Hindari caching request Firebase API/Analytics biar gak error
-                if(!event.request.url.includes('firestore') && !event.request.url.includes('google')) {
-                    cache.put(event.request, responseToCache);
-                }
-              });
-
-            return networkResponse;
-          }
-        ).catch(function() {
-            // Fallback kalau offline dan file belum ada di cache
-            console.log('You are offline and resource is not cached.');
-        });
-      })
-  );
-});
-
-// Update Cache kalau ada versi baru
+// Bersihkan Cache Versi Lama
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
           }
         })
       );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Intercept Request (Ambil dari Cache dulu, kalau kosong baru ke Internet)
+self.addEventListener('fetch', event => {
+  // Abaikan sinkronisasi Firebase API saat offline agar tidak memblokir aplikasi
+  if (event.request.url.includes('firestore.googleapis.com') || 
+      event.request.url.includes('identitytoolkit.googleapis.com')) {
+    return;
+  }
+
+  // Hindari caching ekstensi Chrome (jika diuji di PC)
+  if (event.request.url.startsWith('chrome-extension://')) return;
+
+  event.respondWith(
+    caches.match(event.request).then(cachedResponse => {
+      // 1. Jika file ada di cache, langsung pakai (Ini yang bikin bisa Offline)
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      // 2. Jika tidak ada di cache, ambil dari internet
+      return fetch(event.request).then(networkResponse => {
+        // Simpan ke cache agar kunjungan berikutnya bisa offline
+        // (Pastikan hanya method GET yang disimpan)
+        if (event.request.method === 'GET' && networkResponse.type !== 'error') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      }).catch(() => {
+        console.log('Mode Offline: Gagal memuat', event.request.url);
+      });
     })
   );
 });
