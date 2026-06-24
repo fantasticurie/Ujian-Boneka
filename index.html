@@ -626,7 +626,8 @@
         };
 
         let isFirebaseActive = false;
-        if(firebaseConfig.apiKey !== "ISI_API_KEY_KAMU") {
+        // FIX OFFLLINE CRASH: Cek apakah library firebase berhasil ter-load
+        if(typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "ISI_API_KEY_KAMU") {
             firebase.initializeApp(firebaseConfig);
             isFirebaseActive = true;
         }
