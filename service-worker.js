@@ -1,4 +1,4 @@
-const CACHE_NAME = 'planner-cache-v2'; // Versi dinaikkan agar cache lama terhapus
+const CACHE_NAME = 'planner-cache-v3'; // Versi dinaikkan agar cache lama terganti otomatis
 
 // Daftar link eksternal utama yang WAJIB didownload saat pertama kali buka
 const urlsToCache = [
@@ -9,7 +9,11 @@ const urlsToCache = [
   './icon-512.png',
   'https://cdn.tailwindcss.com',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap',
+  // TAMBAHAN: Cache library Firebase agar tidak error saat offline
+  'https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-app.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-auth.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-firestore.min.js'
 ];
 
 // Install & Paksa Aktifkan SW Baru
