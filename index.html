@@ -12,7 +12,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -43,8 +43,9 @@
         }
 
         h1, h2, h3, .calendar-header { font-family: 'Nunito', sans-serif; }
+        .font-nunito { font-family: 'Nunito', sans-serif; }
 
-        /* --- SPLASH SCREEN INTRO --- */
+        /* --- SPLASH SCREEN INTRO (UPDATED) --- */
         #intro-splash {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: linear-gradient(135deg, #2d3436 0%, #e84393 100%);
@@ -54,13 +55,13 @@
         }
         .intro-icon { font-size: 5rem; color: #fff9d2; margin-bottom: 20px; animation: pulse-glow 1.5s infinite; cursor: pointer; transition: transform 0.2s ease; }
         .intro-icon:hover { transform: scale(1.1); }
-        .intro-title { font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 10px; letter-spacing: 1px; padding: 0 20px; }
-        .intro-subtitle { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 300; text-align: center; color: #ffd1dc; max-width: 80%; line-height: 1.5; }
+        .intro-title { font-family: 'Nunito', sans-serif; font-size: 3.5rem; font-weight: 900; text-align: center; margin-bottom: 5px; letter-spacing: 1px; padding: 0 20px; background: linear-gradient(to right, #fff9d2, #ffd1dc, #ff9ff3); -webkit-background-clip: text; color: transparent; text-shadow: 0px 10px 20px rgba(0,0,0,0.2); }
+        .intro-subtitle { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 400; text-align: center; color: rgba(255, 255, 255, 0.9); max-width: 80%; line-height: 1.6; letter-spacing: 0.5px; }
 
         @keyframes pulse-glow {
-            0% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 249, 210, 0.5); }
-            50% { transform: scale(1.15); text-shadow: 0 0 30px rgba(255, 249, 210, 1); }
-            100% { transform: scale(1); text-shadow: 0 0 10px rgba(255, 249, 210, 0.5); }
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 249, 210, 0.5)); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 30px rgba(255, 249, 210, 1)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 249, 210, 0.5)); }
         }
 
         .header-glow { background: linear-gradient(to right, #e84393, #fd79a8, #ff9ff3); -webkit-background-clip: text; color: transparent; text-shadow: 0px 4px 15px rgba(253, 121, 168, 0.4); letter-spacing: 1px; }
@@ -268,9 +269,13 @@
             <div class="glass-card menu-btn-giant border-4 border-purple-200 hover:border-purple-400 text-purple-600" onclick="showSection('diary-section')"><i class="fas fa-book-heart text-purple-500"></i><span class="font-extrabold font-nunito">Diary & Evaluasi</span></div>
             <div class="glass-card menu-btn-giant border-4 border-indigo-200 hover:border-indigo-400 text-indigo-600" onclick="showSection('vault-section')"><i class="fas fa-key text-indigo-500"></i><span class="font-extrabold font-nunito">Secure Notes</span></div>
             <div class="glass-card menu-btn-giant border-4 border-blue-200 hover:border-blue-400 text-blue-600" onclick="showSection('quotes-section')"><i class="fas fa-quote-right text-blue-500"></i><span class="font-extrabold font-nunito">Motivasi & Quotes</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-gray-300 hover:border-gray-500 text-gray-700" onclick="showSection('game-section')"><i class="fas fa-robot text-gray-600"></i><span class="font-extrabold font-nunito">Robotic Puzzle</span></div>
+            <!-- MENU BARU -->
+            <div class="glass-card menu-btn-giant border-4 border-green-300 hover:border-green-500 text-green-700" onclick="showSection('robo-blueprint-section')"><i class="fas fa-microchip text-green-600"></i><span class="font-extrabold font-nunito">Robo-Blueprint</span></div>
+            <div class="glass-card menu-btn-giant border-4 border-slate-300 hover:border-slate-500 text-slate-700" onclick="showSection('calc-section')"><i class="fas fa-calculator text-slate-600"></i><span class="font-extrabold font-nunito">Kalkulator TMB</span></div>
+            <div class="glass-card menu-btn-giant border-4 border-gray-300 hover:border-gray-500 text-gray-700" onclick="showSection('game-section')"><i class="fas fa-gamepad text-gray-600"></i><span class="font-extrabold font-nunito">Robotic Puzzle</span></div>
         </section>
 
+        <!-- FITUR 2: ENGINE BUILDER (Terintegrasi dengan Focus Timer) -->
         <main id="timer-section" class="flex flex-col gap-6 hidden max-w-2xl mx-auto w-full text-center">
             <section class="glass-card p-8 border-2 border-red-300 relative overflow-hidden">
                 <i class="fas fa-cogs absolute top-4 right-4 text-4xl text-red-100 animate-spin-slow"></i>
@@ -291,6 +296,15 @@
                     <button id="btn-timer-start" onclick="startTimer()" class="btn-cute !bg-red-400 text-lg px-8 py-3"><i class="fas fa-play mr-2"></i> Ignite Engine</button>
                     <button id="btn-timer-pause" onclick="pauseTimer()" class="btn-cute !bg-yellow-400 text-lg px-6 py-3 hidden text-yellow-900"><i class="fas fa-pause mr-2"></i> Pause</button>
                     <button onclick="resetTimer()" class="btn-cute !bg-gray-400 text-lg px-6 py-3"><i class="fas fa-redo mr-2"></i> Reset</button>
+                </div>
+                
+                <!-- PROGRESS MESIN -->
+                <div class="mt-8 border-t-2 border-dashed border-red-200 pt-6">
+                    <h3 class="text-xl font-bold text-red-600 mb-2"><i class="fas fa-robot mr-2"></i> Engine Builder Progress</h3>
+                    <p class="text-xs text-gray-500 mb-4">Setiap sesi fokus selesai, kamu mendapat 1 komponen mesin acak untuk merakit mesinmu!</p>
+                    <div id="engine-parts-display" class="flex flex-wrap justify-center gap-2 text-3xl min-h-[50px] bg-red-50 rounded-lg p-4 border border-red-100 shadow-inner">
+                    </div>
+                    <p class="text-sm font-bold mt-3 text-red-500">Total Komponen Terkumpul: <span id="engine-parts-count">0</span></p>
                 </div>
             </section>
         </main>
@@ -604,6 +618,75 @@
             </section>
         </main>
 
+        <!-- FITUR 1: ROBO-BLUEPRINT & AUTO-CODE -->
+        <main id="robo-blueprint-section" class="flex flex-col gap-6 hidden max-w-6xl mx-auto w-full">
+            <section class="glass-card p-6 border-2 border-green-300">
+                <h2 class="text-2xl font-bold text-green-600 mb-4"><i class="fas fa-microchip mr-2 text-green-500"></i> Robo-Blueprint & Auto-Code Generator</h2>
+                <p class="text-xs text-gray-500 mb-6 font-medium">Tambahkan komponen yang mau kamu pasang, dan kodenya otomatis diketik buat kamu!</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white bg-opacity-60 p-5 rounded-xl border border-green-200 flex flex-col">
+                        <h3 class="font-bold text-green-700 mb-3"><i class="fas fa-plus-circle mr-1"></i> Tambah Komponen Ke Blueprint</h3>
+                        <div class="flex gap-2 mb-4">
+                            <select id="robo-comp-type" class="text-sm p-2 rounded border-green-200 flex-1">
+                                <option value="LED">💡 LED</option>
+                                <option value="Motor">⚙️ Motor DC</option>
+                                <option value="Ultrasonic">🦇 Sensor Ultrasonik</option>
+                            </select>
+                            <input type="number" id="robo-comp-pin" placeholder="Pin (ex: 13)" class="text-sm p-2 rounded border-green-200 w-24">
+                            <button onclick="addRoboComp()" class="btn-cute !bg-green-500 px-4">Add</button>
+                        </div>
+                        <h3 class="font-bold text-green-700 mb-2 border-t border-green-100 pt-3 mt-auto"><i class="fas fa-network-wired mr-1"></i> Wiring Cheat Sheet</h3>
+                        <ul id="robo-wiring-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2"></ul>
+                    </div>
+                    
+                    <div class="bg-gray-900 p-5 rounded-xl border border-gray-700 relative flex flex-col min-h-[300px]">
+                        <button onclick="copyRoboCode()" class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="Copy Code"><i class="fas fa-copy"></i></button>
+                        <h3 class="font-bold text-green-400 mb-3"><i class="fas fa-code mr-1"></i> auto_generated.ino</h3>
+                        <pre class="text-xs text-green-300 font-mono overflow-auto flex-1 custom-scrollbar" id="robo-code-output">
+// Tambahkan komponen untuk generate kode...
+                        </pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FITUR 3: KALKULATOR TEKNIK & KONVERSI -->
+        <main id="calc-section" class="flex flex-col gap-6 hidden max-w-4xl mx-auto w-full">
+            <section class="glass-card p-6 border-2 border-slate-300">
+                <h2 class="text-2xl font-bold text-slate-600 mb-4"><i class="fas fa-calculator mr-2 text-slate-500"></i> Engineering Calculator & Tools</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white bg-opacity-60 p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-700 mb-3 border-b border-slate-200 pb-2"><i class="fas fa-rocket text-orange-400 mr-1"></i> Hitung Kinematika (GLBB)</h3>
+                        <p class="text-[10px] text-gray-500 mb-3 italic">Mencari jarak (s) berdasarkan rumus mekanika dasar.</p>
+                        <div class="flex flex-col gap-3">
+                            <input type="number" id="calc-v0" placeholder="Kec. Awal (v0) m/s" class="text-sm border-slate-200 p-2">
+                            <input type="number" id="calc-t" placeholder="Waktu (t) s" class="text-sm border-slate-200 p-2">
+                            <input type="number" id="calc-a" placeholder="Percepatan (a) m/s²" class="text-sm border-slate-200 p-2">
+                            <button onclick="calcKinematics()" class="btn-cute !bg-slate-500 mt-2">Hitung Jarak (s)</button>
+                            <p class="mt-2 text-sm font-bold text-slate-800 bg-slate-100 p-3 rounded text-center border border-slate-200">Hasil (s) = <span id="calc-res-s" class="text-blue-600 text-lg">0</span> m</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-60 p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-slate-700 mb-3 border-b border-slate-200 pb-2"><i class="fas fa-exchange-alt text-green-400 mr-1"></i> Konversi Satuan Cepat</h3>
+                        <p class="text-[10px] text-gray-500 mb-3 italic">Konversi satuan yang sering muncul di soal TMB.</p>
+                        <div class="flex flex-col gap-3">
+                            <input type="number" id="conv-val" placeholder="Masukkan nilai..." class="text-sm border-slate-200 p-2">
+                            <select id="conv-type" class="text-sm border-slate-200 rounded p-2 bg-white">
+                                <option value="j2c">Joule ke Calorie</option>
+                                <option value="c2j">Calorie ke Joule</option>
+                                <option value="n2d">Newton ke Dyne</option>
+                                <option value="r2d">Radian ke Derajat</option>
+                            </select>
+                            <button onclick="calcConversion()" class="btn-cute !bg-slate-500 mt-2">Konversi Satuan</button>
+                            <p class="mt-2 text-sm font-bold text-slate-800 bg-slate-100 p-3 rounded text-center border border-slate-200">Hasil = <span id="conv-res" class="text-green-600 text-lg">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
     </div>
 
     <footer class="mt-auto py-6 text-center text-gray-500 text-sm font-medium">
@@ -647,7 +730,9 @@
             motivation: "I can achieve anything I set my mind to!", inspirationDesc: "",
             finance: { rab: [], wallets: { utama: [], tabungan: [], wishlist: [] } },
             diary: [], quotesList: [],
-            recipes: [], mealPlan: [], shoppingNotes: [], academicNotes: [], secureNotes: []
+            recipes: [], mealPlan: [], shoppingNotes: [], academicNotes: [], secureNotes: [],
+            // NEW DATA STATES
+            engineParts: 0, roboParts: []
         };
 
         let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData;
@@ -656,6 +741,9 @@
         if(!appData.shoppingNotes) appData.shoppingNotes = []; 
         if(!appData.academicNotes) appData.academicNotes = [];
         if(!appData.secureNotes) appData.secureNotes = [];
+        // NEW DATA INIT
+        if(typeof appData.engineParts === 'undefined') appData.engineParts = 0;
+        if(!appData.roboParts) appData.roboParts = [];
 
         const saveData = () => {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
@@ -831,7 +919,7 @@
         };
 
         window.showSection = (sectionId) => {
-            ['home-section', 'planner-section', 'finance-section', 'schedule-section', 'diary-section', 'quotes-section', 'recipes-section', 'academic-canvas-section', 'vault-section', 'game-section', 'timer-section'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            ['home-section', 'planner-section', 'finance-section', 'schedule-section', 'diary-section', 'quotes-section', 'recipes-section', 'academic-canvas-section', 'vault-section', 'game-section', 'timer-section', 'calc-section', 'robo-blueprint-section'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById(sectionId).classList.remove('hidden');
             
             // Handle Overlay Displays
@@ -856,6 +944,9 @@
                 else if (sectionId === 'academic-canvas-section') { mainTitle.innerText = "Academic Canvas"; mainSubtitle.innerHTML = '<i class="fas fa-chalkboard text-cyan-500 mr-2"></i> Corat-coret PPT & Evaluasi Belajar'; }
                 else if (sectionId === 'vault-section') { mainTitle.innerText = "Tasya's Secure Vault"; mainSubtitle.innerHTML = '<i class="fas fa-shield-alt text-indigo-500 mr-2"></i> Link & Akun Penting Pribadi'; }
                 else if (sectionId === 'game-section') { mainTitle.innerText = "TMB Assembly Puzzle"; mainSubtitle.innerHTML = '<i class="fas fa-gamepad text-gray-500 mr-2"></i> Merakit Komponen Robotika'; initGame(); }
+                // NEW SECTIONS
+                else if (sectionId === 'calc-section') { mainTitle.innerText = "Kalkulator Teknik"; mainSubtitle.innerHTML = '<i class="fas fa-calculator text-slate-500 mr-2"></i> Hitung Kinematika & Konversi Satuan Cepat'; }
+                else if (sectionId === 'robo-blueprint-section') { mainTitle.innerText = "Robo-Blueprint"; mainSubtitle.innerHTML = '<i class="fas fa-microchip text-green-500 mr-2"></i> Tarik Kabel & Auto-Generate Kode C++'; renderRobo(); }
             }
         };
 
@@ -877,7 +968,7 @@
         setInterval(checkAlarms, 10000); updateNotifIcon();
 
         // ==========================================
-        // FOCUS TIMER LOGIC (NEW)
+        // FOCUS TIMER & ENGINE BUILDER LOGIC (UPDATED)
         // ==========================================
         let timerInterval;
         let timeLeft = 25 * 60; // 25 minutes in seconds
@@ -907,6 +998,11 @@
                     document.getElementById('btn-timer-start').classList.remove('hidden');
                     document.getElementById('btn-timer-pause').classList.add('hidden');
                     triggerAlarm("Engine Stopped!", "Waktu fokusmu sudah habis. Great job, Engineer!");
+                    
+                    // GAMIFIKASI: Tambah komponen mesin setelah fokus
+                    appData.engineParts++;
+                    saveData();
+                    renderEngineParts();
                 }
             }, 1000);
         };
@@ -931,6 +1027,108 @@
             const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
             const s = (timeLeft % 60).toString().padStart(2, '0');
             document.getElementById('timer-display').innerText = `${m}:${s}`;
+        };
+
+        const renderEngineParts = () => {
+            const container = document.getElementById('engine-parts-display');
+            const countDisplay = document.getElementById('engine-parts-count');
+            countDisplay.innerText = appData.engineParts || 0;
+            container.innerHTML = '';
+            
+            if(appData.engineParts === 0) {
+                container.innerHTML = '<span class="text-sm text-gray-400 italic font-medium my-auto">Belum ada komponen. Mulai sesi fokus pertama kamu!</span>';
+                return;
+            }
+            
+            const partIcons = ['⚙️', '🔩', '🔌', '💡', '🔋', '🔧', '🧲'];
+            for(let i = 0; i < appData.engineParts; i++) {
+                container.innerHTML += `<span class="animate-bounce" style="animation-delay: ${i*0.1}s">${partIcons[i % partIcons.length]}</span>`;
+            }
+        };
+
+        // ==========================================
+        // KALKULATOR TEKNIK LOGIC (NEW)
+        // ==========================================
+        window.calcKinematics = () => {
+            const v0 = parseFloat(document.getElementById('calc-v0').value) || 0;
+            const t = parseFloat(document.getElementById('calc-t').value) || 0;
+            const a = parseFloat(document.getElementById('calc-a').value) || 0;
+            // Rumus GLBB s = v0*t + 1/2*a*t^2
+            const s = (v0 * t) + (0.5 * a * Math.pow(t, 2));
+            document.getElementById('calc-res-s').innerText = s.toFixed(2);
+        };
+        
+        window.calcConversion = () => {
+            const val = parseFloat(document.getElementById('conv-val').value) || 0;
+            const type = document.getElementById('conv-type').value;
+            let res = 0;
+            if(type === 'j2c') res = val * 0.239006;
+            if(type === 'c2j') res = val * 4.184;
+            if(type === 'n2d') res = val * 100000;
+            if(type === 'r2d') res = val * (180 / Math.PI);
+            document.getElementById('conv-res').innerText = res.toFixed(4);
+        };
+
+        // ==========================================
+        // ROBO-BLUEPRINT & AUTO-CODE LOGIC (NEW)
+        // ==========================================
+        window.addRoboComp = () => {
+            const type = document.getElementById('robo-comp-type').value;
+            const pin = document.getElementById('robo-comp-pin').value;
+            if(!pin) return alert("Ups, The Chaotic lupa masukin nomor pin Arduino-nya!");
+            appData.roboParts.push({ id: Date.now(), type, pin });
+            document.getElementById('robo-comp-pin').value = '';
+            saveData();
+            renderRobo();
+        };
+
+        window.deleteRoboComp = (id) => {
+            appData.roboParts = appData.roboParts.filter(p => p.id !== id);
+            saveData();
+            renderRobo();
+        };
+
+        const renderRobo = () => {
+            const list = document.getElementById('robo-wiring-list');
+            const codeOut = document.getElementById('robo-code-output');
+            list.innerHTML = appData.roboParts.length === 0 ? '<p class="text-xs text-gray-400 italic">Belum ada komponen ditarik.</p>' : '';
+            
+            let varDecls = "";
+            let setupCode = "void setup() {\n  Serial.begin(9600);\n";
+            let loopCode = "void loop() {\n";
+
+            appData.roboParts.forEach((part) => {
+                const varName = `${part.type.toLowerCase()}_${part.pin}`;
+                list.innerHTML += `<li class="flex justify-between items-center bg-white p-2 rounded text-sm border border-green-200 shadow-sm"><span class="font-bold text-gray-700">${part.type === 'LED' ? '💡' : part.type === 'Motor' ? '⚙️' : '🦇'} ${part.type} <i class="fas fa-arrow-right text-green-400 mx-2"></i> Pin ${part.pin}</span><button onclick="deleteRoboComp(${part.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button></li>`;
+                
+                if(part.type === 'LED') {
+                    varDecls += `int ${varName} = ${part.pin};\n`;
+                    setupCode += `  pinMode(${varName}, OUTPUT);\n`;
+                    loopCode += `  // Blink LED ${part.pin}\n  digitalWrite(${varName}, HIGH);\n  delay(1000);\n  digitalWrite(${varName}, LOW);\n  delay(1000);\n\n`;
+                } else if(part.type === 'Motor') {
+                    varDecls += `int ${varName} = ${part.pin};\n`;
+                    setupCode += `  pinMode(${varName}, OUTPUT);\n`;
+                    loopCode += `  digitalWrite(${varName}, HIGH); // Putar Motor DC\n\n`;
+                } else if(part.type === 'Ultrasonic') {
+                    varDecls += `int trig_${part.pin} = ${part.pin};\nint echo_${part.pin} = ${parseInt(part.pin)+1}; // Pin terdekat\nlong duration_${part.pin};\nint distance_${part.pin};\n`;
+                    setupCode += `  pinMode(trig_${part.pin}, OUTPUT);\n  pinMode(echo_${part.pin}, INPUT);\n`;
+                    loopCode += `  // Baca Sensor Jarak\n  digitalWrite(trig_${part.pin}, LOW);\n  delayMicroseconds(2);\n  digitalWrite(trig_${part.pin}, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(trig_${part.pin}, LOW);\n  duration_${part.pin} = pulseIn(echo_${part.pin}, HIGH);\n  distance_${part.pin} = duration_${part.pin} * 0.034 / 2;\n\n`;
+                }
+            });
+
+            setupCode += "}\n\n";
+            loopCode += "}\n";
+
+            if(appData.roboParts.length === 0) {
+                codeOut.innerText = "// Tambahkan komponen dari sebelah kiri untuk auto-generate kode C++...";
+            } else {
+                codeOut.innerText = "// Auto-generated by Tasya's Planner 2026\n\n" + varDecls + "\n" + setupCode + loopCode;
+            }
+        };
+
+        window.copyRoboCode = () => {
+            navigator.clipboard.writeText(document.getElementById('robo-code-output').innerText);
+            alert("Kode berhasil disalin! Silahkan paste di Arduino IDE atau Tinkercad.");
         };
 
         // ==========================================
@@ -1310,6 +1508,7 @@
             renderSchedule(); renderGoals(); renderDaily(); renderCourseOrg(); renderDeadlines(); renderScholarships(); 
             renderCalendar(); renderPhotosAndText(); renderFinance(); renderImportantNotes(); renderDiary(); renderQuotes();
             renderRecipes(); renderMealPlan(); renderShoppingList(); renderAcademicNotes(); renderVault(); initGame();
+            renderEngineParts(); renderRobo();
         };
 
         const todayStr = new Date().toISOString().split('T')[0]; document.getElementById('trans-date').value = todayStr; document.getElementById('diary-date').value = todayStr; document.getElementById('meal-date').value = todayStr;
