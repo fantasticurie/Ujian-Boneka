@@ -722,7 +722,7 @@
             </div>
             <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 items-start content-start">
                 <section class="glass-card p-5 flex flex-col md:col-span-2 min-h-[500px] border-2 border-pink-300">
-                    <h2 class="text-xl font-bold mb-1 text-pink-500">Deadline Tracker</h2><p class="text-xs text-red-400 mb-3 font-semibold">*Akan otomatis memberi alert jika deadline &lt; 5 Hari!</p>
+                    <h2 class="text-xl font-bold mb-1 text-pink-500">Deadline Tracker</h2><p class="text-xs text-red-400 mb-3 font-semibold">*Akan otomatis memberi alert jika deadline &lt;= 7 Hari!</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
                     <div class="mt-auto flex flex-col md:flex-row gap-2">
                         <form id="form-deadlines" class="w-full flex flex-col md:flex-row gap-2">
@@ -1506,12 +1506,13 @@
                 deadlineDate.setHours(0,0,0,0);
                 const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24));
 
-                if(diffDays >= 0 && diffDays <= 5) {
+                // UPGRADE: SEKARANG RANGE MENDETEKSI HARI INI (0) SAMPAI H-7
+                if(diffDays >= 0 && diffDays <= 7) {
                     alertTasks.push({ ...item, diffDays });
                 }
             });
 
-            // Sort berdasarkan urgensi (H-1 > H-3 > H-5)
+            // Sort berdasarkan urgensi (Hari Ini > H-1 > H-3 dll)
             alertTasks.sort((a, b) => a.diffDays - b.diffDays);
 
             if(alertTasks.length > 0) {
@@ -1531,13 +1532,21 @@
                     let animClass = '';
                     let descText = '';
 
-                    if(t.diffDays <= 1) {
+                    // FIX BUG: 0 = HARI INI, 1 = H-1 BESOK
+                    if (t.diffDays === 0) {
+                        bgClass = 'bg-red-100 border-red-600';
+                        textClass = 'text-red-800';
+                        icon = '<i class="fas fa-radiation animate-spin-slow"></i>';
+                        label = 'HARI INI (Kritis)';
+                        animClass = 'animate-pulse border-2 shadow-md';
+                        descText = '🚨 Sangat Kritis! Tugas ini harus dikumpulkan HARI INI juga!';
+                    } else if(t.diffDays === 1) {
                         bgClass = 'bg-red-100 border-red-500';
                         textClass = 'text-red-700';
-                        icon = '<i class="fas fa-radiation animate-spin-slow"></i>';
-                        label = 'H-1 (Kritis)';
-                        animClass = 'animate-pulse border-2 shadow-md';
-                        descText = '🚨 Kritis! Prioritaskan (e.g. Laporan Praktikum TMB / Tugas Besar) yang harus dikumpulkan besok.';
+                        icon = '<i class="fas fa-exclamation-triangle animate-pulse"></i>';
+                        label = 'H-1 (Besok)';
+                        animClass = 'border-2 shadow-sm';
+                        descText = '🚨 Kritis! Prioritaskan (e.g. Laporan Praktikum / Tugas) yang harus dikumpulkan besok.';
                     } else if(t.diffDays <= 3) {
                         bgClass = 'bg-orange-100 border-orange-400';
                         textClass = 'text-orange-700';
@@ -1545,13 +1554,13 @@
                         label = `H-${t.diffDays} (Segera)`;
                         animClass = 'border';
                         descText = 'Tingkat menengah: Tugas ini harus segera diselesaikan!';
-                    } else if(t.diffDays <= 5) {
+                    } else if(t.diffDays <= 7) {
                         bgClass = 'bg-yellow-100 border-yellow-400';
                         textClass = 'text-yellow-700';
                         icon = '<i class="fas fa-info-circle"></i>';
                         label = `H-${t.diffDays} (Menyicil)`;
                         animClass = 'border';
-                        descText = 'Peringatan awal: Yuk mulai cicil draf materi kuliah atau riset.';
+                        descText = 'Peringatan awal: Yuk mulai cicil draf materi atau riset.';
                     }
 
                     popupList.innerHTML += `
@@ -1568,7 +1577,8 @@
             } else {
                 badgeIcon.classList.add('hidden');
                 if(badgeMenu) badgeMenu.classList.add('hidden');
-                popupList.innerHTML = '<p class="text-xs text-gray-500 italic text-center p-3 border border-dashed border-pink-200 rounded-lg bg-pink-50">Wah aman! Nggak ada tugas mendesak dalam 5 hari ke depan. Waktunya bernapas! 🍃</p>';
+                // UPGRADE TEXT MENGACU PADA H-7
+                popupList.innerHTML = '<p class="text-xs text-gray-500 italic text-center p-3 border border-dashed border-pink-200 rounded-lg bg-pink-50">Wah aman! Nggak ada tugas mendesak dalam 7 hari ke depan. Waktunya bernapas! 🍃</p>';
             }
         };
 
