@@ -1731,19 +1731,19 @@
                 if(dayStr === selectedCalendarDate) classes += " selected";
                 let holiday = getHoliday(dayStr); if (holiday) classes += " holiday"; let titleAttr = holiday ? `title="${holiday}"` : "";
 
-                // PERBAIKAN 1: ICON SEBAGAI PENANDA KEGIATAN (KUE, DLL)
+                // PERBAIKAN 1: ICON SEBAGAI PENANDA KEGIATAN (KUE, DLL) DIBUAT ESTETIK
                 let eventIcons = "";
                 if(appData.calendarEvents[dayStr] && appData.calendarEvents[dayStr].length > 0) {
                     const icons = new Set();
                     appData.calendarEvents[dayStr].forEach(e => {
-                        if(e.category === 'Ulang Tahun') icons.add('🎂');
-                        else if(e.category === 'Pengingat') icons.add('⏰');
-                        else if(e.category === 'Pengumuman') icons.add('📢');
-                        else icons.add('🎉'); 
+                        if(e.category === 'Ulang Tahun') icons.add('<i class="fas fa-birthday-cake text-pink-400 drop-shadow-sm"></i>');
+                        else if(e.category === 'Pengingat') icons.add('<i class="fas fa-bell text-pink-400 drop-shadow-sm"></i>');
+                        else if(e.category === 'Pengumuman') icons.add('<i class="fas fa-bullhorn text-pink-400 drop-shadow-sm"></i>');
+                        else icons.add('<i class="fas fa-star text-pink-400 drop-shadow-sm"></i>'); 
                     });
-                    eventIcons = `<div class="text-[10px] mt-0.5 leading-none h-3">${Array.from(icons).join('')}</div>`;
+                    eventIcons = `<div class="text-[10px] mt-0.5 flex gap-1 justify-center items-center h-3">${Array.from(icons).join('')}</div>`;
                 } else {
-                    eventIcons = `<div class="text-[10px] mt-0.5 leading-none h-3"></div>`;
+                    eventIcons = `<div class="text-[10px] mt-0.5 h-3"></div>`;
                 }
                 
                 daysContainer.innerHTML += `<div class="${classes}" ${titleAttr} onclick="selectCalendarDate('${dayStr}')"><span>${d}</span>${eventIcons}</div>`;
