@@ -6,6 +6,9 @@
     <title>My Personal Planner 2026 | Future Engineer</title>
 
     <meta name="theme-color" content="#ffd1dc">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="apple-mobile-web-app-title" content="Tasya Planner">
@@ -124,7 +127,7 @@
         .glass-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px 0 rgba(253, 121, 168, 0.2); }
 
         /* --- Form Elements --- */
-        input[type="text"], input[type="password"], input[type="number"], input[type="date"], input[type="time"], select, textarea {
+        input[type="text"], input[type="url"], input[type="password"], input[type="number"], input[type="date"], input[type="time"], select, textarea {
             width: 100%; background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(253, 121, 168, 0.3); border-radius: 12px;
             padding: 10px 15px; font-family: 'Poppins', sans-serif;
@@ -139,7 +142,7 @@
         }
         button.btn-cute:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(253, 121, 168, 0.5); }
 
-        .custom-checkbox { appearance: none; width: 20px; height: 20px; border: 2px solid #fd79a8; border-radius: 5px; cursor: pointer; position: relative; background: white; transition: all 0.2s ease; }
+        .custom-checkbox { appearance: none; width: 20px; height: 20px; border: 2px solid #fd79a8; border-radius: 5px; cursor: pointer; position: relative; background: white; transition: all 0.2s ease; flex-shrink: 0; }
         .custom-checkbox:checked { background: #fd79a8; border-color: #fd79a8; }
         .custom-checkbox:checked::after { content: '\f00c'; font-family: 'FontAwesome'; color: white; font-size: 12px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
@@ -182,7 +185,7 @@
         .anim-1 { left: 10%; font-size: 2rem; animation-duration: 18s; } .anim-2 { left: 30%; font-size: 4rem; top: 20%; color: rgba(255, 234, 167, 0.2); }
         .anim-3 { left: 60%; font-size: 1.5rem; animation-duration: 12s; animation-delay: 2s; } .anim-4 { left: 85%; font-size: 5rem; top: 60%; } .anim-5 { left: 45%; font-size: 3rem; animation-duration: 25s; }
 
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #fd79a8; border-radius: 10px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #fd79a8; border-radius: 10px; }
 
         /* --- APP MENU STYLE --- */
         .menu-btn-giant { height: 115px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 0.9rem; gap: 8px; border-radius: 20px; cursor: pointer; text-align: center; width: 100%; }
@@ -192,6 +195,47 @@
         .table-rab th { background: rgba(253, 121, 168, 0.1); color: #d63031; font-weight: 700; white-space: nowrap; }
         .table-rab tr:hover { background: rgba(255, 255, 255, 0.5); }
 
+        /* --- SPREADSHEET STYLE TABLE (BEASISWA & LOMBA + RED DAY) --- */
+        .spreadsheet-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1.5px solid rgba(217, 70, 239, 0.25);
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 6px 24px rgba(217, 70, 239, 0.08);
+        }
+        .spreadsheet-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            min-width: 780px;
+        }
+        .spreadsheet-table thead th {
+            background: linear-gradient(180deg, #fdf4ff 0%, #fae8ff 100%);
+            color: #86198f;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-size: 0.72rem;
+            padding: 11px 12px;
+            border-bottom: 2px solid #f0abfc;
+            border-right: 1px solid #f5d0fe;
+            white-space: nowrap;
+            text-align: left;
+        }
+        .spreadsheet-table tbody td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f3e8ff;
+            border-right: 1px solid #faf5ff;
+            vertical-align: middle;
+        }
+        .spreadsheet-table tbody tr:nth-child(even) {
+            background-color: rgba(253, 244, 255, 0.45);
+        }
+        .spreadsheet-table tbody tr:hover {
+            background-color: rgba(254, 249, 195, 0.55);
+        }
+
         .envelope-card { background: linear-gradient(145deg, #ffffff, #fdf2f8); border: 2px solid #fbcfe8; border-radius: 16px; padding: 16px; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
         .envelope-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 30px; background: #fce7f3; border-bottom: 2px solid #fbcfe8; clip-path: polygon(0 0, 100% 0, 50% 100%); transition: all 0.3s ease; }
         .envelope-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(244, 114, 182, 0.2); }
@@ -199,35 +243,6 @@
         #letter-modal-content { background: #fff; background-image: radial-gradient(#fbcfe8 1px, transparent 1px); background-size: 20px 20px; }
         #pin-overlay, #vault-pin-overlay { backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
 
-        /* Game Custom Styles - 3D Effect */
-        .game-board-container { perspective: 800px; margin: 20px auto; width: fit-content; }
-        .game-grid { 
-            display: grid; gap: 8px; background: #2c3e50; padding: 15px; border-radius: 12px; 
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.3); 
-            transform: rotateX(15deg); transform-style: preserve-3d; transition: all 0.5s ease;
-        }
-        .game-tile { 
-            width: 60px; height: 60px; background: linear-gradient(145deg, #ecf0f1, #bdc3c7); 
-            border-radius: 8px; display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s; 
-            box-shadow: 0 6px 0 #95a5a6, 0 8px 15px rgba(0,0,0,0.2);
-            font-size: 2rem; color: #2c3e50; user-select: none; position: relative;
-        }
-        .game-tile:active { transform: translateY(4px); box-shadow: 0 2px 0 #95a5a6, 0 2px 5px rgba(0,0,0,0.2); }
-        .game-tile.start-tile { background: linear-gradient(145deg, #2ecc71, #27ae60); color: white; box-shadow: 0 6px 0 #219653; cursor: default; }
-        .game-tile.end-tile { background: linear-gradient(145deg, #e74c3c, #c0392b); color: white; box-shadow: 0 6px 0 #a93226; cursor: default; }
-
-        .level-indicator { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
-        .level-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; transition: 0.3s; }
-        .level-dot.active { background: #e84393; box-shadow: 0 0 10px #fd79a8; }
-
-        /* Drag & Drop Lab Styles */
-        .drag-item { transition: transform 0.2s; }
-        .drag-item:active { transform: scale(0.9); opacity: 0.8; }
-        .grid-cell { transition: all 0.2s; }
-        .grid-cell.hovered { border: 2px dashed #a3e635; background-color: rgba(163, 230, 53, 0.1); }
-
-        /* Timer Custom Spin */
         .animate-spin-slow { animation: spin-slow 15s linear infinite; }
 
         /* Scientific Calculator Buttons */
@@ -242,16 +257,12 @@
 
     <!-- FLOATING MARQUEE (RUNNING TEXT) - GENERAL NOTES -->
     <div class="marquee-container" id="running-text-bar">
-        <div class="marquee-content" id="running-text-content">
-            <!-- Injected via JS -->
-        </div>
+        <div class="marquee-content" id="running-text-content"></div>
     </div>
 
     <!-- FLOATING MARQUEE (RUNNING TEXT) - EVENT REMINDERS (BOTTOM) -->
     <div class="marquee-container marquee-container-bottom" id="running-text-bar-bottom">
-        <div class="marquee-content" id="running-text-content-bottom">
-            <!-- Injected via JS -->
-        </div>
+        <div class="marquee-content" id="running-text-content-bottom"></div>
     </div>
 
     <!-- EVENT BUBBLE POP-UP (HIGH PRIORITY) -->
@@ -264,9 +275,72 @@
         </div>
     </div>
 
+    <!-- MODAL PANDUAN NOTIFIKASI HP & ANDROID APK -->
+    <div id="pwa-guide-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 z-[99997] hidden flex items-center justify-center transition-opacity opacity-0 p-4" onclick="closePwaGuideModal()">
+        <div id="pwa-guide-content" class="w-full max-w-lg rounded-2xl shadow-2xl p-6 relative transform scale-95 transition-transform bg-white border-2 border-pink-300 max-h-[88vh] overflow-y-auto custom-scrollbar" onclick="event.stopPropagation()">
+            <button onclick="closePwaGuideModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
+            <div class="text-center mb-4 border-b border-pink-100 pb-3">
+                <div class="w-12 h-12 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl"><i class="fas fa-mobile-alt"></i></div>
+                <h2 class="text-xl font-extrabold text-pink-600 font-nunito">Notifikasi Layar HP & Mode APK</h2>
+                <p class="text-xs text-gray-500 mt-1">Agar reminder H-3, H-1, & Hari-H muncul di lock screen walau web ditutup</p>
+            </div>
+
+            <div class="bg-pink-50 border border-pink-200 rounded-xl p-3 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div>
+                    <p class="text-xs font-bold text-gray-700">Status Izin Notifikasi HP:</p>
+                    <p id="pwa-notif-status-text" class="text-xs font-extrabold text-pink-600">Mengecek...</p>
+                </div>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button onclick="requestNotificationPermission()" class="btn-cute text-xs px-3 py-2 flex-1 sm:flex-initial"><i class="fas fa-bell mr-1"></i> Aktifkan</button>
+                    <button onclick="sendTestHpNotification()" class="btn-cute !bg-gradient-to-r !from-purple-400 !to-pink-500 text-xs px-3 py-2 flex-1 sm:flex-initial"><i class="fas fa-paper-plane mr-1"></i> Test Notif</button>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-xs text-gray-700 leading-relaxed">
+                <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-200">
+                    <h4 class="font-bold text-yellow-800 mb-1"><i class="fas fa-star text-yellow-500 mr-1"></i> Cara 1: Install PWA ke Layar Utama (Tercepat)</h4>
+                    <ol class="list-decimal pl-4 space-y-1">
+                        <li>Buka web ini lewat <b>Google Chrome</b> di HP Android (wajib HTTPS / GitHub Pages / Vercel).</li>
+                        <li>Ketuk ikon <b>Titik Tiga (⋮)</b> di pojok kanan atas Chrome.</li>
+                        <li>Pilih <b>"Tambahkan ke Layar utama" (Add to Home Screen)</b> lalu klik <b>Install</b>.</li>
+                        <li>Buka <b>Pengaturan HP &gt; Aplikasi &gt; Tasya Planner &gt; Baterai</b>, pilih <b>"Tidak Dibatasi" (Unrestricted)</b> agar Service Worker selalu aktif di background.</li>
+                    </ol>
+                </div>
+                <div class="bg-blue-50 p-3 rounded-xl border border-blue-200">
+                    <h4 class="font-bold text-blue-800 mb-1"><i class="fab fa-android text-green-600 mr-1"></i> Cara 2: Bungkus Jadi File .APK (PWABuilder)</h4>
+                    <ol class="list-decimal pl-4 space-y-1">
+                        <li>Pastikan file <code>index.html</code>, <code>manifest.json</code>, dan <code>sw.js</code> sudah di-upload online (misal GitHub Pages / Netlify).</li>
+                        <li>Buka <b>pwabuilder.com</b>, masukkan URL web planner kamu, lalu klik <b>Package for Stores &gt; Android</b> untuk mengunduh file <b>.apk</b>.</li>
+                        <li>Install APK tersebut di HP agar berjalan sebagai aplikasi Android mandiri dengan notifikasi bar penuh.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CHECKLIST BERKAS BEASISWA & LOMBA -->
+    <div id="opp-checklist-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 z-[99996] hidden flex items-center justify-center transition-opacity opacity-0 p-4" onclick="closeOppChecklistModal()">
+        <div id="opp-checklist-content" class="w-full max-w-md rounded-2xl shadow-2xl p-6 relative transform scale-95 transition-transform bg-white border-2 border-fuchsia-300" onclick="event.stopPropagation()">
+            <button onclick="closeOppChecklistModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
+            <span id="modal-opp-cat" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-fuchsia-100 text-fuchsia-700 inline-block mb-1">Kategori</span>
+            <h3 id="modal-opp-title" class="text-lg font-extrabold text-gray-800 font-nunito mb-1">Judul Program</h3>
+            <p id="modal-opp-progress-text" class="text-xs font-bold text-fuchsia-600 mb-3">Progres Berkas: 0%</p>
+
+            <div class="w-full bg-fuchsia-100 rounded-full h-2.5 mb-4 overflow-hidden">
+                <div id="modal-opp-progress-bar" class="bg-gradient-to-r from-fuchsia-400 to-pink-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <div id="modal-opp-checklist-items" class="flex flex-col gap-2 max-h-56 overflow-y-auto custom-scrollbar pr-1 mb-4"></div>
+
+            <div class="flex gap-2 border-t border-fuchsia-100 pt-3">
+                <input type="text" id="modal-new-check-item" placeholder="Tambah syarat/berkas baru..." class="text-xs p-2 border-fuchsia-200">
+                <button type="button" onclick="addCheckItemToOpp()" class="btn-cute !bg-fuchsia-500 px-3 text-xs"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
     <!-- FLOATING ICONS (URGENT NOTES & DAILY REMINDER) -->
     <div class="fixed bottom-14 right-6 z-50 flex flex-col items-end gap-4">
-
         <!-- Daily Reminder Toggle -->
         <div class="flex flex-col items-end group relative">
             <div id="daily-reminder-modal" class="hidden mb-3 w-[85vw] sm:w-72 max-w-[288px] glass-card p-4 border-2 border-yellow-300 transform transition-all origin-bottom-right scale-95 opacity-0">
@@ -295,7 +369,6 @@
                 <i class="fas fa-bolt"></i>
             </button>
         </div>
-
     </div>
 
     <!-- Modals for Letters & Recipes -->
@@ -353,27 +426,34 @@
                 <i class="fas fa-arrow-left mr-1"></i> Menu
             </button>
 
-            <!-- DEADLINE NOTIF BUTTON & POPUP -->
-            <div class="absolute right-0 top-0 flex items-center gap-4 z-[60]">
+            <!-- TOP RIGHT CONTROLS: NOTIF HP + DEADLINE POPUP + LOGIN SYNC -->
+            <div class="absolute right-0 top-0 flex items-center gap-2 sm:gap-3 z-[60]">
+                <button onclick="openPwaGuideModal()" id="btn-hp-notif-trigger" class="bg-white border border-pink-200 shadow-sm px-2.5 py-1.5 rounded-full text-[11px] font-bold text-pink-600 flex items-center gap-1.5 hover:bg-pink-50 transition" title="Atur Notifikasi Layar HP & APK">
+                    <i class="fas fa-mobile-alt text-pink-500"></i>
+                    <span class="hidden sm:inline" id="btn-hp-notif-label">Aktifkan Notif HP</span>
+                    <span id="hp-notif-dot" class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                </button>
+
                 <div class="relative flex flex-col items-end">
                     <div class="cursor-pointer transition-transform hover:scale-110 relative bg-white border border-gray-200 shadow-sm p-1.5 rounded-full w-8 h-8 flex items-center justify-center" id="notif-status" onclick="toggleDeadlinePopup()" title="Deadline Alerts">
                         <i class="fas fa-bell text-pink-500 text-sm" id="notif-icon"></i>
                         <span id="deadline-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full hidden shadow-sm border border-white">0</span>
                     </div>
 
-                    <div id="deadline-popup-modal" class="hidden fixed top-20 right-4 left-4 mx-auto sm:absolute sm:top-10 sm:right-0 sm:left-auto sm:mx-0 mt-2 w-auto max-w-[90vw] sm:w-72 md:w-80 glass-card p-4 border-2 border-pink-300 transform transition-all scale-95 opacity-0 z-[100] shadow-xl sm:origin-top-right rounded-xl box-border overflow-hidden">
+                    <div id="deadline-popup-modal" class="hidden fixed top-20 right-4 left-4 mx-auto sm:absolute sm:top-10 sm:right-0 sm:left-auto sm:mx-0 mt-2 w-auto max-w-[90vw] sm:w-80 glass-card p-4 border-2 border-pink-300 transform transition-all scale-95 opacity-0 z-[100] shadow-xl sm:origin-top-right rounded-xl box-border overflow-hidden">
                         <div class="flex justify-between items-center border-b border-pink-100 pb-2 mb-2">
                             <h3 class="text-pink-600 font-bold text-sm"><i class="fas fa-tasks mr-1"></i> Deadline Mendekat!</h3>
-                            <button onclick="requestNotificationPermission()" class="text-[10px] bg-pink-50 text-pink-500 px-2 py-1 rounded hover:bg-pink-100 border border-pink-200 shadow-sm" title="Aktifkan Alarm Browser"><i class="fas fa-volume-up"></i></button>
+                            <div class="flex gap-1.5">
+                                <button onclick="requestNotificationPermission()" class="text-[10px] bg-pink-50 text-pink-600 px-2 py-1 rounded hover:bg-pink-100 border border-pink-200 shadow-sm font-bold" title="Aktifkan Notifikasi HP"><i class="fas fa-bell mr-1"></i>Notif HP</button>
+                                <button onclick="sendTestHpNotification()" class="text-[10px] bg-purple-50 text-purple-600 px-2 py-1 rounded hover:bg-purple-100 border border-purple-200 shadow-sm font-bold" title="Test Notif ke Layar HP"><i class="fas fa-vial"></i></button>
+                            </div>
                         </div>
-                        <div id="deadline-popup-list" class="flex flex-col gap-2 max-h-60 overflow-y-auto overflow-x-hidden w-full custom-scrollbar pr-1">
-                            <!-- JS injected -->
-                        </div>
+                        <div id="deadline-popup-list" class="flex flex-col gap-2 max-h-60 overflow-y-auto overflow-x-hidden w-full custom-scrollbar pr-1"></div>
                     </div>
                 </div>
 
                 <button id="btn-login-google" onclick="signInGoogle()" class="bg-white border border-gray-200 shadow-sm px-3 py-1.5 rounded-full text-xs font-bold text-gray-600 flex items-center hover:bg-gray-50 transition">
-                    <i class="fab fa-google text-red-500 mr-2"></i> Login Sync
+                    <i class="fab fa-google text-red-500 mr-1.5"></i> Sync
                 </button>
                 <div id="user-profile" class="hidden flex items-center gap-2 bg-white px-2 py-1 rounded-full shadow-sm border border-pink-100">
                     <img id="user-avatar" src="" class="w-6 h-6 rounded-full" alt="Avatar">
@@ -386,44 +466,73 @@
             <p class="text-gray-600 font-medium text-base md:text-lg" id="main-subtitle"><i class="fas fa-graduation-cap text-yellow-500 mr-2"></i> 2026 Future Engineer Dashboard</p>
         </header>
 
-        <!-- APP DRAWER MENU - 2 COLUMN GRID DESIGN -->
+        <!-- APP DRAWER MENU - 2 COLUMN GRID DESIGN (CLEANED & IMPROVED) -->
         <section id="home-section" class="grid grid-cols-2 gap-4 mt-10 w-full max-w-sm mx-auto px-2">
-            
-            <!-- MENU GOALS BARU (1 BARIS PENUH) -->
+            <!-- GOALS & SUPPORT -->
             <div class="glass-card menu-btn-giant border-4 border-amber-300 hover:border-amber-500 text-amber-600 col-span-2 relative" onclick="showSection('goals-section')">
                 <i class="fas fa-bullseye text-amber-500 text-3xl mb-1"></i>
                 <span class="font-extrabold font-nunito text-lg tracking-wide">GOALS & SUPPORT</span>
             </div>
 
-            <div class="glass-card menu-btn-giant border-4 border-orange-200 hover:border-orange-400 text-orange-600" onclick="showSection('schedule-section')"><i class="fas fa-calendar-days text-orange-500"></i><span class="font-extrabold font-nunito">Jadwal & Kuis</span></div>
+            <div class="glass-card menu-btn-giant border-4 border-orange-200 hover:border-orange-400 text-orange-600" onclick="showSection('schedule-section')">
+                <i class="fas fa-calendar-days text-orange-500"></i>
+                <span class="font-extrabold font-nunito">Jadwal & Kuis</span>
+            </div>
 
             <div class="glass-card menu-btn-giant border-4 border-pink-200 hover:border-pink-400 text-pink-600 relative" onclick="showSection('planner-section')">
                 <span id="planner-menu-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-6 h-6 flex items-center justify-center rounded-full hidden shadow-lg animate-bounce border-2 border-white">0</span>
-                <i class="far fa-calendar-alt text-pink-500"></i><span class="font-extrabold font-nunito">My Planner</span>
+                <i class="far fa-calendar-alt text-pink-500"></i>
+                <span class="font-extrabold font-nunito">My Planner</span>
             </div>
 
-            <div class="glass-card menu-btn-giant border-4 border-fuchsia-200 hover:border-fuchsia-400 text-fuchsia-600" onclick="showSection('beasiswa-section')"><i class="fas fa-graduation-cap text-fuchsia-500"></i><span class="font-extrabold font-nunito">Beasiswa</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-rose-200 hover:border-rose-400 text-rose-600" onclick="showSection('period-section')"><i class="fas fa-droplet text-rose-500"></i><span class="font-extrabold font-nunito">Mens Period</span></div>
-            
-            <div class="glass-card menu-btn-giant border-4 border-red-200 hover:border-red-400 text-red-600" onclick="showSection('timer-section')"><i class="fas fa-stopwatch text-red-500"></i><span class="font-extrabold font-nunito">Focus Engine</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-lime-200 hover:border-lime-400 text-lime-700" onclick="showSection('lab-section')"><i class="fas fa-layer-group text-lime-500"></i><span class="font-extrabold font-nunito">Virtual Lab 2D</span></div>
-            
-            <div class="glass-card menu-btn-giant border-4 border-yellow-200 hover:border-yellow-400 text-yellow-700" onclick="showSection('finance-section')"><i class="fas fa-wallet text-yellow-500"></i><span class="font-extrabold font-nunito">Keuangan Kos</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-teal-200 hover:border-teal-400 text-teal-600" onclick="showSection('recipes-section')"><i class="fas fa-utensils text-teal-500"></i><span class="font-extrabold font-nunito">Resep & Gizi</span></div>
-            
-            <div class="glass-card menu-btn-giant border-4 border-cyan-200 hover:border-cyan-400 text-cyan-600" onclick="showSection('academic-canvas-section')"><i class="fas fa-paint-brush text-cyan-500"></i><span class="font-extrabold font-nunito">Academic Canvas</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-emerald-200 hover:border-emerald-400 text-emerald-600" onclick="showSection('robo-blueprint-section')"><i class="fas fa-network-wired text-emerald-500"></i><span class="font-extrabold font-nunito">Robo Blueprint</span></div>
-            
-            <div class="glass-card menu-btn-giant border-4 border-slate-300 hover:border-slate-500 text-slate-700" onclick="showSection('kalkulator-section')"><i class="fas fa-calculator text-slate-600"></i><span class="font-extrabold font-nunito">TMB Calc</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-purple-200 hover:border-purple-400 text-purple-600" onclick="showSection('diary-section')"><i class="fas fa-book-heart text-purple-500"></i><span class="font-extrabold font-nunito">Diary & Evaluasi</span></div>
-            
-            <div class="glass-card menu-btn-giant border-4 border-indigo-200 hover:border-indigo-400 text-indigo-600" onclick="showSection('vault-section')"><i class="fas fa-key text-indigo-500"></i><span class="font-extrabold font-nunito">Secure Notes</span></div>
-            <div class="glass-card menu-btn-giant border-4 border-blue-200 hover:border-blue-400 text-blue-600" onclick="showSection('quotes-section')"><i class="fas fa-quote-right text-blue-500"></i><span class="font-extrabold font-nunito">Motivasi & Quotes</span></div>
-            
-            <div class="glass-card menu-btn-giant border-4 border-gray-300 hover:border-gray-500 text-gray-700" onclick="showSection('game-section')"><i class="fas fa-robot text-gray-600"></i><span class="font-extrabold font-nunito">Robotic Puzzle</span></div>
+            <div class="glass-card menu-btn-giant border-4 border-fuchsia-200 hover:border-fuchsia-400 text-fuchsia-600 relative" onclick="showSection('beasiswa-section')">
+                <span id="opp-menu-badge" class="absolute -top-2 -right-2 bg-fuchsia-600 text-white text-[10px] font-bold w-6 h-6 flex items-center justify-center rounded-full hidden shadow-md border-2 border-white">0</span>
+                <i class="fas fa-award text-fuchsia-500"></i>
+                <span class="font-extrabold font-nunito">Beasiswa & Lomba</span>
+            </div>
+
+            <div class="glass-card menu-btn-giant border-4 border-rose-200 hover:border-rose-400 text-rose-600" onclick="showSection('period-section')">
+                <i class="fas fa-droplet text-rose-500"></i>
+                <span class="font-extrabold font-nunito">Red Day Tracker</span>
+            </div>
+
+            <div class="glass-card menu-btn-giant border-4 border-yellow-200 hover:border-yellow-400 text-yellow-700" onclick="showSection('finance-section')">
+                <i class="fas fa-wallet text-yellow-500"></i>
+                <span class="font-extrabold font-nunito">Keuangan Kos</span>
+            </div>
+
+            <div class="glass-card menu-btn-giant border-4 border-teal-200 hover:border-teal-400 text-teal-600" onclick="showSection('recipes-section')">
+                <i class="fas fa-utensils text-teal-500"></i>
+                <span class="font-extrabold font-nunito">Resep & Gizi</span>
+            </div>
+
+            <div class="glass-card menu-btn-giant border-4 border-cyan-200 hover:border-cyan-400 text-cyan-600" onclick="showSection('academic-canvas-section')">
+                <i class="fas fa-paint-brush text-cyan-500"></i>
+                <span class="font-extrabold font-nunito">Academic Canvas</span>
+            </div>
+
+            <div class="glass-card menu-btn-giant border-4 border-slate-300 hover:border-slate-500 text-slate-700" onclick="showSection('kalkulator-section')">
+                <i class="fas fa-calculator text-slate-600"></i>
+                <span class="font-extrabold font-nunito">TMB Calc</span>
+            </div>
+
+            <div class="glass-card menu-btn-giant border-4 border-purple-200 hover:border-purple-400 text-purple-600" onclick="showSection('diary-section')">
+                <i class="fas fa-book-heart text-purple-500"></i>
+                <span class="font-extrabold font-nunito">Diary & Evaluasi</span>
+            </div>
+
+            <div class="glass-card menu-btn-giant border-4 border-indigo-200 hover:border-indigo-400 text-indigo-600" onclick="showSection('vault-section')">
+                <i class="fas fa-key text-indigo-500"></i>
+                <span class="font-extrabold font-nunito">Secure Notes</span>
+            </div>
+
+            <div class="glass-card menu-btn-giant border-4 border-blue-200 hover:border-blue-400 text-blue-600 col-span-2" onclick="showSection('quotes-section')">
+                <i class="fas fa-quote-right text-blue-500"></i>
+                <span class="font-extrabold font-nunito">Motivasi & Quotes</span>
+            </div>
         </section>
 
-        <!-- HALAMAN GOALS BARU (Dipisah dari Planner) -->
+        <!-- HALAMAN GOALS & SUPPORT -->
         <main id="goals-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
             <section class="glass-card p-5 flex flex-col md:col-span-2 min-h-[300px]">
                 <h2 class="text-xl font-bold mb-3 text-amber-500"><i class="fas fa-star mr-2"></i> Long-Term Goals</h2>
@@ -433,7 +542,7 @@
                     <button type="submit" class="btn-cute !bg-amber-400"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </section>
-            
+
             <section class="glass-card p-5 flex flex-col md:col-span-2 relative">
                 <h2 class="text-xl font-bold mb-4 text-pink-500 flex items-center justify-center"><i class="fas fa-heart text-red-400 mr-2"></i> My Support System</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
@@ -445,7 +554,7 @@
                     <textarea id="input-motivation" rows="2" class="w-full text-center italic text-base md:text-lg font-bold text-pink-600 bg-transparent outline-none resize-none" placeholder="Tulis kalimat penyemangatmu di sini..."></textarea>
                 </div>
             </section>
-            
+
             <section class="glass-card p-5 flex flex-col items-center md:col-span-2">
                 <h2 class="text-xl font-bold mb-4 text-blue-500 flex items-center"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i> My Inspiration</h2>
                 <div class="flex flex-col sm:flex-row gap-6 w-full items-center justify-center">
@@ -455,179 +564,249 @@
             </section>
         </main>
 
-
-        <main id="beasiswa-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
-            <section class="glass-card p-5 md:p-6 border-2 border-fuchsia-300 w-full min-h-[500px] flex flex-col">
-                <h2 class="text-xl font-bold text-fuchsia-600 mb-4 flex items-center"><i class="fas fa-graduation-cap mr-2 text-fuchsia-400"></i> Tracker Perjalanan Beasiswa</h2>
-                <p class="text-xs text-gray-500 mb-4">*Data ini akan langsung terintegrasi dengan Notifikasi Deadline kamu loh!</p>
-
-                <form id="form-scholarship" class="flex flex-col gap-3 mb-6 bg-fuchsia-50 p-4 rounded-xl border border-fuchsia-200 shadow-sm">
-                    <input type="text" id="input-scholarship-name" placeholder="Nama Beasiswa / Target (Misal: LPDP / BSI)..." required class="text-sm p-2 rounded w-full border border-fuchsia-300 outline-none focus:border-fuchsia-500">
-                    <div class="flex flex-col md:flex-row gap-2">
-                        <select id="input-scholarship-status" class="text-sm p-2 rounded md:w-1/3 border border-fuchsia-300">
-                            <option value="Persiapan Berkas">📝 Persiapan Berkas</option>
-                            <option value="Menulis Essai">✍️ Menulis Essai</option>
-                            <option value="Submit Daftar">📤 Submit Pendaftaran</option>
-                            <option value="Wawancara">🗣️ Wawancara</option>
-                        </select>
-                        <div class="flex items-center gap-2 md:w-2/3 bg-white p-1 rounded border border-fuchsia-200">
-                            <label class="text-[10px] font-bold text-gray-500 ml-1">Deadline:</label>
-                            <input type="date" id="input-scholarship-date" class="text-xs p-1.5 rounded flex-grow outline-none bg-gray-50" required>
-                            <input type="time" id="input-scholarship-time" class="text-xs p-1.5 rounded flex-grow outline-none bg-gray-50" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-cute !bg-gradient-to-r !from-fuchsia-400 !to-purple-500 w-full"><i class="fas fa-plus mr-2"></i>Tambah & Set Auto Notif</button>
-                </form>
-                
-                <h3 class="font-bold text-sm text-gray-600 mb-3 border-b border-fuchsia-100 pb-1">Daftar List Beasiswa:</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto max-h-[400px] pr-2 custom-scrollbar" id="scholarship-list"></div>
-            </section>
-        </main>
-
-        <main id="period-section" class="flex flex-col gap-6 hidden max-w-2xl mx-auto w-full">
-            <section class="glass-card p-5 border-2 border-rose-300">
-                <h2 class="text-xl font-bold text-rose-600 mb-4 flex items-center"><i class="fas fa-droplet mr-2 text-rose-400"></i> Period & Cycle Tracker</h2>
-
-                <form id="form-period" class="flex flex-col md:flex-row gap-3 mb-6 bg-rose-50 p-3 rounded-lg border border-rose-100 shadow-sm">
-                    <div class="flex-1">
-                        <label class="text-[10px] font-bold text-rose-500">Tanggal Mulai Haid</label>
-                        <input type="date" id="period-start" required class="text-sm w-full p-2 border-rose-200 rounded">
-                    </div>
-                    <div class="flex-1">
-                        <label class="text-[10px] font-bold text-rose-500">Durasi (Hari)</label>
-                        <input type="number" id="period-duration" required placeholder="Misal: 5" class="text-sm w-full p-2 border-rose-200 rounded" min="1" max="14">
-                    </div>
-                    <div class="flex items-end">
-                        <button type="submit" class="btn-cute !bg-gradient-to-r !from-rose-400 !to-pink-500 w-full md:w-auto h-10 px-6"><i class="fas fa-plus"></i> Catat</button>
-                    </div>
-                </form>
-
-                <div class="flex justify-between items-center mb-4 bg-white p-2 rounded-lg border border-rose-100 shadow-sm">
-                    <button id="prev-month-period" class="text-rose-500 font-bold px-3 py-1 hover:bg-rose-50 rounded"><i class="fas fa-chevron-left"></i></button>
-                    <h3 id="period-month-year" class="font-bold text-gray-700 text-sm">Bulan Tahun</h3>
-                    <button id="next-month-period" class="text-rose-500 font-bold px-3 py-1 hover:bg-rose-50 rounded"><i class="fas fa-chevron-right"></i></button>
+        <!-- HALAMAN TERPADU: BEASISWA & LOMBA (SPREADSHEET + WORKFLOW) -->
+        <main id="beasiswa-section" class="flex flex-col gap-6 hidden max-w-6xl mx-auto w-full">
+            <!-- Summary Strip -->
+            <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="glass-card p-4 border-l-4 border-fuchsia-400">
+                    <span class="text-[11px] font-bold text-gray-500">Total Program</span>
+                    <p id="opp-stat-total" class="text-2xl font-black text-fuchsia-700">0</p>
                 </div>
-
-                <div class="calendar-grid text-xs font-bold text-gray-500 mb-2">
-                    <div class="text-red-500">Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+                <div class="glass-card p-4 border-l-4 border-purple-400">
+                    <span class="text-[11px] font-bold text-gray-500">🎓 Beasiswa</span>
+                    <p id="opp-stat-beasiswa" class="text-2xl font-black text-purple-700">0</p>
                 </div>
-                <div id="period-calendar-days" class="calendar-grid mb-6"></div>
-
-                <h3 class="font-bold text-rose-600 mb-3 border-b border-rose-100 pb-1 text-sm"><i class="fas fa-history mr-2"></i>Riwayat Siklus</h3>
-                <div id="period-history-list" class="flex flex-col gap-2 max-h-40 overflow-y-auto custom-scrollbar pr-1"></div>
-            </section>
-        </main>
-
-        <main id="lab-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
-            <section class="glass-card p-6 border-2 border-lime-300">
-                <h2 class="text-2xl font-bold text-lime-700 mb-2"><i class="fas fa-layer-group mr-2 text-lime-500"></i> 2D Drag & Drop Engine Builder</h2>
-                <p class="text-sm text-gray-600 mb-6 font-medium">Rakit blueprint sirkuit dan mesinmu secara visual. Kumpulkan komponennya dari sesi Engine Focus Timer!</p>
-
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="w-full md:w-1/4 bg-white border border-lime-200 rounded-xl p-4 shadow-sm flex flex-col gap-3">
-                        <div class="flex justify-between items-center border-b border-lime-100 pb-2">
-                            <h3 class="font-bold text-gray-700 text-sm"><i class="fas fa-toolbox mr-1 text-lime-500"></i> Toolbox</h3>
-                            <span class="text-xs bg-lime-100 text-lime-700 font-bold px-2 py-1 rounded" id="lab-parts-counter">Part: 0</span>
-                        </div>
-                        <p class="text-[10px] text-gray-400 italic">Drag icon ini ke area grid gelap.</p>
-                        <div id="toolbox" class="grid grid-cols-2 gap-3 mt-2">
-                            <div class="drag-item cursor-grab bg-gray-50 hover:bg-lime-50 p-3 rounded-lg text-center border border-gray-200 shadow-sm transition-colors" draggable="true" ondragstart="dragComp(event)" id="drag-arduino">
-                                <i class="fas fa-microchip text-teal-600 text-3xl mb-2 pointer-events-none"></i><br><span class="text-[10px] font-bold text-gray-600 pointer-events-none">Arduino</span>
-                            </div>
-                            <div class="drag-item cursor-grab bg-gray-50 hover:bg-lime-50 p-3 rounded-lg text-center border border-gray-200 shadow-sm transition-colors" draggable="true" ondragstart="dragComp(event)" id="drag-motor">
-                                <i class="fas fa-cogs text-orange-600 text-3xl mb-2 pointer-events-none"></i><br><span class="text-[10px] font-bold text-gray-600 pointer-events-none">Motor DC</span>
-                            </div>
-                            <div class="drag-item cursor-grab bg-gray-50 hover:bg-lime-50 p-3 rounded-lg text-center border border-gray-200 shadow-sm transition-colors" draggable="true" ondragstart="dragComp(event)" id="drag-led">
-                                <i class="fas fa-lightbulb text-yellow-500 text-3xl mb-2 pointer-events-none"></i><br><span class="text-[10px] font-bold text-gray-600 pointer-events-none">LED</span>
-                            </div>
-                            <div class="drag-item cursor-grab bg-gray-50 hover:bg-lime-50 p-3 rounded-lg text-center border border-gray-200 shadow-sm transition-colors" draggable="true" ondragstart="dragComp(event)" id="drag-sensor">
-                                <i class="fas fa-broadcast-tower text-blue-500 text-3xl mb-2 pointer-events-none"></i><br><span class="text-[10px] font-bold text-gray-600 pointer-events-none">Sensor</span>
-                            </div>
-                            <div class="drag-item cursor-grab bg-gray-50 hover:bg-lime-50 p-3 rounded-lg text-center border border-gray-200 shadow-sm transition-colors" draggable="true" ondragstart="dragComp(event)" id="drag-wheel">
-                                <i class="fas fa-circle-notch text-gray-700 text-3xl mb-2 pointer-events-none"></i><br><span class="text-[10px] font-bold text-gray-600 pointer-events-none">Roda</span>
-                            </div>
-                            <div class="drag-item cursor-grab bg-gray-50 hover:bg-lime-50 p-3 rounded-lg text-center border border-gray-200 shadow-sm transition-colors" draggable="true" ondragstart="dragComp(event)" id="drag-wire">
-                                <i class="fas fa-minus text-red-500 text-3xl mb-2 pointer-events-none"></i><br><span class="text-[10px] font-bold text-gray-600 pointer-events-none">Kabel Jumper</span>
-                            </div>
-                        </div>
-                        <button onclick="clearVirtualGrid()" class="btn-cute w-full !bg-gradient-to-r !from-red-400 !to-rose-500 text-xs mt-auto py-2"><i class="fas fa-eraser mr-1"></i> Bersihkan Area</button>
-                    </div>
-
-                    <div class="w-full md:w-3/4 bg-[#1e293b] rounded-xl p-4 shadow-inner relative overflow-x-auto border-4 border-gray-700">
-                        <div id="virtual-grid" class="grid grid-cols-8 grid-rows-5 gap-1 min-w-[500px] h-[400px]">
-                            <!-- Cells generated by JS -->
-                        </div>
-                    </div>
+                <div class="glass-card p-4 border-l-4 border-amber-400">
+                    <span class="text-[11px] font-bold text-gray-500">🏆 Lomba</span>
+                    <p id="opp-stat-lomba" class="text-2xl font-black text-amber-600">0</p>
+                </div>
+                <div class="glass-card p-4 border-l-4 border-red-400">
+                    <span class="text-[11px] font-bold text-gray-500">🔥 Deadline &le; 7 Hari</span>
+                    <p id="opp-stat-urgent" class="text-2xl font-black text-red-600">0</p>
                 </div>
             </section>
-        </main>
 
-        <main id="timer-section" class="flex flex-col gap-6 hidden max-w-2xl mx-auto w-full text-center">
-            <section class="glass-card p-8 border-2 border-red-300 relative overflow-hidden">
-                <i class="fas fa-cogs absolute top-4 right-4 text-4xl text-red-100 animate-spin-slow"></i>
-                <h2 class="text-3xl font-black text-red-600 mb-2"><i class="fas fa-stopwatch mr-2 text-red-500"></i> Engine Focus Timer</h2>
-                <p class="text-sm text-gray-500 mb-6 font-medium">Bakar semangat belajarmu, Calon Engineer! Set waktu dan fokus penuh tanpa interupsi.</p>
-
-                <div class="w-64 h-64 mx-auto rounded-full border-8 border-red-200 flex items-center justify-center bg-white shadow-inner relative mb-6">
-                    <div id="timer-display" class="text-6xl font-black text-gray-800 font-nunito tracking-widest z-10">25:00</div>
-                </div>
-
-                <div class="flex justify-center gap-4 mb-6 flex-wrap">
-                    <button onclick="setTimer(25)" class="px-4 py-2 bg-red-100 text-red-700 font-bold rounded-lg hover:bg-red-200 shadow-sm transition"><i class="fas fa-fire mr-1"></i> 25 Min</button>
-                    <button onclick="setTimer(50)" class="px-4 py-2 bg-blue-100 text-blue-700 font-bold rounded-lg hover:bg-blue-200 shadow-sm transition"><i class="fas fa-brain mr-1"></i> 50 Min (Deep Work)</button>
-                    <button onclick="setTimer(5)" class="px-4 py-2 bg-green-100 text-green-700 font-bold rounded-lg hover:bg-green-200 shadow-sm transition"><i class="fas fa-mug-hot mr-1"></i> 5 Min (Break)</button>
-                </div>
-
-                <div class="flex justify-center gap-4">
-                    <button id="btn-timer-start" onclick="startTimer()" class="btn-cute !bg-red-400 text-lg px-8 py-3"><i class="fas fa-play mr-2"></i> Ignite Engine</button>
-                    <button id="btn-timer-pause" onclick="pauseTimer()" class="btn-cute !bg-yellow-400 text-lg px-6 py-3 hidden text-yellow-900"><i class="fas fa-pause mr-2"></i> Pause</button>
-                    <button onclick="resetTimer()" class="btn-cute !bg-gray-400 text-lg px-6 py-3"><i class="fas fa-redo mr-2"></i> Reset</button>
-                </div>
-
-                <div class="mt-8 border-t-2 border-dashed border-red-200 pt-6">
-                    <h3 class="font-bold text-red-600 mb-2"><i class="fas fa-cogs mr-1"></i> Engine Builder Progress</h3>
-                    <p class="text-xs text-gray-500 mb-4">Selesaikan 1 sesi fokus untuk mengumpulkan komponen mesinmu hari ini! Komponen bisa dipakai di menu <b>Virtual Lab 2D</b>.</p>
-                    <div id="engine-parts-container" class="flex justify-center gap-4 flex-wrap text-3xl text-gray-700">
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <main id="robo-blueprint-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
-            <section class="glass-card p-6 border-2 border-emerald-300">
-                <h2 class="text-xl font-bold text-emerald-600 mb-4"><i class="fas fa-microchip mr-2 text-emerald-400"></i> Wiring to Code Generator</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="flex flex-col gap-4">
-                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
-                            <label class="text-xs font-bold text-gray-600">Pilih Komponen:</label>
-                            <select id="robo-comp" class="w-full text-sm p-2 border border-emerald-200 rounded mb-3 outline-none focus:border-emerald-500">
-                                <option value="LED">Lampu LED</option>
-                                <option value="Motor">Motor DC</option>
-                                <option value="Ultrasonic">Sensor Ultrasonik (Trig/Echo)</option>
-                                <option value="Buzzer">Buzzer</option>
-                            </select>
-                            <label class="text-xs font-bold text-gray-600">Pin Arduino:</label>
-                            <input type="number" id="robo-pin" class="w-full text-sm p-2 border border-emerald-200 rounded mb-3 outline-none focus:border-emerald-500" placeholder="Contoh: 13 (Maks 13)" min="0" max="13">
-                            <button onclick="addWire()" class="btn-cute !bg-gradient-to-r !from-emerald-400 !to-teal-500 w-full shadow-lg"><i class="fas fa-plug mr-2"></i> Sambung Kabel</button>
-                        </div>
-                        <div class="flex-grow bg-white border border-gray-200 rounded-xl p-4 shadow-sm h-64 overflow-y-auto">
-                            <h3 class="text-xs font-bold text-gray-500 mb-2 border-b pb-1">Wiring List (Contekan Fisik):</h3>
-                            <ul id="wiring-list" class="text-xs text-gray-700 flex flex-col gap-2"></ul>
-                        </div>
-                    </div>
+            <!-- Form Input / Edit Terstruktur -->
+            <section class="glass-card p-5 md:p-6 border-2 border-fuchsia-300 w-full">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                     <div>
-                        <div class="bg-gray-900 rounded-xl p-5 h-full flex flex-col relative shadow-inner border-2 border-gray-700">
-                            <h3 class="text-green-400 font-mono text-sm mb-3 flex items-center justify-between">
-                                <span><i class="fas fa-code mr-2"></i> Auto-Generated C++</span>
-                                <button onclick="copyCode()" class="text-gray-400 hover:text-white transition" title="Copy Code"><i class="fas fa-copy"></i></button>
-                            </h3>
-                            <textarea id="auto-cpp-code" class="w-full flex-grow bg-transparent text-gray-300 font-mono text-sm resize-none outline-none custom-scrollbar" readonly>// Kode akan terbuat otomatis saat kabel disambung...</textarea>
-                        </div>
+                        <h2 class="text-xl font-bold text-fuchsia-700 flex items-center"><i class="fas fa-award mr-2 text-fuchsia-500"></i> Manajemen Beasiswa & Lomba</h2>
+                        <p class="text-xs text-gray-500">Kelola alur seleksi secara terstruktur. Setiap Deadline otomatis terhubung ke <b>Deadline Tracker</b> & <b>Notifikasi Layar HP (H-3, H-1, Hari-H)</b>.</p>
                     </div>
+                    <span id="opp-form-mode-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-fuchsia-100 text-fuchsia-700 self-start">Mode: Tambah Baru</span>
+                </div>
+
+                <form id="form-opportunity" class="grid grid-cols-1 md:grid-cols-12 gap-3 bg-fuchsia-50 bg-opacity-70 p-4 rounded-2xl border border-fuchsia-200">
+                    <input type="hidden" id="opp-edit-id" value="">
+
+                    <div class="md:col-span-5">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Nama Program / Kompetisi *</label>
+                        <input type="text" id="opp-name" placeholder="Ex: Beasiswa Unggulan / Lomba KTI Nasional..." required class="text-xs mt-1 border-fuchsia-200">
+                    </div>
+
+                    <div class="md:col-span-3">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Kategori *</label>
+                        <select id="opp-category" required class="text-xs mt-1 border-fuchsia-200">
+                            <option value="Beasiswa">🎓 Beasiswa</option>
+                            <option value="Lomba">🏆 Lomba / Kompetisi</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Tahapan Proses Saat Ini *</label>
+                        <select id="opp-stage" required class="text-xs mt-1 border-fuchsia-200">
+                            <option value="1. Riset & Syarat">1. Riset & Syarat</option>
+                            <option value="2. Penyusunan Berkas/Esai">2. Penyusunan Berkas / Esai / Karya</option>
+                            <option value="3. Submit Pendaftaran">3. Submit Pendaftaran</option>
+                            <option value="4. Seleksi Administrasi">4. Seleksi Administrasi</option>
+                            <option value="5. Wawancara / Final">5. Wawancara / Presentasi Final</option>
+                            <option value="6. Pengumuman (Lolos)">6. Pengumuman (Lolos 🎉)</option>
+                            <option value="7. Selesai / Evaluasi">7. Selesai / Evaluasi</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Link Akses (Pendaftaran / Guidebook)</label>
+                        <input type="url" id="opp-link" placeholder="https://..." class="text-xs mt-1 border-fuchsia-200">
+                    </div>
+
+                    <div class="md:col-span-3">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Tanggal Deadline (DL) *</label>
+                        <input type="date" id="opp-dl-date" required class="text-xs mt-1 border-fuchsia-200">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Jam DL *</label>
+                        <input type="time" id="opp-dl-time" value="23:59" required class="text-xs mt-1 border-fuchsia-200">
+                    </div>
+
+                    <div class="md:col-span-3">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Catatan / Syarat Utama</label>
+                        <input type="text" id="opp-notes" placeholder="Ex: Min IPK 3.5, Esai 1000 kata..." class="text-xs mt-1 border-fuchsia-200">
+                    </div>
+
+                    <div class="md:col-span-12 flex flex-wrap gap-2 justify-end pt-2 border-t border-fuchsia-200/60">
+                        <button type="button" id="btn-cancel-opp" onclick="resetOpportunityForm()" class="hidden px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 text-gray-700 hover:bg-gray-300 transition">Batal Edit</button>
+                        <button type="submit" id="btn-submit-opp" class="btn-cute !bg-gradient-to-r !from-fuchsia-500 !to-purple-600 text-xs px-6 py-2.5">
+                            <i class="fas fa-save mr-1.5"></i> Simpan ke Tabel & Set Notif HP
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Spreadsheet Table View -->
+            <section class="glass-card p-5 md:p-6 border-2 border-fuchsia-200 w-full">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                    <h3 class="text-lg font-extrabold text-fuchsia-700 flex items-center">
+                        <i class="fas fa-table mr-2 text-fuchsia-500"></i> Spreadsheet Tracker Beasiswa & Lomba
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <input type="text" id="search-opp" oninput="renderOpportunities()" placeholder="Cari program..." class="text-xs py-1.5 px-3 w-40 sm:w-48 border-fuchsia-200">
+                        <select id="filter-opp-category" onchange="renderOpportunities()" class="text-xs py-1.5 px-3 w-36 border-fuchsia-200">
+                            <option value="All">Semua Kategori</option>
+                            <option value="Beasiswa">🎓 Beasiswa</option>
+                            <option value="Lomba">🏆 Lomba</option>
+                        </select>
+                        <select id="sort-opp" onchange="renderOpportunities()" class="text-xs py-1.5 px-3 w-40 border-fuchsia-200">
+                            <option value="dl-asc">Urut: DL Terdekat</option>
+                            <option value="name-asc">Urut: Nama (A-Z)</option>
+                            <option value="progress-desc">Urut: Progres Tertinggi</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="spreadsheet-wrapper custom-scrollbar">
+                    <table class="spreadsheet-table">
+                        <thead>
+                            <tr>
+                                <th class="w-10 text-center">No</th>
+                                <th class="min-w-[220px]">Nama Program / Kompetisi</th>
+                                <th class="w-28">Kategori</th>
+                                <th class="min-w-[210px]">Tahapan & Progres Saat Ini</th>
+                                <th class="w-36">Akses</th>
+                                <th class="w-40">DL (Deadline)</th>
+                                <th class="w-28 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="opp-table-body"></tbody>
+                    </table>
                 </div>
             </section>
         </main>
 
+        <!-- HALAMAN RED DAY TRACKER (DIPERBAIKI & TERSTRUKTUR) -->
+        <main id="period-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
+            <!-- Summary Status Cards -->
+            <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="glass-card p-4 border-l-4 border-rose-500">
+                    <span class="text-[11px] font-bold text-gray-500">Status Siklus</span>
+                    <p id="period-stat-status" class="text-sm md:text-base font-black text-rose-600 mt-1">Belum ada data</p>
+                </div>
+                <div class="glass-card p-4 border-l-4 border-pink-400">
+                    <span class="text-[11px] font-bold text-gray-500">Rata-rata Durasi Haid</span>
+                    <p id="period-stat-avg-dur" class="text-xl font-black text-gray-800 mt-0.5">- Hari</p>
+                </div>
+                <div class="glass-card p-4 border-l-4 border-purple-400">
+                    <span class="text-[11px] font-bold text-gray-500">Rata-rata Jarak Siklus</span>
+                    <p id="period-stat-avg-cycle" class="text-xl font-black text-gray-800 mt-0.5">28 Hari</p>
+                </div>
+                <div class="glass-card p-4 border-l-4 border-amber-400">
+                    <span class="text-[11px] font-bold text-gray-500">Estimasi Berikutnya</span>
+                    <p id="period-stat-next" class="text-sm md:text-base font-black text-amber-700 mt-1">-</p>
+                </div>
+            </section>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Kalender Siklus -->
+                <section class="glass-card p-5 border-2 border-rose-300 lg:col-span-5">
+                    <h2 class="text-lg font-bold text-rose-600 mb-3 flex items-center"><i class="fas fa-calendar-heart mr-2 text-rose-400"></i> Kalender Red Day</h2>
+                    <div class="flex justify-between items-center mb-3 bg-white p-2 rounded-xl border border-rose-100 shadow-sm">
+                        <button id="prev-month-period" class="text-rose-500 font-bold px-3 py-1 hover:bg-rose-50 rounded"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="period-month-year" class="font-bold text-gray-700 text-sm">Bulan Tahun</h3>
+                        <button id="next-month-period" class="text-rose-500 font-bold px-3 py-1 hover:bg-rose-50 rounded"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+
+                    <div class="calendar-grid text-xs font-bold text-gray-500 mb-2">
+                        <div class="text-red-500">Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+                    </div>
+                    <div id="period-calendar-days" class="calendar-grid mb-4"></div>
+
+                    <div class="flex flex-wrap gap-3 text-[11px] font-semibold text-gray-600 bg-white/70 p-2.5 rounded-xl border border-rose-100">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Red Day Tercatat</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full border-2 border-dashed border-rose-400 bg-rose-100 inline-block"></span> Estimasi Berikutnya</span>
+                    </div>
+                </section>
+
+                <!-- Form Catat / Edit & Tabel Riwayat Terstruktur -->
+                <div class="lg:col-span-7 flex flex-col gap-6">
+                    <section class="glass-card p-5 border-2 border-rose-300">
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-lg font-bold text-rose-600 flex items-center"><i class="fas fa-droplet mr-2 text-rose-400"></i> Catat / Edit Siklus Red Day</h2>
+                            <span id="period-form-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700">Tambah Baru</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-3">*Tanggal selesai bisa diedit kapan saja jika siklus maju/mundur.</p>
+
+                        <form id="form-period" class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-rose-50 p-4 rounded-xl border border-rose-200">
+                            <input type="hidden" id="period-edit-id" value="">
+
+                            <div>
+                                <label class="text-[10px] font-bold text-rose-700 ml-1">Tanggal Mulai Haid *</label>
+                                <input type="date" id="period-start" required onchange="syncPeriodEndFromStart()" class="text-xs mt-1 border-rose-200">
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-bold text-rose-700 ml-1">Tanggal Selesai Haid *</label>
+                                <input type="date" id="period-end" required class="text-xs mt-1 border-rose-200">
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-bold text-rose-700 ml-1">Gejala / Mood Utama</label>
+                                <select id="period-symptom" class="text-xs mt-1 border-rose-200">
+                                    <option value="Normal / Nyaman">😊 Normal / Nyaman</option>
+                                    <option value="Kram Perut">😣 Kram Perut</option>
+                                    <option value="PMS / Moody">🥺 PMS / Moody</option>
+                                    <option value="Aliran Deras">🩸 Aliran Deras</option>
+                                    <option value="Lemas / Pusing">😴 Lemas / Pusing</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-bold text-rose-700 ml-1">Catatan Tambahan</label>
+                                <input type="text" id="period-notes" placeholder="Ex: Telat 3 hari karena begadang..." class="text-xs mt-1 border-rose-200">
+                            </div>
+
+                            <div class="sm:col-span-2 flex justify-end gap-2 pt-2">
+                                <button type="button" id="btn-cancel-period" onclick="resetPeriodForm()" class="hidden px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 text-gray-700 hover:bg-gray-300">Batal Edit</button>
+                                <button type="submit" id="btn-submit-period" class="btn-cute !bg-gradient-to-r !from-rose-400 !to-pink-500 text-xs px-6 py-2.5">
+                                    <i class="fas fa-save mr-1.5"></i> Simpan Siklus
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="glass-card p-5 border-2 border-rose-200">
+                        <h3 class="font-bold text-rose-600 mb-3 text-sm flex items-center"><i class="fas fa-list-ul mr-2"></i> Riwayat Siklus Terstruktur</h3>
+                        <div class="overflow-x-auto rounded-xl border border-rose-200 bg-white/90 custom-scrollbar">
+                            <table class="w-full text-left border-collapse text-xs min-w-[560px]">
+                                <thead>
+                                    <tr class="bg-rose-50 text-rose-700 border-b border-rose-200 font-extrabold">
+                                        <th class="p-2.5">Tgl Mulai</th>
+                                        <th class="p-2.5">Tgl Selesai</th>
+                                        <th class="p-2.5">Durasi</th>
+                                        <th class="p-2.5">Jarak Siklus</th>
+                                        <th class="p-2.5">Gejala & Catatan</th>
+                                        <th class="p-2.5 text-center">Edit / Hapus</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="period-history-list"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <!-- TMB CALCULATOR -->
         <main id="kalkulator-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
             <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                 <div class="glass-card p-6 border-2 border-purple-300 md:col-span-2">
@@ -713,6 +892,7 @@
             </section>
         </main>
 
+        <!-- JADWAL PERKULIAHAN -->
         <main id="schedule-section" class="grid grid-cols-1 md:grid-cols-3 gap-6 hidden">
              <section class="glass-card p-5 flex flex-col md:col-span-1 border-2 border-orange-300">
                 <h2 class="text-xl font-bold mb-4 text-orange-600"><i class="fas fa-folder-plus mr-2"></i> Input Jadwal</h2>
@@ -751,7 +931,7 @@
             </section>
         </main>
 
-        <!-- PLANNER KINI TANPA GOALS & SUPPORT (SUDAH DIPINDAHKAN) -->
+        <!-- MY PLANNER + DEADLINE TRACKER TERINTEGRASI NOTIFIKASI HP -->
         <main id="planner-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
              <div class="lg:col-span-1 flex flex-col gap-6">
                 <section class="glass-card p-5 border-2 border-pink-300">
@@ -778,7 +958,7 @@
                                 </select>
                                 <select id="input-cal-priority" class="w-[22%] text-[9px] p-2 border border-pink-200 rounded text-gray-600">
                                     <option value="rendah">Biasa</option>
-                                    <option value="tinggi">Penting!</option>
+                                    <option value="tinggi">Penting! (Notif HP)</option>
                                 </select>
                                 <select id="input-cal-routine" class="w-[25%] text-[9px] p-2 border border-pink-200 rounded text-gray-600">
                                     <option value="sekali">Sekali</option>
@@ -796,22 +976,31 @@
                     <div class="flex gap-2 mt-auto"><form id="form-daily" class="w-full flex flex-col gap-2"><input type="text" id="input-daily" placeholder="Fokus hari ini..." required><div class="flex gap-2"><input type="date" id="input-daily-date" class="w-1/2 text-xs"><input type="time" id="input-daily-time" class="w-1/3 text-xs"><button type="submit" class="btn-cute w-1/6 px-0"><i class="fas fa-plus"></i></button></div></form></div>
                 </section>
             </div>
-            
+
             <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 items-start content-start">
                 <section class="glass-card p-5 flex flex-col md:col-span-2 min-h-[400px] border-2 border-pink-300">
-                    <h2 class="text-xl font-bold mb-1 text-pink-500">Deadline Tracker</h2><p class="text-xs text-red-400 mb-3 font-semibold">*Akan otomatis memberi alert jika deadline &lt;= 7 Hari!</p>
+                    <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
+                        <h2 class="text-xl font-bold text-pink-500">Deadline Tracker</h2>
+                        <span class="text-[10px] font-bold bg-pink-100 text-pink-700 px-2.5 py-1 rounded-full"><i class="fas fa-mobile-alt mr-1"></i> Auto-Push Notif HP (H-3, H-1, Hari-H)</span>
+                    </div>
+                    <p class="text-xs text-red-400 mb-3 font-semibold">*Otomatis kirim pengingat ke layar HP & beri alert jika deadline &le; 7 Hari!</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
-                    <div class="mt-auto flex flex-col md:flex-row gap-2 border-t border-pink-100 pt-3">
-                        <form id="form-deadlines" class="w-full flex flex-col md:flex-row gap-2">
-                            <input type="text" id="input-deadline-task" placeholder="Nama Tugas..." required class="md:w-1/3 text-sm">
-                            <select id="input-deadline-category" required class="md:w-1/4 text-sm p-2 border border-pink-200 rounded text-gray-700">
+                    <div class="mt-auto flex flex-col gap-2 border-t border-pink-100 pt-3">
+                        <form id="form-deadlines" class="w-full grid grid-cols-1 sm:grid-cols-12 gap-2">
+                            <input type="text" id="input-deadline-task" placeholder="Nama Tugas / Agenda..." required class="sm:col-span-4 text-xs">
+                            <select id="input-deadline-category" required class="sm:col-span-2 text-xs p-2 border border-pink-200 rounded text-gray-700">
                                 <option value="Matkul">Tugas Matkul</option>
                                 <option value="Organisasi">Tugas Organisasi</option>
                                 <option value="Lainnya">Lainnya / Ekstra</option>
                             </select>
-                            <input type="date" id="input-deadline-date" required class="md:w-1/5 text-sm">
-                            <input type="time" id="input-deadline-time" required class="md:w-1/5 text-sm">
-                            <button type="submit" class="btn-cute md:w-auto px-3"><i class="fas fa-plus"></i> Add</button>
+                            <input type="date" id="input-deadline-date" required class="sm:col-span-2 text-xs">
+                            <input type="time" id="input-deadline-time" required class="sm:col-span-2 text-xs">
+                            <select id="input-deadline-remind" class="sm:col-span-2 text-[11px] p-2 border border-pink-200 rounded text-pink-700 font-bold" title="Jadwal Notifikasi Layar HP">
+                                <option value="all">Notif: H-3, H-1, H-0</option>
+                                <option value="h1">Notif: H-1 & H-0</option>
+                                <option value="h0">Notif: Hari-H Saja</option>
+                            </select>
+                            <button type="submit" class="btn-cute sm:col-span-12 py-2 text-xs"><i class="fas fa-plus mr-1"></i> Tambah Deadline & Jadwalkan Notif HP</button>
                         </form>
                     </div>
                 </section>
@@ -821,6 +1010,7 @@
             </div>
         </main>
 
+        <!-- KEUANGAN KOS -->
         <main id="finance-section" class="flex flex-col gap-8 hidden max-w-5xl mx-auto">
             <div class="text-center w-full"><blockquote class="glass-card p-4 mx-auto border-l-8 border-yellow-400 inline-block shadow-sm"><p class="italic text-gray-700 font-medium">"Uang kos di Dramaga emang cepet banget ngalirnya kalau nggak ditampung. Yuk, hemat hari ini biar besok bisa jajan tanpa *guilty feeling*, Tasya!" ✨</p></blockquote></div>
             <section class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full"><div class="glass-card p-5 border-2 border-red-300 bg-red-50 bg-opacity-30"><h3 class="font-bold text-red-600 mb-2"><i class="fas fa-fire mr-2"></i>Pengeluaran Hari Ini</h3><p id="display-daily-out" class="text-3xl font-black text-gray-800">Rp 0</p></div><div class="glass-card p-5 border-2 border-green-300 bg-green-50 bg-opacity-30"><h3 class="font-bold text-green-600 mb-2"><i class="fas fa-calendar-week mr-2"></i>Pemasukan Minggu Ini</h3><p id="display-weekly-in" class="text-3xl font-black text-gray-800">Rp 0</p></div></section>
@@ -874,6 +1064,7 @@
             </section>
         </main>
 
+        <!-- RESEP & GIZI -->
         <main id="recipes-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
             <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                 <div class="glass-card p-5 border-2 border-teal-300">
@@ -924,6 +1115,7 @@
             </section>
         </main>
 
+        <!-- ACADEMIC CANVAS -->
         <main id="academic-canvas-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
             <section class="glass-card p-5 border-2 border-cyan-300 flex flex-col md:flex-row gap-6">
                 <div class="w-full md:w-2/3 flex flex-col items-center">
@@ -966,6 +1158,7 @@
             </div>
         </main>
 
+        <!-- SECURE VAULT -->
         <main id="vault-section" class="flex flex-col gap-6 hidden max-w-3xl mx-auto w-full relative">
             <div id="vault-pin-overlay" class="absolute inset-0 bg-indigo-50 bg-opacity-90 backdrop-blur-xl z-40 flex flex-col items-center justify-center rounded-2xl border border-indigo-200 shadow-lg">
                 <div class="glass-card p-8 text-center flex flex-col items-center border-2 border-indigo-300">
@@ -988,6 +1181,7 @@
             </section>
         </main>
 
+        <!-- DIARY & REFLECTION -->
         <main id="diary-section" class="gap-6 hidden max-w-5xl mx-auto w-full relative">
             <div id="pin-overlay" class="absolute inset-0 bg-white bg-opacity-80 backdrop-blur-xl z-40 flex flex-col items-center justify-center rounded-2xl border border-purple-200 shadow-lg">
                 <div class="glass-card p-8 text-center flex flex-col items-center border-2 border-purple-300">
@@ -1018,6 +1212,7 @@
             </div>
         </main>
 
+        <!-- QUOTES -->
         <main id="quotes-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
             <section class="glass-card p-5 w-full border-2 border-blue-300">
                 <h2 class="text-xl font-bold text-blue-600 flex items-center mb-4"><i class="fas fa-quote-left mr-2 text-blue-400"></i> Tambah Quotes & Foto</h2>
@@ -1034,21 +1229,6 @@
                 </form>
             </section>
             <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full" id="quotes-list"></section>
-        </main>
-
-        <main id="game-section" class="flex flex-col gap-6 hidden max-w-xl mx-auto w-full text-center">
-            <section class="glass-card p-6 border-2 border-gray-400 bg-gray-50">
-                <h2 class="text-2xl font-black text-gray-700 mb-2"><i class="fas fa-microchip mr-2 text-blue-500"></i> Robotic Circuit Builder</h2>
-                <p class="text-sm text-gray-500 mb-4 font-medium">Klik pada komponen untuk merotasi konektornya. Sambungkan dari blok <span class="text-green-500 font-bold">START</span> ke blok <span class="text-red-500 font-bold">END</span> untuk menyelesaikan sirkuit!</p>
-                <div class="level-indicator" id="level-dots"><div class="level-dot active"></div><div class="level-dot"></div><div class="level-dot"></div><div class="level-dot"></div><div class="level-dot"></div></div>
-                <h3 class="font-bold text-e84393 mb-4" id="level-title">Level 1: Basic LED Circuit</h3>
-                <div class="game-board-container"><div class="game-grid" id="game-board"></div></div>
-                <div class="mt-6 flex justify-center gap-4">
-                    <button onclick="resetCurrentLevel()" class="btn-cute !bg-gray-600 text-white"><i class="fas fa-redo mr-2"></i> Reset Grid</button>
-                    <button onclick="nextLevel()" id="btn-next-level" class="btn-cute hidden"><i class="fas fa-forward mr-2"></i> Next Level</button>
-                </div>
-                <p id="game-status" class="mt-4 font-bold text-green-600 text-lg opacity-0 transition-opacity">🎉 Circuit Connected, Engineer! 🎉</p>
-            </section>
         </main>
 
     </div>
@@ -1083,10 +1263,13 @@
         let currentUserUid = null;
 
         // ==========================================
-        // 2. DATA MANAGEMENT (LOKAL & CLOUD)
+        // 2. DATA MANAGEMENT (LOKAL, CLOUD & INDEXEDDB SW BRIDGE)
         // ==========================================
         const STORAGE_KEY = 'planner_2026_data';
-        let editingDeadlineId = null; // State global untuk edit tugas deadline
+        const IDB_NAME = 'TasyaPlannerNotifDB';
+        const IDB_STORE = 'reminders';
+        let editingDeadlineId = null;
+        let activeChecklistOppId = null;
 
         const defaultSchedule = [
             { id: 1, type: "Kuliah", name: "Pemtek (K)", day: "Senin", start: "07:00", end: "08:40", room: "RK A SATARI 03.03 (FKGiz)" },
@@ -1104,16 +1287,16 @@
         ];
 
         const defaultData = {
-            schedule: defaultSchedule, 
+            schedule: defaultSchedule,
             scheduleNotes: {},
             goals: [], daily: [], importantNotes: [], dailyReminders: [], coursework: [], organizations: [], deadlines: [],
-            scholarships: [], calendarEvents: {}, photos: { family: null, friends: null, partner: null, inspiration: null },
+            opportunities: [], // Terpadu Beasiswa & Lomba
+            calendarEvents: {}, photos: { family: null, friends: null, partner: null, inspiration: null },
             photoPositions: { family: 50, friends: 50, partner: 50, inspiration: 50 },
             motivation: "I can achieve anything I set my mind to!", inspirationDesc: "",
             finance: { rab: [], wallets: { utama: [], tabungan: [], wishlist: [] } },
             diary: [], quotesList: [],
             recipes: [], mealPlan: [], shoppingNotes: [], academicNotes: [], lectureNotes: [], secureNotes: [],
-            roboWires: [], engineParts: 0,
             periodLogs: []
         };
 
@@ -1121,19 +1304,181 @@
         if(!appData) {
             appData = defaultData;
         } else {
-            // Check for schema updates silently...
             if(!appData.recipes) appData.recipes = [];
             if(!appData.mealPlan) appData.mealPlan = [];
-            if(!appData.shoppingNotes) appData.shoppingNotes = []; 
+            if(!appData.shoppingNotes) appData.shoppingNotes = [];
             if(!appData.academicNotes) appData.academicNotes = [];
             if(!appData.lectureNotes) appData.lectureNotes = [];
             if(!appData.secureNotes) appData.secureNotes = [];
-            if(!appData.roboWires) appData.roboWires = [];
             if(!appData.dailyReminders) appData.dailyReminders = [];
             if(!appData.periodLogs) appData.periodLogs = [];
-            if(!appData.scheduleNotes) appData.scheduleNotes = {}; 
-            if(appData.engineParts === undefined) appData.engineParts = 0;
-            if(!appData.schedule || appData.schedule.length === 0) appData.schedule = defaultSchedule; 
+            if(!appData.scheduleNotes) appData.scheduleNotes = {};
+            if(!appData.schedule || appData.schedule.length === 0) appData.schedule = defaultSchedule;
+
+            // Migrasi otomatis data Beasiswa lama ke format terpadu Beasiswa & Lomba
+            if(!appData.opportunities) appData.opportunities = [];
+            if(Array.isArray(appData.scholarships) && appData.scholarships.length > 0) {
+                appData.scholarships.forEach(s => {
+                    appData.opportunities.push({
+                        id: s.id || Date.now() + Math.random(),
+                        name: s.name,
+                        category: 'Beasiswa',
+                        stage: mapOldScholarshipStage(s.status),
+                        accessLink: '',
+                        deadlineDate: s.date || '',
+                        deadlineTime: s.time || '23:59',
+                        notes: '',
+                        checklist: createDefaultChecklist('Beasiswa')
+                    });
+                });
+                delete appData.scholarships;
+            }
+
+            // Migrasi otomatis data Period lama ke format start & end date
+            appData.periodLogs = appData.periodLogs.map(log => {
+                if(!log.end && log.start) {
+                    const dur = parseInt(log.duration) || 5;
+                    const endDateObj = new Date(log.start);
+                    endDateObj.setDate(endDateObj.getDate() + (dur - 1));
+                    log.end = formatDateLocal(endDateObj);
+                }
+                if(!log.symptom) log.symptom = 'Normal / Nyaman';
+                if(!log.notes) log.notes = '';
+                return log;
+            });
+        }
+
+        function formatDateLocal(dateObj) {
+            return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+        }
+
+        function mapOldScholarshipStage(oldStatus) {
+            if(oldStatus === 'Persiapan Berkas') return '1. Riset & Syarat';
+            if(oldStatus === 'Menulis Essai') return '2. Penyusunan Berkas/Esai';
+            if(oldStatus === 'Submit Daftar') return '3. Submit Pendaftaran';
+            if(oldStatus === 'Wawancara') return '5. Wawancara / Final';
+            return '1. Riset & Syarat';
+        }
+
+        function createDefaultChecklist(category) {
+            if(category === 'Lomba') {
+                return [
+                    { id: 1, text: 'Baca Guidebook & Syarat Tema', done: false },
+                    { id: 2, text: 'KTM / Identitas Tim', done: false },
+                    { id: 3, text: 'Abstrak / Karya / Proposal', done: false },
+                    { id: 4, text: 'Twibbon & Bukti Follow', done: false },
+                    { id: 5, text: 'Submit Berkas di Portal', done: false }
+                ];
+            }
+            return [
+                { id: 1, text: 'CV & Portofolio Terbaru', done: false },
+                { id: 2, text: 'Esai Motivasi / Rencana Studi', done: false },
+                { id: 3, text: 'Transkrip Nilai & KTM', done: false },
+                { id: 4, text: 'Surat Rekomendasi / Pengantar', done: false },
+                { id: 5, text: 'Submit Formulir Pendaftaran', done: false }
+            ];
+        }
+
+        // ==========================================
+        // INDEXEDDB & SERVICE WORKER BACKGROUND NOTIF ENGINE
+        // ==========================================
+        function openNotifDB() {
+            return new Promise((resolve, reject) => {
+                if (!('indexedDB' in window)) return reject('IndexedDB tidak didukung');
+                const request = indexedDB.open(IDB_NAME, 1);
+                request.onupgradeneeded = (e) => {
+                    const idb = e.target.result;
+                    if (!idb.objectStoreNames.contains(IDB_STORE)) {
+                        idb.createObjectStore(IDB_STORE, { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = (e) => resolve(e.target.result);
+                request.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        async function syncRemindersToSW() {
+            try {
+                const reminders = [];
+
+                // 1. Semua item dari Deadline Tracker (termasuk yang tersinkron dari Beasiswa & Lomba)
+                appData.deadlines.forEach(item => {
+                    if (!item.date) return;
+                    reminders.push({
+                        id: `dl_${item.id}`,
+                        title: `Deadline ${item.category || 'Tugas'}: ${item.task}`,
+                        date: item.date,
+                        time: item.time || '23:59',
+                        remindMode: item.remindMode || 'all',
+                        source: item.category || 'Deadline Tracker'
+                    });
+                });
+
+                // 2. Semua Acara Penting di Kalender
+                Object.keys(appData.calendarEvents || {}).forEach(dateStr => {
+                    (appData.calendarEvents[dateStr] || []).forEach(ev => {
+                        if (ev.priority === 'tinggi') {
+                            reminders.push({
+                                id: `cal_${ev.id}_${dateStr}`,
+                                title: `Acara Penting (${ev.category || 'Agenda'}): ${ev.text}`,
+                                date: dateStr,
+                                time: ev.timeStart || ev.time || '08:00',
+                                remindMode: 'all',
+                                source: 'Kalender Utama'
+                            });
+                        }
+                    });
+                });
+
+                const idb = await openNotifDB();
+                const tx = idb.transaction(IDB_STORE, 'readwrite');
+                const store = tx.objectStore(IDB_STORE);
+
+                // Ambil status notifikasi yang sudah pernah dikirim agar tidak duplikat
+                const existingMap = {};
+                const getAllReq = store.getAll();
+                getAllReq.onsuccess = () => {
+                    (getAllReq.result || []).forEach(r => {
+                        existingMap[r.id] = r.notifiedFlags || {};
+                    });
+
+                    store.clear();
+                    reminders.forEach(rem => {
+                        rem.notifiedFlags = existingMap[rem.id] || {};
+                        store.put(rem);
+                    });
+                };
+
+                if ('serviceWorker' in navigator) {
+                    const reg = await navigator.serviceWorker.ready;
+                    if (reg.active) {
+                        reg.active.postMessage({ type: 'SYNC_REMINDERS', reminders });
+                    }
+                    if ('periodicSync' in reg) {
+                        try {
+                            await reg.periodicSync.register('tasya-deadline-check', {
+                                minInterval: 60 * 60 * 1000 // Cek setiap 1 jam di latar belakang
+                            });
+                        } catch (err) {
+                            console.log('PeriodicSync info:', err.message);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.log('SW Sync skipped:', err);
+            }
+        }
+
+        // Registrasi Service Worker PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => {
+                        console.log('Service Worker terdaftar:', reg.scope);
+                        syncRemindersToSW();
+                    })
+                    .catch(err => console.log('SW belum aktif (jalankan via HTTPS/localhost):', err));
+            });
         }
 
         const saveData = () => {
@@ -1143,7 +1488,8 @@
                     .then(() => console.log("Data synced to cloud!"))
                     .catch((error) => console.error("Error syncing to cloud: ", error));
             }
-            renderAll(); 
+            syncRemindersToSW();
+            renderAll();
         };
 
         window.signInGoogle = () => {
@@ -1153,7 +1499,7 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Loading...';
 
             auth.signInWithPopup(provider)
-            .then((result) => { console.log("Login sukses!"); })
+            .then(() => { console.log("Login sukses!"); })
             .catch((error) => { alert("Oops, Login Gagal!\n\nAlasan: " + error.message); btn.innerHTML = originalText; });
         };
 
@@ -1175,8 +1521,10 @@
                             if(!appData.dailyReminders) appData.dailyReminders = [];
                             if(!appData.lectureNotes) appData.lectureNotes = [];
                             if(!appData.periodLogs) appData.periodLogs = [];
-                            if(!appData.scheduleNotes) appData.scheduleNotes = {}; 
+                            if(!appData.scheduleNotes) appData.scheduleNotes = {};
+                            if(!appData.opportunities) appData.opportunities = [];
                             localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                            syncRemindersToSW();
                             renderAll();
                         } else { saveData(); }
                     });
@@ -1189,19 +1537,482 @@
         }
 
         // ==========================================
-        // MENS PERIOD TRACKER
+        // 3. BEASISWA & LOMBA (TERPADU & SPREADSHEET)
+        // ==========================================
+        const STAGE_PROGRESS_MAP = {
+            '1. Riset & Syarat': 15,
+            '2. Penyusunan Berkas/Esai': 35,
+            '3. Submit Pendaftaran': 55,
+            '4. Seleksi Administrasi': 70,
+            '5. Wawancara / Final': 85,
+            '6. Pengumuman (Lolos)': 100,
+            '7. Selesai / Evaluasi': 100
+        };
+
+        function syncOpportunityToDeadline(opp) {
+            if (!opp.deadlineDate) return;
+            const taskTitle = `[${opp.category}] ${opp.name} (${opp.stage})`;
+            const existingIdx = appData.deadlines.findIndex(d => d.linkedOpportunityId === opp.id);
+
+            if (opp.stage === '6. Pengumuman (Lolos)' || opp.stage === '7. Selesai / Evaluasi') {
+                if (existingIdx > -1) appData.deadlines.splice(existingIdx, 1);
+                return;
+            }
+
+            if (existingIdx > -1) {
+                appData.deadlines[existingIdx].task = taskTitle;
+                appData.deadlines[existingIdx].date = opp.deadlineDate;
+                appData.deadlines[existingIdx].time = opp.deadlineTime || '23:59';
+                appData.deadlines[existingIdx].category = opp.category;
+                appData.deadlines[existingIdx].remindMode = 'all';
+            } else {
+                appData.deadlines.push({
+                    id: Date.now() + Math.floor(Math.random() * 1000),
+                    linkedOpportunityId: opp.id,
+                    task: taskTitle,
+                    date: opp.deadlineDate,
+                    time: opp.deadlineTime || '23:59',
+                    category: opp.category,
+                    remindMode: 'all'
+                });
+            }
+        }
+
+        document.getElementById('form-opportunity').onsubmit = (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('opp-edit-id').value;
+            const name = document.getElementById('opp-name').value.trim();
+            const category = document.getElementById('opp-category').value;
+            const stage = document.getElementById('opp-stage').value;
+            const accessLink = document.getElementById('opp-link').value.trim();
+            const deadlineDate = document.getElementById('opp-dl-date').value;
+            const deadlineTime = document.getElementById('opp-dl-time').value || '23:59';
+            const notes = document.getElementById('opp-notes').value.trim();
+
+            if (editId) {
+                const idx = appData.opportunities.findIndex(o => String(o.id) === String(editId));
+                if (idx > -1) {
+                    appData.opportunities[idx] = {
+                        ...appData.opportunities[idx],
+                        name, category, stage, accessLink, deadlineDate, deadlineTime, notes
+                    };
+                    syncOpportunityToDeadline(appData.opportunities[idx]);
+                }
+            } else {
+                const newOpp = {
+                    id: Date.now(),
+                    name,
+                    category,
+                    stage,
+                    accessLink,
+                    deadlineDate,
+                    deadlineTime,
+                    notes,
+                    checklist: createDefaultChecklist(category)
+                };
+                appData.opportunities.push(newOpp);
+                syncOpportunityToDeadline(newOpp);
+            }
+
+            resetOpportunityForm();
+            saveData();
+        };
+
+        window.resetOpportunityForm = () => {
+            document.getElementById('form-opportunity').reset();
+            document.getElementById('opp-edit-id').value = '';
+            document.getElementById('opp-dl-time').value = '23:59';
+            document.getElementById('opp-form-mode-badge').innerText = 'Mode: Tambah Baru';
+            document.getElementById('btn-submit-opp').innerHTML = '<i class="fas fa-save mr-1.5"></i> Simpan ke Tabel & Set Notif HP';
+            document.getElementById('btn-cancel-opp').classList.add('hidden');
+        };
+
+        window.editOpportunity = (id) => {
+            const item = appData.opportunities.find(o => o.id === id);
+            if (!item) return;
+            document.getElementById('opp-edit-id').value = item.id;
+            document.getElementById('opp-name').value = item.name;
+            document.getElementById('opp-category').value = item.category;
+            document.getElementById('opp-stage').value = item.stage;
+            document.getElementById('opp-link').value = item.accessLink || '';
+            document.getElementById('opp-dl-date').value = item.deadlineDate || '';
+            document.getElementById('opp-dl-time').value = item.deadlineTime || '23:59';
+            document.getElementById('opp-notes').value = item.notes || '';
+
+            document.getElementById('opp-form-mode-badge').innerText = 'Mode: Edit Data';
+            document.getElementById('btn-submit-opp').innerHTML = '<i class="fas fa-check-circle mr-1.5"></i> Update Data';
+            document.getElementById('btn-cancel-opp').classList.remove('hidden');
+            document.getElementById('form-opportunity').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.updateOpportunityStageInline = (id, newStage) => {
+            const item = appData.opportunities.find(o => o.id === id);
+            if (!item) return;
+            item.stage = newStage;
+            syncOpportunityToDeadline(item);
+            saveData();
+        };
+
+        window.deleteOpportunity = (id) => {
+            appData.opportunities = appData.opportunities.filter(o => o.id !== id);
+            appData.deadlines = appData.deadlines.filter(d => d.linkedOpportunityId !== id);
+            saveData();
+        };
+
+        window.copyAccessLink = (url, btnEl) => {
+            if (!url) return;
+            navigator.clipboard.writeText(url).then(() => {
+                const orig = btnEl.innerHTML;
+                btnEl.innerHTML = '<i class="fas fa-check text-green-600"></i>';
+                setTimeout(() => { btnEl.innerHTML = orig; }, 1500);
+            });
+        };
+
+        // Checklist Modal Logic
+        window.openOppChecklistModal = (id) => {
+            const item = appData.opportunities.find(o => o.id === id);
+            if (!item) return;
+            activeChecklistOppId = id;
+            if (!item.checklist) item.checklist = createDefaultChecklist(item.category);
+
+            document.getElementById('modal-opp-cat').innerText = item.category === 'Lomba' ? '🏆 Lomba / Kompetisi' : '🎓 Beasiswa';
+            document.getElementById('modal-opp-title').innerText = item.name;
+            renderOppChecklistItems();
+
+            const modal = document.getElementById('opp-checklist-modal');
+            const content = document.getElementById('opp-checklist-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        };
+
+        window.closeOppChecklistModal = () => {
+            const modal = document.getElementById('opp-checklist-modal');
+            const content = document.getElementById('opp-checklist-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); activeChecklistOppId = null; }, 300);
+        };
+
+        function renderOppChecklistItems() {
+            const item = appData.opportunities.find(o => o.id === activeChecklistOppId);
+            if (!item) return;
+            const listEl = document.getElementById('modal-opp-checklist-items');
+            const total = item.checklist.length;
+            const doneCount = item.checklist.filter(c => c.done).length;
+            const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+
+            document.getElementById('modal-opp-progress-text').innerText = `Progres Berkas: ${doneCount}/${total} (${pct}%)`;
+            document.getElementById('modal-opp-progress-bar').style.width = `${pct}%`;
+
+            listEl.innerHTML = '';
+            item.checklist.forEach(chk => {
+                listEl.innerHTML += `
+                    <div class="flex items-center justify-between bg-fuchsia-50/70 p-2.5 rounded-xl border border-fuchsia-100">
+                        <label class="flex items-center gap-2.5 cursor-pointer flex-1 text-xs font-semibold ${chk.done ? 'line-through text-gray-400' : 'text-gray-700'}">
+                            <input type="checkbox" class="custom-checkbox" ${chk.done ? 'checked' : ''} onchange="toggleOppCheckItem(${chk.id})">
+                            <span>${chk.text}</span>
+                        </label>
+                        <button onclick="deleteOppCheckItem(${chk.id})" class="text-red-300 hover:text-red-500 px-1.5"><i class="fas fa-trash text-xs"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        window.toggleOppCheckItem = (chkId) => {
+            const item = appData.opportunities.find(o => o.id === activeChecklistOppId);
+            if (!item) return;
+            const chk = item.checklist.find(c => c.id === chkId);
+            if (chk) chk.done = !chk.done;
+            renderOppChecklistItems();
+            saveData();
+        };
+
+        window.addCheckItemToOpp = () => {
+            const input = document.getElementById('modal-new-check-item');
+            const val = input.value.trim();
+            if (!val) return;
+            const item = appData.opportunities.find(o => o.id === activeChecklistOppId);
+            if (item) {
+                item.checklist.push({ id: Date.now(), text: val, done: false });
+                input.value = '';
+                renderOppChecklistItems();
+                saveData();
+            }
+        };
+
+        window.deleteOppCheckItem = (chkId) => {
+            const item = appData.opportunities.find(o => o.id === activeChecklistOppId);
+            if (item) {
+                item.checklist = item.checklist.filter(c => c.id !== chkId);
+                renderOppChecklistItems();
+                saveData();
+            }
+        };
+
+        function getOpportunityProgress(item) {
+            const stagePct = STAGE_PROGRESS_MAP[item.stage] || 15;
+            const list = item.checklist || [];
+            if (list.length === 0) return stagePct;
+            const checkPct = Math.round((list.filter(c => c.done).length / list.length) * 100);
+            return Math.round((stagePct * 0.6) + (checkPct * 0.4));
+        }
+
+        const renderOpportunities = () => {
+            const tbody = document.getElementById('opp-table-body');
+            if (!tbody) return;
+
+            const searchVal = (document.getElementById('search-opp')?.value || '').toLowerCase();
+            const catFilter = document.getElementById('filter-opp-category')?.value || 'All';
+            const sortBy = document.getElementById('sort-opp')?.value || 'dl-asc';
+
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+
+            // Update Summary Counters
+            const totalCount = appData.opportunities.length;
+            const beasiswaCount = appData.opportunities.filter(o => o.category === 'Beasiswa').length;
+            const lombaCount = appData.opportunities.filter(o => o.category === 'Lomba').length;
+            let urgentCount = 0;
+
+            appData.opportunities.forEach(o => {
+                if (o.deadlineDate && !o.stage.startsWith('6.') && !o.stage.startsWith('7.')) {
+                    const dl = new Date(o.deadlineDate);
+                    dl.setHours(0, 0, 0, 0);
+                    const diff = Math.ceil((dl - now) / (1000 * 60 * 60 * 24));
+                    if (diff >= 0 && diff <= 7) urgentCount++;
+                }
+            });
+
+            document.getElementById('opp-stat-total').innerText = totalCount;
+            document.getElementById('opp-stat-beasiswa').innerText = beasiswaCount;
+            document.getElementById('opp-stat-lomba').innerText = lombaCount;
+            document.getElementById('opp-stat-urgent').innerText = urgentCount;
+
+            const menuBadge = document.getElementById('opp-menu-badge');
+            if (menuBadge) {
+                if (urgentCount > 0) {
+                    menuBadge.innerText = urgentCount;
+                    menuBadge.classList.remove('hidden');
+                } else {
+                    menuBadge.classList.add('hidden');
+                }
+            }
+
+            let list = appData.opportunities.filter(item => {
+                const matchSearch = item.name.toLowerCase().includes(searchVal) || (item.notes || '').toLowerCase().includes(searchVal);
+                const matchCat = catFilter === 'All' || item.category === catFilter;
+                return matchSearch && matchCat;
+            });
+
+            list.sort((a, b) => {
+                if (sortBy === 'name-asc') return a.name.localeCompare(b.name);
+                if (sortBy === 'progress-desc') return getOpportunityProgress(b) - getOpportunityProgress(a);
+                const da = a.deadlineDate ? new Date(`${a.deadlineDate}T${a.deadlineTime || '23:59'}`) : new Date('2099-12-31');
+                const db = b.deadlineDate ? new Date(`${b.deadlineDate}T${b.deadlineTime || '23:59'}`) : new Date('2099-12-31');
+                return da - db;
+            });
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-gray-400 italic">Belum ada data Beasiswa atau Lomba. Tambahkan di form atas!</td></tr>`;
+                return;
+            }
+
+            const stages = [
+                '1. Riset & Syarat',
+                '2. Penyusunan Berkas/Esai',
+                '3. Submit Pendaftaran',
+                '4. Seleksi Administrasi',
+                '5. Wawancara / Final',
+                '6. Pengumuman (Lolos)',
+                '7. Selesai / Evaluasi'
+            ];
+
+            tbody.innerHTML = '';
+            list.forEach((item, index) => {
+                const pct = getOpportunityProgress(item);
+                const chkList = item.checklist || [];
+                const chkDone = chkList.filter(c => c.done).length;
+
+                const catBadge = item.category === 'Lomba'
+                    ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">🏆 Lomba</span>`
+                    : `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800 border border-purple-200">🎓 Beasiswa</span>`;
+
+                const accessHtml = item.accessLink
+                    ? `<div class="flex items-center gap-1.5">
+                        <a href="${item.accessLink}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border border-cyan-200 font-bold text-[11px] transition">
+                            <i class="fas fa-external-link-alt"></i> Buka Link
+                        </a>
+                        <button onclick="copyAccessLink('${item.accessLink}', this)" class="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 text-[11px]" title="Salin Link">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                       </div>`
+                    : `<span class="text-gray-400 italic text-[11px]">Belum ada link</span>`;
+
+                let dlHtml = `<span class="text-gray-400">-</span>`;
+                if (item.deadlineDate) {
+                    const dlObj = new Date(item.deadlineDate);
+                    dlObj.setHours(0, 0, 0, 0);
+                    const diffDays = Math.ceil((dlObj - now) / (1000 * 60 * 60 * 24));
+                    let badgeClass = 'bg-green-100 text-green-700';
+                    let badgeText = `H-${diffDays}`;
+
+                    if (item.stage.startsWith('6.') || item.stage.startsWith('7.')) {
+                        badgeClass = 'bg-gray-100 text-gray-600';
+                        badgeText = 'Selesai';
+                    } else if (diffDays < 0) {
+                        badgeClass = 'bg-gray-200 text-gray-600';
+                        badgeText = 'Lewat';
+                    } else if (diffDays === 0) {
+                        badgeClass = 'bg-red-500 text-white animate-pulse';
+                        badgeText = 'HARI INI!';
+                    } else if (diffDays <= 3) {
+                        badgeClass = 'bg-red-100 text-red-700 border border-red-300 font-extrabold';
+                        badgeText = `H-${diffDays} (Kritis)`;
+                    } else if (diffDays <= 7) {
+                        badgeClass = 'bg-orange-100 text-orange-700 border border-orange-300';
+                        badgeText = `H-${diffDays}`;
+                    }
+
+                    dlHtml = `
+                        <div class="flex flex-col gap-1">
+                            <span class="font-bold text-gray-800 text-xs"><i class="far fa-calendar-alt text-fuchsia-500 mr-1"></i>${item.deadlineDate}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] text-gray-500">${item.deadlineTime || '23:59'}</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeClass}">${badgeText}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const stageOptions = stages.map(st => `<option value="${st}" ${item.stage === st ? 'selected' : ''}>${st}</option>`).join('');
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="text-center font-bold text-gray-400">${index + 1}</td>
+                        <td>
+                            <div class="font-extrabold text-gray-800 text-xs sm:text-sm">${item.name}</div>
+                            ${item.notes ? `<div class="text-[11px] text-gray-500 mt-0.5"><i class="fas fa-sticky-note text-fuchsia-300 mr-1"></i>${item.notes}</div>` : ''}
+                            <button onclick="openOppChecklistModal(${item.id})" class="mt-1.5 inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 rounded-md bg-fuchsia-50 text-fuchsia-700 hover:bg-fuchsia-100 border border-fuchsia-200 transition">
+                                <i class="fas fa-tasks"></i> Checklist Berkas: ${chkDone}/${chkList.length}
+                            </button>
+                        </td>
+                        <td>${catBadge}</td>
+                        <td>
+                            <select onchange="updateOpportunityStageInline(${item.id}, this.value)" class="!py-1 !px-2 !text-[11px] font-bold !rounded-lg border-fuchsia-200 bg-white text-fuchsia-900 mb-1.5">
+                                ${stageOptions}
+                            </select>
+                            <div class="flex items-center gap-2">
+                                <div class="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-fuchsia-400 to-pink-500 h-1.5 rounded-full" style="width: ${pct}%"></div>
+                                </div>
+                                <span class="text-[10px] font-extrabold text-fuchsia-700 w-8 text-right">${pct}%</span>
+                            </div>
+                        </td>
+                        <td>${accessHtml}</td>
+                        <td>${dlHtml}</td>
+                        <td class="text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="openOppChecklistModal(${item.id})" class="p-1.5 rounded-lg bg-fuchsia-50 text-fuchsia-600 hover:bg-fuchsia-100" title="Checklist Berkas"><i class="fas fa-check-square"></i></button>
+                                <button onclick="editOpportunity(${item.id})" class="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteOpportunity(${item.id})" class="p-1.5 rounded-lg bg-red-50 text-red-500 hover:bg-red-100" title="Hapus"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        };
+
+        // ==========================================
+        // 4. RED DAY TRACKER (EDIT TANGGAL & TERSTRUKTUR)
         // ==========================================
         let periodMonth = new Date().getMonth();
         let periodYear = new Date().getFullYear();
 
+        window.syncPeriodEndFromStart = () => {
+            const startVal = document.getElementById('period-start').value;
+            const endInput = document.getElementById('period-end');
+            if (startVal && !endInput.value) {
+                const d = new Date(startVal);
+                d.setDate(d.getDate() + 4); // Default 5 hari termasuk hari pertama
+                endInput.value = formatDateLocal(d);
+            }
+        };
+
+        function calcPeriodDurationDays(startStr, endStr) {
+            const s = new Date(startStr);
+            const e = new Date(endStr || startStr);
+            s.setHours(0, 0, 0, 0);
+            e.setHours(0, 0, 0, 0);
+            const diff = Math.round((e - s) / (1000 * 60 * 60 * 24)) + 1;
+            return diff > 0 ? diff : 1;
+        }
+
         document.getElementById('form-period').onsubmit = (e) => {
             e.preventDefault();
+            const editId = document.getElementById('period-edit-id').value;
             const start = document.getElementById('period-start').value;
-            const dur = parseInt(document.getElementById('period-duration').value);
-            appData.periodLogs.push({ id: Date.now(), start, duration: dur });
-            document.getElementById('form-period').reset();
+            let end = document.getElementById('period-end').value;
+            const symptom = document.getElementById('period-symptom').value;
+            const notes = document.getElementById('period-notes').value.trim();
+
+            if (new Date(end) < new Date(start)) {
+                alert('Tanggal selesai tidak boleh lebih awal dari tanggal mulai!');
+                return;
+            }
+
+            const duration = calcPeriodDurationDays(start, end);
+
+            if (editId) {
+                const idx = appData.periodLogs.findIndex(p => String(p.id) === String(editId));
+                if (idx > -1) {
+                    appData.periodLogs[idx] = {
+                        ...appData.periodLogs[idx],
+                        start, end, duration, symptom, notes
+                    };
+                }
+            } else {
+                appData.periodLogs.push({
+                    id: Date.now(),
+                    start,
+                    end,
+                    duration,
+                    symptom,
+                    notes
+                });
+            }
+
+            resetPeriodForm();
             saveData();
             renderPeriodCalendar();
+        };
+
+        window.editPeriodLog = (id) => {
+            const log = appData.periodLogs.find(p => p.id === id);
+            if (!log) return;
+            document.getElementById('period-edit-id').value = log.id;
+            document.getElementById('period-start').value = log.start;
+            document.getElementById('period-end').value = log.end || log.start;
+            document.getElementById('period-symptom').value = log.symptom || 'Normal / Nyaman';
+            document.getElementById('period-notes').value = log.notes || '';
+
+            document.getElementById('period-form-badge').innerText = 'Edit Tanggal Siklus';
+            document.getElementById('btn-submit-period').innerHTML = '<i class="fas fa-check mr-1.5"></i> Update Tanggal';
+            document.getElementById('btn-cancel-period').classList.remove('hidden');
+            document.getElementById('form-period').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.resetPeriodForm = () => {
+            document.getElementById('form-period').reset();
+            document.getElementById('period-edit-id').value = '';
+            document.getElementById('period-form-badge').innerText = 'Tambah Baru';
+            document.getElementById('btn-submit-period').innerHTML = '<i class="fas fa-save mr-1.5"></i> Simpan Siklus';
+            document.getElementById('btn-cancel-period').classList.add('hidden');
+        };
+
+        window.quickSelectPeriodDate = (dayStr) => {
+            document.getElementById('period-start').value = dayStr;
+            const d = new Date(dayStr);
+            d.setDate(d.getDate() + 4);
+            document.getElementById('period-end').value = formatDateLocal(d);
         };
 
         const renderPeriodCalendar = () => {
@@ -1210,21 +2021,91 @@
             const listContainer = document.getElementById('period-history-list');
             if(!daysContainer) return;
 
+            const sortedAsc = [...appData.periodLogs].sort((a, b) => new Date(a.start) - new Date(b.start));
+
+            // Hitung statistik siklus
+            let avgDuration = 5;
+            if (sortedAsc.length > 0) {
+                const totalDur = sortedAsc.reduce((acc, l) => acc + calcPeriodDurationDays(l.start, l.end), 0);
+                avgDuration = Math.round(totalDur / sortedAsc.length);
+            }
+
+            let avgCycleLen = 28;
+            const cycleIntervals = {};
+            if (sortedAsc.length >= 2) {
+                let sumIntervals = 0;
+                let countIntervals = 0;
+                for (let i = 1; i < sortedAsc.length; i++) {
+                    const prevStart = new Date(sortedAsc[i - 1].start);
+                    const currStart = new Date(sortedAsc[i].start);
+                    const diff = Math.round((currStart - prevStart) / (1000 * 60 * 60 * 24));
+                    if (diff > 0) {
+                        cycleIntervals[sortedAsc[i].id] = diff;
+                        sumIntervals += diff;
+                        countIntervals++;
+                    }
+                }
+                if (countIntervals > 0) avgCycleLen = Math.round(sumIntervals / countIntervals);
+            }
+
+            const todayObj = new Date();
+            todayObj.setHours(0, 0, 0, 0);
+            const todayStr = formatDateLocal(todayObj);
+
+            let predictedDates = new Set();
+            let nextPredStr = '-';
+            let statusText = 'Belum ada catatan';
+
+            if (sortedAsc.length > 0) {
+                const latest = sortedAsc[sortedAsc.length - 1];
+                const latestStart = new Date(latest.start);
+                const latestEnd = new Date(latest.end || latest.start);
+                latestStart.setHours(0, 0, 0, 0);
+                latestEnd.setHours(0, 0, 0, 0);
+
+                if (todayObj >= latestStart && todayObj <= latestEnd) {
+                    const dayNum = Math.round((todayObj - latestStart) / (1000 * 60 * 60 * 24)) + 1;
+                    statusText = `🩸 Hari ke-${dayNum} Red Day`;
+                } else if (todayObj > latestEnd) {
+                    const cycleDay = Math.round((todayObj - latestStart) / (1000 * 60 * 60 * 24)) + 1;
+                    statusText = `Hari ke-${cycleDay} Siklus`;
+                } else {
+                    statusText = `Tercatat (${latest.start})`;
+                }
+
+                const nextStart = new Date(latestStart);
+                nextStart.setDate(nextStart.getDate() + avgCycleLen);
+                nextPredStr = formatDateLocal(nextStart);
+
+                for (let i = 0; i < avgDuration; i++) {
+                    const pd = new Date(nextStart);
+                    pd.setDate(pd.getDate() + i);
+                    predictedDates.add(formatDateLocal(pd));
+                }
+            }
+
+            if (document.getElementById('period-stat-status')) {
+                document.getElementById('period-stat-status').innerText = statusText;
+                document.getElementById('period-stat-avg-dur').innerText = sortedAsc.length > 0 ? `${avgDuration} Hari` : '- Hari';
+                document.getElementById('period-stat-avg-cycle').innerText = `${avgCycleLen} Hari`;
+                document.getElementById('period-stat-next').innerText = nextPredStr;
+            }
+
             const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
             monthYearLabel.innerText = `${months[periodMonth]} ${periodYear}`;
             daysContainer.innerHTML = '';
 
             const firstDayIndex = new Date(periodYear, periodMonth, 1).getDay();
             const totalDays = new Date(periodYear, periodMonth + 1, 0).getDate();
-            const todayStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
 
             let activeDates = new Set();
             appData.periodLogs.forEach(log => {
-                let start = new Date(log.start);
-                for(let i = 0; i < log.duration; i++) {
-                    let d = new Date(start);
+                const dur = calcPeriodDurationDays(log.start, log.end);
+                const start = new Date(log.start);
+                for(let i = 0; i < dur; i++) {
+                    const d = new Date(start);
                     d.setDate(d.getDate() + i);
-                    activeDates.add(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+                    activeDates.add(formatDateLocal(d));
                 }
             });
 
@@ -1233,21 +2114,44 @@
             for(let d=1; d<=totalDays; d++) {
                 const dayStr = `${periodYear}-${String(periodMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
                 let classes = "calendar-day flex items-center justify-center";
-                if(dayStr === todayStr) classes += " border-2 border-rose-400";
-                if(activeDates.has(dayStr)) classes += " !bg-rose-400 !text-white font-bold shadow-md rounded-full";
-                daysContainer.innerHTML += `<div class="${classes}">${d}</div>`;
+                let titleHint = "Klik untuk pilih tanggal mulai";
+                if(dayStr === todayStr) classes += " border-2 border-amber-400 font-extrabold";
+                if(activeDates.has(dayStr)) {
+                    classes += " !bg-rose-500 !text-white font-bold shadow-md rounded-full";
+                    titleHint = "Red Day Tercatat";
+                } else if(predictedDates.has(dayStr)) {
+                    classes += " !bg-rose-100 !text-rose-700 border-2 border-dashed border-rose-400 font-bold rounded-full";
+                    titleHint = "Estimasi Red Day Berikutnya";
+                }
+                daysContainer.innerHTML += `<div class="${classes}" title="${titleHint}" onclick="quickSelectPeriodDate('${dayStr}')">${d}</div>`;
             }
 
             if(listContainer) {
-                listContainer.innerHTML = appData.periodLogs.length === 0 ? '<p class="text-xs text-gray-400 italic">Belum ada catatan siklus.</p>' : '';
-                [...appData.periodLogs].sort((a,b) => new Date(b.start) - new Date(a.start)).forEach(log => {
-                    listContainer.innerHTML += `
-                        <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-rose-100 shadow-sm">
-                            <span class="text-xs font-bold text-gray-700"><i class="fas fa-calendar-day mr-2 text-rose-400"></i>Mulai: ${log.start} (Durasi: ${log.duration} Hari)</span>
-                            <button onclick="deleteItem('periodLogs', ${log.id}); renderPeriodCalendar();" class="text-red-300 hover:text-red-500"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    `;
-                });
+                if (appData.periodLogs.length === 0) {
+                    listContainer.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400 italic">Belum ada catatan siklus Red Day.</td></tr>`;
+                } else {
+                    listContainer.innerHTML = '';
+                    [...appData.periodLogs].sort((a,b) => new Date(b.start) - new Date(a.start)).forEach(log => {
+                        const dur = calcPeriodDurationDays(log.start, log.end);
+                        const intervalText = cycleIntervals[log.id] ? `${cycleIntervals[log.id]} Hari` : '<span class="text-gray-400">Awal</span>';
+                        listContainer.innerHTML += `
+                            <tr class="border-b border-rose-100 hover:bg-rose-50/50">
+                                <td class="p-2.5 font-bold text-gray-800 whitespace-nowrap">${log.start}</td>
+                                <td class="p-2.5 font-bold text-rose-600 whitespace-nowrap">${log.end || log.start}</td>
+                                <td class="p-2.5"><span class="bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full text-[11px]">${dur} Hari</span></td>
+                                <td class="p-2.5 font-semibold text-gray-600">${intervalText}</td>
+                                <td class="p-2.5">
+                                    <div class="font-bold text-gray-700 text-[11px]">${log.symptom || 'Normal'}</div>
+                                    ${log.notes ? `<div class="text-[10px] text-gray-500">${log.notes}</div>` : ''}
+                                </td>
+                                <td class="p-2.5 text-center whitespace-nowrap">
+                                    <button onclick="editPeriodLog(${log.id})" class="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 mr-1" title="Edit Tanggal"><i class="fas fa-edit"></i></button>
+                                    <button onclick="deleteItem('periodLogs', ${log.id}); renderPeriodCalendar();" class="p-1.5 rounded-lg bg-red-50 text-red-500 hover:bg-red-100" title="Hapus"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
             }
         };
 
@@ -1255,7 +2159,7 @@
         document.getElementById('next-month-period').onclick = () => { periodMonth++; if(periodMonth > 11) { periodMonth = 0; periodYear++; } renderPeriodCalendar(); };
 
         // ==========================================
-        // 3. DIARY & VAULT PIN LOGIC
+        // 5. DIARY & VAULT PIN LOGIC
         // ==========================================
         window.checkPin = () => {
             const pin = document.getElementById('diary-pin-input').value;
@@ -1331,8 +2235,8 @@
         };
 
         let introTimeout;
-        window.addEventListener('load', () => { 
-            introTimeout = setTimeout(() => { skipIntro(); }, 3500); 
+        window.addEventListener('load', () => {
+            introTimeout = setTimeout(() => { skipIntro(); }, 3500);
             const daysIndo = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
             let todayDay = daysIndo[new Date().getDay()];
             let validFilters = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
@@ -1381,6 +2285,21 @@
             setTimeout(() => hpModal.classList.add('hidden'), 300);
         };
 
+        window.openPwaGuideModal = () => {
+            updateNotifIcon();
+            const modal = document.getElementById('pwa-guide-modal');
+            const content = document.getElementById('pwa-guide-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        };
+
+        window.closePwaGuideModal = () => {
+            const modal = document.getElementById('pwa-guide-modal');
+            const content = document.getElementById('pwa-guide-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
         // --- MARQUEE RENDERER ---
         const renderMarquee = () => {
             const contentTop = document.getElementById('running-text-content');
@@ -1397,7 +2316,7 @@
             for (let i = 1; i <= 7; i++) {
                 let target = new Date(nowObj);
                 target.setDate(nowObj.getDate() + i);
-                const targetStr = `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2, '0')}-${String(target.getDate()).padStart(2, '0')}`;
+                const targetStr = formatDateLocal(target);
 
                 if (appData.calendarEvents[targetStr]) {
                     appData.calendarEvents[targetStr].forEach(ev => {
@@ -1442,14 +2361,14 @@
         const renderDailyReminders = () => {
             const container = document.getElementById('daily-reminder-list'); container.innerHTML = '';
             if(appData.dailyReminders.length > 0) {
-                appData.dailyReminders.forEach(item => { 
-                    container.innerHTML += `<div class="bg-yellow-50 border border-yellow-200 p-2 rounded flex justify-between items-center shadow-sm"><span class="text-sm font-bold text-yellow-800 flex-1 pl-1"><i class="fas fa-clock mr-2 text-yellow-500"></i>${item.text}</span><button onclick="deleteItem('dailyReminders', ${item.id})" class="text-red-300 hover:text-red-500 px-2"><i class="fas fa-trash"></i></button></div>`; 
+                appData.dailyReminders.forEach(item => {
+                    container.innerHTML += `<div class="bg-yellow-50 border border-yellow-200 p-2 rounded flex justify-between items-center shadow-sm"><span class="text-sm font-bold text-yellow-800 flex-1 pl-1"><i class="fas fa-clock mr-2 text-yellow-500"></i>${item.text}</span><button onclick="deleteItem('dailyReminders', ${item.id})" class="text-red-300 hover:text-red-500 px-2"><i class="fas fa-trash"></i></button></div>`;
                 });
             } else { container.innerHTML = `<p class="text-[10px] text-gray-400 italic text-center">Belum ada rutinitas.</p>`; }
         };
 
         window.showSection = (sectionId) => {
-            ['home-section', 'planner-section', 'goals-section', 'beasiswa-section', 'finance-section', 'schedule-section', 'diary-section', 'quotes-section', 'recipes-section', 'academic-canvas-section', 'vault-section', 'game-section', 'timer-section', 'robo-blueprint-section', 'kalkulator-section', 'lab-section', 'period-section'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            ['home-section', 'planner-section', 'goals-section', 'beasiswa-section', 'finance-section', 'schedule-section', 'diary-section', 'quotes-section', 'recipes-section', 'academic-canvas-section', 'vault-section', 'kalkulator-section', 'period-section'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById(sectionId).classList.remove('hidden');
 
             document.getElementById('pin-overlay').style.display = (sectionId === 'diary-section') ? 'flex' : 'none';
@@ -1465,8 +2384,7 @@
                 btnBack.classList.remove('hidden');
                 if (sectionId === 'planner-section') { mainTitle.innerText = "My Personal Planner"; mainSubtitle.innerHTML = '<i class="far fa-calendar-check text-pink-500 mr-2"></i> Jadwal & Target Studi'; }
                 else if (sectionId === 'goals-section') { mainTitle.innerText = "Goals & Support"; mainSubtitle.innerHTML = '<i class="fas fa-bullseye text-amber-500 mr-2"></i> Mimpi, Inspirasi, dan Support System'; }
-                else if (sectionId === 'beasiswa-section') { mainTitle.innerText = "Beasiswa Journey"; mainSubtitle.innerHTML = '<i class="fas fa-graduation-cap text-fuchsia-500 mr-2"></i> Tracker Persiapan & Pendaftaran Beasiswa'; }
-                else if (sectionId === 'timer-section') { mainTitle.innerText = "Pomodoro Timer"; mainSubtitle.innerHTML = '<i class="fas fa-fire text-red-500 mr-2"></i> Engine Focus & Deep Work Mode'; }
+                else if (sectionId === 'beasiswa-section') { mainTitle.innerText = "Beasiswa & Lomba"; mainSubtitle.innerHTML = '<i class="fas fa-award text-fuchsia-500 mr-2"></i> Spreadsheet & Manajemen Tahapan Seleksi'; }
                 else if (sectionId === 'finance-section') { mainTitle.innerText = "Keuangan Anak Kos"; mainSubtitle.innerHTML = '<i class="fas fa-wallet text-green-500 mr-2"></i> Tracker Pengeluaran Mingguan & Harian'; }
                 else if (sectionId === 'schedule-section') { mainTitle.innerText = "Jadwal Perkuliahan"; mainSubtitle.innerHTML = '<i class="fas fa-calendar-alt text-orange-500 mr-2"></i> Kalender Matkul, Praktikum & Kuis'; }
                 else if (sectionId === 'diary-section') { mainTitle.innerText = "My Diary & Reflection"; mainSubtitle.innerHTML = '<i class="fas fa-book-heart text-purple-500 mr-2"></i> Tulis Jurnal dan Evaluasi Diri'; }
@@ -1474,18 +2392,89 @@
                 else if (sectionId === 'recipes-section') { mainTitle.innerText = "Buku Resep & Gizi Harian"; mainSubtitle.innerHTML = '<i class="fas fa-utensils text-teal-500 mr-2"></i> Tracking Sarapan, Makan Siang & Habit Gizi'; }
                 else if (sectionId === 'academic-canvas-section') { mainTitle.innerText = "Academic Canvas"; mainSubtitle.innerHTML = '<i class="fas fa-chalkboard text-cyan-500 mr-2"></i> Corat-coret PPT & Catatan Kuliah'; }
                 else if (sectionId === 'vault-section') { mainTitle.innerText = "Tasya's Secure Vault"; mainSubtitle.innerHTML = '<i class="fas fa-shield-alt text-indigo-500 mr-2"></i> Link & Akun Penting Pribadi'; }
-                else if (sectionId === 'game-section') { mainTitle.innerText = "TMB Assembly Puzzle"; mainSubtitle.innerHTML = '<i class="fas fa-gamepad text-gray-500 mr-2"></i> Merakit Komponen Robotika'; initGame(); }
-                else if (sectionId === 'robo-blueprint-section') { mainTitle.innerText = "Robo-Blueprint"; mainSubtitle.innerHTML = '<i class="fas fa-network-wired text-emerald-500 mr-2"></i> Auto Code C++ Generator'; }
                 else if (sectionId === 'kalkulator-section') { mainTitle.innerText = "TMB Calculator"; mainSubtitle.innerHTML = '<i class="fas fa-calculator text-slate-500 mr-2"></i> Kalkulator Scientific & Konversi'; }
-                else if (sectionId === 'lab-section') { mainTitle.innerText = "Virtual Lab 2D"; mainSubtitle.innerHTML = '<i class="fas fa-layer-group text-lime-500 mr-2"></i> Engine Builder & Drag-Drop Blueprint'; generateVirtualGrid(); }
-                else if (sectionId === 'period-section') { mainTitle.innerText = "Period Tracker"; mainSubtitle.innerHTML = '<i class="fas fa-droplet text-rose-500 mr-2"></i> Kalender Haid & Siklus'; renderPeriodCalendar(); }
+                else if (sectionId === 'period-section') { mainTitle.innerText = "Red Day Tracker"; mainSubtitle.innerHTML = '<i class="fas fa-droplet text-rose-500 mr-2"></i> Kalender Siklus, Riwayat & Estimasi'; renderPeriodCalendar(); }
             }
         };
 
+        // ==========================================
+        // NOTIFIKASI LAYAR HP & ALARM ENGINE
+        // ==========================================
         const notifIcon = document.getElementById('notif-icon');
-        function updateNotifIcon() { if (!("Notification" in window)) { notifIcon.className = "fas fa-bell-slash text-gray-300"; } else if (Notification.permission === "granted") { notifIcon.className = "fas fa-bell text-pink-500"; } else if (Notification.permission === "denied") { notifIcon.className = "fas fa-bell-slash text-red-400"; } else { notifIcon.className = "fas fa-bell text-gray-400"; } }
-        window.requestNotificationPermission = () => { if ("Notification" in window) { Notification.requestPermission().then(permission => { updateNotifIcon(); if (permission === "granted") { new Notification("Yay!", { body: "Sistem alarm Planner Tasya sudah aktif!", icon: "icon-192.png" }); } }); } else { alert("Browser ini tidak mendukung notifikasi modern."); } };
-        function triggerAlarm(title, message) { if ("Notification" in window && Notification.permission === "granted") { new Notification(title, { body: message, icon: "icon-192.png" }); } else { alert(`🔔 ALARM PLANNER TASYA!\n\n${title}\n${message}`); } }
+        function updateNotifIcon() {
+            const statusText = document.getElementById('pwa-notif-status-text');
+            const dot = document.getElementById('hp-notif-dot');
+            const label = document.getElementById('btn-hp-notif-label');
+
+            if (!("Notification" in window)) {
+                notifIcon.className = "fas fa-bell-slash text-gray-300";
+                if (statusText) statusText.innerText = "Browser tidak mendukung Notifikasi";
+                if (dot) dot.className = "w-2 h-2 rounded-full bg-gray-400";
+            } else if (Notification.permission === "granted") {
+                notifIcon.className = "fas fa-bell text-pink-500";
+                if (statusText) statusText.innerText = "✅ AKTIF (Siap kirim ke Layar HP)";
+                if (dot) dot.className = "w-2 h-2 rounded-full bg-green-500 animate-ping";
+                if (label) label.innerText = "Notif HP Aktif";
+            } else if (Notification.permission === "denied") {
+                notifIcon.className = "fas fa-bell-slash text-red-400";
+                if (statusText) statusText.innerText = "❌ Diblokir (Izinkan lewat Setelan Browser/HP)";
+                if (dot) dot.className = "w-2 h-2 rounded-full bg-red-500";
+            } else {
+                notifIcon.className = "fas fa-bell text-gray-400";
+                if (statusText) statusText.innerText = "⚠️ Belum Diizinkan (Klik Aktifkan)";
+                if (dot) dot.className = "w-2 h-2 rounded-full bg-yellow-400";
+            }
+        }
+
+        window.requestNotificationPermission = () => {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    updateNotifIcon();
+                    if (permission === "granted") {
+                        syncRemindersToSW();
+                        triggerSystemNotification("🎉 Notifikasi HP Aktif!", "Reminder H-3, H-1, dan Hari-H akan muncul otomatis di layar HP kamu.");
+                    } else {
+                        alert("Izin notifikasi ditolak. Silakan aktifkan izin notifikasi di pengaturan browser/HP agar pengingat H-3 & H-1 muncul.");
+                    }
+                });
+            } else {
+                alert("Browser ini tidak mendukung Web Notifications.");
+            }
+        };
+
+        window.sendTestHpNotification = () => {
+            if ("Notification" in window && Notification.permission !== "granted") {
+                requestNotificationPermission();
+                return;
+            }
+            triggerSystemNotification(
+                "🔔 Test Notifikasi Layar HP Tasya",
+                "Berhasil! Pengingat H-3, H-1, dan Hari-H dari Deadline Tracker, Beasiswa & Lomba, serta Kalender akan tampil seperti ini."
+            );
+        };
+
+        function triggerSystemNotification(title, message) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.ready.then(reg => {
+                        reg.showNotification(title, {
+                            body: message,
+                            icon: 'icon-192.png',
+                            badge: 'icon-192.png',
+                            vibrate: [200, 100, 200],
+                            tag: 'tasya-planner-alert-' + Date.now(),
+                            requireInteraction: true
+                        });
+                    }).catch(() => {
+                        new Notification(title, { body: message, icon: "icon-192.png" });
+                    });
+                } else {
+                    new Notification(title, { body: message, icon: "icon-192.png" });
+                }
+            } else {
+                alert(`🔔 ALARM PLANNER TASYA!\n\n${title}\n${message}`);
+            }
+        }
 
         // --- DEADLINE NOTIFICATION BUBBLE ---
         const updateDeadlineNotifs = () => {
@@ -1540,76 +2529,79 @@
         };
 
         function checkAlarms() {
-            const now = new Date(); const currentTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0'); const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`; let dataChanged = false;
-            appData.daily.forEach(item => { if (!item.completed && item.time === currentTime && !item.notified) { if (!item.date || item.date === currentDate) { triggerAlarm("🎯 Waktunya Fokus!", item.text); item.notified = true; dataChanged = true; } } });
+            const now = new Date();
+            const currentTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            const todayZero = new Date(); todayZero.setHours(0, 0, 0, 0);
+            const currentDate = formatDateLocal(todayZero);
+            let dataChanged = false;
 
-            const nowObj = new Date();
+            // 1. Daily Planner
+            appData.daily.forEach(item => {
+                if (!item.completed && item.time === currentTime && !item.notified) {
+                    if (!item.date || item.date === currentDate) {
+                        triggerSystemNotification("🎯 Waktunya Fokus!", item.text);
+                        item.notified = true;
+                        dataChanged = true;
+                    }
+                }
+            });
+
+            // 2. Kalender Acara Penting (H-3, H-1, Hari-H)
             for (let i = 0; i <= 7; i++) {
-                let target = new Date(nowObj); target.setDate(nowObj.getDate() + i);
-                const targetStr = `${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2, '0')}-${String(target.getDate()).padStart(2, '0')}`;
+                let target = new Date(todayZero); target.setDate(todayZero.getDate() + i);
+                const targetStr = formatDateLocal(target);
 
                 if (appData.calendarEvents[targetStr]) {
                     appData.calendarEvents[targetStr].forEach(ev => {
-                        if (ev.priority !== 'tinggi') return; 
-
+                        if (ev.priority !== 'tinggi') return;
                         if (!ev.reminders) { ev.reminders = {}; dataChanged = true; }
-                        let evTimeStart = ev.timeStart || ev.time;
-                        let evTimeObj = new Date(`${targetStr}T${evTimeStart}`);
-                        let diffMs = evTimeObj - nowObj;
-                        let diffMins = diffMs / (1000 * 60);
-                        let diffDays = diffMins / (60 * 24);
+                        let evTimeStart = ev.timeStart || ev.time || '08:00';
 
-                        if (diffDays > 0) {
-                            if (diffDays <= 7 && diffDays > 6.9 && !ev.reminders.d7) { triggerAlarm("📅 H-7 Acara!", `${ev.text} pada ${targetStr} ${evTimeStart}`); ev.reminders.d7 = true; dataChanged = true; }
-                            else if (diffDays <= 5 && diffDays > 4.9 && !ev.reminders.d5) { triggerAlarm("📅 H-5 Acara!", `${ev.text} pada ${targetStr} ${evTimeStart}`); ev.reminders.d5 = true; dataChanged = true; }
-                            else if (diffDays <= 3 && diffDays > 2.9 && !ev.reminders.d3) { triggerAlarm("📅 H-3 Acara!", `${ev.text} pada ${targetStr} ${evTimeStart}`); ev.reminders.d3 = true; dataChanged = true; }
-                            else if (diffDays <= 2 && diffDays > 1.9 && !ev.reminders.d2) { triggerAlarm("📅 H-2 Acara!", `${ev.text} pada ${targetStr} ${evTimeStart}`); ev.reminders.d2 = true; dataChanged = true; }
-                            else if (diffDays <= 1 && diffDays > 0.9 && !ev.reminders.d1) { triggerAlarm("📅 H-1 Acara Besok!", `${ev.text} pada ${targetStr} ${evTimeStart}`); ev.reminders.d1 = true; dataChanged = true; }
-                            
-                            else if (diffMins <= 300 && diffMins > 295 && !ev.reminders.h5) { triggerAlarm("📅 H-5 Jam Lagi!", `${ev.text} segera dimulai jam ${evTimeStart}`); ev.reminders.h5 = true; dataChanged = true; }
-                            else if (diffMins <= 60 && diffMins > 59 && !ev.reminders.h1) { triggerAlarm("📅 1 Jam Lagi!", `${ev.text} segera dimulai jam ${evTimeStart}`); ev.reminders.h1 = true; dataChanged = true; }
-                        }
-                        
-                        if (diffMins <= 0 && diffMins > -1 && !ev.reminders.now) {
-                            triggerAlarm("📅 Acara Dimulai!", `${ev.text} sekarang (${evTimeStart})`);
-                            ev.reminders.now = true;
-                            dataChanged = true;
+                        if (i === 3 && !ev.reminders.d3) {
+                            triggerSystemNotification("📅 H-3 Acara Penting!", `${ev.text} pada ${targetStr} jam ${evTimeStart}`);
+                            ev.reminders.d3 = true; dataChanged = true;
+                        } else if (i === 1 && !ev.reminders.d1) {
+                            triggerSystemNotification("📅 H-1 Acara Besok!", `${ev.text} besok (${targetStr}) jam ${evTimeStart}`);
+                            ev.reminders.d1 = true; dataChanged = true;
+                        } else if (i === 0 && evTimeStart === currentTime && !ev.reminders.now) {
+                            triggerSystemNotification("📅 Acara Penting Dimulai!", `${ev.text} sekarang (${evTimeStart})`);
+                            ev.reminders.now = true; dataChanged = true;
                         }
                     });
                 }
             }
 
-            appData.deadlines.forEach(item => { if (item.date === currentDate && item.time === currentTime && !item.notified) { triggerAlarm("🚨 Peringatan Deadline!", `Waktunya mengumpulkan: ${item.task}`); item.notified = true; dataChanged = true; } });
+            // 3. Deadline Tracker & Beasiswa/Lomba (H-3, H-1, Hari-H)
+            appData.deadlines.forEach(item => {
+                if (!item.date) return;
+                if (!item.notifiedMilestones) { item.notifiedMilestones = {}; dataChanged = true; }
+                const dlDateZero = new Date(item.date);
+                dlDateZero.setHours(0, 0, 0, 0);
+                const diffDays = Math.round((dlDateZero - todayZero) / (1000 * 60 * 60 * 24));
+                const mode = item.remindMode || 'all';
+
+                if (diffDays === 3 && mode === 'all' && !item.notifiedMilestones.h3) {
+                    triggerSystemNotification("⏳ Pengingat H-3 Deadline!", `${item.task} jatuh tempo 3 hari lagi (${item.date} ${item.time || ''})`);
+                    item.notifiedMilestones.h3 = true; dataChanged = true;
+                } else if (diffDays === 1 && (mode === 'all' || mode === 'h1') && !item.notifiedMilestones.h1) {
+                    triggerSystemNotification("⚠️ Pengingat H-1 Deadline!", `Besok batas akhir: ${item.task} (${item.date} ${item.time || ''})`);
+                    item.notifiedMilestones.h1 = true; dataChanged = true;
+                } else if (diffDays === 0 && (item.time === currentTime || !item.notifiedMilestones.h0Morning)) {
+                    if (item.time === currentTime && !item.notifiedMilestones.h0Exact) {
+                        triggerSystemNotification("🚨 HARI-H DEADLINE SEKARANG!", `Waktunya mengumpulkan: ${item.task}`);
+                        item.notifiedMilestones.h0Exact = true; dataChanged = true;
+                    } else if (!item.notifiedMilestones.h0Morning) {
+                        triggerSystemNotification("🚨 HARI INI DEADLINE!", `Jangan lupa hari ini batas akhir: ${item.task} (${item.time || '23:59'})`);
+                        item.notifiedMilestones.h0Morning = true; dataChanged = true;
+                    }
+                }
+            });
+
             if(dataChanged) saveData();
         }
-        setInterval(checkAlarms, 10000); updateNotifIcon();
-
-        // ==========================================
-        // FOCUS TIMER LOGIC
-        // ==========================================
-        let timerInterval; let timeLeft = 25 * 60; let isTimerRunning = false;
-        window.setTimer = (minutes) => { clearInterval(timerInterval); isTimerRunning = false; timeLeft = minutes * 60; updateTimerDisplay(); document.getElementById('btn-timer-start').classList.remove('hidden'); document.getElementById('btn-timer-pause').classList.add('hidden'); };
-        window.startTimer = () => { if (isTimerRunning) return; isTimerRunning = true; document.getElementById('btn-timer-start').classList.add('hidden'); document.getElementById('btn-timer-pause').classList.remove('hidden'); timerInterval = setInterval(() => { timeLeft--; updateTimerDisplay(); if (timeLeft <= 0) { clearInterval(timerInterval); isTimerRunning = false; document.getElementById('btn-timer-start').classList.remove('hidden'); document.getElementById('btn-timer-pause').classList.add('hidden'); appData.engineParts = (appData.engineParts || 0) + 1; saveData(); triggerAlarm("Engine Stopped!", "Waktu fokusmu habis. Kamu dapat 1 Komponen Mesin!"); } }, 1000); };
-        window.pauseTimer = () => { clearInterval(timerInterval); isTimerRunning = false; document.getElementById('btn-timer-start').classList.remove('hidden'); document.getElementById('btn-timer-pause').classList.add('hidden'); };
-        window.resetTimer = () => { clearInterval(timerInterval); isTimerRunning = false; timeLeft = 25 * 60; updateTimerDisplay(); document.getElementById('btn-timer-start').classList.remove('hidden'); document.getElementById('btn-timer-pause').classList.add('hidden'); };
-        const updateTimerDisplay = () => { const m = Math.floor(timeLeft / 60).toString().padStart(2, '0'); const s = (timeLeft % 60).toString().padStart(2, '0'); document.getElementById('timer-display').innerText = `${m}:${s}`; };
-        const renderEngineParts = () => { const container = document.getElementById('engine-parts-container'); const countLabel = document.getElementById('lab-parts-counter'); const count = appData.engineParts || 0; if(countLabel) countLabel.innerText = `Parts Tersedia: ${count}`; if(!container) return; container.innerHTML = ''; const partsIcons = ['fa-cog', 'fa-cogs', 'fa-microchip', 'fa-battery-full', 'fa-tachometer-alt']; for(let i=0; i<count; i++) { container.innerHTML += `<i class="fas ${partsIcons[i % partsIcons.length]} text-red-400 hover:scale-125 transition-transform cursor-pointer hover:text-red-600" title="Part ke-${i+1}"></i>`; } if(count === 0) container.innerHTML = '<span class="text-sm text-gray-400">Belum ada komponen terkumpul. Mulai fokus yuk!</span>'; };
-
-        // ==========================================
-        // VIRTUAL LAB 2D: DRAG & DROP LOGIC
-        // ==========================================
-        window.generateVirtualGrid = () => { const grid = document.getElementById('virtual-grid'); if(!grid) return; if(grid.innerHTML.trim() === '') { for(let i=0; i<40; i++) { grid.innerHTML += `<div class="grid-cell bg-[#334155] border border-[#475569] rounded-sm w-full h-full flex items-center justify-center relative overflow-hidden" ondrop="dropComp(event)" ondragover="allowDropComp(event)" ondragenter="dragEnterComp(event)" ondragleave="dragLeaveComp(event)"></div>`; } } };
-        window.dragComp = (ev) => { if(appData.engineParts <= 0) { alert("Kamu belum punya komponen mesin! Gunakan 'Engine Focus Timer' dulu untuk mengumpulkan part."); ev.preventDefault(); return; } ev.dataTransfer.setData("text", ev.target.id); ev.dataTransfer.setData("html", ev.target.outerHTML); };
-        window.allowDropComp = (ev) => { ev.preventDefault(); }; window.dragEnterComp = (ev) => { ev.preventDefault(); if(ev.target.classList.contains('grid-cell')) { ev.target.classList.add('hovered'); } }; window.dragLeaveComp = (ev) => { if(ev.target.classList.contains('grid-cell')) { ev.target.classList.remove('hovered'); } };
-        window.dropComp = (ev) => { ev.preventDefault(); ev.target.classList.remove('hovered'); if(ev.target.tagName === 'DIV' && ev.target.classList.contains('grid-cell')) { const htmlData = ev.dataTransfer.getData("html"); const tempDiv = document.createElement('div'); tempDiv.innerHTML = htmlData; const newElem = tempDiv.firstChild; newElem.id = "dropped-" + Date.now(); newElem.classList.remove('cursor-grab', 'bg-gray-50', 'hover:bg-lime-50', 'p-3', 'shadow-sm', 'border-gray-200'); newElem.classList.add('cursor-pointer', 'w-full', 'h-full', 'border-none', 'bg-transparent', 'shadow-none', 'flex', 'flex-col', 'items-center', 'justify-center'); const icon = newElem.querySelector('i'); if(icon) { icon.className = icon.className.replace('text-3xl', 'text-4xl').replace('mb-2', ''); newElem.innerHTML = ''; newElem.appendChild(icon); } newElem.onclick = function() { this.parentElement.innerHTML = ''; appData.engineParts += 1; saveData(); }; newElem.title = "Klik untuk menghapus"; newElem.setAttribute('draggable', 'false'); appData.engineParts -= 1; saveData(); ev.target.innerHTML = ''; ev.target.appendChild(newElem); } };
-        window.clearVirtualGrid = () => { const grid = document.getElementById('virtual-grid'); if(grid) { let itemsCount = grid.querySelectorAll('.grid-cell > div').length; appData.engineParts += itemsCount; grid.innerHTML = ''; saveData(); generateVirtualGrid(); } };
-
-        // ==========================================
-        // ROBO BLUEPRINT LOGIC
-        // ==========================================
-        window.addWire = () => { const comp = document.getElementById('robo-comp').value; const pin = document.getElementById('robo-pin').value; if(!pin || pin < 0 || pin > 13) return alert("Pilih pin Arduino yang valid (0-13)!"); appData.roboWires.push({ id: Date.now(), comp, pin }); document.getElementById('robo-pin').value = ''; saveData(); };
-        window.renderRobo = () => { const list = document.getElementById('wiring-list'); const codeOutput = document.getElementById('auto-cpp-code'); if(!list || !codeOutput) return; list.innerHTML = appData.roboWires.length === 0 ? '<li class="text-gray-400 italic">Belum ada kabel disambung.</li>' : ''; let vars = ""; let setups = ""; let loop = "\nvoid loop() {\n  // Logika gerak robotmu disini\n}\n"; appData.roboWires.forEach(w => { let icon = 'fa-microchip'; if(w.comp === 'LED') icon = 'fa-lightbulb'; if(w.comp === 'Motor') icon = 'fa-cogs'; if(w.comp === 'Ultrasonic') icon = 'fa-broadcast-tower'; if(w.comp === 'Buzzer') icon = 'fa-volume-up'; list.innerHTML += `<li class="flex justify-between items-center bg-gray-50 p-2 rounded border border-gray-100"><span><i class="fas ${icon} text-emerald-500 mr-2"></i>${w.comp} ➔ Pin ${w.pin}</span><button onclick="deleteItem('roboWires', ${w.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button></li>`; let pName = w.comp.toLowerCase() + "Pin_" + w.pin; if(w.comp === "Ultrasonic") { let nextPin = parseInt(w.pin) + 1; vars += `int trigPin_${w.pin} = ${w.pin};\nint echoPin_${nextPin} = ${nextPin};\n`; setups += `  pinMode(trigPin_${w.pin}, OUTPUT);\n  pinMode(echoPin_${nextPin}, INPUT);\n`; } else if(w.comp === "Buzzer" || w.comp === "LED" || w.comp === "Motor") { vars += `int ${pName} = ${w.pin};\n`; setups += `  pinMode(${pName}, OUTPUT);\n`; } }); if(appData.roboWires.length > 0) { codeOutput.value = `// Auto-Generated by Tasya Planner\n\n${vars}\nvoid setup() {\n${setups}}\n${loop}`; } else { codeOutput.value = `// Kode akan terbuat otomatis saat kabel disambung...`; } };
-        window.copyCode = () => { const codeArea = document.getElementById('auto-cpp-code'); codeArea.select(); document.execCommand('copy'); alert("Kode C++ berhasil disalin ke clipboard!"); };
+        setInterval(checkAlarms, 15000);
+        setTimeout(checkAlarms, 3000);
+        updateNotifIcon();
 
         // ==========================================
         // SCIENTIFIC & TMB CALCULATOR LOGIC
@@ -1703,9 +2695,9 @@
             });
         };
 
-        // --- CALENDAR & CALENDAR EVENTS FIX ---
+        // --- CALENDAR & CALENDAR EVENTS ---
         let currentMonth = new Date().getMonth(); let currentYear = new Date().getFullYear();
-        let selectedCalendarDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
+        let selectedCalendarDate = formatDateLocal(new Date());
         let editingCalEventId = null; let editingCalEventDate = null;
 
         const getHoliday = (dateStr) => {
@@ -1721,7 +2713,7 @@
             if(!daysContainer) return;
             const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
             monthYearLabel.innerText = `${months[currentMonth]} ${currentYear}`; daysContainer.innerHTML = '';
-            const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay(); const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate(); const todayStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
+            const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay(); const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate(); const todayStr = formatDateLocal(new Date());
             dateDisplay.innerText = selectedCalendarDate;
             for(let i=0; i<firstDayIndex; i++) { daysContainer.innerHTML += `<div></div>`; }
             for(let d=1; d<=totalDays; d++) {
@@ -1731,7 +2723,6 @@
                 if(dayStr === selectedCalendarDate) classes += " selected";
                 let holiday = getHoliday(dayStr); if (holiday) classes += " holiday"; let titleAttr = holiday ? `title="${holiday}"` : "";
 
-                // PERBAIKAN 1: ICON SEBAGAI PENANDA KEGIATAN (KUE, DLL) DIBUAT ESTETIK
                 let eventIcons = "";
                 if(appData.calendarEvents[dayStr] && appData.calendarEvents[dayStr].length > 0) {
                     const icons = new Set();
@@ -1739,13 +2730,13 @@
                         if(e.category === 'Ulang Tahun') icons.add('<i class="fas fa-birthday-cake text-pink-400 drop-shadow-sm"></i>');
                         else if(e.category === 'Pengingat') icons.add('<i class="fas fa-bell text-pink-400 drop-shadow-sm"></i>');
                         else if(e.category === 'Pengumuman') icons.add('<i class="fas fa-bullhorn text-pink-400 drop-shadow-sm"></i>');
-                        else icons.add('<i class="fas fa-star text-pink-400 drop-shadow-sm"></i>'); 
+                        else icons.add('<i class="fas fa-star text-pink-400 drop-shadow-sm"></i>');
                     });
                     eventIcons = `<div class="text-[10px] mt-0.5 flex gap-1 justify-center items-center h-3">${Array.from(icons).join('')}</div>`;
                 } else {
                     eventIcons = `<div class="text-[10px] mt-0.5 h-3"></div>`;
                 }
-                
+
                 daysContainer.innerHTML += `<div class="${classes}" ${titleAttr} onclick="selectCalendarDate('${dayStr}')"><span>${d}</span>${eventIcons}</div>`;
             }
             renderCalendarEventsBelow();
@@ -1765,10 +2756,10 @@
             const events = appData.calendarEvents[selectedCalendarDate] || [];
             if(events.length === 0 && !holidayName) { container.innerHTML = '<p class="text-xs text-gray-400 italic">Tidak ada acara di tanggal ini.</p>'; return; }
             events.forEach(ev => {
-                let priorityBadge = ev.priority === 'tinggi' ? '<span class="text-[9px] font-bold bg-red-200 text-red-700 px-1.5 py-0.5 rounded ml-1"><i class="fas fa-exclamation-triangle"></i> Penting</span>' : '';
+                let priorityBadge = ev.priority === 'tinggi' ? '<span class="text-[9px] font-bold bg-red-200 text-red-700 px-1.5 py-0.5 rounded ml-1"><i class="fas fa-bell"></i> Penting (Notif HP)</span>' : '';
                 let timeStr = ev.timeStart ? `${ev.timeStart} - ${ev.timeEnd}` : ev.time;
                 let categoryBadge = ev.category ? `<span class="text-[9px] font-bold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded ml-1">${ev.category}</span>` : '';
-                
+
                 container.innerHTML += `
                     <div class="bg-pink-50 border border-pink-200 p-2 rounded-lg flex justify-between items-center mb-2 shadow-sm">
                         <div>
@@ -1787,26 +2778,7 @@
                 `;
             });
         };
-
-        window.editCalendarEvent = (dateStr, id) => {
-            const ev = appData.calendarEvents[dateStr].find(e => e.id === id);
-            if(ev) {
-                document.getElementById('input-cal-time-start').value = ev.timeStart || ev.time;
-                document.getElementById('input-cal-time-end').value = ev.timeEnd || '';
-                document.getElementById('input-cal-event').value = ev.text;
-                document.getElementById('input-cal-category').value = ev.category || 'Acara/Kegiatan';
-                document.getElementById('input-cal-priority').value = ev.priority || 'rendah';
-                
-                let routineEl = document.getElementById('input-cal-routine');
-                if(routineEl) routineEl.value = 'sekali'; // Saat edit hanya edit tanggal itu saja
-                
-                editingCalEventId = id; editingCalEventDate = dateStr;
-                document.querySelector('#form-calendar-event button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Save';
-            }
-        };
-
-        window.deleteCalendarEvent = (dateStr, id) => {
-            if(appData.calendarEvents[dateStr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(e => e.id !== id); if(appData.calendarEvents[dateStr].length === 0) delete appData.calendarEvents[dateStr]; saveData(); renderCalendar(); }
+tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(e => e.id !== id); if(appData.calendarEvents[dateStr].length === 0) delete appData.calendarEvents[dateStr]; saveData(); renderCalendar(); }
         };
 
         document.getElementById('prev-month').onclick = () => { currentMonth--; if(currentMonth < 0) { currentMonth = 11; currentYear--; } renderCalendar(); };
@@ -1818,7 +2790,7 @@
         const renderDaily = () => {
             const container = document.getElementById('daily-list'); if(!container) return;
             container.innerHTML = appData.daily.length === 0 ? '<p class="text-xs text-gray-400 italic">Belum ada target harian.</p>' : '';
-            const todayStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
+            const todayStr = formatDateLocal(new Date());
             document.getElementById('daily-date-display').innerText = `Today: ${todayStr}`;
             appData.daily.forEach(item => {
                 container.innerHTML += `
@@ -1830,6 +2802,25 @@
                         <button onclick="deleteItem('daily', ${item.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash text-xs"></i></button>
                     </div>
                 `;
+        window.editCalendarEvent = (dateStr, id) => {
+            const ev = appData.calendarEvents[dateStr].find(e => e.id === id);
+            if(ev) {
+                document.getElementById('input-cal-time-start').value = ev.timeStart || ev.time;
+                document.getElementById('input-cal-time-end').value = ev.timeEnd || '';
+                document.getElementById('input-cal-event').value = ev.text;
+                document.getElementById('input-cal-category').value = ev.category || 'Acara/Kegiatan';
+                document.getElementById('input-cal-priority').value = ev.priority || 'rendah';
+
+                let routineEl = document.getElementById('input-cal-routine');
+                if(routineEl) routineEl.value = 'sekali';
+
+                editingCalEventId = id; editingCalEventDate = dateStr;
+                document.querySelector('#form-calendar-event button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Save';
+            }
+        };
+
+        window.deleteCalendarEvent = (dateStr, id) => {
+            if(appData.calendarEvents[dateS
             });
         };
 
@@ -1837,17 +2828,25 @@
             const container = document.getElementById('deadlines-list'); if(!container) return;
             container.innerHTML = appData.deadlines.length === 0 ? '<p class="text-xs text-gray-400 italic">Belum ada deadline tugas.</p>' : '';
             const now = new Date();
-            appData.deadlines.forEach(item => {
+            const sortedDeadlines = [...appData.deadlines].sort((a, b) => new Date(`${a.date}T${a.time || '23:59'}`) - new Date(`${b.date}T${b.time || '23:59'}`));
+
+            sortedDeadlines.forEach(item => {
                 const deadlineDate = new Date(`${item.date}T${item.time || '23:59'}`);
                 const diffDays = (deadlineDate - now) / (1000 * 60 * 60 * 24);
-                let isPanic = diffDays >= 0 && diffDays <= 3;
+                let isPanic = diffDays >= -0.5 && diffDays <= 3;
                 let categoryLabel = item.category ? `[${item.category}] ` : '';
+                let remindLabel = item.remindMode === 'h0' ? 'Notif: Hari-H' : (item.remindMode === 'h1' ? 'Notif: H-1 & H-0' : 'Notif: H-3, H-1, H-0');
+                let linkedBadge = item.linkedOpportunityId ? `<span class="text-[9px] font-bold bg-fuchsia-100 text-fuchsia-700 px-1.5 py-0.5 rounded ml-1">Sinkron Beasiswa/Lomba</span>` : '';
+
                 container.innerHTML += `
                     <div class="glass-card p-3 border border-pink-200 flex flex-col justify-between items-start ${isPanic ? 'panic-warning' : ''}">
                         <div class="w-full">
-                            <span class="text-[10px] font-bold ${isPanic ? 'panic-text' : 'text-pink-500'}"><i class="far fa-calendar-alt mr-1"></i>${item.date} ${item.time || ''}</span>
-                            <h4 class="font-bold text-gray-800 text-sm mt-0.5">${categoryLabel}${item.task}</h4>
-                            ${isPanic ? '<span class="text-[10px] font-bold text-red-500 animate-pulse">🚨 MENDESAK (&lt; 3 Hari)!</span>' : ''}
+                            <div class="flex flex-wrap items-center justify-between gap-1">
+                                <span class="text-[10px] font-bold ${isPanic ? 'panic-text' : 'text-pink-500'}"><i class="far fa-calendar-alt mr-1"></i>${item.date} ${item.time || ''}</span>
+                                <span class="text-[9px] font-bold bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full"><i class="fas fa-mobile-alt mr-1"></i>${remindLabel}</span>
+                            </div>
+                            <h4 class="font-bold text-gray-800 text-sm mt-1">${categoryLabel}${item.task} ${linkedBadge}</h4>
+                            ${isPanic ? '<span class="text-[10px] font-bold text-red-500 animate-pulse block mt-0.5">🚨 MENDESAK (&le; 3 Hari)!</span>' : ''}
                         </div>
                         <div class="flex gap-2 mt-2 w-full justify-end border-t border-pink-100 pt-2">
                             <button onclick="editDeadline(${item.id})" class="text-blue-400 hover:text-blue-600 px-2 bg-blue-50 rounded shadow-sm text-[10px] py-1 border border-blue-100"><i class="fas fa-edit mr-1"></i> Edit</button>
@@ -1863,18 +2862,17 @@
             const item = appData.deadlines.find(d => d.id === id);
             if(item) {
                 document.getElementById('input-deadline-task').value = item.task;
-                document.getElementById('input-deadline-category').value = item.category || 'Lainnya';
+                document.getElementById('input-deadline-category').value = ['Matkul', 'Organisasi', 'Lainnya'].includes(item.category) ? item.category : 'Lainnya';
                 document.getElementById('input-deadline-date').value = item.date;
                 document.getElementById('input-deadline-time').value = item.time;
+                document.getElementById('input-deadline-remind').value = item.remindMode || 'all';
                 editingDeadlineId = id;
-                document.querySelector('#form-deadlines button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update';
+                document.querySelector('#form-deadlines button[type="submit"]').innerHTML = '<i class="fas fa-save mr-1"></i> Update Deadline';
             }
         };
 
-        // PERBAIKAN 2: SINKRONISASI DEADLINE SELESAI DAN MENGHAPUS COURSEWORK
         window.completeDeadline = (id) => {
             deleteItem('deadlines', id);
-            // Hapus juga yang terhubung di Coursework & Organisasi
             appData.coursework = appData.coursework.filter(c => c.linkedDeadlineId !== id);
             appData.organizations = appData.organizations.filter(o => o.linkedDeadlineId !== id);
             saveData();
@@ -1899,38 +2897,6 @@
             appData.organizations.forEach(item => { container.innerHTML += `<div class="list-item"><div class="flex flex-col"><span class="text-[10px] font-bold text-orange-500">${item.name} (${item.date})</span><span class="text-xs font-bold text-gray-700">${item.role}</span></div><button onclick="deleteItem('organizations', ${item.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash text-xs"></i></button></div>`; });
         };
 
-        const renderScholarships = () => {
-            const container = document.getElementById('scholarship-list'); if(!container) return;
-            container.innerHTML = appData.scholarships.length === 0 ? '<p class="text-xs text-gray-400 italic col-span-2 text-center mt-6">Belum ada roadmap beasiswa. Yuk mulai planning dari sekarang!</p>' : '';
-            
-            let sortedS = [...appData.scholarships].sort((a,b) => new Date(a.date) - new Date(b.date));
-
-            sortedS.forEach(item => {
-                let badge = 'bg-yellow-100 text-yellow-700';
-                if(item.status === 'Menulis Essai' || item.status === 'Wawancara') badge = 'bg-blue-100 text-blue-700';
-                if(item.status === 'Lolos' || item.status === 'Submit Daftar') badge = 'bg-green-100 text-green-700';
-                let dateInfo = item.date ? `<br><span class="text-[10px] text-gray-500"><i class="far fa-calendar-alt mr-1"></i>DL Tahap ini: ${item.date} ${item.time || ''}</span>` : '';
-                
-                container.innerHTML += `
-                    <div class="bg-white p-3 rounded-xl border border-fuchsia-200 flex flex-col justify-between mb-2 shadow-sm relative group transition-transform hover:-translate-y-1">
-                        <div class="flex justify-between items-start mb-2">
-                            <div>
-                                <h4 class="text-sm font-bold text-gray-800">${item.name}</h4>
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded mt-1 inline-block ${badge}">${item.status}</span>
-                                ${dateInfo}
-                            </div>
-                            <button onclick="completeScholarship(${item.id})" class="text-green-500 hover:text-green-700 bg-green-50 p-1.5 rounded-full shadow-sm" title="Tandai Selesai / Ceklis"><i class="fas fa-check-circle text-lg"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-        };
-
-        window.completeScholarship = (id) => {
-            deleteItem('scholarships', id);
-            renderScholarships();
-        };
-
         // ==========================================
         // FINANCE & RAB LOGIC
         // ==========================================
@@ -1941,22 +2907,60 @@
             let saldoTabungan = 0; wallets.tabungan.forEach(t => { if(t.type === 'in') saldoTabungan += t.amount; else saldoTabungan -= t.amount; });
             let saldoWishlist = 0; wallets.wishlist.forEach(t => { if(t.type === 'in') saldoWishlist += t.amount; else saldoWishlist -= t.amount; });
 
-            document.getElementById('display-utama').innerText = `Rp ${saldoUtama.toLocaleString()}`; document.getElementById('display-utama-in').innerText = `+ Rp ${totalUtamaIn.toLocaleString()}`; document.getElementById('display-utama-out').innerText = `- Rp ${totalUtamaOut.toLocaleString()}`; document.getElementById('display-tabungan').innerText = `Rp ${saldoTabungan.toLocaleString()}`; document.getElementById('display-wishlist').innerText = `Rp ${saldoWishlist.toLocaleString()}`;
-            const todayStr = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`; let dailyOut = 0; wallets.utama.forEach(t => { if(t.date === todayStr && t.type === 'out') dailyOut += t.amount; }); document.getElementById('display-daily-out').innerText = `Rp ${dailyOut.toLocaleString()}`;
+            document.getElementById('display-utama').innerText = `Rp ${saldoUtama.toLocaleString()}`;
+            document.getElementById('display-utama-in').innerText = `+ Rp ${totalUtamaIn.toLocaleString()}`;
+            document.getElementById('display-utama-out').innerText = `- Rp ${totalUtamaOut.toLocaleString()}`;
+            document.getElementById('display-tabungan').innerText = `Rp ${saldoTabungan.toLocaleString()}`;
+            document.getElementById('display-wishlist').innerText = `Rp ${saldoWishlist.toLocaleString()}`;
 
-            renderWeeklyExpenseGrid(); renderRAB(); renderTransactions();
+            const todayStr = formatDateLocal(new Date());
+            let dailyOut = 0;
+            wallets.utama.forEach(t => { if(t.date === todayStr && t.type === 'out') dailyOut += t.amount; });
+            document.getElementById('display-daily-out').innerText = `Rp ${dailyOut.toLocaleString()}`;
+
+            // Hitung pemasukan & pengeluaran minggu berjalan (Senin - Minggu)
+            const now = new Date();
+            const dayOfWeek = now.getDay(); // 0 = Min, 1 = Sen
+            const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            const monday = new Date(now);
+            monday.setDate(now.getDate() + diffToMonday);
+            monday.setHours(0, 0, 0, 0);
+
+            let weeklyIn = 0;
+            const dailyTotals = [0, 0, 0, 0, 0, 0, 0];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                const dStr = formatDateLocal(d);
+                wallets.utama.forEach(t => {
+                    if (t.date === dStr) {
+                        if (t.type === 'in') weeklyIn += t.amount;
+                        if (t.type === 'out') dailyTotals[i] += t.amount;
+                    }
+                });
+            }
+            document.getElementById('display-weekly-in').innerText = `Rp ${weeklyIn.toLocaleString()}`;
+
+            renderWeeklyExpenseGrid(dailyTotals); renderRAB(); renderTransactions();
         };
 
-        const renderWeeklyExpenseGrid = () => {
-            const container = document.getElementById('weekly-expense-grid'); if(!container) return; container.innerHTML = ''; const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-            days.forEach((day, index) => { container.innerHTML += `<div class="bg-white bg-opacity-60 p-2 rounded-lg border border-yellow-200"><span class="text-[10px] font-bold text-yellow-800">${day}</span><p class="text-xs font-bold text-red-600 mt-1">Rp 0</p></div>`; });
+        const renderWeeklyExpenseGrid = (dailyTotals = [0,0,0,0,0,0,0]) => {
+            const container = document.getElementById('weekly-expense-grid'); if(!container) return; container.innerHTML = '';
+            const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+            days.forEach((day, index) => {
+                container.innerHTML += `<div class="bg-white bg-opacity-60 p-2 rounded-lg border border-yellow-200"><span class="text-[10px] font-bold text-yellow-800">${day}</span><p class="text-xs font-bold text-red-600 mt-1">Rp ${(dailyTotals[index] || 0).toLocaleString()}</p></div>`;
+            });
         };
         const renderRAB = () => {
             const tbody = document.getElementById('rab-list'); if(!tbody) return; tbody.innerHTML = appData.finance.rab.length === 0 ? '<tr><td colspan="5" class="text-center text-xs text-gray-400 py-3 italic">Belum ada RAB.</td></tr>' : '';
             appData.finance.rab.forEach(item => {
                 let realisasi = 0; appData.finance.wallets.utama.forEach(t => { if(t.category === item.kategori && t.type === 'out') realisasi += t.amount; });
-                tbody.innerHTML += `<tr><td class="font-bold text-gray-700">${item.kategori}</td><td>${item.target}</td><td>Rp ${item.nominal.toLocaleString()}</td><td class="font-bold text-red-500">Rp ${realisasi.toLocaleString()}</td><td class="text-center"><button onclick="deleteItem('rab', ${item.id}, 'finance')" class="text-red-300 hover:text-red-500"><i class="fas fa-trash text-xs"></i></button></td></tr>`;
+                tbody.innerHTML += `<tr><td class="font-bold text-gray-700">${item.kategori}</td><td>${item.target}</td><td>Rp ${item.nominal.toLocaleString()}</td><td class="font-bold text-red-500">Rp ${realisasi.toLocaleString()}</td><td class="text-center"><button onclick="deleteRabItem(${item.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash text-xs"></i></button></td></tr>`;
             });
+        };
+        window.deleteRabItem = (id) => {
+            appData.finance.rab = appData.finance.rab.filter(r => r.id !== id);
+            saveData();
         };
         window.renderTransactions = () => {
             const wallet = document.getElementById('filter-history-wallet').value; const container = document.getElementById('transaction-list'); if(!container) return; container.innerHTML = '';
@@ -1981,7 +2985,28 @@
         // ACADEMIC CANVAS & LECTURE NOTES
         // ==========================================
         const canvas = document.getElementById('academic-canvas'); let ctx = canvas ? canvas.getContext('2d') : null; let isDrawing = false;
-        if(canvas) { canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', stopDraw); canvas.addEventListener('touchstart', (e) => { startDraw(e.touches[0]); e.preventDefault(); }); canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); }); canvas.addEventListener('touchend', stopDraw); }
+        if(canvas) {
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('touchstart', (e) => { startDraw(e.touches[0]); e.preventDefault(); });
+            canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
+            canvas.addEventListener('touchend', stopDraw);
+            const uploadPpt = document.getElementById('upload-ppt-image');
+            if (uploadPpt) {
+                uploadPpt.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const img = new Image();
+                        img.onload = () => {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        };
+                        img.src = URL.createObjectURL(file);
+                    }
+                };
+            }
+        }
         function startDraw(e) { isDrawing = true; ctx.beginPath(); const rect = canvas.getBoundingClientRect(); ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top); }
         function draw(e) { if(!isDrawing) return; const rect = canvas.getBoundingClientRect(); ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = document.getElementById('pen-color').value; ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top); ctx.stroke(); }
         function stopDraw() { isDrawing = false; }
@@ -1995,15 +3020,6 @@
         // SECURE VAULT
         // ==========================================
         const renderVault = () => { const container = document.getElementById('vault-list'); if(!container) return; container.innerHTML = appData.secureNotes.length === 0 ? '<p class="text-xs text-gray-400 italic text-center">Vault kosong.</p>' : ''; appData.secureNotes.forEach(v => { container.innerHTML += `<div class="bg-indigo-50 p-3 rounded-xl border border-indigo-200 flex justify-between items-center shadow-sm"><div><h4 class="font-bold text-indigo-800 text-sm">${v.title}</h4><p class="text-xs text-gray-600 font-mono mt-0.5">${v.data}</p></div><button onclick="deleteItem('secureNotes', ${v.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button></div>`; }); };
-
-        // ==========================================
-        // ROBOTIC PUZZLE GAME
-        // ==========================================
-        let currentGameLevel = 0; const gameLevels = [ { title: "Level 1: Basic LED Circuit", grid: [[1, 0], [2, 3]] }, { title: "Level 2: Motor Driver Connection", grid: [[1, 3], [3, 2]] } ];
-        window.initGame = () => { renderGameGrid(); };
-        const renderGameGrid = () => { const board = document.getElementById('game-board'); if(!board) return; board.innerHTML = ''; const lvl = gameLevels[currentGameLevel]; document.getElementById('level-title').innerText = lvl.title; board.style.gridTemplateColumns = `repeat(${lvl.grid[0].length}, 60px)`; lvl.grid.forEach((row, r) => { row.forEach((cell, c) => { let tileClass = "game-tile"; let content = '<i class="fas fa-random"></i>'; if(cell === 1) { tileClass += " start-tile"; content = '<i class="fas fa-bolt"></i>'; } if(cell === 2) { tileClass += " end-tile"; content = '<i class="fas fa-lightbulb"></i>'; } board.innerHTML += `<div class="${tileClass}" onclick="rotateTile(${r}, ${c})" id="tile-${r}-${c}">${content}</div>`; }); }); };
-        window.rotateTile = (r, c) => { const tile = document.getElementById(`tile-${r}-${c}`); if(tile.classList.contains('start-tile') || tile.classList.contains('end-tile')) return; let currentRot = parseInt(tile.dataset.rot || 0) + 90; tile.dataset.rot = currentRot; tile.style.transform = `rotate(${currentRot}deg)`; };
-        window.resetCurrentLevel = () => { renderGameGrid(); }; window.nextLevel = () => { currentGameLevel = (currentGameLevel + 1) % gameLevels.length; renderGameGrid(); document.getElementById('btn-next-level').classList.add('hidden'); };
 
         // ==========================================
         // SUPPORT SYSTEM & POLAROID POSITIONS
@@ -2025,8 +3041,7 @@
         // FORM SUBMISSIONS & INITIALIZATION
         // ==========================================
         document.getElementById('form-schedule').onsubmit = (e) => { e.preventDefault(); const editId = document.getElementById('edit-sch-id').value; const newObj = { id: editId ? parseInt(editId) : Date.now(), type: document.getElementById('input-sch-type').value, name: document.getElementById('input-sch-name').value, day: document.getElementById('input-sch-day').value, start: document.getElementById('input-sch-start').value, end: document.getElementById('input-sch-end').value, room: document.getElementById('input-sch-room').value }; if(editId) { const idx = appData.schedule.findIndex(s => s.id === parseInt(editId)); if(idx > -1) appData.schedule[idx] = newObj; document.getElementById('edit-sch-id').value = ''; document.getElementById('btn-submit-schedule').innerText = "Tambah ke Jadwal"; } else { appData.schedule.push(newObj); } document.getElementById('form-schedule').reset(); saveData(); };
-        
-        // PERBAIKAN 3: CALENDAR EVENT ONSUBMIT (ACARA RUTIN 4 MINGGU)
+
         document.getElementById('form-calendar-event').onsubmit = (e) => {
             e.preventDefault();
             const timeStart = document.getElementById('input-cal-time-start').value;
@@ -2048,17 +3063,15 @@
                 editingCalEventId = null; editingCalEventDate = null;
                 document.querySelector('#form-calendar-event button[type="submit"]').innerHTML = '<i class="fas fa-plus"></i> Add';
             } else {
-                // Hari Terpilih
                 if(!appData.calendarEvents[selectedCalendarDate]) appData.calendarEvents[selectedCalendarDate] = [];
                 appData.calendarEvents[selectedCalendarDate].push({ id: Date.now(), timeStart, timeEnd, text, priority, category });
 
-                // Jika Rutin
                 if (routine === 'rutin') {
                     for (let i = 1; i <= 4; i++) {
                         let nextDate = new Date(selectedCalendarDate);
                         nextDate.setDate(nextDate.getDate() + (7 * i));
-                        let targetStr = `${nextDate.getFullYear()}-${String(nextDate.getMonth() + 1).padStart(2, '0')}-${String(nextDate.getDate()).padStart(2, '0')}`;
-                        
+                        let targetStr = formatDateLocal(nextDate);
+
                         if(!appData.calendarEvents[targetStr]) appData.calendarEvents[targetStr] = [];
                         appData.calendarEvents[targetStr].push({ id: Date.now() + i, timeStart, timeEnd, text, priority, category });
                     }
@@ -2067,16 +3080,16 @@
             document.getElementById('input-cal-event').value = '';
             saveData(); renderCalendar();
         };
-        
+
         document.getElementById('form-daily').onsubmit = (e) => { e.preventDefault(); appData.daily.push({ id: Date.now(), text: document.getElementById('input-daily').value, date: document.getElementById('input-daily-date').value, time: document.getElementById('input-daily-time').value, completed: false }); document.getElementById('input-daily').value = ''; saveData(); };
-        
-        // PERBAIKAN 2: MENAMBAHKAN LINK ANTARA DEADLINE DAN COURSEWORK SAAT DIBUAT
+
         document.getElementById('form-deadlines').onsubmit = (e) => {
             e.preventDefault();
             const task = document.getElementById('input-deadline-task').value;
             const date = document.getElementById('input-deadline-date').value;
             const time = document.getElementById('input-deadline-time').value;
             const category = document.getElementById('input-deadline-category').value;
+            const remindMode = document.getElementById('input-deadline-remind').value || 'all';
 
             if (editingDeadlineId) {
                 const idx = appData.deadlines.findIndex(d => d.id === editingDeadlineId);
@@ -2085,14 +3098,14 @@
                     appData.deadlines[idx].date = date;
                     appData.deadlines[idx].time = time;
                     appData.deadlines[idx].category = category;
+                    appData.deadlines[idx].remindMode = remindMode;
                 }
                 editingDeadlineId = null;
-                document.querySelector('#form-deadlines button[type="submit"]').innerHTML = '<i class="fas fa-plus"></i> Add';
+                document.querySelector('#form-deadlines button[type="submit"]').innerHTML = '<i class="fas fa-plus mr-1"></i> Tambah Deadline & Jadwalkan Notif HP';
             } else {
                 const newId = Date.now();
-                appData.deadlines.push({ id: newId, task: task, date: date, time: time, category: category });
-                
-                // Link ke Coursework & Org
+                appData.deadlines.push({ id: newId, task: task, date: date, time: time, category: category, remindMode: remindMode });
+
                 if(category === 'Matkul') appData.coursework.push({ id: Date.now() + 1, linkedDeadlineId: newId, course: task, detail: `Deadline: ${date} ${time}` });
                 else if(category === 'Organisasi') appData.organizations.push({ id: Date.now() + 1, linkedDeadlineId: newId, name: task, role: `Tugas/Deadline`, date: date });
             }
@@ -2100,166 +3113,138 @@
             saveData();
         };
 
-        const formScholarship = document.getElementById('form-scholarship');
-        if(formScholarship) {
-            formScholarship.onsubmit = (e) => {
-                e.preventDefault();
-                const name = document.getElementById('input-scholarship-name').value;
-                const status = document.getElementById('input-scholarship-status').value;
-                const date = document.getElementById('input-scholarship-date').value;
-                const time = document.getElementById('input-scholarship-time').value;
-
-                appData.scholarships.push({ id: Date.now(), name, status, date, time });
-
-                if(date) {
-                    appData.deadlines.push({
-                        id: Date.now() + 1,
-                        task: `[BEASISWA] ${name} - ${status}`,
-                        date: date,
-                        time: time || '23:59',
-                        category: 'Lainnya'
-                    });
-                    alert('Berhasil disimpan dan Deadline Notif telah diaktifkan secara otomatis!');
-                }
-
-                document.getElementById('form-scholarship').reset();
-                saveData();
-            };
-        }
-
         document.getElementById('form-goals').onsubmit = (e) => { e.preventDefault(); appData.goals.push({ id: Date.now(), text: document.getElementById('input-goals').value }); document.getElementById('input-goals').value = ''; saveData(); };
         document.getElementById('form-coursework').onsubmit = (e) => { e.preventDefault(); appData.coursework.push({ id: Date.now(), course: document.getElementById('input-course').value, detail: document.getElementById('input-course-detail').value }); document.getElementById('input-course').value = ''; document.getElementById('input-course-detail').value = ''; saveData(); };
         document.getElementById('form-org').onsubmit = (e) => { e.preventDefault(); appData.organizations.push({ id: Date.now(), name: document.getElementById('input-org-name').value, role: document.getElementById('input-org-role').value, date: document.getElementById('input-org-date').value }); document.getElementById('input-org-name').value = ''; document.getElementById('input-org-role').value = ''; saveData(); };
         document.getElementById('form-rab').onsubmit = (e) => { e.preventDefault(); appData.finance.rab.push({ id: Date.now(), kategori: document.getElementById('rab-kategori').value, target: document.getElementById('rab-target').value, nominal: parseFloat(document.getElementById('rab-nominal').value) || 0 }); document.getElementById('rab-target').value = ''; document.getElementById('rab-nominal').value = ''; saveData(); };
         document.getElementById('form-transaksi').onsubmit = (e) => { e.preventDefault(); const wallet = document.getElementById('trans-wallet').value; const type = document.getElementById('trans-type').value; const date = document.getElementById('trans-date').value; const category = document.getElementById('trans-category').value; const desc = document.getElementById('trans-desc').value; const amount = parseFloat(document.getElementById('trans-amount').value) || 0; appData.finance.wallets[wallet].push({ id: Date.now(), type, date, category, desc, amount }); document.getElementById('trans-desc').value = ''; document.getElementById('trans-amount').value = ''; saveData(); };
-        
-        document.getElementById('form-meal-plan').onsubmit = (e) => { 
-            e.preventDefault(); 
-            appData.mealPlan.push({ 
-                id: Date.now(), 
-                date: document.getElementById('meal-date').value, 
-                break: { type: document.getElementById('meal-break-type').value, desc: document.getElementById('meal-break-desc').value }, 
-                lunch: { type: document.getElementById('meal-lunch-type').value, desc: document.getElementById('meal-lunch-desc').value }, 
-                dinner: { type: document.getElementById('meal-dinner-type').value, desc: document.getElementById('meal-dinner-desc').value } 
-            }); 
-            document.getElementById('form-meal-plan').reset(); 
-            saveData(); 
+
+        document.getElementById('form-meal-plan').onsubmit = (e) => {
+            e.preventDefault();
+            appData.mealPlan.push({
+                id: Date.now(),
+                date: document.getElementById('meal-date').value,
+                break: { type: document.getElementById('meal-break-type').value, desc: document.getElementById('meal-break-desc').value },
+                lunch: { type: document.getElementById('meal-lunch-type').value, desc: document.getElementById('meal-lunch-desc').value },
+                dinner: { type: document.getElementById('meal-dinner-type').value, desc: document.getElementById('meal-dinner-desc').value }
+            });
+            document.getElementById('form-meal-plan').reset();
+            saveData();
         };
-        
-        document.getElementById('form-add-recipe').onsubmit = (e) => { 
-            e.preventDefault(); 
-            appData.recipes.push({ 
-                id: Date.now(), 
-                name: document.getElementById('recipe-name').value, 
-                ingredients: tempIngredients, 
-                steps: document.getElementById('recipe-steps').value 
-            }); 
-            tempIngredients = []; 
-            document.getElementById('form-add-recipe').reset(); 
-            renderTempIngredients(); 
-            saveData(); 
+
+        document.getElementById('form-add-recipe').onsubmit = (e) => {
+            e.preventDefault();
+            appData.recipes.push({
+                id: Date.now(),
+                name: document.getElementById('recipe-name').value,
+                ingredients: tempIngredients,
+                steps: document.getElementById('recipe-steps').value
+            });
+            tempIngredients = [];
+            document.getElementById('form-add-recipe').reset();
+            renderTempIngredients();
+            saveData();
         };
-        
-        document.getElementById('form-shopping').onsubmit = (e) => { 
-            e.preventDefault(); 
-            appData.shoppingNotes.push({ 
-                id: Date.now(), 
-                item: document.getElementById('shop-item').value, 
-                price: parseFloat(document.getElementById('shop-price').value) || 0, 
-                note: document.getElementById('shop-note').value 
-            }); 
-            document.getElementById('form-shopping').reset(); 
-            saveData(); 
+
+        document.getElementById('form-shopping').onsubmit = (e) => {
+            e.preventDefault();
+            appData.shoppingNotes.push({
+                id: Date.now(),
+                item: document.getElementById('shop-item').value,
+                price: parseFloat(document.getElementById('shop-price').value) || 0,
+                note: document.getElementById('shop-note').value
+            });
+            document.getElementById('form-shopping').reset();
+            saveData();
         };
-        
-        document.getElementById('form-vault').onsubmit = (e) => { 
-            e.preventDefault(); 
-            appData.secureNotes.push({ 
-                id: Date.now(), 
-                title: document.getElementById('vault-title').value, 
-                data: document.getElementById('vault-data').value 
-            }); 
-            document.getElementById('form-vault').reset(); 
-            saveData(); 
+
+        document.getElementById('form-vault').onsubmit = (e) => {
+            e.preventDefault();
+            appData.secureNotes.push({
+                id: Date.now(),
+                title: document.getElementById('vault-title').value,
+                data: document.getElementById('vault-data').value
+            });
+            document.getElementById('form-vault').reset();
+            saveData();
         };
-        
-        document.getElementById('form-diary').onsubmit = (e) => { 
-            e.preventDefault(); 
-            appData.diary.push({ 
-                id: Date.now(), 
-                date: document.getElementById('diary-date').value, 
-                title: document.getElementById('diary-title-input').value, 
-                story: document.getElementById('diary-story').value, 
-                eval: document.getElementById('diary-eval').value 
-            }); 
-            document.getElementById('form-diary').reset(); 
-            saveData(); 
+
+        document.getElementById('form-diary').onsubmit = (e) => {
+            e.preventDefault();
+            appData.diary.push({
+                id: Date.now(),
+                date: document.getElementById('diary-date').value,
+                title: document.getElementById('diary-title-input').value,
+                story: document.getElementById('diary-story').value,
+                eval: document.getElementById('diary-eval').value
+            });
+            document.getElementById('form-diary').reset();
+            saveData();
         };
-        
-        document.getElementById('form-quotes').onsubmit = (e) => { 
-            e.preventDefault(); 
-            appData.quotesList.push({ 
-                id: Date.now(), 
-                text: document.getElementById('quote-text').value, 
-                image: document.getElementById('quote-img-base64').value 
-            }); 
-            document.getElementById('form-quotes').reset(); 
-            document.getElementById('quote-img-base64').value = ''; 
-            saveData(); 
+
+        document.getElementById('form-quotes').onsubmit = (e) => {
+            e.preventDefault();
+            appData.quotesList.push({
+                id: Date.now(),
+                text: document.getElementById('quote-text').value,
+                image: document.getElementById('quote-img-base64').value
+            });
+            document.getElementById('form-quotes').reset();
+            document.getElementById('quote-img-base64').value = '';
+            saveData();
         };
 
         const motInput = document.getElementById('input-motivation');
-        if(motInput) { 
-            motInput.value = appData.motivation || ""; 
-            motInput.oninput = (e) => { appData.motivation = e.target.value; saveData(); }; 
+        if(motInput) {
+            motInput.value = appData.motivation || "";
+            motInput.oninput = (e) => { appData.motivation = e.target.value; saveData(); };
         }
-        
+
         const inspInput = document.getElementById('input-inspiration-desc');
-        if(inspInput) { 
-            inspInput.value = appData.inspirationDesc || ""; 
-            inspInput.oninput = (e) => { appData.inspirationDesc = e.target.value; saveData(); }; 
+        if(inspInput) {
+            inspInput.value = appData.inspirationDesc || "";
+            inspInput.oninput = (e) => { appData.inspirationDesc = e.target.value; saveData(); };
         }
 
         window.renderAll = () => {
-            renderSchedule(); 
-            renderScheduleNotes(); 
-            renderCalendar(); 
-            renderDaily(); 
-            renderDeadlines(); 
-            renderGoals(); 
-            renderCoursework(); 
-            renderOrganizations(); 
-            renderScholarships(); 
-            renderFinance(); 
-            renderRecipes(); 
-            renderMealPlan(); 
-            renderShoppingNotes(); 
-            renderAcademicNotes(); 
-            renderLectureNotes(); 
-            renderVault(); 
-            renderDiary(); 
-            renderQuotes(); 
-            renderImportantNotes(); 
-            renderDailyReminders(); 
-            renderMarquee(); 
-            renderEngineParts(); 
-            renderRobo(); 
+            renderSchedule();
+            renderScheduleNotes();
+            renderCalendar();
+            renderDaily();
+            renderDeadlines();
+            renderGoals();
+            renderCoursework();
+            renderOrganizations();
+            renderOpportunities();
+            renderFinance();
+            renderRecipes();
+            renderMealPlan();
+            renderShoppingNotes();
+            renderAcademicNotes();
+            renderLectureNotes();
+            renderVault();
+            renderDiary();
+            renderQuotes();
+            renderImportantNotes();
+            renderDailyReminders();
+            renderMarquee();
             renderPeriodCalendar();
-            
+
             ['family', 'friends', 'partner', 'inspiration'].forEach(type => {
-                if (appData.photos[type]) { 
-                    const img = document.getElementById(`img-${type}`); 
-                    if(img) img.src = appData.photos[type]; 
+                if (appData.photos[type]) {
+                    const img = document.getElementById(`img-${type}`);
+                    if(img) img.src = appData.photos[type];
                 }
                 const pos = appData.photoPositions[type] || 50;
-                const imgNode = document.getElementById(`img-${type}`); 
+                const imgNode = document.getElementById(`img-${type}`);
                 if(imgNode) imgNode.style.objectPosition = `50% ${pos}%`;
-                const slider = document.querySelector(`.pos-slider[oninput*="${type}"]`); 
+                const slider = document.querySelector(`.pos-slider[oninput*="${type}"]`);
                 if(slider) slider.value = pos;
             });
         };
 
         setupImageUploads();
+        syncRemindersToSW();
         renderAll();
     </script>
 </body>
