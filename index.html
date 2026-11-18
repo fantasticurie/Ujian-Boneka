@@ -466,7 +466,7 @@
             <p class="text-gray-600 font-medium text-base md:text-lg" id="main-subtitle"><i class="fas fa-graduation-cap text-yellow-500 mr-2"></i> 2026 Future Engineer Dashboard</p>
         </header>
 
-        <!-- APP DRAWER MENU - 2 COLUMN GRID DESIGN (CLEANED & IMPROVED) -->
+        <!-- APP DRAWER MENU - 2 COLUMN GRID DESIGN -->
         <section id="home-section" class="grid grid-cols-2 gap-4 mt-10 w-full max-w-sm mx-auto px-2">
             <!-- GOALS & SUPPORT -->
             <div class="glass-card menu-btn-giant border-4 border-amber-300 hover:border-amber-500 text-amber-600 col-span-2 relative" onclick="showSection('goals-section')">
@@ -694,7 +694,7 @@
             </section>
         </main>
 
-        <!-- HALAMAN RED DAY TRACKER (DIPERBAIKI & TERSTRUKTUR) -->
+        <!-- HALAMAN RED DAY TRACKER -->
         <main id="period-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
             <!-- Summary Status Cards -->
             <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -841,7 +841,7 @@
                             <button class="calc-btn" onclick="sciCalc('1')">1</button>
                             <button class="calc-btn" onclick="sciCalc('2')">2</button>
                             <button class="calc-btn" onclick="sciCalc('3')">3</button>
-                            <button class="calc-btn" onclick="sciCalc('.')">.</button>
+                            <button class="calc-btn calc-btn-op" onclick="sciCalc('.')">.</button>
                             <button class="calc-btn calc-btn-op" onclick="sciCalc('+')">+</button>
 
                             <button class="calc-btn" onclick="sciCalc('0')">0</button>
@@ -854,7 +854,7 @@
 
                 <div class="glass-card p-6 border-2 border-slate-300">
                     <h2 class="text-xl font-bold text-slate-700 mb-4"><i class="fas fa-subscript mr-2 text-slate-500"></i> Kinematika Dasar (GLBB)</h2>
-                    <p class="text-xs text-gray-500 mb-4">Hitung cepat jarak tempuh (s) dan kecepatan akhir (vt).</p>
+                    <p class="text-xs text-gray-500 mb-4">Hitung cepat jarak tempuh (s) dan kecepatan akhir (v<sub>t</sub>).</p>
                     <div class="flex flex-col gap-3">
                         <div class="flex items-center gap-2 bg-slate-50 p-2 rounded border border-slate-100">
                             <label class="w-2/5 text-xs font-bold text-slate-600">v₀ (Kecepatan Awal)</label>
@@ -1271,6 +1271,16 @@
         let editingDeadlineId = null;
         let activeChecklistOppId = null;
 
+        function formatDateLocal(dateObj) {
+            return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+        }
+
+        function parseLocalDate(dateStr) {
+            if (!dateStr) return new Date();
+            const parts = dateStr.split('-').map(Number);
+            return new Date(parts[0], (parts[1] || 1) - 1, parts[2] || 1);
+        }
+
         const defaultSchedule = [
             { id: 1, type: "Kuliah", name: "Pemtek (K)", day: "Senin", start: "07:00", end: "08:40", room: "RK A SATARI 03.03 (FKGiz)" },
             { id: 2, type: "Praktikum", name: "Pemtek (P)", day: "Senin", start: "09:00", end: "11:00", room: "Lab komp. Fateta. B" },
@@ -1290,7 +1300,7 @@
             schedule: defaultSchedule,
             scheduleNotes: {},
             goals: [], daily: [], importantNotes: [], dailyReminders: [], coursework: [], organizations: [], deadlines: [],
-            opportunities: [], // Terpadu Beasiswa & Lomba
+            opportunities: [],
             calendarEvents: {}, photos: { family: null, friends: null, partner: null, inspiration: null },
             photoPositions: { family: 50, friends: 50, partner: 50, inspiration: 50 },
             motivation: "I can achieve anything I set my mind to!", inspirationDesc: "",
@@ -1318,9 +1328,9 @@
             // Migrasi otomatis data Beasiswa lama ke format terpadu Beasiswa & Lomba
             if(!appData.opportunities) appData.opportunities = [];
             if(Array.isArray(appData.scholarships) && appData.scholarships.length > 0) {
-                appData.scholarships.forEach(s => {
+                appData.scholarships.forEach((s, idx) => {
                     appData.opportunities.push({
-                        id: s.id || Date.now() + Math.random(),
+                        id: s.id ? Math.floor(Number(s.id)) : Date.now() + idx,
                         name: s.name,
                         category: 'Beasiswa',
                         stage: mapOldScholarshipStage(s.status),
@@ -1338,7 +1348,7 @@
             appData.periodLogs = appData.periodLogs.map(log => {
                 if(!log.end && log.start) {
                     const dur = parseInt(log.duration) || 5;
-                    const endDateObj = new Date(log.start);
+                    const endDateObj = parseLocalDate(log.start);
                     endDateObj.setDate(endDateObj.getDate() + (dur - 1));
                     log.end = formatDateLocal(endDateObj);
                 }
@@ -1346,10 +1356,6 @@
                 if(!log.notes) log.notes = '';
                 return log;
             });
-        }
-
-        function formatDateLocal(dateObj) {
-            return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
         }
 
         function mapOldScholarshipStage(oldStatus) {
@@ -1401,7 +1407,6 @@
             try {
                 const reminders = [];
 
-                // 1. Semua item dari Deadline Tracker (termasuk yang tersinkron dari Beasiswa & Lomba)
                 appData.deadlines.forEach(item => {
                     if (!item.date) return;
                     reminders.push({
@@ -1414,7 +1419,6 @@
                     });
                 });
 
-                // 2. Semua Acara Penting di Kalender
                 Object.keys(appData.calendarEvents || {}).forEach(dateStr => {
                     (appData.calendarEvents[dateStr] || []).forEach(ev => {
                         if (ev.priority === 'tinggi') {
@@ -1434,7 +1438,6 @@
                 const tx = idb.transaction(IDB_STORE, 'readwrite');
                 const store = tx.objectStore(IDB_STORE);
 
-                // Ambil status notifikasi yang sudah pernah dikirim agar tidak duplikat
                 const existingMap = {};
                 const getAllReq = store.getAll();
                 getAllReq.onsuccess = () => {
@@ -1457,7 +1460,7 @@
                     if ('periodicSync' in reg) {
                         try {
                             await reg.periodicSync.register('tasya-deadline-check', {
-                                minInterval: 60 * 60 * 1000 // Cek setiap 1 jam di latar belakang
+                                minInterval: 60 * 60 * 1000
                             });
                         } catch (err) {
                             console.log('PeriodicSync info:', err.message);
@@ -1469,7 +1472,6 @@
             }
         }
 
-        // Registrasi Service Worker PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
@@ -1552,7 +1554,7 @@
         function syncOpportunityToDeadline(opp) {
             if (!opp.deadlineDate) return;
             const taskTitle = `[${opp.category}] ${opp.name} (${opp.stage})`;
-            const existingIdx = appData.deadlines.findIndex(d => d.linkedOpportunityId === opp.id);
+            const existingIdx = appData.deadlines.findIndex(d => String(d.linkedOpportunityId) === String(opp.id));
 
             if (opp.stage === '6. Pengumuman (Lolos)' || opp.stage === '7. Selesai / Evaluasi') {
                 if (existingIdx > -1) appData.deadlines.splice(existingIdx, 1);
@@ -1628,7 +1630,7 @@
         };
 
         window.editOpportunity = (id) => {
-            const item = appData.opportunities.find(o => o.id === id);
+            const item = appData.opportunities.find(o => String(o.id) === String(id));
             if (!item) return;
             document.getElementById('opp-edit-id').value = item.id;
             document.getElementById('opp-name').value = item.name;
@@ -1646,7 +1648,7 @@
         };
 
         window.updateOpportunityStageInline = (id, newStage) => {
-            const item = appData.opportunities.find(o => o.id === id);
+            const item = appData.opportunities.find(o => String(o.id) === String(id));
             if (!item) return;
             item.stage = newStage;
             syncOpportunityToDeadline(item);
@@ -1654,25 +1656,41 @@
         };
 
         window.deleteOpportunity = (id) => {
-            appData.opportunities = appData.opportunities.filter(o => o.id !== id);
-            appData.deadlines = appData.deadlines.filter(d => d.linkedOpportunityId !== id);
+            appData.opportunities = appData.opportunities.filter(o => String(o.id) !== String(id));
+            appData.deadlines = appData.deadlines.filter(d => String(d.linkedOpportunityId) !== String(id));
             saveData();
         };
 
-        window.copyAccessLink = (url, btnEl) => {
-            if (!url) return;
-            navigator.clipboard.writeText(url).then(() => {
+        window.copyAccessLink = (id, btnEl) => {
+            const item = appData.opportunities.find(o => String(o.id) === String(id));
+            if (!item || !item.accessLink) return;
+            const url = item.accessLink;
+            const showCopied = () => {
                 const orig = btnEl.innerHTML;
                 btnEl.innerHTML = '<i class="fas fa-check text-green-600"></i>';
                 setTimeout(() => { btnEl.innerHTML = orig; }, 1500);
-            });
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(showCopied).catch(() => fallbackCopyText(url, showCopied));
+            } else {
+                fallbackCopyText(url, showCopied);
+            }
         };
+
+        function fallbackCopyText(text, cb) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); if (cb) cb(); } catch (e) {}
+            document.body.removeChild(ta);
+        }
 
         // Checklist Modal Logic
         window.openOppChecklistModal = (id) => {
-            const item = appData.opportunities.find(o => o.id === id);
+            const item = appData.opportunities.find(o => String(o.id) === String(id));
             if (!item) return;
-            activeChecklistOppId = id;
+            activeChecklistOppId = item.id;
             if (!item.checklist) item.checklist = createDefaultChecklist(item.category);
 
             document.getElementById('modal-opp-cat').innerText = item.category === 'Lomba' ? '🏆 Lomba / Kompetisi' : '🎓 Beasiswa';
@@ -1693,7 +1711,7 @@
         };
 
         function renderOppChecklistItems() {
-            const item = appData.opportunities.find(o => o.id === activeChecklistOppId);
+            const item = appData.opportunities.find(o => String(o.id) === String(activeChecklistOppId));
             if (!item) return;
             const listEl = document.getElementById('modal-opp-checklist-items');
             const total = item.checklist.length;
@@ -1718,7 +1736,7 @@
         }
 
         window.toggleOppCheckItem = (chkId) => {
-            const item = appData.opportunities.find(o => o.id === activeChecklistOppId);
+            const item = appData.opportunities.find(o => String(o.id) === String(activeChecklistOppId));
             if (!item) return;
             const chk = item.checklist.find(c => c.id === chkId);
             if (chk) chk.done = !chk.done;
@@ -1730,7 +1748,7 @@
             const input = document.getElementById('modal-new-check-item');
             const val = input.value.trim();
             if (!val) return;
-            const item = appData.opportunities.find(o => o.id === activeChecklistOppId);
+            const item = appData.opportunities.find(o => String(o.id) === String(activeChecklistOppId));
             if (item) {
                 item.checklist.push({ id: Date.now(), text: val, done: false });
                 input.value = '';
@@ -1740,7 +1758,7 @@
         };
 
         window.deleteOppCheckItem = (chkId) => {
-            const item = appData.opportunities.find(o => o.id === activeChecklistOppId);
+            const item = appData.opportunities.find(o => String(o.id) === String(activeChecklistOppId));
             if (item) {
                 item.checklist = item.checklist.filter(c => c.id !== chkId);
                 renderOppChecklistItems();
@@ -1767,7 +1785,6 @@
             const now = new Date();
             now.setHours(0, 0, 0, 0);
 
-            // Update Summary Counters
             const totalCount = appData.opportunities.length;
             const beasiswaCount = appData.opportunities.filter(o => o.category === 'Beasiswa').length;
             const lombaCount = appData.opportunities.filter(o => o.category === 'Lomba').length;
@@ -1775,8 +1792,7 @@
 
             appData.opportunities.forEach(o => {
                 if (o.deadlineDate && !o.stage.startsWith('6.') && !o.stage.startsWith('7.')) {
-                    const dl = new Date(o.deadlineDate);
-                    dl.setHours(0, 0, 0, 0);
+                    const dl = parseLocalDate(o.deadlineDate);
                     const diff = Math.ceil((dl - now) / (1000 * 60 * 60 * 24));
                     if (diff >= 0 && diff <= 7) urgentCount++;
                 }
@@ -1841,7 +1857,7 @@
                         <a href="${item.accessLink}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border border-cyan-200 font-bold text-[11px] transition">
                             <i class="fas fa-external-link-alt"></i> Buka Link
                         </a>
-                        <button onclick="copyAccessLink('${item.accessLink}', this)" class="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 text-[11px]" title="Salin Link">
+                        <button onclick="copyAccessLink(${item.id}, this)" class="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 text-[11px]" title="Salin Link">
                             <i class="fas fa-copy"></i>
                         </button>
                        </div>`
@@ -1849,8 +1865,7 @@
 
                 let dlHtml = `<span class="text-gray-400">-</span>`;
                 if (item.deadlineDate) {
-                    const dlObj = new Date(item.deadlineDate);
-                    dlObj.setHours(0, 0, 0, 0);
+                    const dlObj = parseLocalDate(item.deadlineDate);
                     const diffDays = Math.ceil((dlObj - now) / (1000 * 60 * 60 * 24));
                     let badgeClass = 'bg-green-100 text-green-700';
                     let badgeText = `H-${diffDays}`;
@@ -1931,17 +1946,15 @@
             const startVal = document.getElementById('period-start').value;
             const endInput = document.getElementById('period-end');
             if (startVal && !endInput.value) {
-                const d = new Date(startVal);
-                d.setDate(d.getDate() + 4); // Default 5 hari termasuk hari pertama
+                const d = parseLocalDate(startVal);
+                d.setDate(d.getDate() + 4);
                 endInput.value = formatDateLocal(d);
             }
         };
 
         function calcPeriodDurationDays(startStr, endStr) {
-            const s = new Date(startStr);
-            const e = new Date(endStr || startStr);
-            s.setHours(0, 0, 0, 0);
-            e.setHours(0, 0, 0, 0);
+            const s = parseLocalDate(startStr);
+            const e = parseLocalDate(endStr || startStr);
             const diff = Math.round((e - s) / (1000 * 60 * 60 * 24)) + 1;
             return diff > 0 ? diff : 1;
         }
@@ -1954,7 +1967,7 @@
             const symptom = document.getElementById('period-symptom').value;
             const notes = document.getElementById('period-notes').value.trim();
 
-            if (new Date(end) < new Date(start)) {
+            if (parseLocalDate(end) < parseLocalDate(start)) {
                 alert('Tanggal selesai tidak boleh lebih awal dari tanggal mulai!');
                 return;
             }
@@ -1986,7 +1999,7 @@
         };
 
         window.editPeriodLog = (id) => {
-            const log = appData.periodLogs.find(p => p.id === id);
+            const log = appData.periodLogs.find(p => String(p.id) === String(id));
             if (!log) return;
             document.getElementById('period-edit-id').value = log.id;
             document.getElementById('period-start').value = log.start;
@@ -2010,7 +2023,7 @@
 
         window.quickSelectPeriodDate = (dayStr) => {
             document.getElementById('period-start').value = dayStr;
-            const d = new Date(dayStr);
+            const d = parseLocalDate(dayStr);
             d.setDate(d.getDate() + 4);
             document.getElementById('period-end').value = formatDateLocal(d);
         };
@@ -2021,9 +2034,8 @@
             const listContainer = document.getElementById('period-history-list');
             if(!daysContainer) return;
 
-            const sortedAsc = [...appData.periodLogs].sort((a, b) => new Date(a.start) - new Date(b.start));
+            const sortedAsc = [...appData.periodLogs].sort((a, b) => parseLocalDate(a.start) - parseLocalDate(b.start));
 
-            // Hitung statistik siklus
             let avgDuration = 5;
             if (sortedAsc.length > 0) {
                 const totalDur = sortedAsc.reduce((acc, l) => acc + calcPeriodDurationDays(l.start, l.end), 0);
@@ -2036,8 +2048,8 @@
                 let sumIntervals = 0;
                 let countIntervals = 0;
                 for (let i = 1; i < sortedAsc.length; i++) {
-                    const prevStart = new Date(sortedAsc[i - 1].start);
-                    const currStart = new Date(sortedAsc[i].start);
+                    const prevStart = parseLocalDate(sortedAsc[i - 1].start);
+                    const currStart = parseLocalDate(sortedAsc[i].start);
                     const diff = Math.round((currStart - prevStart) / (1000 * 60 * 60 * 24));
                     if (diff > 0) {
                         cycleIntervals[sortedAsc[i].id] = diff;
@@ -2058,10 +2070,8 @@
 
             if (sortedAsc.length > 0) {
                 const latest = sortedAsc[sortedAsc.length - 1];
-                const latestStart = new Date(latest.start);
-                const latestEnd = new Date(latest.end || latest.start);
-                latestStart.setHours(0, 0, 0, 0);
-                latestEnd.setHours(0, 0, 0, 0);
+                const latestStart = parseLocalDate(latest.start);
+                const latestEnd = parseLocalDate(latest.end || latest.start);
 
                 if (todayObj >= latestStart && todayObj <= latestEnd) {
                     const dayNum = Math.round((todayObj - latestStart) / (1000 * 60 * 60 * 24)) + 1;
@@ -2101,7 +2111,7 @@
             let activeDates = new Set();
             appData.periodLogs.forEach(log => {
                 const dur = calcPeriodDurationDays(log.start, log.end);
-                const start = new Date(log.start);
+                const start = parseLocalDate(log.start);
                 for(let i = 0; i < dur; i++) {
                     const d = new Date(start);
                     d.setDate(d.getDate() + i);
@@ -2131,7 +2141,7 @@
                     listContainer.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400 italic">Belum ada catatan siklus Red Day.</td></tr>`;
                 } else {
                     listContainer.innerHTML = '';
-                    [...appData.periodLogs].sort((a,b) => new Date(b.start) - new Date(a.start)).forEach(log => {
+                    [...appData.periodLogs].sort((a,b) => parseLocalDate(b.start) - parseLocalDate(a.start)).forEach(log => {
                         const dur = calcPeriodDurationDays(log.start, log.end);
                         const intervalText = cycleIntervals[log.id] ? `${cycleIntervals[log.id]} Hari` : '<span class="text-gray-400">Awal</span>';
                         listContainer.innerHTML += `
@@ -2183,7 +2193,7 @@
 
         const renderDiary = () => {
             const container = document.getElementById('diary-list');
-            const sortedDiary = [...appData.diary].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const sortedDiary = [...appData.diary].sort((a, b) => parseLocalDate(b.date) - parseLocalDate(a.date));
             container.innerHTML = sortedDiary.length === 0 ? '<p class="text-sm text-gray-400 italic text-center mt-4 col-span-2">Belum ada surat. Tulis jurnal pertamamu hari ini!</p>' : '';
             sortedDiary.forEach(item => {
                 const title = item.title || "Surat Tanpa Judul";
@@ -2199,7 +2209,7 @@
         };
 
         window.openLetter = (id) => {
-            const item = appData.diary.find(d => d.id === id);
+            const item = appData.diary.find(d => String(d.id) === String(id));
             if(item) {
                 document.getElementById('letter-date').innerText = item.date;
                 document.getElementById('letter-title').innerText = item.title || "Surat Tasya";
@@ -2305,7 +2315,7 @@
             const contentTop = document.getElementById('running-text-content');
             const contentBottom = document.getElementById('running-text-content-bottom');
 
-            let notes = appData.importantNotes.length > 0 ? appData.importantNotes.map(n => `🔥 ${n.text}`).join(' &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ') : "✨ The Chaotic's Dashboard ✨ Semangat belajar hari ini, Calon Engineer hebat! Jangan lupa kerjakan rutinitas dan *stay hydrated* ya!";
+            let notes = appData.importantNotes.length > 0 ? appData.importantNotes.map(n => `🔥 ${n.text}`).join(' &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ') : "✨ The Chaotic's Dashboard ✨ Semangat belajar hari ini, Calon Engineer hebat! Jangan lupa kerjakan rutinitas dan stay hydrated ya!";
             contentTop.innerHTML = `<span>${notes} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; </span><span>${notes}</span>`;
 
             let upcomingEventsText = [];
@@ -2487,8 +2497,8 @@
             let alertTasks = [];
 
             appData.deadlines.forEach(item => {
-                const deadlineDate = new Date(`${item.date}T${item.time || '23:59'}`);
-                deadlineDate.setHours(0,0,0,0);
+                if (!item.date) return;
+                const deadlineDate = parseLocalDate(item.date);
                 const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24));
                 if(diffDays >= 0 && diffDays <= 7) alertTasks.push({ ...item, diffDays });
             });
@@ -2575,8 +2585,7 @@
             appData.deadlines.forEach(item => {
                 if (!item.date) return;
                 if (!item.notifiedMilestones) { item.notifiedMilestones = {}; dataChanged = true; }
-                const dlDateZero = new Date(item.date);
-                dlDateZero.setHours(0, 0, 0, 0);
+                const dlDateZero = parseLocalDate(item.date);
                 const diffDays = Math.round((dlDateZero - todayZero) / (1000 * 60 * 60 * 24));
                 const mode = item.remindMode || 'all';
 
@@ -2618,9 +2627,14 @@
             display.value = sciExpression || "0";
         };
         window.calcKinematics = () => {
-            const v0 = parseFloat(document.getElementById('kin-v0').value) || 0; const t = parseFloat(document.getElementById('kin-t').value) || 0; const a = parseFloat(document.getElementById('kin-a').value) || 0;
-            const vt = v0 + (a * t); const s = (v0 * t) + (0.5 * a * t * t);
-            const res = document.getElementById('kin-result'); res.classList.remove('hidden'); res.innerHTML = `Kecepatan Akhir ($v_t$): <b>${vt.toFixed(2)} m/s</b><br>Jarak Tempuh ($s$): <b>${s.toFixed(2)} meter</b>`;
+            const v0 = parseFloat(document.getElementById('kin-v0').value) || 0;
+            const t = parseFloat(document.getElementById('kin-t').value) || 0;
+            const a = parseFloat(document.getElementById('kin-a').value) || 0;
+            const vt = v0 + (a * t);
+            const s = (v0 * t) + (0.5 * a * t * t);
+            const res = document.getElementById('kin-result');
+            res.classList.remove('hidden');
+            res.innerHTML = `Kecepatan Akhir (v<sub>t</sub>): <b>${vt.toFixed(2)} m/s</b><br>Jarak Tempuh (s): <b>${s.toFixed(2)} meter</b>`;
         };
         window.calcConversion = () => {
             const type = document.getElementById('conv-type').value; const val = parseFloat(document.getElementById('conv-val').value) || 0;
@@ -2663,7 +2677,7 @@
         };
 
         window.editSchedule = (id) => {
-            const item = appData.schedule.find(s => s.id === id);
+            const item = appData.schedule.find(s => String(s.id) === String(id));
             if(item) {
                 document.getElementById('edit-sch-id').value = id; document.getElementById('input-sch-type').value = item.type; document.getElementById('input-sch-name').value = item.name; document.getElementById('input-sch-day').value = item.day; document.getElementById('input-sch-start').value = item.start; document.getElementById('input-sch-end').value = item.end; document.getElementById('input-sch-room').value = item.room;
                 document.getElementById('btn-submit-schedule').innerText = "Update Jadwal";
@@ -2778,7 +2792,32 @@
                 `;
             });
         };
-tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(e => e.id !== id); if(appData.calendarEvents[dateStr].length === 0) delete appData.calendarEvents[dateStr]; saveData(); renderCalendar(); }
+
+        window.editCalendarEvent = (dateStr, id) => {
+            const ev = (appData.calendarEvents[dateStr] || []).find(e => String(e.id) === String(id));
+            if(ev) {
+                document.getElementById('input-cal-time-start').value = ev.timeStart || ev.time;
+                document.getElementById('input-cal-time-end').value = ev.timeEnd || '';
+                document.getElementById('input-cal-event').value = ev.text;
+                document.getElementById('input-cal-category').value = ev.category || 'Acara/Kegiatan';
+                document.getElementById('input-cal-priority').value = ev.priority || 'rendah';
+
+                let routineEl = document.getElementById('input-cal-routine');
+                if(routineEl) routineEl.value = 'sekali';
+
+                editingCalEventId = id;
+                editingCalEventDate = dateStr;
+                document.querySelector('#form-calendar-event button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Save';
+            }
+        };
+
+        window.deleteCalendarEvent = (dateStr, id) => {
+            if(appData.calendarEvents[dateStr]) {
+                appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(e => String(e.id) !== String(id));
+                if(appData.calendarEvents[dateStr].length === 0) delete appData.calendarEvents[dateStr];
+                saveData();
+                renderCalendar();
+            }
         };
 
         document.getElementById('prev-month').onclick = () => { currentMonth--; if(currentMonth < 0) { currentMonth = 11; currentYear--; } renderCalendar(); };
@@ -2802,25 +2841,6 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
                         <button onclick="deleteItem('daily', ${item.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash text-xs"></i></button>
                     </div>
                 `;
-        window.editCalendarEvent = (dateStr, id) => {
-            const ev = appData.calendarEvents[dateStr].find(e => e.id === id);
-            if(ev) {
-                document.getElementById('input-cal-time-start').value = ev.timeStart || ev.time;
-                document.getElementById('input-cal-time-end').value = ev.timeEnd || '';
-                document.getElementById('input-cal-event').value = ev.text;
-                document.getElementById('input-cal-category').value = ev.category || 'Acara/Kegiatan';
-                document.getElementById('input-cal-priority').value = ev.priority || 'rendah';
-
-                let routineEl = document.getElementById('input-cal-routine');
-                if(routineEl) routineEl.value = 'sekali';
-
-                editingCalEventId = id; editingCalEventDate = dateStr;
-                document.querySelector('#form-calendar-event button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Save';
-            }
-        };
-
-        window.deleteCalendarEvent = (dateStr, id) => {
-            if(appData.calendarEvents[dateS
             });
         };
 
@@ -2859,7 +2879,7 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
         };
 
         window.editDeadline = (id) => {
-            const item = appData.deadlines.find(d => d.id === id);
+            const item = appData.deadlines.find(d => String(d.id) === String(id));
             if(item) {
                 document.getElementById('input-deadline-task').value = item.task;
                 document.getElementById('input-deadline-category').value = ['Matkul', 'Organisasi', 'Lainnya'].includes(item.category) ? item.category : 'Lainnya';
@@ -2873,8 +2893,8 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
 
         window.completeDeadline = (id) => {
             deleteItem('deadlines', id);
-            appData.coursework = appData.coursework.filter(c => c.linkedDeadlineId !== id);
-            appData.organizations = appData.organizations.filter(o => o.linkedDeadlineId !== id);
+            appData.coursework = appData.coursework.filter(c => String(c.linkedDeadlineId) !== String(id));
+            appData.organizations = appData.organizations.filter(o => String(o.linkedDeadlineId) !== String(id));
             saveData();
             renderDeadlines();
             renderCoursework();
@@ -2918,9 +2938,8 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
             wallets.utama.forEach(t => { if(t.date === todayStr && t.type === 'out') dailyOut += t.amount; });
             document.getElementById('display-daily-out').innerText = `Rp ${dailyOut.toLocaleString()}`;
 
-            // Hitung pemasukan & pengeluaran minggu berjalan (Senin - Minggu)
             const now = new Date();
-            const dayOfWeek = now.getDay(); // 0 = Min, 1 = Sen
+            const dayOfWeek = now.getDay();
             const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
             const monday = new Date(now);
             monday.setDate(now.getDate() + diffToMonday);
@@ -2959,12 +2978,12 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
             });
         };
         window.deleteRabItem = (id) => {
-            appData.finance.rab = appData.finance.rab.filter(r => r.id !== id);
+            appData.finance.rab = appData.finance.rab.filter(r => String(r.id) !== String(id));
             saveData();
         };
         window.renderTransactions = () => {
             const wallet = document.getElementById('filter-history-wallet').value; const container = document.getElementById('transaction-list'); if(!container) return; container.innerHTML = '';
-            const list = appData.finance.wallets[wallet] || []; list.sort((a,b) => new Date(b.date) - new Date(a.date));
+            const list = appData.finance.wallets[wallet] || []; list.sort((a,b) => parseLocalDate(b.date) - parseLocalDate(a.date));
             if(list.length === 0) container.innerHTML = '<p class="text-xs text-gray-400 italic text-center mt-4">Belum ada riwayat transaksi.</p>';
             list.forEach(item => { let isOut = item.type === 'out'; container.innerHTML += `<div class="bg-white p-2.5 rounded-lg border border-gray-100 flex justify-between items-center mb-2 shadow-sm"><div><span class="text-[9px] font-bold text-gray-400">${item.date} • ${item.category}</span><h4 class="text-xs font-bold text-gray-800">${item.desc}</h4></div><div class="flex items-center gap-2"><span class="text-xs font-bold ${isOut ? 'text-red-500' : 'text-green-600'}">${isOut ? '-' : '+'} Rp ${item.amount.toLocaleString()}</span><button onclick="deleteWalletItem('${wallet}', ${item.id})" class="text-red-300 hover:text-red-500 text-xs"><i class="fas fa-trash"></i></button></div></div>`; });
         };
@@ -2978,7 +2997,18 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
         window.openRecipeBook = () => { const modal = document.getElementById('recipe-modal'); const content = document.getElementById('recipe-modal-content'); modal.classList.remove('hidden'); setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10); renderRecipes(); };
         window.closeRecipeBook = () => { const modal = document.getElementById('recipe-modal'); const content = document.getElementById('recipe-modal-content'); modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95'); setTimeout(() => modal.classList.add('hidden'), 300); };
         const renderRecipes = () => { const container = document.getElementById('recipes-list'); if(!container) return; const searchVal = document.getElementById('search-recipe') ? document.getElementById('search-recipe').value.toLowerCase() : ''; container.innerHTML = ''; const filtered = appData.recipes.filter(r => r.name.toLowerCase().includes(searchVal)); if(filtered.length === 0) container.innerHTML = '<p class="text-xs text-gray-400 italic text-center">Belum ada resep tersimpan.</p>'; filtered.forEach(rec => { let totalCost = rec.ingredients.reduce((acc, curr) => acc + curr.price, 0); container.innerHTML += `<div class="bg-cyan-50 bg-opacity-50 p-4 rounded-xl border border-cyan-200 shadow-sm relative"><div class="flex justify-between items-start mb-2"><h4 class="font-bold text-cyan-800 text-base">${rec.name}</h4><button onclick="deleteItem('recipes', ${rec.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button></div><p class="text-xs font-bold text-gray-600 mb-1">Total Estimasi Belanja: <span class="text-cyan-700">Rp ${totalCost.toLocaleString()}</span></p><div class="mb-2"><span class="text-[10px] font-bold text-gray-500">Bahan-bahan:</span><ul class="list-disc pl-4 text-xs text-gray-700">${rec.ingredients.map(i => `<li>${i.name} (Rp ${i.price.toLocaleString()})</li>`).join('')}</ul></div><div><span class="text-[10px] font-bold text-gray-500">Langkah Memasak:</span><p class="text-xs text-gray-700 whitespace-pre-wrap mt-0.5">${rec.steps}</p></div></div>`; }); };
-        const renderMealPlan = () => { const container = document.getElementById('meal-history-list'); if(!container) return; container.innerHTML = appData.mealPlan.length === 0 ? '<p class="text-[10px] text-gray-400 italic">Belum ada plan gizi.</p>' : ''; appData.mealPlan.forEach(m => { container.innerHTML += `<div class="bg-white p-2 rounded border border-teal-100 flex justify-between items-center text-xs"><div><strong class="text-teal-700">${m.date}</strong>: Sarapan (${m.break.type}: ${m.break.desc}), Siang (${m.lunch.type}: ${m.lunch.desc}), Malam (${m.dinner.type}: ${m.dinner.desc})</div><button onclick="deleteItem('mealPlan', ${m.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button></div>`; }); };
+        const renderMealPlan = () => {
+            const container = document.getElementById('meal-history-list');
+            if(!container) return;
+            container.innerHTML = appData.mealPlan.length === 0 ? '<p class="text-[10px] text-gray-400 italic">Belum ada plan gizi.</p>' : '';
+            appData.mealPlan.forEach(m => {
+                const habits = [];
+                if (m.susu) habits.push('🥛 Susu');
+                if (m.buah) habits.push('🍎 Buah');
+                const habitStr = habits.length > 0 ? ` • <span class="text-teal-600 font-bold">${habits.join(', ')}</span>` : '';
+                container.innerHTML += `<div class="bg-white p-2 rounded border border-teal-100 flex justify-between items-center text-xs"><div><strong class="text-teal-700">${m.date}</strong>: Sarapan (${m.break.type}: ${m.break.desc}), Siang (${m.lunch.type}: ${m.lunch.desc}), Malam (${m.dinner.type}: ${m.dinner.desc})${habitStr}</div><button onclick="deleteItem('mealPlan', ${m.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button></div>`;
+            });
+        };
         const renderShoppingNotes = () => { const container = document.getElementById('shopping-list-container'); if(!container) return; container.innerHTML = appData.shoppingNotes.length === 0 ? '<p class="text-xs text-gray-400 italic">Belum ada catatan belanja.</p>' : ''; appData.shoppingNotes.forEach(s => { container.innerHTML += `<li class="flex justify-between items-center bg-orange-50 p-2 rounded border border-orange-100 text-xs"><div><strong>${s.item}</strong> (Rp ${s.price.toLocaleString()}) - <span class="text-gray-500">${s.note || '-'}</span></div><button onclick="deleteItem('shoppingNotes', ${s.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button></li>`; }); };
 
         // ==========================================
@@ -3033,14 +3063,14 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
         // ==========================================
         // GLOBAL DELETE & TOGGLE UTILS
         // ==========================================
-        window.deleteItem = (category, id) => { appData[category] = appData[category].filter(item => item.id !== id); saveData(); };
-        window.toggleItem = (category, id) => { const item = appData[category].find(i => i.id === id); if(item) { item.completed = !item.completed; saveData(); } };
-        window.deleteWalletItem = (wallet, id) => { appData.finance.wallets[wallet] = appData.finance.wallets[wallet].filter(t => t.id !== id); saveData(); };
+        window.deleteItem = (category, id) => { appData[category] = appData[category].filter(item => String(item.id) !== String(id)); saveData(); };
+        window.toggleItem = (category, id) => { const item = appData[category].find(i => String(i.id) === String(id)); if(item) { item.completed = !item.completed; saveData(); } };
+        window.deleteWalletItem = (wallet, id) => { appData.finance.wallets[wallet] = appData.finance.wallets[wallet].filter(t => String(t.id) !== String(id)); saveData(); };
 
         // ==========================================
         // FORM SUBMISSIONS & INITIALIZATION
         // ==========================================
-        document.getElementById('form-schedule').onsubmit = (e) => { e.preventDefault(); const editId = document.getElementById('edit-sch-id').value; const newObj = { id: editId ? parseInt(editId) : Date.now(), type: document.getElementById('input-sch-type').value, name: document.getElementById('input-sch-name').value, day: document.getElementById('input-sch-day').value, start: document.getElementById('input-sch-start').value, end: document.getElementById('input-sch-end').value, room: document.getElementById('input-sch-room').value }; if(editId) { const idx = appData.schedule.findIndex(s => s.id === parseInt(editId)); if(idx > -1) appData.schedule[idx] = newObj; document.getElementById('edit-sch-id').value = ''; document.getElementById('btn-submit-schedule').innerText = "Tambah ke Jadwal"; } else { appData.schedule.push(newObj); } document.getElementById('form-schedule').reset(); saveData(); };
+        document.getElementById('form-schedule').onsubmit = (e) => { e.preventDefault(); const editId = document.getElementById('edit-sch-id').value; const newObj = { id: editId ? parseInt(editId) : Date.now(), type: document.getElementById('input-sch-type').value, name: document.getElementById('input-sch-name').value, day: document.getElementById('input-sch-day').value, start: document.getElementById('input-sch-start').value, end: document.getElementById('input-sch-end').value, room: document.getElementById('input-sch-room').value }; if(editId) { const idx = appData.schedule.findIndex(s => String(s.id) === String(editId)); if(idx > -1) appData.schedule[idx] = newObj; document.getElementById('edit-sch-id').value = ''; document.getElementById('btn-submit-schedule').innerText = "Tambah ke Jadwal"; } else { appData.schedule.push(newObj); } document.getElementById('form-schedule').reset(); saveData(); };
 
         document.getElementById('form-calendar-event').onsubmit = (e) => {
             e.preventDefault();
@@ -3052,7 +3082,7 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
             const routine = document.getElementById('input-cal-routine') ? document.getElementById('input-cal-routine').value : 'sekali';
 
             if (editingCalEventId) {
-                const evIndex = appData.calendarEvents[editingCalEventDate].findIndex(ev => ev.id === editingCalEventId);
+                const evIndex = (appData.calendarEvents[editingCalEventDate] || []).findIndex(ev => String(ev.id) === String(editingCalEventId));
                 if (evIndex > -1) {
                     appData.calendarEvents[editingCalEventDate][evIndex].timeStart = timeStart;
                     appData.calendarEvents[editingCalEventDate][evIndex].timeEnd = timeEnd;
@@ -3068,7 +3098,7 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
 
                 if (routine === 'rutin') {
                     for (let i = 1; i <= 4; i++) {
-                        let nextDate = new Date(selectedCalendarDate);
+                        let nextDate = parseLocalDate(selectedCalendarDate);
                         nextDate.setDate(nextDate.getDate() + (7 * i));
                         let targetStr = formatDateLocal(nextDate);
 
@@ -3092,7 +3122,7 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
             const remindMode = document.getElementById('input-deadline-remind').value || 'all';
 
             if (editingDeadlineId) {
-                const idx = appData.deadlines.findIndex(d => d.id === editingDeadlineId);
+                const idx = appData.deadlines.findIndex(d => String(d.id) === String(editingDeadlineId));
                 if (idx > -1) {
                     appData.deadlines[idx].task = task;
                     appData.deadlines[idx].date = date;
@@ -3126,7 +3156,9 @@ tr]) { appData.calendarEvents[dateStr] = appData.calendarEvents[dateStr].filter(
                 date: document.getElementById('meal-date').value,
                 break: { type: document.getElementById('meal-break-type').value, desc: document.getElementById('meal-break-desc').value },
                 lunch: { type: document.getElementById('meal-lunch-type').value, desc: document.getElementById('meal-lunch-desc').value },
-                dinner: { type: document.getElementById('meal-dinner-type').value, desc: document.getElementById('meal-dinner-desc').value }
+                dinner: { type: document.getElementById('meal-dinner-type').value, desc: document.getElementById('meal-dinner-desc').value },
+                susu: document.getElementById('habit-susu').checked,
+                buah: document.getElementById('habit-buah').checked
             });
             document.getElementById('form-meal-plan').reset();
             saveData();
