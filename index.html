@@ -268,6 +268,41 @@
         <div class="marquee-content" id="running-text-content-bottom"></div>
     </div>
 
+    <!-- FLOATING QUICK STICKY NOTE & DAILY ROUTINE BUTTONS -->
+    <div class="fixed bottom-12 right-4 z-[9000] flex flex-col gap-2">
+        <button onclick="toggleBubble()" class="w-11 h-11 rounded-full bg-gradient-to-tr from-pink-400 to-rose-500 text-white shadow-lg flex items-center justify-center hover:scale-110 transition" title="Tambah Pengumuman / Running Text">
+            <i class="fas fa-bullhorn"></i>
+        </button>
+        <button onclick="toggleDailyReminder()" class="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-300 to-orange-400 text-white shadow-lg flex items-center justify-center hover:scale-110 transition" title="Rutinitas Harian">
+            <i class="fas fa-star"></i>
+        </button>
+    </div>
+
+    <!-- MODAL RUNNING TEXT / PENGUMUMAN PENTING -->
+    <div id="important-bubble-modal" class="hidden fixed bottom-28 right-4 z-[9500] w-80 max-w-[90vw] glass-card p-4 border-2 border-pink-300 bg-white shadow-2xl transform scale-95 opacity-0 transition-all">
+        <div class="flex justify-between items-center mb-2">
+            <h4 class="text-xs font-extrabold text-pink-600"><i class="fas fa-bullhorn mr-1"></i> Running Text & Catatan Penting</h4>
+            <button onclick="toggleBubble()" class="text-gray-400 hover:text-red-500 text-xs"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="flex gap-1.5">
+            <input type="text" id="input-bubble-note" placeholder="Tulis catatan tampil di atas..." class="!py-1.5 !px-2.5 !text-xs">
+            <button onclick="saveImportantNote()" class="btn-cute !py-1.5 !px-3 text-xs"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+
+    <!-- MODAL RUTINITAS HARIAN -->
+    <div id="daily-reminder-modal" class="hidden fixed bottom-28 right-4 z-[9500] w-80 max-w-[90vw] glass-card p-4 border-2 border-amber-300 bg-white shadow-2xl transform scale-95 opacity-0 transition-all">
+        <div class="flex justify-between items-center mb-2">
+            <h4 class="text-xs font-extrabold text-amber-700"><i class="fas fa-star mr-1"></i> Rutinitas Harian</h4>
+            <button onclick="toggleDailyReminder()" class="text-gray-400 hover:text-red-500 text-xs"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="daily-reminder-list" class="flex flex-col gap-1.5 max-h-40 overflow-y-auto mb-2 custom-scrollbar"></div>
+        <div class="flex gap-1.5">
+            <input type="text" id="input-daily-reminder" placeholder="Tambah rutinitas (ex: Minum 2L)..." class="!py-1.5 !px-2.5 !text-xs">
+            <button onclick="saveDailyReminder()" class="btn-cute !bg-amber-400 !py-1.5 !px-3 text-xs"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+
     <!-- EVENT BUBBLE POP-UP (HIGH PRIORITY) -->
     <div id="high-priority-popup" class="fixed inset-0 bg-gray-900 bg-opacity-60 z-[99998] hidden flex items-center justify-center transition-opacity opacity-0">
         <div class="glass-card p-6 w-11/12 max-w-md text-center transform scale-95 transition-transform bg-white border-2 border-red-400" id="high-priority-content">
@@ -285,7 +320,7 @@
             <div class="text-center mb-4 border-b border-pink-100 pb-3">
                 <div class="w-12 h-12 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl"><i class="fas fa-bell"></i></div>
                 <h2 class="text-xl font-extrabold text-pink-600 font-nunito">Pengaturan Notifikasi HP & Laptop</h2>
-                <p class="text-xs text-gray-500 mt-1">Pengingat otomatis H-3, H-1, & Hari-H untuk Deadline, Beasiswa/Lomba, dan Kalender</p>
+                <p class="text-xs text-gray-500 mt-1">Pengingat otomatis H-3, H-2, H-1, & Hari-H untuk Deadline, Beasiswa/Lomba, dan Kalender</p>
             </div>
 
             <div class="bg-pink-50 border border-pink-200 rounded-xl p-3.5 mb-4 flex flex-col gap-3">
@@ -308,7 +343,7 @@
                     <ul class="list-disc pl-4 space-y-1">
                         <li>Pastikan mode <b>Do Not Disturb / Focus Assist</b> di Windows/Mac dalam keadaan <b>OFF</b>.</li>
                         <li>Klik ikon <b>Gembok / Setelan situs</b> di sebelah kiri URL browser &rarr; pastikan <b>Notifications = Allow (Izinkan)</b>.</li>
-                        <li>Jangan membuka file langsung dari <code>file:///</code>; gunakan link HTTPS hosting kamu (link yang sama tetap bisa dipakai!).</li>
+                        <li>Jangan membuka file langsung dari <code>file:///</code>; gunakan link HTTPS hosting kamu.</li>
                     </ul>
                 </div>
                 <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-200">
@@ -345,35 +380,32 @@
         </div>
     </div>
 
-    <!-- FLOATING ICONS (URGENT NOTES & DAILY REMINDER) -->
-    <div class="fixed bottom-14 right-6 z-50 flex flex-col items-end gap-4">
-        <!-- Daily Reminder Toggle -->
-        <div class="flex flex-col items-end group relative">
-            <div id="daily-reminder-modal" class="hidden mb-3 w-[85vw] sm:w-72 max-w-[288px] glass-card p-4 border-2 border-yellow-300 transform transition-all origin-bottom-right scale-95 opacity-0">
-                <h3 class="text-yellow-600 font-bold text-sm mb-2"><i class="fas fa-thumbtack mr-1"></i> Pengingat Harian (Rutinitas)</h3>
-                <div class="flex gap-2 mb-2">
-                    <input type="text" id="input-daily-reminder" placeholder="Ex: Bawa Lanyard, Pretest Fisdas..." class="text-xs p-2 border-yellow-200 focus:border-yellow-400">
-                    <button onclick="saveDailyReminder()" class="btn-cute !bg-yellow-400 px-3"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="daily-reminder-list" class="flex flex-col gap-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
+    <!-- MODAL ALARM BERBUNYI (ACTIVE ALARM RINGING) -->
+    <div id="active-alarm-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-[100001] hidden flex items-center justify-center transition-opacity opacity-0 p-4">
+        <div id="active-alarm-content" class="glass-card w-full max-w-sm p-6 text-center bg-white border-4 border-pink-400 shadow-2xl transform scale-95 transition-transform">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-yellow-200 to-pink-300 text-pink-600 flex items-center justify-center mx-auto mb-4 text-4xl animate-bounce shadow-md">
+                <i class="fas fa-bell"></i>
             </div>
-            <button onclick="toggleDailyReminder()" class="bg-gradient-to-tr from-yellow-300 to-orange-400 text-white w-14 h-14 rounded-full shadow-lg border-2 border-white animate-bounce hover:animate-none hover:scale-110 transition flex items-center justify-center text-xl" title="Rutinitas Harian">
-                <i class="fas fa-clipboard-list"></i>
-            </button>
+            <span id="ringing-alarm-time" class="text-3xl font-black text-pink-600 font-nunito tracking-wider block mb-1">00:00</span>
+            <h3 id="ringing-alarm-title" class="text-lg font-extrabold text-gray-800 mb-2">Alarm My Planner</h3>
+            <p id="ringing-alarm-desc" class="text-xs text-gray-500 mb-5">Waktunya mengeksekusi agenda terjadwalmu, Tasya!</p>
+            <div class="flex gap-3">
+                <button type="button" onclick="snoozePlannerAlarm()" class="flex-1 py-2.5 px-3 rounded-xl font-bold text-xs bg-amber-100 text-amber-800 hover:bg-amber-200 border border-amber-300 transition">
+                    <i class="fas fa-clock mr-1"></i> Snooze 5m
+                </button>
+                <button type="button" onclick="stopPlannerAlarm()" class="flex-1 btn-cute !bg-gradient-to-r !from-pink-500 !to-red-500 py-2.5 px-3 text-xs">
+                    <i class="fas fa-stop-circle mr-1"></i> Matikan Alarm
+                </button>
+            </div>
         </div>
+    </div>
 
-        <!-- Urgent Note Toggle -->
-        <div class="flex flex-col items-end group relative">
-            <div id="important-bubble-modal" class="hidden mb-3 w-[85vw] sm:w-72 max-w-[288px] glass-card p-4 border-2 border-red-300 transform transition-all origin-bottom-right scale-95 opacity-0">
-                <h3 class="text-red-500 font-bold text-sm mb-2"><i class="fas fa-exclamation-circle mr-1"></i> Quick Urgent Note!</h3>
-                <div class="flex gap-2">
-                    <input type="text" id="input-bubble-note" placeholder="Catat cepat yang mendesak..." class="text-xs p-2 border-red-200 focus:border-red-400">
-                    <button onclick="saveImportantNote()" class="btn-cute !bg-red-400 px-3"><i class="fas fa-plus"></i></button>
-                </div>
-            </div>
-            <button onclick="toggleBubble()" class="bg-gradient-to-tr from-red-400 to-pink-500 text-white w-14 h-14 rounded-full shadow-lg border-2 border-white hover:scale-110 transition flex items-center justify-center text-xl" title="Catatan Mendesak">
-                <i class="fas fa-bolt"></i>
-            </button>
+    <!-- MODAL PREVIEW FOTO DOKUMENTASI RISET -->
+    <div id="research-photo-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-[99997] hidden flex items-center justify-center p-4" onclick="closeResearchPhotoModal()">
+        <div class="bg-white rounded-2xl p-4 max-w-lg w-full shadow-2xl relative" onclick="event.stopPropagation()">
+            <button onclick="closeResearchPhotoModal()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
+            <h4 id="research-photo-modal-title" class="text-sm font-extrabold text-emerald-700 mb-2 pr-6">Dokumentasi Uji Coba</h4>
+            <img id="research-photo-modal-img" src="" alt="Dokumentasi Riset" class="w-full max-h-[70vh] object-contain rounded-xl bg-gray-50 border border-emerald-100">
         </div>
     </div>
 
@@ -532,6 +564,16 @@
                 <span class="font-extrabold font-nunito">Secure Notes</span>
             </div>
 
+            <div class="glass-card menu-btn-giant border-4 border-emerald-200 hover:border-emerald-400 text-emerald-700" onclick="showSection('research-section')">
+                <i class="fas fa-microchip text-emerald-500"></i>
+                <span class="font-extrabold font-nunito">Research & PKM</span>
+            </div>
+
+            <div class="glass-card menu-btn-giant border-4 border-sky-200 hover:border-sky-400 text-sky-700" onclick="showSection('workspace-section')">
+                <i class="fas fa-rocket text-sky-500"></i>
+                <span class="font-extrabold font-nunito">Workspace Hub</span>
+            </div>
+
             <div class="glass-card menu-btn-giant border-4 border-blue-200 hover:border-blue-400 text-blue-600 col-span-2" onclick="showSection('quotes-section')">
                 <i class="fas fa-quote-right text-blue-500"></i>
                 <span class="font-extrabold font-nunito">Motivasi & Quotes</span>
@@ -626,102 +668,286 @@
             </section>
         </main>
 
-        <!-- HALAMAN TERPADU: BEASISWA & LOMBA (SPREADSHEET + WORKFLOW) -->
-        <main id="beasiswa-section" class="flex flex-col gap-6 hidden max-w-6xl mx-auto w-full">
-            <!-- Summary Strip -->
+        <!-- HALAMAN RESEARCH & PKM LOGBOOK (CATATAN PROGRES RISET) -->
+        <main id="research-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
             <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <div class="glass-card p-4 border-l-4 border-fuchsia-400">
+                <div class="glass-card p-4 border-l-4 border-emerald-500">
+                    <span class="text-[11px] font-bold text-gray-500">Total Log Eksperimen</span>
+                    <p id="res-stat-total" class="text-2xl font-black text-emerald-700">0</p>
+                </div>
+                <div class="glass-card p-4 border-l-4 border-green-400">
+                    <span class="text-[11px] font-bold text-gray-500">✅ Normal / Berhasil</span>
+                    <p id="res-stat-ok" class="text-2xl font-black text-green-600">0</p>
+                </div>
+                <div class="glass-card p-4 border-l-4 border-red-400">
+                    <span class="text-[11px] font-bold text-gray-500">⚠️ Kendala / Error</span>
+                    <p id="res-stat-issue" class="text-2xl font-black text-red-600">0</p>
+                </div>
+                <div class="glass-card p-4 border-l-4 border-amber-400">
+                    <span class="text-[11px] font-bold text-gray-500">💡 Ide Pengembangan</span>
+                    <p id="res-stat-idea" class="text-2xl font-black text-amber-600">0</p>
+                </div>
+            </section>
+
+            <section class="glass-card p-5 md:p-6 border-2 border-emerald-300 w-full">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-emerald-700 flex items-center"><i class="fas fa-microchip mr-2 text-emerald-500"></i> Research & PKM Logbook</h2>
+                        <p class="text-xs text-gray-500">Catat tahapan eksperimen prototipe, kendala teknis sensor/script, foto uji coba, dan poin evaluasi riset.</p>
+                    </div>
+                    <span id="res-form-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 self-start">Mode: Catatan Baru</span>
+                </div>
+
+                <form id="form-research-log" class="grid grid-cols-1 md:grid-cols-12 gap-3 bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200">
+                    <input type="hidden" id="res-edit-id" value="">
+                    <input type="hidden" id="res-photo-base64" value="">
+
+                    <div class="md:col-span-3">
+                        <label class="text-[10px] font-bold text-emerald-800 ml-1">Tanggal Uji Coba *</label>
+                        <input type="date" id="res-date" required class="text-xs mt-1 border-emerald-200">
+                    </div>
+
+                    <div class="md:col-span-5">
+                        <label class="text-[10px] font-bold text-emerald-800 ml-1">Judul / Tahapan Eksperimen *</label>
+                        <input type="text" id="res-title" placeholder="Ex: Kalibrasi Sensor Soil Moisture & Relay Pompa..." required class="text-xs mt-1 border-emerald-200">
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label class="text-[10px] font-bold text-emerald-800 ml-1">Bidang / Kategori Proyek *</label>
+                        <select id="res-project" class="text-xs mt-1 border-emerald-200">
+                            <option value="PKM">🔬 PKM (Program Kreativitas Mahasiswa)</option>
+                            <option value="Prototipe Otomatisasi">🤖 Prototipe Otomatisasi & IoT</option>
+                            <option value="Riset Lingkungan">🌱 Riset Lingkungan & Biosistem</option>
+                            <option value="Praktikum / Riset Lab">🧪 Riset Lab / Mata Kuliah</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label class="text-[10px] font-bold text-emerald-800 ml-1">Status Komponen / Sistem *</label>
+                        <select id="res-status" class="text-xs mt-1 border-emerald-200">
+                            <option value="✅ Normal / Berhasil">✅ Normal / Berhasil</option>
+                            <option value="🔧 Kalibrasi / Tuning">🔧 Kalibrasi / Tuning</option>
+                            <option value="⚠️ Kendala Sensor / Hardware">⚠️ Kendala Sensor / Hardware</option>
+                            <option value="🐛 Error Script / Firmware">🐛 Error Script / Firmware</option>
+                            <option value="💡 Ide Pengembangan Baru">💡 Ide Pengembangan Baru</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-8">
+                        <label class="text-[10px] font-bold text-emerald-800 ml-1">Detail Komponen & Kendala Teknis (Sensor / Wiring / Error Script)</label>
+                        <input type="text" id="res-issue" placeholder="Ex: ESP32 pembacaan ADC fluktuatif ±5%, perlu kapasitor filter..." class="text-xs mt-1 border-emerald-200">
+                    </div>
+
+                    <div class="md:col-span-7">
+                        <label class="text-[10px] font-bold text-emerald-800 ml-1">Poin Evaluasi & Ide Pengembangan Lanjutan *</label>
+                        <textarea id="res-eval" rows="2" placeholder="Evaluasi hasil pengujian hari ini dan langkah perbaikan/ide berikutnya..." required class="text-xs mt-1 border-emerald-200 resize-none"></textarea>
+                    </div>
+
+                    <div class="md:col-span-5 flex flex-col justify-between">
+                        <div>
+                            <label class="text-[10px] font-bold text-emerald-800 ml-1">Foto Dokumentasi Uji Coba (Opsional)</label>
+                            <input type="file" id="res-photo-input" accept="image/*" class="text-[10px] mt-1 p-1.5 bg-white border-emerald-200">
+                        </div>
+                        <div id="res-photo-preview-wrap" class="hidden mt-2 flex items-center gap-2 bg-white p-1.5 rounded-xl border border-emerald-200">
+                            <img id="res-photo-preview" src="" alt="Preview" class="w-12 h-12 object-cover rounded-lg">
+                            <span class="text-[10px] font-bold text-emerald-700 flex-1">Foto siap dilampirkan</span>
+                            <button type="button" onclick="clearResearchPhotoTemp()" class="text-red-400 hover:text-red-600 text-xs px-2"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-12 flex flex-wrap justify-end gap-2 pt-2 border-t border-emerald-200/70">
+                        <button type="button" id="btn-cancel-res" onclick="resetResearchForm()" class="hidden px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 text-gray-700 hover:bg-gray-300">Batal Edit</button>
+                        <button type="submit" id="btn-submit-res" class="btn-cute !bg-gradient-to-r !from-emerald-400 !to-teal-600 text-xs px-6 py-2.5">
+                            <i class="fas fa-save mr-1.5"></i> Simpan ke Logbook Riset
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="glass-card p-5 md:p-6 border-2 border-emerald-200 w-full">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                    <h3 class="text-lg font-extrabold text-emerald-700 flex items-center"><i class="fas fa-clipboard-check mr-2 text-emerald-500"></i> Riwayat Eksperimen & Prototipe</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <input type="text" id="search-res" oninput="renderResearchLogs()" placeholder="Cari eksperimen/komponen..." class="text-xs py-1.5 px-3 w-44 sm:w-52 border-emerald-200">
+                        <select id="filter-res-status" onchange="renderResearchLogs()" class="text-xs py-1.5 px-3 w-44 border-emerald-200">
+                            <option value="All">Semua Status</option>
+                            <option value="✅ Normal / Berhasil">✅ Normal / Berhasil</option>
+                            <option value="🔧 Kalibrasi / Tuning">🔧 Kalibrasi / Tuning</option>
+                            <option value="⚠️ Kendala Sensor / Hardware">⚠️ Kendala Hardware</option>
+                            <option value="🐛 Error Script / Firmware">🐛 Error Script</option>
+                            <option value="💡 Ide Pengembangan Baru">💡 Ide Pengembangan</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="research-logs-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </section>
+        </main>
+
+        <!-- HALAMAN QUICK WORKSPACE HUB (AKSES CEPAT TAUTAN PROYEK) -->
+        <main id="workspace-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
+            <section class="glass-card p-5 md:p-6 border-2 border-sky-300 w-full">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-sky-700 flex items-center"><i class="fas fa-rocket mr-2 text-sky-500"></i> Quick Workspace Hub</h2>
+                        <p class="text-xs text-gray-500">Pintasan sekali ketuk untuk membuka Repository GitHub, Dashboard IoT, LMS Kampus, dan Dokumen Referensi dari HP maupun Laptop.</p>
+                    </div>
+                    <span id="ws-form-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-sky-100 text-sky-700 self-start">Tambah Pintasan</span>
+                </div>
+
+                <form id="form-workspace-link" class="grid grid-cols-1 md:grid-cols-12 gap-3 bg-sky-50/70 p-4 rounded-2xl border border-sky-200">
+                    <input type="hidden" id="ws-edit-id" value="">
+
+                    <div class="md:col-span-4">
+                        <label class="text-[10px] font-bold text-sky-800 ml-1">Nama Pintasan / Proyek *</label>
+                        <input type="text" id="ws-name" placeholder="Ex: Repo PKM Otomatisasi / Blynk IoT..." required class="text-xs mt-1 border-sky-200">
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label class="text-[10px] font-bold text-sky-800 ml-1">URL Tautan *</label>
+                        <input type="url" id="ws-url" placeholder="https://github.com/..." required class="text-xs mt-1 border-sky-200">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-bold text-sky-800 ml-1">Kategori</label>
+                        <select id="ws-category" class="text-xs mt-1 border-sky-200">
+                            <option value="Coding & Repo">💻 Coding & Repo</option>
+                            <option value="Dashboard IoT">📡 Dashboard IoT</option>
+                            <option value="Kampus">🎓 Kampus</option>
+                            <option value="Dokumen & Referensi">📄 Dokumen & Refs</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="text-[10px] font-bold text-sky-800 ml-1">Ikon Tombol</label>
+                        <select id="ws-icon" class="text-xs mt-1 border-sky-200">
+                            <option value="fab fa-github">GitHub</option>
+                            <option value="fas fa-microchip">IoT / Chip</option>
+                            <option value="fab fa-google-drive">Google Drive</option>
+                            <option value="fas fa-graduation-cap">Kampus / LMS</option>
+                            <option value="fas fa-file-alt">Jurnal / Docs</option>
+                            <option value="fas fa-code">Coding / IDE</option>
+                            <option value="fas fa-globe">Web Link</option>
+                        </select>
+                    </div>
+
+                    <div class="md:col-span-12 flex justify-end gap-2 pt-2 border-t border-sky-200/70">
+                        <button type="button" id="btn-cancel-ws" onclick="resetWorkspaceForm()" class="hidden px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 text-gray-700 hover:bg-gray-300">Batal Edit</button>
+                        <button type="submit" id="btn-submit-ws" class="btn-cute !bg-gradient-to-r !from-sky-400 !to-blue-600 text-xs px-6 py-2.5">
+                            <i class="fas fa-plus-circle mr-1.5"></i> Simpan Pintasan
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="glass-card p-5 md:p-6 border-2 border-sky-200 w-full">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <h3 class="text-lg font-extrabold text-sky-700 flex items-center"><i class="fas fa-th-large mr-2 text-sky-500"></i> Tombol Akses Cepat Proyek</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <input type="text" id="search-ws" oninput="renderWorkspaceHub()" placeholder="Cari pintasan..." class="text-xs py-1.5 px-3 w-40 sm:w-48 border-sky-200">
+                        <select id="filter-ws-cat" onchange="renderWorkspaceHub()" class="text-xs py-1.5 px-3 w-40 border-sky-200">
+                            <option value="All">Semua Kategori</option>
+                            <option value="Coding & Repo">💻 Coding & Repo</option>
+                            <option value="Dashboard IoT">📡 Dashboard IoT</option>
+                            <option value="Kampus">🎓 Kampus</option>
+                            <option value="Dokumen & Referensi">📄 Dokumen & Refs</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="workspace-links-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </section>
+        </main>
+
+        <!-- HALAMAN BEASISWA & LOMBA (SPREADSHEET TRACKER) -->
+        <main id="beasiswa-section" class="flex flex-col gap-6 hidden max-w-6xl mx-auto w-full">
+            <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="glass-card p-4 border-l-4 border-fuchsia-500">
                     <span class="text-[11px] font-bold text-gray-500">Total Program</span>
                     <p id="opp-stat-total" class="text-2xl font-black text-fuchsia-700">0</p>
                 </div>
                 <div class="glass-card p-4 border-l-4 border-purple-400">
                     <span class="text-[11px] font-bold text-gray-500">🎓 Beasiswa</span>
-                    <p id="opp-stat-beasiswa" class="text-2xl font-black text-purple-700">0</p>
+                    <p id="opp-stat-beasiswa" class="text-2xl font-black text-purple-600">0</p>
                 </div>
                 <div class="glass-card p-4 border-l-4 border-amber-400">
-                    <span class="text-[11px] font-bold text-gray-500">🏆 Lomba</span>
+                    <span class="text-[11px] font-bold text-gray-500">🏆 Lomba / Kompetisi</span>
                     <p id="opp-stat-lomba" class="text-2xl font-black text-amber-600">0</p>
                 </div>
                 <div class="glass-card p-4 border-l-4 border-red-400">
-                    <span class="text-[11px] font-bold text-gray-500">🔥 Deadline &le; 7 Hari</span>
+                    <span class="text-[11px] font-bold text-gray-500">🚨 Mendekati DL (&le;7 Hari)</span>
                     <p id="opp-stat-urgent" class="text-2xl font-black text-red-600">0</p>
                 </div>
             </section>
 
-            <!-- Form Input / Edit Terstruktur -->
             <section class="glass-card p-5 md:p-6 border-2 border-fuchsia-300 w-full">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                     <div>
-                        <h2 class="text-xl font-bold text-fuchsia-700 flex items-center"><i class="fas fa-award mr-2 text-fuchsia-500"></i> Manajemen Beasiswa & Lomba</h2>
-                        <p class="text-xs text-gray-500">Kelola alur seleksi secara terstruktur. Setiap Deadline otomatis terhubung ke <b>Deadline Tracker</b> & <b>Notifikasi (H-3, H-1, Hari-H)</b>.</p>
+                        <h2 class="text-xl font-bold text-fuchsia-700 flex items-center"><i class="fas fa-award mr-2 text-fuchsia-500"></i> Input Beasiswa & Lomba</h2>
+                        <p class="text-xs text-gray-500">Otomatis tersinkronisasi dengan Deadline Tracker & Notifikasi H-3, H-2, H-1, Hari-H.</p>
                     </div>
                     <span id="opp-form-mode-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-fuchsia-100 text-fuchsia-700 self-start">Mode: Tambah Baru</span>
                 </div>
 
-                <form id="form-opportunity" class="grid grid-cols-1 md:grid-cols-12 gap-3 bg-fuchsia-50 bg-opacity-70 p-4 rounded-2xl border border-fuchsia-200">
+                <form id="form-opportunity" class="grid grid-cols-1 md:grid-cols-12 gap-3 bg-fuchsia-50/70 p-4 rounded-2xl border border-fuchsia-200">
                     <input type="hidden" id="opp-edit-id" value="">
 
-                    <div class="md:col-span-5">
-                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Nama Program / Kompetisi *</label>
+                    <div class="md:col-span-4">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Nama Beasiswa / Lomba *</label>
                         <input type="text" id="opp-name" placeholder="Ex: Beasiswa Unggulan / Lomba KTI Nasional..." required class="text-xs mt-1 border-fuchsia-200">
                     </div>
 
-                    <div class="md:col-span-3">
+                    <div class="md:col-span-2">
                         <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Kategori *</label>
-                        <select id="opp-category" required class="text-xs mt-1 border-fuchsia-200">
+                        <select id="opp-category" class="text-xs mt-1 border-fuchsia-200">
                             <option value="Beasiswa">🎓 Beasiswa</option>
-                            <option value="Lomba">🏆 Lomba / Kompetisi</option>
+                            <option value="Lomba">🏆 Lomba</option>
                         </select>
                     </div>
 
-                    <div class="md:col-span-4">
-                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Tahapan Proses Saat Ini *</label>
-                        <select id="opp-stage" required class="text-xs mt-1 border-fuchsia-200">
+                    <div class="md:col-span-3">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Tahapan Progres *</label>
+                        <select id="opp-stage" class="text-xs mt-1 border-fuchsia-200">
                             <option value="1. Riset & Syarat">1. Riset & Syarat</option>
-                            <option value="2. Penyusunan Berkas/Esai">2. Penyusunan Berkas / Esai / Karya</option>
+                            <option value="2. Penyusunan Berkas/Esai">2. Penyusunan Berkas/Esai</option>
                             <option value="3. Submit Pendaftaran">3. Submit Pendaftaran</option>
                             <option value="4. Seleksi Administrasi">4. Seleksi Administrasi</option>
-                            <option value="5. Wawancara / Final">5. Wawancara / Presentasi Final</option>
-                            <option value="6. Pengumuman (Lolos)">6. Pengumuman (Lolos 🎉)</option>
+                            <option value="5. Wawancara / Final">5. Wawancara / Final</option>
+                            <option value="6. Pengumuman (Lolos)">6. Pengumuman (Lolos)</option>
                             <option value="7. Selesai / Evaluasi">7. Selesai / Evaluasi</option>
                         </select>
                     </div>
 
-                    <div class="md:col-span-4">
-                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Link Akses (Pendaftaran / Guidebook)</label>
+                    <div class="md:col-span-3">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Link Portal / Guidebook</label>
                         <input type="url" id="opp-link" placeholder="https://..." class="text-xs mt-1 border-fuchsia-200">
                     </div>
 
                     <div class="md:col-span-3">
-                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Tanggal Deadline (DL) *</label>
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Tanggal Deadline *</label>
                         <input type="date" id="opp-dl-date" required class="text-xs mt-1 border-fuchsia-200">
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Jam DL *</label>
-                        <input type="time" id="opp-dl-time" value="23:59" required class="text-xs mt-1 border-fuchsia-200">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Jam Deadline</label>
+                        <input type="time" id="opp-dl-time" value="23:59" class="text-xs mt-1 border-fuchsia-200">
                     </div>
 
-                    <div class="md:col-span-3">
-                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Catatan / Syarat Utama</label>
-                        <input type="text" id="opp-notes" placeholder="Ex: Min IPK 3.5, Esai 1000 kata..." class="text-xs mt-1 border-fuchsia-200">
+                    <div class="md:col-span-7">
+                        <label class="text-[10px] font-bold text-fuchsia-800 ml-1">Catatan Syarat / Tema Penting</label>
+                        <input type="text" id="opp-notes" placeholder="Ex: Minimal IPK 3.25, wajib surat rekomendasi dekan..." class="text-xs mt-1 border-fuchsia-200">
                     </div>
 
-                    <div class="md:col-span-12 flex flex-wrap gap-2 justify-end pt-2 border-t border-fuchsia-200/60">
-                        <button type="button" id="btn-cancel-opp" onclick="resetOpportunityForm()" class="hidden px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 text-gray-700 hover:bg-gray-300 transition">Batal Edit</button>
-                        <button type="submit" id="btn-submit-opp" class="btn-cute !bg-gradient-to-r !from-fuchsia-500 !to-purple-600 text-xs px-6 py-2.5">
+                    <div class="md:col-span-12 flex justify-end gap-2 pt-2 border-t border-fuchsia-200/70">
+                        <button type="button" id="btn-cancel-opp" onclick="resetOpportunityForm()" class="hidden px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 text-gray-700 hover:bg-gray-300">Batal Edit</button>
+                        <button type="submit" id="btn-submit-opp" class="btn-cute !bg-gradient-to-r !from-fuchsia-400 !to-pink-500 text-xs px-6 py-2.5">
                             <i class="fas fa-save mr-1.5"></i> Simpan ke Tabel & Set Notif
                         </button>
                     </div>
                 </form>
             </section>
 
-            <!-- Spreadsheet Table View -->
             <section class="glass-card p-5 md:p-6 border-2 border-fuchsia-200 w-full">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
-                    <h3 class="text-lg font-extrabold text-fuchsia-700 flex items-center">
-                        <i class="fas fa-table mr-2 text-fuchsia-500"></i> Spreadsheet Tracker Beasiswa & Lomba
-                    </h3>
+                    <h3 class="text-lg font-extrabold text-fuchsia-700 flex items-center"><i class="fas fa-table mr-2 text-fuchsia-500"></i> Spreadsheet Tracker Beasiswa & Lomba</h3>
                     <div class="flex flex-wrap gap-2">
                         <input type="text" id="search-opp" oninput="renderOpportunities()" placeholder="Cari program..." class="text-xs py-1.5 px-3 w-40 sm:w-48 border-fuchsia-200">
                         <select id="filter-opp-category" onchange="renderOpportunities()" class="text-xs py-1.5 px-3 w-36 border-fuchsia-200">
@@ -730,9 +956,9 @@
                             <option value="Lomba">🏆 Lomba</option>
                         </select>
                         <select id="sort-opp" onchange="renderOpportunities()" class="text-xs py-1.5 px-3 w-40 border-fuchsia-200">
-                            <option value="dl-asc">Urut: DL Terdekat</option>
-                            <option value="name-asc">Urut: Nama (A-Z)</option>
-                            <option value="progress-desc">Urut: Progres Tertinggi</option>
+                            <option value="dl-asc">Urutkan: Deadline Terdekat</option>
+                            <option value="progress-desc">Urutkan: Progres Tertinggi</option>
+                            <option value="name-asc">Urutkan: Nama A-Z</option>
                         </select>
                     </div>
                 </div>
@@ -741,13 +967,13 @@
                     <table class="spreadsheet-table">
                         <thead>
                             <tr>
-                                <th class="w-10 text-center">No</th>
-                                <th class="min-w-[220px]">Nama Program / Kompetisi</th>
-                                <th class="w-28">Kategori</th>
-                                <th class="min-w-[210px]">Tahapan & Progres Saat Ini</th>
-                                <th class="w-36">Akses</th>
-                                <th class="w-40">DL (Deadline)</th>
-                                <th class="w-28 text-center">Aksi</th>
+                                <th class="w-10 text-center">#</th>
+                                <th>Program & Checklist Berkas</th>
+                                <th>Kategori</th>
+                                <th>Tahapan & Progres</th>
+                                <th>Portal / Link</th>
+                                <th>Deadline & Countdown</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="opp-table-body"></tbody>
@@ -756,9 +982,216 @@
             </section>
         </main>
 
+        <!-- HALAMAN KEUANGAN ANAK KOS -->
+        <main id="finance-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-card p-5 border-2 border-yellow-300">
+                    <span class="text-xs font-bold text-yellow-700"><i class="fas fa-wallet mr-1"></i> Dompet Utama (Operasional)</span>
+                    <p id="display-utama" class="text-2xl font-black text-gray-800 mt-1">Rp 0</p>
+                    <div class="flex justify-between text-[11px] font-bold mt-2 pt-2 border-t border-yellow-100">
+                        <span id="display-utama-in" class="text-green-600">+ Rp 0</span>
+                        <span id="display-utama-out" class="text-red-500">- Rp 0</span>
+                    </div>
+                </div>
+                <div class="glass-card p-5 border-2 border-emerald-300">
+                    <span class="text-xs font-bold text-emerald-700"><i class="fas fa-piggy-bank mr-1"></i> Tabungan / Darurat</span>
+                    <p id="display-tabungan" class="text-2xl font-black text-emerald-700 mt-1">Rp 0</p>
+                    <p class="text-[11px] text-gray-500 mt-2">Dana aman untuk masa depan</p>
+                </div>
+                <div class="glass-card p-5 border-2 border-pink-300">
+                    <span class="text-xs font-bold text-pink-700"><i class="fas fa-gift mr-1"></i> Dana Wishlist / Self-Reward</span>
+                    <p id="display-wishlist" class="text-2xl font-black text-pink-600 mt-1">Rp 0</p>
+                    <p class="text-[11px] text-gray-500 mt-2">Alokasi khusus barang impian</p>
+                </div>
+            </section>
+
+            <section class="glass-card p-5 border-2 border-yellow-200">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                    <h3 class="font-bold text-yellow-800 text-sm"><i class="fas fa-chart-line mr-1.5 text-yellow-600"></i> Ringkasan Pengeluaran Minggu Ini</h3>
+                    <div class="flex gap-3 text-xs font-bold">
+                        <span class="bg-red-50 text-red-600 px-2.5 py-1 rounded-full border border-red-200">Keluar Hari Ini: <b id="display-daily-out">Rp 0</b></span>
+                        <span class="bg-green-50 text-green-700 px-2.5 py-1 rounded-full border border-green-200">Masuk Minggu Ini: <b id="display-weekly-in">Rp 0</b></span>
+                    </div>
+                </div>
+                <div id="weekly-expense-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 text-center"></div>
+            </section>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <section class="glass-card p-5 border-2 border-yellow-300 lg:col-span-5">
+                    <h3 class="text-lg font-bold text-yellow-800 mb-3"><i class="fas fa-plus-circle mr-1.5 text-yellow-500"></i> Catat Transaksi</h3>
+                    <form id="form-transaksi" class="flex flex-col gap-3">
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="trans-wallet" class="text-xs">
+                                <option value="utama">Dompet Utama</option>
+                                <option value="tabungan">Tabungan</option>
+                                <option value="wishlist">Wishlist</option>
+                            </select>
+                            <select id="trans-type" class="text-xs">
+                                <option value="out">Pengeluaran (-)</option>
+                                <option value="in">Pemasukan (+)</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="date" id="trans-date" required class="text-xs">
+                            <select id="trans-category" class="text-xs">
+                                <option value="Makan & Minum">Makan & Minum</option>
+                                <option value="Kebutuhan Kos">Kebutuhan Kos</option>
+                                <option value="Kuliah & Praktikum">Kuliah & Praktikum</option>
+                                <option value="Transportasi">Transportasi</option>
+                                <option value="Uang Saku / Gaji">Uang Saku / Gaji</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <input type="text" id="trans-desc" placeholder="Keterangan transaksi..." required class="text-xs">
+                        <input type="number" id="trans-amount" placeholder="Nominal (Rp)..." required class="text-xs">
+                        <button type="submit" class="btn-cute !bg-gradient-to-r !from-yellow-400 !to-amber-500 text-xs py-2.5">Simpan Transaksi</button>
+                    </form>
+                </section>
+
+                <section class="glass-card p-5 border-2 border-yellow-200 lg:col-span-7">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-yellow-800"><i class="fas fa-history mr-1.5"></i> Riwayat Transaksi</h3>
+                        <select id="filter-history-wallet" onchange="renderTransactions()" class="!w-auto text-xs !py-1.5 !px-3">
+                            <option value="utama">Dompet Utama</option>
+                            <option value="tabungan">Tabungan</option>
+                            <option value="wishlist">Wishlist</option>
+                        </select>
+                    </div>
+                    <div id="transaction-list" class="max-h-72 overflow-y-auto pr-1 custom-scrollbar"></div>
+                </section>
+            </div>
+
+            <section class="glass-card p-5 border-2 border-yellow-300">
+                <h3 class="text-lg font-bold text-yellow-800 mb-3"><i class="fas fa-file-invoice-dollar mr-1.5"></i> Rencana Anggaran Belanja (RAB)</h3>
+                <form id="form-rab" class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-4">
+                    <select id="rab-kategori" class="text-xs">
+                        <option value="Makan & Minum">Makan & Minum</option>
+                        <option value="Kebutuhan Kos">Kebutuhan Kos</option>
+                        <option value="Kuliah & Praktikum">Kuliah & Praktikum</option>
+                        <option value="Transportasi">Transportasi</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                    <input type="text" id="rab-target" placeholder="Target / Rincian..." required class="text-xs">
+                    <input type="number" id="rab-nominal" placeholder="Anggaran (Rp)..." required class="text-xs">
+                    <button type="submit" class="btn-cute !bg-amber-500 text-xs">Tambah RAB</button>
+                </form>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-rab text-left">
+                        <thead>
+                            <tr>
+                                <th>Kategori</th>
+                                <th>Target</th>
+                                <th>Anggaran</th>
+                                <th>Realisasi Keluar</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rab-list"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- HALAMAN RESEP & GIZI HARIAN -->
+        <main id="recipes-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
+            <div class="flex justify-end">
+                <button type="button" onclick="openRecipeBook()" class="btn-cute !bg-gradient-to-r !from-cyan-400 !to-teal-500 text-xs px-5 py-2.5">
+                    <i class="fas fa-book-open mr-1.5"></i> Buka Buku Resep Tasya
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                <section class="glass-card p-5 border-2 border-teal-300">
+                    <h3 class="text-lg font-bold text-teal-700 mb-3"><i class="fas fa-utensils mr-2 text-teal-500"></i> Meal Plan & Habit Gizi</h3>
+                    <form id="form-meal-plan" class="flex flex-col gap-3">
+                        <input type="date" id="meal-date" required class="text-xs border-teal-200">
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="meal-break-type" class="text-xs"><option value="Masak">Masak</option><option value="Beli">Beli</option></select>
+                            <input type="text" id="meal-break-desc" placeholder="Menu Sarapan..." required class="col-span-2 text-xs">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="meal-lunch-type" class="text-xs"><option value="Masak">Masak</option><option value="Beli">Beli</option></select>
+                            <input type="text" id="meal-lunch-desc" placeholder="Menu Makan Siang..." required class="col-span-2 text-xs">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="meal-dinner-type" class="text-xs"><option value="Masak">Masak</option><option value="Beli">Beli</option></select>
+                            <input type="text" id="meal-dinner-desc" placeholder="Menu Makan Malam..." required class="col-span-2 text-xs">
+                        </div>
+                        <div class="flex gap-4 bg-teal-50 p-2.5 rounded-xl border border-teal-200 text-xs font-bold text-teal-800">
+                            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="habit-susu" class="custom-checkbox"> 🥛 Minum Susu</label>
+                            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="habit-buah" class="custom-checkbox"> 🍎 Makan Buah</label>
+                        </div>
+                        <button type="submit" class="btn-cute !bg-teal-500 text-xs py-2.5">Simpan Meal Plan</button>
+                    </form>
+                    <div id="meal-history-list" class="mt-4 flex flex-col gap-2 max-h-48 overflow-y-auto custom-scrollbar"></div>
+                </section>
+
+                <section class="glass-card p-5 border-2 border-cyan-300">
+                    <h3 class="text-lg font-bold text-cyan-700 mb-3"><i class="fas fa-mortar-pestle mr-2 text-cyan-500"></i> Tambah Resep Anak Kos</h3>
+                    <form id="form-add-recipe" class="flex flex-col gap-3">
+                        <input type="text" id="recipe-name" placeholder="Nama Masakan / Resep..." required class="text-xs border-cyan-200">
+                        <div class="flex gap-2">
+                            <input type="text" id="recipe-ingredient" placeholder="Bahan (ex: Telur 2 butir)" class="text-xs flex-1">
+                            <input type="number" id="recipe-price" placeholder="Est. Rp" class="text-xs w-28">
+                            <button type="button" onclick="addIngredientTemp()" class="btn-cute !bg-cyan-500 px-3 text-xs"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <ul id="temp-ingredients-list" class="list-disc pl-5 text-xs text-gray-600"></ul>
+                        <textarea id="recipe-steps" rows="3" placeholder="Langkah memasak..." required class="text-xs border-cyan-200"></textarea>
+                        <button type="submit" class="btn-cute !bg-gradient-to-r !from-cyan-400 !to-teal-500 text-xs py-2.5">Simpan ke Buku Resep</button>
+                    </form>
+                </section>
+            </div>
+
+            <section class="glass-card p-5 border-2 border-orange-200">
+                <h3 class="text-lg font-bold text-orange-700 mb-3"><i class="fas fa-shopping-basket mr-2 text-orange-500"></i> Catatan Belanja Dapur & Kos</h3>
+                <form id="form-shopping" class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
+                    <input type="text" id="shop-item" placeholder="Nama barang / bahan..." required class="text-xs">
+                    <input type="number" id="shop-price" placeholder="Estimasi harga (Rp)..." class="text-xs">
+                    <input type="text" id="shop-note" placeholder="Catatan toko / jumlah..." class="text-xs">
+                    <button type="submit" class="btn-cute !bg-orange-400 text-xs">Tambah Belanjaan</button>
+                </form>
+                <ul id="shopping-list-container" class="flex flex-col gap-2 max-h-48 overflow-y-auto custom-scrollbar"></ul>
+            </section>
+        </main>
+
+        <!-- HALAMAN ACADEMIC CANVAS -->
+        <main id="academic-canvas-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
+            <section class="glass-card p-5 border-2 border-cyan-300">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                    <h3 class="text-lg font-bold text-cyan-700"><i class="fas fa-paint-brush mr-2 text-cyan-500"></i> Papan Coret-Coret & Anotasi Materi</h3>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <label class="cursor-pointer bg-cyan-50 hover:bg-cyan-100 text-cyan-700 text-xs font-bold px-3 py-1.5 rounded-lg border border-cyan-200">
+                            <i class="fas fa-image mr-1"></i> Muat Slide/Gambar
+                            <input type="file" id="upload-ppt-image" accept="image/*" class="hidden">
+                        </label>
+                        <input type="color" id="pen-color" value="#e84393" class="w-8 h-8 rounded cursor-pointer border border-cyan-200" title="Warna Pena">
+                        <button type="button" onclick="clearCanvas()" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold px-3 py-1.5 rounded-lg border border-red-200">Bersihkan</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto bg-white rounded-xl border-2 border-cyan-200 p-2 mb-3">
+                    <canvas id="academic-canvas" width="820" height="340" class="w-full bg-white rounded-lg cursor-crosshair touch-none"></canvas>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-2">
+                    <input type="text" id="academic-note-title" placeholder="Judul Topik / Mata Kuliah..." class="md:col-span-4 text-xs">
+                    <input type="text" id="academic-note-eval" placeholder="Kesimpulan / Poin Evaluasi Rumus..." class="md:col-span-6 text-xs">
+                    <button type="button" onclick="saveAcademicNote()" class="btn-cute !bg-cyan-500 md:col-span-2 text-xs">Simpan Canvas</button>
+                </div>
+                <div id="academic-notes-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4"></div>
+            </section>
+
+            <section class="glass-card p-5 border-2 border-indigo-200">
+                <h3 class="text-lg font-bold text-indigo-700 mb-3"><i class="fas fa-book-reader mr-2 text-indigo-500"></i> Catatan Ringkas Kuliah</h3>
+                <div class="flex flex-col gap-2 mb-4">
+                    <input type="text" id="lecture-note-title" placeholder="Judul Mata Kuliah / Bab..." class="text-xs">
+                    <div id="lecture-note-editor" contenteditable="true" class="min-h-[110px] bg-white rounded-xl border border-indigo-200 p-3 text-xs text-gray-700 outline-none focus:border-indigo-400" data-placeholder="Tulis ringkasan materi kuliah di sini..."></div>
+                    <button type="button" onclick="saveLectureNote()" class="btn-cute !bg-indigo-500 text-xs self-end px-5">Simpan Ringkasan</button>
+                </div>
+                <div id="lecture-archive-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+            </section>
+        </main>
+
         <!-- HALAMAN RED DAY TRACKER -->
         <main id="period-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
-            <!-- Summary Status Cards -->
             <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div class="glass-card p-4 border-l-4 border-rose-500">
                     <span class="text-[11px] font-bold text-gray-500">Status Siklus</span>
@@ -779,7 +1212,6 @@
             </section>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                <!-- Kalender Siklus -->
                 <section class="glass-card p-5 border-2 border-rose-300 lg:col-span-5">
                     <h2 class="text-lg font-bold text-rose-600 mb-3 flex items-center"><i class="fas fa-calendar-heart mr-2 text-rose-400"></i> Kalender Red Day</h2>
                     <div class="flex justify-between items-center mb-3 bg-white p-2 rounded-xl border border-rose-100 shadow-sm">
@@ -799,7 +1231,6 @@
                     </div>
                 </section>
 
-                <!-- Form Catat / Edit & Tabel Riwayat Terstruktur -->
                 <div class="lg:col-span-7 flex flex-col gap-6">
                     <section class="glass-card p-5 border-2 border-rose-300">
                         <div class="flex justify-between items-center mb-3">
@@ -993,7 +1424,7 @@
             </section>
         </main>
 
-        <!-- MY PLANNER + DEADLINE TRACKER TERINTEGRASI NOTIFIKASI HP & LAPTOP -->
+        <!-- MY PLANNER + DEADLINE TRACKER + ALARM + NOTULEN -->
         <main id="planner-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
              <div class="lg:col-span-1 flex flex-col gap-6">
                 <section class="glass-card p-5 border-2 border-pink-300">
@@ -1037,6 +1468,51 @@
                     <div class="flex-grow overflow-y-auto mb-4 pr-1" id="daily-list"></div>
                     <div class="flex gap-2 mt-auto"><form id="form-daily" class="w-full flex flex-col gap-2"><input type="text" id="input-daily" placeholder="Fokus hari ini..." required><div class="flex gap-2"><input type="date" id="input-daily-date" class="w-1/2 text-xs"><input type="time" id="input-daily-time" class="w-1/3 text-xs"><button type="submit" class="btn-cute w-1/6 px-0"><i class="fas fa-plus"></i></button></div></form></div>
                 </section>
+
+                <!-- ALARM & PENGINGAT SUARA DI MY PLANNER -->
+                <section class="glass-card p-5 border-2 border-amber-300 flex flex-col gap-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-bold text-amber-600 flex items-center"><i class="fas fa-bell mr-2 text-amber-500"></i> Alarm My Planner</h2>
+                            <p class="text-[10px] text-gray-500">Dering suara otomatis + pop-up & snooze</p>
+                        </div>
+                        <span id="planner-live-clock" class="text-sm font-black font-mono bg-amber-100 text-amber-800 px-2.5 py-1 rounded-lg border border-amber-200">00:00:00</span>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-amber-50/80 p-2.5 rounded-xl border border-amber-200">
+                        <label class="flex items-center gap-2 text-[11px] font-bold text-amber-900 cursor-pointer">
+                            <input type="checkbox" id="toggle-alarm-autosync" class="custom-checkbox" checked onchange="toggleAlarmAutoSync(this.checked)">
+                            <span>Bunyikan alarm pada jam Deadline & Acara Penting</span>
+                        </label>
+                        <button type="button" onclick="testPlannerAlarmSound()" class="text-[10px] font-bold bg-white text-amber-700 hover:bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-300 shadow-sm shrink-0">
+                            <i class="fas fa-volume-up mr-1"></i> Tes
+                        </button>
+                    </div>
+
+                    <form id="form-planner-alarm" class="flex flex-col gap-2">
+                        <div class="flex gap-2">
+                            <input type="time" id="alarm-time" required class="w-2/5 text-xs border-amber-200 font-bold">
+                            <input type="text" id="alarm-label" placeholder="Label alarm (ex: Bangun / Submit)..." required class="w-3/5 text-xs border-amber-200">
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="alarm-repeat" class="w-5/12 text-[11px] p-2 border-amber-200">
+                                <option value="once">Sekali Saja</option>
+                                <option value="daily">Setiap Hari</option>
+                                <option value="weekdays">Senin - Jumat</option>
+                            </select>
+                            <select id="alarm-tone" class="w-4/12 text-[11px] p-2 border-amber-200">
+                                <option value="chime">🎵 Chime</option>
+                                <option value="bell">🔔 Bell</option>
+                                <option value="urgent">🚨 Tegas</option>
+                            </select>
+                            <button type="submit" class="btn-cute !bg-gradient-to-r !from-amber-400 !to-orange-500 w-3/12 px-2 py-1.5 text-xs">
+                                <i class="fas fa-plus"></i> Set
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="planner-alarms-list" class="flex flex-col gap-2 max-h-44 overflow-y-auto pr-1 custom-scrollbar"></div>
+                </section>
             </div>
 
             <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 items-start content-start">
@@ -1044,11 +1520,11 @@
                     <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
                         <h2 class="text-xl font-bold text-pink-500">Deadline Tracker</h2>
                         <div class="flex items-center gap-2">
-                            <span class="text-[10px] font-bold bg-pink-100 text-pink-700 px-2.5 py-1 rounded-full"><i class="fas fa-bell mr-1"></i> Auto-Notif (H-3, H-1, Hari-H)</span>
+                            <span class="text-[10px] font-bold bg-pink-100 text-pink-700 px-2.5 py-1 rounded-full"><i class="fas fa-bell mr-1"></i> Auto-Notif (H-3, H-2, H-1, Hari-H)</span>
                             <button type="button" onclick="sendTestHpNotification()" class="text-[10px] font-bold bg-purple-100 text-purple-700 hover:bg-purple-200 px-2.5 py-1 rounded-full transition"><i class="fas fa-paper-plane mr-1"></i> Tes Notif</button>
                         </div>
                     </div>
-                    <p class="text-xs text-red-400 mb-3 font-semibold">*Otomatis kirim pengingat ke layar HP/Laptop & beri alert jika deadline &le; 7 Hari!</p>
+                    <p class="text-xs text-red-400 mb-3 font-semibold">*Otomatis kirim pengingat H-3, H-2, H-1, & Hari-H ke layar HP/Laptop serta beri alert jika deadline &le; 7 Hari!</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
                     <div class="mt-auto flex flex-col gap-2 border-t border-pink-100 pt-3">
                         <form id="form-deadlines" class="w-full grid grid-cols-1 sm:grid-cols-12 gap-2">
@@ -1061,7 +1537,8 @@
                             <input type="date" id="input-deadline-date" required class="sm:col-span-2 text-xs">
                             <input type="time" id="input-deadline-time" required class="sm:col-span-2 text-xs">
                             <select id="input-deadline-remind" class="sm:col-span-2 text-[11px] p-2 border border-pink-200 rounded text-pink-700 font-bold" title="Jadwal Notifikasi">
-                                <option value="all">Notif: H-3, H-1, H-0</option>
+                                <option value="all">Notif: H-3, H-2, H-1, H-0</option>
+                                <option value="h2">Notif: H-2, H-1 & H-0</option>
                                 <option value="h1">Notif: H-1 & H-0</option>
                                 <option value="h0">Notif: Hari-H Saja</option>
                             </select>
@@ -1072,153 +1549,28 @@
 
                 <section class="glass-card p-5 flex flex-col min-h-[350px]"><h2 class="text-xl font-bold mb-3 text-pink-500">Coursework (TMB)</h2><div class="flex-grow overflow-y-auto mb-4 pr-1" id="coursework-list"></div><form id="form-coursework" class="mt-auto flex flex-col gap-2"><input type="text" id="input-course" placeholder="Nama Matkul" required class="text-sm"><div class="flex gap-2"><input type="text" id="input-course-detail" placeholder="Tugas / Bab" required class="text-sm"><button type="submit" class="btn-cute px-3"><i class="fas fa-plus"></i></button></div></form></section>
                 <section class="glass-card p-5 flex flex-col min-h-[350px]"><h2 class="text-xl font-bold mb-3 text-pink-500">Organization</h2><div class="flex-grow overflow-y-auto mb-4 pr-1" id="org-list"></div><form id="form-org" class="mt-auto flex flex-col gap-2"><input type="text" id="input-org-name" placeholder="Organisasi/Kepanitiaan..." required class="text-sm"><div class="flex gap-2"><input type="text" id="input-org-role" placeholder="Tugas/Divisi" required class="text-sm w-1/3"><input type="date" id="input-org-date" class="text-sm w-1/3" required><button type="submit" class="btn-cute px-3 w-1/3"><i class="fas fa-plus"></i></button></div></form></section>
-            </div>
-        </main>
 
-        <!-- KEUANGAN KOS -->
-        <main id="finance-section" class="flex flex-col gap-8 hidden max-w-5xl mx-auto">
-            <div class="text-center w-full"><blockquote class="glass-card p-4 mx-auto border-l-8 border-yellow-400 inline-block shadow-sm"><p class="italic text-gray-700 font-medium">"Uang kos di Dramaga emang cepet banget ngalirnya kalau nggak ditampung. Yuk, hemat hari ini biar besok bisa jajan tanpa *guilty feeling*, Tasya!" ✨</p></blockquote></div>
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full"><div class="glass-card p-5 border-2 border-red-300 bg-red-50 bg-opacity-30"><h3 class="font-bold text-red-600 mb-2"><i class="fas fa-fire mr-2"></i>Pengeluaran Hari Ini</h3><p id="display-daily-out" class="text-3xl font-black text-gray-800">Rp 0</p></div><div class="glass-card p-5 border-2 border-green-300 bg-green-50 bg-opacity-30"><h3 class="font-bold text-green-600 mb-2"><i class="fas fa-calendar-week mr-2"></i>Pemasukan Minggu Ini</h3><p id="display-weekly-in" class="text-3xl font-black text-gray-800">Rp 0</p></div></section>
-            <section class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                <div class="glass-card p-5 border-t-4 border-blue-400 bg-blue-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-blue-700 mb-1">Saldo Utama</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-utama">Rp 0</h2></div><div class="border-t border-blue-200 pt-3 flex flex-col gap-1 text-xs"><div class="flex justify-between text-green-700"><span>Masuk Mg Ini:</span><strong id="display-utama-in">+ Rp 0</strong></div><div class="flex justify-between text-red-600"><span>Keluar Mg Ini:</span><strong id="display-utama-out">- Rp 0</strong></div></div></div>
-                <div class="glass-card p-5 border-t-4 border-green-400 bg-green-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-green-700 mb-1">Tabungan</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-tabungan">Rp 0</h2></div></div>
-                <div class="glass-card p-5 border-t-4 border-purple-400 bg-purple-50 bg-opacity-40 flex flex-col justify-between"><div><h3 class="text-sm font-extrabold text-purple-700 mb-1">Wishlist</h3><h2 class="text-3xl font-black text-gray-800 mb-4" id="display-wishlist">Rp 0</h2></div></div>
-            </section>
-
-            <section class="glass-card p-5 w-full border-2 border-yellow-300">
-                <h2 class="text-lg font-bold text-yellow-700 mb-4"><i class="fas fa-calendar-day mr-2"></i> Rekap Pengeluaran Minggu Ini (Senin - Minggu)</h2>
-                <div class="grid grid-cols-2 md:grid-cols-7 gap-3 text-center" id="weekly-expense-grid"></div>
-            </section>
-
-            <section class="glass-card p-5 md:p-6 w-full border-2 border-pink-300">
-                <div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-pink-600 flex items-center"><i class="fas fa-table mr-2 text-pink-400"></i> Estimasi RAB (Guideline)</h2></div>
-                <form id="form-rab" class="flex flex-col md:flex-row gap-2 mb-4 bg-white bg-opacity-60 p-3 rounded-lg border border-pink-100 shadow-sm">
-                    <select id="rab-kategori" required class="text-sm md:w-1/4"><option value="" disabled selected>Pilih Kategori...</option><option value="Makan & Minum">Makan & Minum</option><option value="Transportasi">Transportasi</option><option value="Kebutuhan Kos">Kebutuhan Kos</option><option value="Keperluan Kuliah">Keperluan Kuliah</option><option value="Skincare/Selfcare">Skincare (e.g. LightPlus)</option><option value="Lainnya">Lainnya</option></select>
-                    <input type="text" id="rab-target" placeholder="Target / Item..." required class="text-sm md:w-1/3">
-                    <input type="number" id="rab-nominal" placeholder="Estimasi Rp" required class="text-sm md:w-1/4">
-                    <button type="submit" class="btn-cute px-4 py-2 md:w-auto text-sm"><i class="fas fa-plus"></i> Add</button>
-                </form>
-                <div class="overflow-x-auto bg-white bg-opacity-80 rounded-lg shadow-sm border border-gray-100">
-                    <table class="w-full text-left border-collapse table-rab">
-                        <thead><tr><th>Kategori</th><th>Target / Barang</th><th>Budget Est.</th><th>Realisasi</th><th class="text-center"><i class="fas fa-cog"></i></th></tr></thead>
-                        <tbody id="rab-list"></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full items-start">
-                <div class="glass-card p-5 border border-yellow-200 bg-yellow-50 bg-opacity-30">
-                    <h2 class="text-lg font-bold text-yellow-700 mb-4"><i class="fas fa-pen-nib mr-2"></i> Catat Transaksi</h2>
-                    <form id="form-transaksi" class="flex flex-col gap-3">
-                        <select id="trans-wallet" required class="text-sm bg-white p-2 rounded"><option value="utama">🔵 Saldo Utama</option><option value="tabungan">🟢 Tabungan</option><option value="wishlist">🟣 Wishlist</option></select>
-                        <select id="trans-type" required class="text-sm bg-white p-2 rounded"><option value="out">🔴 Pengeluaran (-)</option><option value="in">🟢 Pemasukan (+)</option></select>
-                        <input type="date" id="trans-date" required class="text-sm p-2 rounded">
-                        <select id="trans-category" required class="text-sm bg-white p-2 rounded"><option value="Uang Saku Mingguan">💰 Uang Saku Mingguan</option><option value="Makan & Minum">🍔 Makan & Minum</option><option value="Transportasi">🛵 Transportasi</option><option value="Kebutuhan Kos">🧻 Kebutuhan Kos</option><option value="Keperluan Kuliah">📚 Keperluan Kuliah</option><option value="Skincare/Selfcare">✨ Skincare</option><option value="Nabung">📥 Nabung (Transfer)</option><option value="Lainnya">📦 Lainnya</option></select>
-                        <input type="text" id="trans-desc" placeholder="Keterangan (Gacoan, Gorengan dll)..." required class="text-sm p-2 rounded">
-                        <input type="number" id="trans-amount" placeholder="Nominal (Rp)" required class="text-sm p-2 rounded font-bold">
-                        <button type="submit" class="btn-cute mt-2 w-full py-3 text-sm shadow-md"><i class="fas fa-save"></i> Simpan Transaksi</button>
-                    </form>
-                </div>
-                <div class="glass-card p-5 min-h-[450px] flex flex-col">
-                    <div class="flex justify-between items-center mb-4 border-b border-gray-200 pb-2">
-                        <h2 class="text-lg font-bold text-gray-700"><i class="fas fa-history mr-2"></i> Riwayat</h2>
-                        <select id="filter-history-wallet" class="text-xs p-1 rounded border border-gray-300 font-bold" onchange="renderTransactions()"><option value="utama">Utama</option><option value="tabungan">Tabungan</option><option value="wishlist">Wishlist</option></select>
-                    </div>
-                    <div class="flex-grow overflow-y-auto pr-1" id="transaction-list"></div>
-                </div>
-            </section>
-        </main>
-
-        <!-- RESEP & GIZI -->
-        <main id="recipes-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                <div class="glass-card p-5 border-2 border-teal-300">
-                    <h2 class="text-xl font-bold text-teal-600 mb-4"><i class="fas fa-apple-alt mr-2 text-teal-400"></i> Planner Makan & Gizi</h2>
-                    <form id="form-meal-plan" class="flex flex-col gap-3">
-                        <input type="date" id="meal-date" required class="text-sm p-2 rounded border-teal-200">
-                        <div class="flex items-center gap-2"><span class="w-1/4 text-xs font-bold text-gray-600">Sarapan</span><select id="meal-break-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select><input type="text" id="meal-break-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200"></div>
-                        <div class="flex items-center gap-2"><span class="w-1/4 text-xs font-bold text-gray-600">Makan Siang</span><select id="meal-lunch-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select><input type="text" id="meal-lunch-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200"></div>
-                        <div class="flex items-center gap-2"><span class="w-1/4 text-xs font-bold text-gray-600">Makan Malam</span><select id="meal-dinner-type" class="text-xs p-2 rounded border-teal-200"><option value="Masak">Masak</option><option value="Beli">Beli</option></select><input type="text" id="meal-dinner-desc" placeholder="Menu..." class="flex-1 text-xs p-2 border-teal-200"></div>
-                        <div class="border-t border-teal-100 mt-2 pt-3 flex flex-wrap gap-4 items-center"><label class="text-xs font-bold text-gray-600">Habit Harian:</label><label class="flex items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="habit-susu" class="custom-checkbox"> Minum Susu</label><label class="flex items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="habit-buah" class="custom-checkbox"> Makan Buah</label></div>
-                        <button type="submit" class="btn-cute mt-2 w-full !bg-gradient-to-r !from-teal-300 !to-cyan-400">Simpan Menu Harian</button>
-                    </form>
-                    <div id="meal-history-list" class="mt-4 max-h-40 overflow-y-auto pr-1 flex flex-col gap-2"></div>
-                </div>
-
-                <div class="glass-card p-5 border-2 border-cyan-300 flex flex-col">
-                    <h2 class="text-xl font-bold text-cyan-600 mb-3"><i class="fas fa-folder-plus mr-2 text-cyan-400"></i> Tambah Resep Kos</h2>
-                    <form id="form-add-recipe" class="flex flex-col gap-2 mb-4 p-3 bg-cyan-50 bg-opacity-40 rounded-lg border border-cyan-200 shadow-sm">
-                        <input type="text" id="recipe-name" placeholder="Nama Masakan..." required class="text-sm">
-                        <div class="flex gap-2">
-                            <input type="text" id="recipe-ingredient" placeholder="Bahan (ex: Telur)" class="text-sm w-1/2">
-                            <input type="number" id="recipe-price" placeholder="Harga Rp" class="text-sm w-1/4">
-                            <button type="button" onclick="addIngredientTemp()" class="btn-cute px-3 w-1/4 !bg-cyan-400 text-xs"><i class="fas fa-plus"></i> Bahan</button>
+                <!-- NOTULEN & ACTION ITEMS RAPAT ORGANISASI -->
+                <section class="glass-card p-5 flex flex-col md:col-span-2 border-2 border-purple-300">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <div>
+                            <h2 class="text-xl font-bold text-purple-600 flex items-center"><i class="fas fa-clipboard-list mr-2 text-purple-500"></i> Notulen & Action Items Rapat Organisasi</h2>
+                            <p class="text-xs text-gray-500">Catat instruksi rapat divisi/kepanitiaan, centang progres, atau kirim langsung ke Deadline Tracker.</p>
                         </div>
-                        <ul id="temp-ingredients-list" class="text-xs text-gray-600 ml-2 list-disc pl-4"></ul>
-                        <textarea id="recipe-steps" rows="3" placeholder="Langkah-langkah memasak (pisahkan dengan nomor / baris baru)..." required class="text-sm p-2 rounded border-cyan-200 resize-none mt-2"></textarea>
-                        <button type="submit" class="btn-cute w-full !bg-gradient-to-r !from-cyan-300 !to-blue-400 mt-2">Simpan ke Buku Resep</button>
-                    </form>
-                    <div class="mt-2 pt-4 border-t-2 border-dashed border-cyan-200 flex-grow flex flex-col items-center justify-center">
-                        <h3 class="text-sm font-bold text-cyan-600 mb-2 italic text-center">Buku resep Tasya sekarang ada di dalam *pop-up* biar lebih rapi!</h3>
-                        <button type="button" onclick="openRecipeBook()" class="btn-cute w-full !bg-gradient-to-r !from-cyan-400 !to-blue-500 py-3 shadow-lg hover:scale-105"><i class="fas fa-book-open mr-2"></i> Buka Buku Resep</button>
                     </div>
-                </div>
 
-                <div class="glass-card p-5 border-2 border-orange-300 w-full md:col-span-2">
-                    <h2 class="text-xl font-bold text-orange-600 mb-4"><i class="fas fa-shopping-cart mr-2 text-orange-400"></i> Catatan Belanja Kos</h2>
-                    <p class="text-xs text-gray-500 mb-4">*Catat barang yang mau dibeli biar nggak lupa (contoh: Gas Portable, Minyak), sekalian track perubahan harganya!</p>
-                    <form id="form-shopping" class="flex flex-col md:flex-row gap-2 mb-4">
-                        <input type="text" id="shop-item" placeholder="Nama Barang..." required class="text-sm md:w-1/3 border-orange-200">
-                        <input type="number" id="shop-price" placeholder="Harga Estimasi Rp" required class="text-sm md:w-1/4 border-orange-200">
-                        <input type="text" id="shop-note" placeholder="Keterangan tambahan..." class="text-sm md:w-1/3 border-orange-200">
-                        <button type="submit" class="btn-cute !bg-gradient-to-r !from-orange-300 !to-red-400 md:w-auto px-4"><i class="fas fa-plus"></i> Add</button>
+                    <form id="form-org-minutes" class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 bg-purple-50/70 p-3.5 rounded-2xl border border-purple-200 mb-4">
+                        <input type="text" id="notulen-event" placeholder="Nama Rapat / Kepanitiaan (ex: Rapat Logistik Acara)..." required class="sm:col-span-5 text-xs border-purple-200">
+                        <input type="text" id="notulen-div" placeholder="Divisi / PIC (ex: Logistik)" required class="sm:col-span-4 text-xs border-purple-200">
+                        <input type="date" id="notulen-date" required class="sm:col-span-3 text-xs border-purple-200">
+                        <textarea id="notulen-summary" rows="2" placeholder="Poin hasil rapat & keputusan penting..." required class="sm:col-span-12 text-xs border-purple-200 resize-none"></textarea>
+                        <input type="text" id="notulen-first-action" placeholder="Action item pertama (opsional, ex: Sewa HT 10 unit sebelum Jumat)..." class="sm:col-span-9 text-xs border-purple-200">
+                        <button type="submit" class="btn-cute !bg-gradient-to-r !from-purple-400 !to-indigo-500 sm:col-span-3 text-xs py-2">
+                            <i class="fas fa-plus mr-1"></i> Simpan Notulen
+                        </button>
                     </form>
-                    <div class="overflow-x-auto bg-white bg-opacity-80 rounded-lg shadow-sm border border-gray-100 p-3">
-                        <ul id="shopping-list-container" class="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2"></ul>
-                    </div>
-                </div>
-            </section>
-        </main>
 
-        <!-- ACADEMIC CANVAS -->
-        <main id="academic-canvas-section" class="flex flex-col gap-6 hidden max-w-5xl mx-auto w-full">
-            <section class="glass-card p-5 border-2 border-cyan-300 flex flex-col md:flex-row gap-6">
-                <div class="w-full md:w-2/3 flex flex-col items-center">
-                    <h2 class="text-xl font-bold text-cyan-600 mb-4 w-full"><i class="fas fa-chalkboard mr-2 text-cyan-400"></i> Academic Canvas (Coret-Coret PPT)</h2>
-                    <input type="file" id="upload-ppt-image" accept="image/*" class="text-xs mb-3 w-full border border-cyan-200 p-2 rounded bg-white">
-                    <div class="relative border-2 border-dashed border-cyan-300 bg-white rounded-lg overflow-hidden w-full max-w-[600px] h-[400px] cursor-crosshair">
-                        <canvas id="academic-canvas" width="600" height="400" class="absolute top-0 left-0 touch-none"></canvas>
-                    </div>
-                    <div class="flex gap-4 mt-4 w-full justify-center">
-                        <input type="color" id="pen-color" value="#e84393" class="w-10 h-10 border-0 rounded cursor-pointer p-0">
-                        <button onclick="clearCanvas()" class="btn-cute !bg-red-400 text-sm px-4 py-2"><i class="fas fa-eraser mr-1"></i> Clear</button>
-                    </div>
-                </div>
-                <div class="w-full md:w-1/3 flex flex-col gap-3">
-                    <h3 class="font-bold text-gray-700 mt-4 md:mt-0">Evaluasi & Catatan (Cepat):</h3>
-                    <input type="text" id="academic-note-title" placeholder="Topik Evaluasi..." class="text-sm p-2 border-cyan-200 rounded">
-                    <textarea id="academic-note-eval" rows="4" placeholder="Pertanyaan untuk Dosen / Evaluasi materi yang belum paham..." class="text-sm p-2 border-cyan-200 rounded flex-grow resize-none"></textarea>
-                    <button onclick="saveAcademicNote()" class="btn-cute !bg-gradient-to-r !from-cyan-400 !to-blue-500 py-3 mt-auto"><i class="fas fa-save mr-2"></i>Simpan Catatan Canvas</button>
-                </div>
-            </section>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                <section class="glass-card p-5 border-t-4 border-cyan-400 w-full h-full">
-                    <h3 class="font-bold text-cyan-600 mb-4"><i class="fas fa-images mr-2"></i> Arsip Canvas Coret-Coret</h3>
-                    <div id="academic-notes-list" class="grid grid-cols-1 gap-4 max-h-80 overflow-y-auto pr-2 custom-scrollbar"></div>
-                </section>
-                <section class="glass-card p-5 border-t-4 border-indigo-400 w-full h-full flex flex-col">
-                    <h3 class="font-bold text-indigo-600 mb-4"><i class="fas fa-book-reader mr-2"></i> Arsip Catatan Kuliah</h3>
-                    <div class="flex flex-col mb-4 p-3 bg-indigo-50 bg-opacity-50 rounded-lg border border-indigo-100">
-                        <input type="text" id="lecture-note-title" placeholder="Mata Kuliah / Bab" class="w-full text-sm p-2 border border-indigo-200 rounded mb-2 font-bold text-indigo-700">
-                        <div class="flex gap-2 mb-2 bg-white p-1 rounded shadow-sm w-fit border border-gray-200">
-                            <button type="button" onclick="document.execCommand('bold',false,null)" class="px-2 py-1 rounded hover:bg-gray-100 font-bold text-gray-700" title="Bold">B</button>
-                            <button type="button" onclick="document.execCommand('italic',false,null)" class="px-2 py-1 rounded hover:bg-gray-100 italic text-gray-700" title="Italic">I</button>
-                            <button type="button" onclick="document.execCommand('underline',false,null)" class="px-2 py-1 rounded hover:bg-gray-100 underline text-gray-700" title="Underline">U</button>
-                        </div>
-                        <div id="lecture-note-editor" contenteditable="true" class="w-full min-h-[100px] p-3 bg-white border border-indigo-200 rounded outline-none mb-3 text-sm text-gray-700 custom-scrollbar max-h-32 overflow-y-auto" placeholder="Ketik catatan kuliahmu di sini..."></div>
-                        <button onclick="saveLectureNote()" class="btn-cute !bg-gradient-to-r !from-indigo-400 !to-purple-500 w-full py-2 shadow-md"><i class="fas fa-save mr-1"></i> Simpan ke Archive</button>
-                    </div>
-                    <div id="lecture-archive-list" class="flex flex-col gap-3 flex-grow max-h-48 overflow-y-auto pr-2 custom-scrollbar"></div>
+                    <div id="org-minutes-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar"></div>
                 </section>
             </div>
         </main>
@@ -1322,8 +1674,8 @@
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-                osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12); // A5
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12);
                 gain.gain.setValueAtTime(0.12, ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
                 osc.connect(gain);
@@ -1398,23 +1750,25 @@
 
         function parseLocalDate(dateStr) {
             if (!dateStr) return new Date();
-            const parts = dateStr.split('-').map(Number);
-            return new Date(parts[0], (parts[1] || 1) - 1, parts[2] || 1);
+            const parts = String(dateStr).split('-');
+            if (parts.length !== 3) return new Date(dateStr);
+            return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
         }
 
         const defaultSchedule = [
-            { id: 1, type: "Kuliah", name: "Pemtek (K)", day: "Senin", start: "07:00", end: "08:40", room: "RK A SATARI 03.03 (FKGiz)" },
-            { id: 2, type: "Praktikum", name: "Pemtek (P)", day: "Senin", start: "09:00", end: "11:00", room: "Lab komp. Fateta. B" },
-            { id: 3, type: "Kuliah", name: "Gamtek (K)", day: "Selasa", start: "08:00", end: "09:40", room: "RK A SATARI 03.05 (FKGiz)" },
-            { id: 4, type: "Kuliah", name: "PBT (K)", day: "Selasa", start: "10:30", end: "12:10", room: "RK A SATARI 03.05 (FKGiz)" },
-            { id: 5, type: "Kuliah", name: "FISDAS 2 (K)", day: "Selasa", start: "15:30", end: "18:00", room: "RK PAU 01. 1b (Lt 2 FATETA)" },
-            { id: 6, type: "Praktikum", name: "Dasgron (P)", day: "Rabu", start: "07:00", end: "09:00", room: "Cikabayan (Disesuaikan)" },
-            { id: 7, type: "Kuliah", name: "Termo (K)", day: "Kamis", start: "07:00", end: "08:40", room: "RK A SATARI 03.08 (FKGiz)" },
-            { id: 8, type: "Kuliah", name: "Hidro (K)", day: "Kamis", start: "10:00", end: "11:40", room: "RK A2 FPIK" },
-            { id: 9, type: "Praktikum", name: "Dasgron (P)", day: "Kamis", start: "13:00", end: "14:40", room: "RK Leuwikopo 1" },
-            { id: 10, type: "Kuliah", name: "Termo (R)", day: "Jumat", start: "08:00", end: "09:40", room: "RK IPB W4 4.01" },
-            { id: 11, type: "Praktikum", name: "Gamtek (P)", day: "Jumat", start: "13:00", end: "15:00", room: "Ruang disesuaikan" },
-            { id: 12, type: "Praktikum", name: "FISDAS 2 (P)", day: "Jumat", start: "15:30", end: "18:00", room: "Ruang disesuaikan" }
+            { id: 1, type: 'Kuliah', name: 'Mekanika Fluida', day: 'Senin', start: '08:00', end: '10:30', room: 'RK. TMB 01' },
+            { id: 2, type: 'Praktikum', name: 'Praktikum Elektronika & Instrumentasi', day: 'Selasa', start: '13:00', end: '16:00', room: 'Lab. Otomatisasi' },
+            { id: 3, type: 'Kuliah', name: 'Termodinamika Teknik', day: 'Rabu', start: '10:00', end: '12:30', room: 'RK. TMB 02' },
+            { id: 4, type: 'Praktikum', name: 'Praktikum Gambar Teknik & CAD', day: 'Kamis', start: '09:00', end: '12:00', room: 'Lab. Komputasi' }
+        ];
+
+        const defaultWorkspaceLinks = [
+            { id: 101, name: "GitHub Repositories", url: "https://github.com", category: "Coding & Repo", icon: "fab fa-github" },
+            { id: 102, name: "Google Drive PKM & Kuliah", url: "https://drive.google.com", category: "Dokumen & Referensi", icon: "fab fa-google-drive" },
+            { id: 103, name: "New LMS / Portal Kampus", url: "https://newlms.ipb.ac.id", category: "Kampus", icon: "fas fa-graduation-cap" },
+            { id: 104, name: "Wokwi IoT & Arduino Sim", url: "https://wokwi.com", category: "Dashboard IoT", icon: "fas fa-microchip" },
+            { id: 105, name: "Overleaf LaTeX / Laporan", url: "https://www.overleaf.com", category: "Dokumen & Referensi", icon: "fas fa-file-alt" },
+            { id: 106, name: "Google Scholar Referensi", url: "https://scholar.google.com", category: "Dokumen & Referensi", icon: "fas fa-globe" }
         ];
 
         const defaultData = {
@@ -1428,7 +1782,12 @@
             finance: { rab: [], wallets: { utama: [], tabungan: [], wishlist: [] } },
             diary: [], quotesList: [],
             recipes: [], mealPlan: [], shoppingNotes: [], academicNotes: [], lectureNotes: [], secureNotes: [],
-            periodLogs: []
+            periodLogs: [],
+            researchLogs: [],
+            workspaceLinks: defaultWorkspaceLinks,
+            orgMinutes: [],
+            plannerAlarms: [],
+            alarmAutoSync: true
         };
 
         let appData = null;
@@ -1449,12 +1808,16 @@
             if(!appData.secureNotes) appData.secureNotes = [];
             if(!appData.dailyReminders) appData.dailyReminders = [];
             if(!appData.periodLogs) appData.periodLogs = [];
+            if(!appData.researchLogs) appData.researchLogs = [];
+            if(!appData.workspaceLinks) appData.workspaceLinks = defaultWorkspaceLinks;
+            if(!appData.orgMinutes) appData.orgMinutes = [];
+            if(!appData.plannerAlarms) appData.plannerAlarms = [];
+            if(typeof appData.alarmAutoSync === 'undefined') appData.alarmAutoSync = true;
             if(!appData.scheduleNotes) appData.scheduleNotes = {};
             if(!appData.photos) appData.photos = { family: null, friends: null, partner: null, inspiration: null };
             if(!appData.photoPositions) appData.photoPositions = { family: 50, friends: 50, partner: 50, inspiration: 50 };
             if(!appData.schedule || appData.schedule.length === 0) appData.schedule = defaultSchedule;
 
-            // Migrasi otomatis data Beasiswa lama ke format terpadu Beasiswa & Lomba
             if(!appData.opportunities) appData.opportunities = [];
             if(Array.isArray(appData.scholarships) && appData.scholarships.length > 0) {
                 appData.scholarships.forEach((s, idx) => {
@@ -1473,7 +1836,6 @@
                 delete appData.scholarships;
             }
 
-            // Migrasi otomatis data Period lama ke format start & end date
             appData.periodLogs = appData.periodLogs.map(log => {
                 if(!log.end && log.start) {
                     const dur = parseInt(log.duration) || 5;
@@ -1655,6 +2017,11 @@
                             if(!appData.dailyReminders) appData.dailyReminders = [];
                             if(!appData.lectureNotes) appData.lectureNotes = [];
                             if(!appData.periodLogs) appData.periodLogs = [];
+                            if(!appData.researchLogs) appData.researchLogs = [];
+                            if(!appData.workspaceLinks) appData.workspaceLinks = defaultWorkspaceLinks;
+                            if(!appData.orgMinutes) appData.orgMinutes = [];
+                            if(!appData.plannerAlarms) appData.plannerAlarms = [];
+                            if(typeof appData.alarmAutoSync === 'undefined') appData.alarmAutoSync = true;
                             if(!appData.scheduleNotes) appData.scheduleNotes = {};
                             if(!appData.opportunities) appData.opportunities = [];
                             if(!appData.photos) appData.photos = { family: null, friends: null, partner: null, inspiration: null };
@@ -2400,6 +2767,7 @@
         // ==========================================
         window.toggleBubble = () => {
             const modal = document.getElementById('important-bubble-modal');
+            if(!modal) return;
             if(modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden'); setTimeout(() => { modal.classList.remove('scale-95', 'opacity-0'); modal.classList.add('scale-100', 'opacity-100'); document.getElementById('input-bubble-note').focus(); }, 10);
             } else {
@@ -2409,6 +2777,7 @@
 
         window.toggleDailyReminder = () => {
             const modal = document.getElementById('daily-reminder-modal');
+            if(!modal) return;
             if(modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden'); setTimeout(() => { modal.classList.remove('scale-95', 'opacity-0'); modal.classList.add('scale-100', 'opacity-100'); document.getElementById('input-daily-reminder').focus(); }, 10);
             } else {
@@ -2418,6 +2787,7 @@
 
         window.toggleDeadlinePopup = () => {
             const modal = document.getElementById('deadline-popup-modal');
+            if(!modal) return;
             if(modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden'); setTimeout(() => { modal.classList.remove('scale-95', 'opacity-0'); modal.classList.add('scale-100', 'opacity-100'); }, 10);
             } else {
@@ -2491,22 +2861,26 @@
 
         window.saveImportantNote = () => {
             const input = document.getElementById('input-bubble-note');
-            if(input.value.trim() !== '') { appData.importantNotes.push({ id: Date.now(), text: input.value }); input.value = ''; saveData(); toggleBubble(); }
+            if(input && input.value.trim() !== '') { appData.importantNotes.push({ id: Date.now(), text: input.value }); input.value = ''; saveData(); toggleBubble(); }
         };
         window.saveDailyReminder = () => {
             const input = document.getElementById('input-daily-reminder');
-            if(input.value.trim() !== '') { appData.dailyReminders.push({ id: Date.now(), text: input.value }); input.value = ''; saveData(); }
+            if(input && input.value.trim() !== '') { appData.dailyReminders.push({ id: Date.now(), text: input.value }); input.value = ''; saveData(); }
         };
 
         const renderImportantNotes = () => {
-            const container = document.getElementById('urgent-notes-display'); container.innerHTML = '';
+            const container = document.getElementById('urgent-notes-display');
+            if(!container) return;
+            container.innerHTML = '';
             if(appData.importantNotes.length > 0) {
                 appData.importantNotes.forEach(item => { container.innerHTML += `<div class="bg-red-50 border-l-4 border-red-500 p-2 rounded flex justify-between items-center shadow-sm"><span class="text-sm font-bold text-red-700 flex-1 pl-2"><i class="fas fa-exclamation-circle mr-2"></i>${item.text}</span><button onclick="deleteItem('importantNotes', ${item.id})" class="text-red-400 hover:text-red-600 px-2"><i class="fas fa-check-circle"></i> Selesai</button></div>`; });
             }
         };
 
         const renderDailyReminders = () => {
-            const container = document.getElementById('daily-reminder-list'); container.innerHTML = '';
+            const container = document.getElementById('daily-reminder-list');
+            if(!container) return;
+            container.innerHTML = '';
             if(appData.dailyReminders.length > 0) {
                 appData.dailyReminders.forEach(item => {
                     container.innerHTML += `<div class="bg-yellow-50 border border-yellow-200 p-2 rounded flex justify-between items-center shadow-sm"><span class="text-sm font-bold text-yellow-800 flex-1 pl-1"><i class="fas fa-clock mr-2 text-yellow-500"></i>${item.text}</span><button onclick="deleteItem('dailyReminders', ${item.id})" class="text-red-300 hover:text-red-500 px-2"><i class="fas fa-trash"></i></button></div>`;
@@ -2515,8 +2889,12 @@
         };
 
         window.showSection = (sectionId) => {
-            ['home-section', 'planner-section', 'goals-section', 'beasiswa-section', 'finance-section', 'schedule-section', 'diary-section', 'quotes-section', 'recipes-section', 'academic-canvas-section', 'vault-section', 'kalkulator-section', 'period-section'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById(sectionId).classList.remove('hidden');
+            ['home-section', 'planner-section', 'goals-section', 'beasiswa-section', 'finance-section', 'schedule-section', 'diary-section', 'quotes-section', 'recipes-section', 'academic-canvas-section', 'vault-section', 'kalkulator-section', 'period-section', 'research-section', 'workspace-section'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) targetSection.classList.remove('hidden');
 
             document.getElementById('pin-overlay').style.display = (sectionId === 'diary-section') ? 'flex' : 'none';
             document.getElementById('vault-pin-overlay').style.display = (sectionId === 'vault-section') ? 'flex' : 'none';
@@ -2529,7 +2907,7 @@
                 btnBack.classList.add('hidden'); mainTitle.innerText = "be the kind author of your own story"; mainSubtitle.innerHTML = '<i class="fas fa-graduation-cap text-yellow-500 mr-2"></i> 2026 Future Engineer Dashboard';
             } else {
                 btnBack.classList.remove('hidden');
-                if (sectionId === 'planner-section') { mainTitle.innerText = "My Personal Planner"; mainSubtitle.innerHTML = '<i class="far fa-calendar-check text-pink-500 mr-2"></i> Jadwal & Target Studi'; }
+                if (sectionId === 'planner-section') { mainTitle.innerText = "My Personal Planner"; mainSubtitle.innerHTML = '<i class="far fa-calendar-check text-pink-500 mr-2"></i> Jadwal, Alarm, Notulen & Target Studi'; }
                 else if (sectionId === 'goals-section') { mainTitle.innerText = "Goals & Support"; mainSubtitle.innerHTML = '<i class="fas fa-bullseye text-amber-500 mr-2"></i> Mimpi, Inspirasi, dan Support System'; renderSupportPhotosOnce(); }
                 else if (sectionId === 'beasiswa-section') { mainTitle.innerText = "Beasiswa & Lomba"; mainSubtitle.innerHTML = '<i class="fas fa-award text-fuchsia-500 mr-2"></i> Spreadsheet & Manajemen Tahapan Seleksi'; }
                 else if (sectionId === 'finance-section') { mainTitle.innerText = "Keuangan Anak Kos"; mainSubtitle.innerHTML = '<i class="fas fa-wallet text-green-500 mr-2"></i> Tracker Pengeluaran Mingguan & Harian'; }
@@ -2541,6 +2919,8 @@
                 else if (sectionId === 'vault-section') { mainTitle.innerText = "Tasya's Secure Vault"; mainSubtitle.innerHTML = '<i class="fas fa-shield-alt text-indigo-500 mr-2"></i> Link & Akun Penting Pribadi'; }
                 else if (sectionId === 'kalkulator-section') { mainTitle.innerText = "TMB Calculator"; mainSubtitle.innerHTML = '<i class="fas fa-calculator text-slate-500 mr-2"></i> Kalkulator Scientific & Konversi'; }
                 else if (sectionId === 'period-section') { mainTitle.innerText = "Red Day Tracker"; mainSubtitle.innerHTML = '<i class="fas fa-droplet text-rose-500 mr-2"></i> Kalender Siklus, Riwayat & Estimasi'; renderPeriodCalendar(); }
+                else if (sectionId === 'research-section') { mainTitle.innerText = "Research & PKM Logbook"; mainSubtitle.innerHTML = '<i class="fas fa-microchip text-emerald-500 mr-2"></i> Catatan Progres Eksperimen, Kendala Teknis & Evaluasi'; }
+                else if (sectionId === 'workspace-section') { mainTitle.innerText = "Quick Workspace Hub"; mainSubtitle.innerHTML = '<i class="fas fa-rocket text-sky-500 mr-2"></i> Akses Cepat Tautan Proyek, GitHub & IoT'; }
             }
         };
 
@@ -2585,7 +2965,7 @@
                 updateNotifIcon();
                 if (permission === "granted") {
                     syncRemindersToSW();
-                    triggerSystemNotification("🎉 Notifikasi Aktif!", "Reminder H-3, H-1, dan Hari-H akan muncul otomatis di layar HP & Laptop kamu.");
+                    triggerSystemNotification("🎉 Notifikasi Aktif!", "Reminder H-3, H-2, H-1, dan Hari-H akan muncul otomatis di layar HP & Laptop kamu.");
                 } else if (permission === "denied") {
                     showToast("Izin Notifikasi Diblokir", "Buka pengaturan situs (ikon gembok di samping alamat web) lalu ubah Notifikasi menjadi Izinkan.", "error");
                 }
@@ -2605,7 +2985,7 @@
             }
             triggerSystemNotification(
                 "🔔 Tes Notifikasi Tasya Planner",
-                "Berhasil! Pengingat H-3, H-1, dan Hari-H akan tampil otomatis seperti ini di HP & Laptop kamu."
+                "Berhasil! Pengingat H-3, H-2, H-1, dan Hari-H akan tampil otomatis seperti ini di HP & Laptop kamu."
             );
         };
 
@@ -2626,12 +3006,10 @@
         }
 
         function triggerSystemNotification(title, message) {
-            // Selalu tampilkan visual toast & suara lembut di dalam layar agar tidak pernah terlewat
             playGentleChime();
             showToast(title, message, 'pink');
 
             if ("Notification" in window && Notification.permission === "granted") {
-                // Gunakan Service Worker HANYA jika benar-benar sudah aktif mengontrol halaman, dengan batas waktu 800ms
                 if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
                     let settled = false;
                     const timer = setTimeout(() => {
@@ -2667,7 +3045,6 @@
                         }
                     });
                 } else {
-                    // Langsung panggil notifikasi native browser (Laptop & Android Chrome tanpa SW controller)
                     fireDirectBrowserNotification(title, message);
                 }
             }
@@ -2702,8 +3079,10 @@
                         bgClass = 'bg-red-100 border-red-600'; textClass = 'text-red-800'; icon = '<i class="fas fa-radiation animate-spin-slow"></i>'; label = 'HARI INI (Kritis)'; animClass = 'animate-pulse border-2 shadow-md'; descText = '🚨 Sangat Kritis! Tugas ini harus dikumpulkan HARI INI juga!';
                     } else if(t.diffDays === 1) {
                         bgClass = 'bg-red-100 border-red-500'; textClass = 'text-red-700'; icon = '<i class="fas fa-exclamation-triangle animate-pulse"></i>'; label = 'H-1 (Besok)'; animClass = 'border-2 shadow-sm'; descText = '🚨 Kritis! Prioritaskan yang harus dikumpulkan besok.';
-                    } else if(t.diffDays <= 3) {
-                        bgClass = 'bg-orange-100 border-orange-400'; textClass = 'text-orange-700'; icon = '<i class="fas fa-exclamation-circle"></i>'; label = `H-${t.diffDays} (Segera)`; animClass = 'border'; descText = 'Tingkat menengah: Tugas ini harus segera diselesaikan!';
+                    } else if(t.diffDays === 2) {
+                        bgClass = 'bg-orange-100 border-orange-500'; textClass = 'text-orange-800'; icon = '<i class="fas fa-bell animate-bounce"></i>'; label = 'H-2 (2 Hari Lagi)'; animClass = 'border-2 shadow-sm'; descText = '⚠️ Pengingat H-2: Finalisasi draf dan cek kembali kelengkapan!';
+                    } else if(t.diffDays === 3) {
+                        bgClass = 'bg-orange-50 border-orange-400'; textClass = 'text-orange-700'; icon = '<i class="fas fa-exclamation-circle"></i>'; label = 'H-3 (3 Hari Lagi)'; animClass = 'border'; descText = '⏳ Pengingat H-3: Tugas ini harus segera diprioritaskan!';
                     } else if(t.diffDays <= 7) {
                         bgClass = 'bg-yellow-100 border-yellow-400'; textClass = 'text-yellow-700'; icon = '<i class="fas fa-info-circle"></i>'; label = `H-${t.diffDays} (Menyicil)`; animClass = 'border'; descText = 'Peringatan awal: Yuk mulai cicil draf materi atau riset.';
                     }
@@ -2730,20 +3109,39 @@
             const currentTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
             const todayZero = new Date(); todayZero.setHours(0, 0, 0, 0);
             const currentDate = formatDateLocal(todayZero);
+            const dayOfWeek = now.getDay();
             let dataChanged = false;
 
-            // 1. Daily Planner
+            (appData.plannerAlarms || []).forEach(al => {
+                if (!al.enabled) return;
+                const triggerKey = `${currentDate}_${currentTime}`;
+                if (al.lastTriggeredKey === triggerKey) return;
+
+                let matchDay = true;
+                if (al.repeat === 'weekdays' && (dayOfWeek === 0 || dayOfWeek === 6)) matchDay = false;
+
+                if (matchDay && al.time === currentTime) {
+                    al.lastTriggeredKey = triggerKey;
+                    if (al.repeat === 'once') al.enabled = false;
+                    dataChanged = true;
+                    ringPlannerAlarm(al.label, al.time, al.tone || 'chime', `Alarm Terjadwal (${al.repeat === 'daily' ? 'Setiap Hari' : al.repeat === 'weekdays' ? 'Senin-Jumat' : 'Sekali'})`);
+                }
+            });
+
             appData.daily.forEach(item => {
                 if (!item.completed && item.time === currentTime && !item.notified) {
                     if (!item.date || item.date === currentDate) {
-                        triggerSystemNotification("🎯 Waktunya Fokus!", item.text);
+                        if (appData.alarmAutoSync) {
+                            ringPlannerAlarm(`Fokus Harian: ${item.text}`, currentTime, 'chime', 'Pengingat Daily Planner');
+                        } else {
+                            triggerSystemNotification("🎯 Waktunya Fokus!", item.text);
+                        }
                         item.notified = true;
                         dataChanged = true;
                     }
                 }
             });
 
-            // 2. Kalender Acara Penting (H-3, H-1, Hari-H)
             for (let i = 0; i <= 7; i++) {
                 let target = new Date(todayZero); target.setDate(todayZero.getDate() + i);
                 const targetStr = formatDateLocal(target);
@@ -2757,18 +3155,24 @@
                         if (i === 3 && !ev.reminders.d3) {
                             triggerSystemNotification("📅 H-3 Acara Penting!", `${ev.text} pada ${targetStr} jam ${evTimeStart}`);
                             ev.reminders.d3 = true; dataChanged = true;
+                        } else if (i === 2 && !ev.reminders.d2) {
+                            triggerSystemNotification("📅 H-2 Acara Penting!", `${ev.text} 2 hari lagi (${targetStr}) jam ${evTimeStart}`);
+                            ev.reminders.d2 = true; dataChanged = true;
                         } else if (i === 1 && !ev.reminders.d1) {
                             triggerSystemNotification("📅 H-1 Acara Besok!", `${ev.text} besok (${targetStr}) jam ${evTimeStart}`);
                             ev.reminders.d1 = true; dataChanged = true;
                         } else if (i === 0 && evTimeStart === currentTime && !ev.reminders.now) {
-                            triggerSystemNotification("📅 Acara Penting Dimulai!", `${ev.text} sekarang (${evTimeStart})`);
+                            if (appData.alarmAutoSync) {
+                                ringPlannerAlarm(`Acara Penting: ${ev.text}`, evTimeStart, 'bell', `Jadwal Kalender Hari Ini (${targetStr})`);
+                            } else {
+                                triggerSystemNotification("📅 Acara Penting Dimulai!", `${ev.text} sekarang (${evTimeStart})`);
+                            }
                             ev.reminders.now = true; dataChanged = true;
                         }
                     });
                 }
             }
 
-            // 3. Deadline Tracker & Beasiswa/Lomba (H-3, H-1, Hari-H)
             appData.deadlines.forEach(item => {
                 if (!item.date) return;
                 if (!item.notifiedMilestones) { item.notifiedMilestones = {}; dataChanged = true; }
@@ -2779,12 +3183,19 @@
                 if (diffDays === 3 && mode === 'all' && !item.notifiedMilestones.h3) {
                     triggerSystemNotification("⏳ Pengingat H-3 Deadline!", `${item.task} jatuh tempo 3 hari lagi (${item.date} ${item.time || ''})`);
                     item.notifiedMilestones.h3 = true; dataChanged = true;
-                } else if (diffDays === 1 && (mode === 'all' || mode === 'h1') && !item.notifiedMilestones.h1) {
+                } else if (diffDays === 2 && (mode === 'all' || mode === 'h2') && !item.notifiedMilestones.h2) {
+                    triggerSystemNotification("⏰ Pengingat H-2 Deadline!", `${item.task} jatuh tempo 2 hari lagi (${item.date} ${item.time || ''})`);
+                    item.notifiedMilestones.h2 = true; dataChanged = true;
+                } else if (diffDays === 1 && (mode === 'all' || mode === 'h2' || mode === 'h1') && !item.notifiedMilestones.h1) {
                     triggerSystemNotification("⚠️ Pengingat H-1 Deadline!", `Besok batas akhir: ${item.task} (${item.date} ${item.time || ''})`);
                     item.notifiedMilestones.h1 = true; dataChanged = true;
                 } else if (diffDays === 0) {
                     if (item.time === currentTime && !item.notifiedMilestones.h0Exact) {
-                        triggerSystemNotification("🚨 HARI-H DEADLINE SEKARANG!", `Waktunya mengumpulkan: ${item.task}`);
+                        if (appData.alarmAutoSync) {
+                            ringPlannerAlarm(`DEADLINE SEKARANG: ${item.task}`, item.time, 'urgent', `Batas Akhir Pengumpulan (${item.date})`);
+                        } else {
+                            triggerSystemNotification("🚨 HARI-H DEADLINE SEKARANG!", `Waktunya mengumpulkan: ${item.task}`);
+                        }
                         item.notifiedMilestones.h0Exact = true; dataChanged = true;
                     } else if (!item.notifiedMilestones.h0Morning) {
                         triggerSystemNotification("🚨 HARI INI DEADLINE!", `Jangan lupa hari ini batas akhir: ${item.task} (${item.time || '23:59'})`);
@@ -2795,7 +3206,7 @@
 
             if(dataChanged) saveData();
         }
-        setInterval(checkAlarms, 15000);
+        setInterval(checkAlarms, 10000);
         setTimeout(checkAlarms, 3000);
         updateNotifIcon();
 
@@ -3042,7 +3453,11 @@
                 const diffDays = (deadlineDate - now) / (1000 * 60 * 60 * 24);
                 let isPanic = diffDays >= -0.5 && diffDays <= 3;
                 let categoryLabel = item.category ? `[${item.category}] ` : '';
-                let remindLabel = item.remindMode === 'h0' ? 'Notif: Hari-H' : (item.remindMode === 'h1' ? 'Notif: H-1 & H-0' : 'Notif: H-3, H-1, H-0');
+                let remindLabel = item.remindMode === 'h0'
+                    ? 'Notif: Hari-H'
+                    : (item.remindMode === 'h1'
+                        ? 'Notif: H-1 & H-0'
+                        : (item.remindMode === 'h2' ? 'Notif: H-2, H-1, H-0' : 'Notif: H-3, H-2, H-1, H-0'));
                 let linkedBadge = item.linkedOpportunityId ? `<span class="text-[9px] font-bold bg-fuchsia-100 text-fuchsia-700 px-1.5 py-0.5 rounded ml-1">Sinkron Beasiswa/Lomba</span>` : '';
 
                 container.innerHTML += `
@@ -3274,7 +3689,6 @@
             inspiration: "Role Model / Inspirasi"
         };
 
-        // Kompresi foto otomatis ke ukuran ~45 KB agar selalu muat di localStorage (5MB) & Firebase (1MB)
         function compressImageFile(file, maxDim = 640, quality = 0.78) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -3310,7 +3724,6 @@
             });
         }
 
-        // Update UI foto tanpa memicu loop ulang
         function renderSupportPhotosOnce() {
             ['family', 'friends', 'partner', 'inspiration'].forEach(type => {
                 const imgNode = document.getElementById(`img-${type}`);
@@ -3321,7 +3734,7 @@
                 const savedSrc = appData.photos ? appData.photos[type] : null;
                 const targetSrc = savedSrc || DEFAULT_PLACEHOLDERS[type];
 
-                if (imgNode && imgNode.dataset.loadedKey !== (savedSrc ? 'custom' : 'default') || (savedSrc && imgNode.src !== savedSrc)) {
+                if (imgNode && (imgNode.dataset.loadedKey !== (savedSrc ? 'custom' : 'default') || (savedSrc && imgNode.src !== savedSrc))) {
                     imgNode.src = targetSrc;
                     imgNode.dataset.loadedKey = savedSrc ? 'custom' : 'default';
                 }
@@ -3344,7 +3757,6 @@
             });
         }
 
-        // Saat slider digeser (oninput): ubah CSS saja dengan halus tanpa reload gambar
         window.previewImagePos = (type, val) => {
             if (!appData.photoPositions) appData.photoPositions = {};
             appData.photoPositions[type] = Number(val);
@@ -3352,7 +3764,6 @@
             if (img) img.style.objectPosition = `50% ${val}%`;
         };
 
-        // Saat slider dilepas (onchange): simpan posisi secara permanen tanpa render ulang img.src
         window.commitImagePos = (type, val) => {
             if (!appData.photoPositions) appData.photoPositions = {};
             appData.photoPositions[type] = Number(val);
@@ -3398,7 +3809,6 @@
                             showToast("Gagal Upload Foto", err.message, "error");
                             renderSupportPhotosOnce();
                         } finally {
-                            // Reset input value agar jika user pilih ulang foto tidak memicu bug
                             e.target.value = '';
                         }
                     };
@@ -3414,6 +3824,23 @@
                         const compressed = await compressImageFile(file, 600, 0.75);
                         document.getElementById('quote-img-base64').value = compressed;
                         showToast("Foto Siap", "Foto pendukung quote siap disimpan.", "success");
+                    } catch (err) {
+                        showToast("Gagal Memproses Foto", err.message, "error");
+                    }
+                };
+            }
+
+            const resPhotoInput = document.getElementById('res-photo-input');
+            if (resPhotoInput) {
+                resPhotoInput.onchange = async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    try {
+                        const compressed = await compressImageFile(file, 640, 0.75);
+                        document.getElementById('res-photo-base64').value = compressed;
+                        document.getElementById('res-photo-preview').src = compressed;
+                        document.getElementById('res-photo-preview-wrap').classList.remove('hidden');
+                        showToast("Foto Uji Coba Siap", "Dokumentasi siap disimpan ke logbook.", "success");
                     } catch (err) {
                         showToast("Gagal Memproses Foto", err.message, "error");
                     }
@@ -3624,7 +4051,594 @@
             renderMarquee();
             renderPeriodCalendar();
             renderSupportPhotosOnce();
+            renderResearchLogs();
+            renderWorkspaceHub();
+            renderOrgMinutes();
+            renderPlannerAlarms();
         };
+
+        // ==========================================
+        // 6. RESEARCH & PKM LOGBOOK LOGIC
+        // ==========================================
+        window.clearResearchPhotoTemp = () => {
+            document.getElementById('res-photo-base64').value = '';
+            document.getElementById('res-photo-input').value = '';
+            document.getElementById('res-photo-preview-wrap').classList.add('hidden');
+        };
+
+        window.resetResearchForm = () => {
+            document.getElementById('form-research-log').reset();
+            document.getElementById('res-edit-id').value = '';
+            clearResearchPhotoTemp();
+            document.getElementById('res-form-badge').innerText = 'Mode: Catatan Baru';
+            document.getElementById('btn-submit-res').innerHTML = '<i class="fas fa-save mr-1.5"></i> Simpan ke Logbook Riset';
+            document.getElementById('btn-cancel-res').classList.add('hidden');
+        };
+
+        document.getElementById('form-research-log').onsubmit = (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('res-edit-id').value;
+            const date = document.getElementById('res-date').value;
+            const title = document.getElementById('res-title').value.trim();
+            const project = document.getElementById('res-project').value;
+            const status = document.getElementById('res-status').value;
+            const issue = document.getElementById('res-issue').value.trim();
+            const evalText = document.getElementById('res-eval').value.trim();
+            const photo = document.getElementById('res-photo-base64').value;
+
+            if (editId) {
+                const idx = appData.researchLogs.findIndex(r => String(r.id) === String(editId));
+                if (idx > -1) {
+                    appData.researchLogs[idx] = {
+                        ...appData.researchLogs[idx],
+                        date, title, project, status, issue, evalText,
+                        photo: photo || appData.researchLogs[idx].photo || ''
+                    };
+                }
+            } else {
+                appData.researchLogs.push({
+                    id: Date.now(),
+                    date, title, project, status, issue, evalText, photo
+                });
+            }
+
+            resetResearchForm();
+            saveData();
+            showToast("Logbook Riset Tersimpan!", `${title} berhasil dicatat.`, "success");
+        };
+
+        window.editResearchLog = (id) => {
+            const item = appData.researchLogs.find(r => String(r.id) === String(id));
+            if (!item) return;
+            document.getElementById('res-edit-id').value = item.id;
+            document.getElementById('res-date').value = item.date;
+            document.getElementById('res-title').value = item.title;
+            document.getElementById('res-project').value = item.project || 'PKM';
+            document.getElementById('res-status').value = item.status || '✅ Normal / Berhasil';
+            document.getElementById('res-issue').value = item.issue || '';
+            document.getElementById('res-eval').value = item.evalText || '';
+            document.getElementById('res-photo-base64').value = item.photo || '';
+
+            if (item.photo) {
+                document.getElementById('res-photo-preview').src = item.photo;
+                document.getElementById('res-photo-preview-wrap').classList.remove('hidden');
+            } else {
+                document.getElementById('res-photo-preview-wrap').classList.add('hidden');
+            }
+
+            document.getElementById('res-form-badge').innerText = 'Mode: Edit Catatan';
+            document.getElementById('btn-submit-res').innerHTML = '<i class="fas fa-check mr-1.5"></i> Update Logbook';
+            document.getElementById('btn-cancel-res').classList.remove('hidden');
+            document.getElementById('form-research-log').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.openResearchPhotoModal = (id) => {
+            const item = appData.researchLogs.find(r => String(r.id) === String(id));
+            if (!item || !item.photo) return;
+            document.getElementById('research-photo-modal-title').innerText = `${item.title} (${item.date})`;
+            document.getElementById('research-photo-modal-img').src = item.photo;
+            document.getElementById('research-photo-modal').classList.remove('hidden');
+        };
+
+        window.closeResearchPhotoModal = () => {
+            document.getElementById('research-photo-modal').classList.add('hidden');
+        };
+
+        const renderResearchLogs = () => {
+            const container = document.getElementById('research-logs-list');
+            if (!container) return;
+
+            const logs = appData.researchLogs || [];
+            document.getElementById('res-stat-total').innerText = logs.length;
+            document.getElementById('res-stat-ok').innerText = logs.filter(l => l.status.includes('Normal')).length;
+            document.getElementById('res-stat-issue').innerText = logs.filter(l => l.status.includes('Kendala') || l.status.includes('Error') || l.status.includes('Kalibrasi')).length;
+            document.getElementById('res-stat-idea').innerText = logs.filter(l => l.status.includes('Ide')).length;
+
+            const searchVal = (document.getElementById('search-res')?.value || '').toLowerCase();
+            const statusFilter = document.getElementById('filter-res-status')?.value || 'All';
+
+            const filtered = [...logs]
+                .filter(item => {
+                    const matchText = item.title.toLowerCase().includes(searchVal) ||
+                        (item.issue || '').toLowerCase().includes(searchVal) ||
+                        (item.evalText || '').toLowerCase().includes(searchVal);
+                    const matchStatus = statusFilter === 'All' || item.status === statusFilter;
+                    return matchText && matchStatus;
+                })
+                .sort((a, b) => parseLocalDate(b.date) - parseLocalDate(a.date));
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 italic text-center py-6 md:col-span-2">Belum ada catatan logbook riset. Mulailah mencatat progres eksperimen atau PKM-mu di atas!</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            filtered.forEach(item => {
+                let statusBadgeClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+                if (item.status.includes('Kendala') || item.status.includes('Error')) statusBadgeClass = 'bg-red-100 text-red-700 border-red-200';
+                else if (item.status.includes('Kalibrasi')) statusBadgeClass = 'bg-amber-100 text-amber-800 border-amber-200';
+                else if (item.status.includes('Ide')) statusBadgeClass = 'bg-purple-100 text-purple-700 border-purple-200';
+
+                const photoHtml = item.photo
+                    ? `<div class="mt-2 cursor-pointer group relative overflow-hidden rounded-xl border border-emerald-200 bg-gray-50" onclick="openResearchPhotoModal(${item.id})">
+                        <img src="${item.photo}" alt="Uji Coba" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full"><i class="fas fa-search-plus mr-1"></i>Perbesar</span>
+                       </div>`
+                    : '';
+
+                container.innerHTML += `
+                    <div class="bg-white/85 rounded-2xl p-4 border border-emerald-200 shadow-sm flex flex-col justify-between gap-2">
+                        <div>
+                            <div class="flex flex-wrap items-center justify-between gap-1 mb-1.5">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200">${item.project || 'PKM'}</span>
+                                <span class="text-[10px] font-bold text-gray-400"><i class="far fa-calendar-alt mr-1"></i>${item.date}</span>
+                            </div>
+                            <h4 class="font-extrabold text-gray-800 text-sm leading-snug mb-1.5">${item.title}</h4>
+                            <span class="inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${statusBadgeClass} mb-2">${item.status}</span>
+                            ${item.issue ? `<div class="bg-red-50/70 border-l-4 border-red-400 p-2 rounded text-[11px] text-gray-700 mb-2"><strong class="text-red-700 block text-[10px]">Komponen & Kendala Teknis:</strong>${item.issue}</div>` : ''}
+                            <div class="bg-emerald-50/80 border-l-4 border-emerald-400 p-2 rounded text-[11px] text-gray-700"><strong class="text-emerald-800 block text-[10px]">Poin Evaluasi & Ide:</strong>${item.evalText}</div>
+                            ${photoHtml}
+                        </div>
+                        <div class="flex justify-end gap-2 pt-2 border-t border-emerald-100 mt-1">
+                            <button onclick="editResearchLog(${item.id})" class="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg"><i class="fas fa-edit mr-1"></i>Edit</button>
+                            <button onclick="deleteItem('researchLogs', ${item.id})" class="text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-lg"><i class="fas fa-trash mr-1"></i>Hapus</button>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        // ==========================================
+        // 7. QUICK WORKSPACE HUB LOGIC
+        // ==========================================
+        window.resetWorkspaceForm = () => {
+            document.getElementById('form-workspace-link').reset();
+            document.getElementById('ws-edit-id').value = '';
+            document.getElementById('ws-form-badge').innerText = 'Tambah Pintasan';
+            document.getElementById('btn-submit-ws').innerHTML = '<i class="fas fa-plus-circle mr-1.5"></i> Simpan Pintasan';
+            document.getElementById('btn-cancel-ws').classList.add('hidden');
+        };
+
+        document.getElementById('form-workspace-link').onsubmit = (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('ws-edit-id').value;
+            const name = document.getElementById('ws-name').value.trim();
+            const url = document.getElementById('ws-url').value.trim();
+            const category = document.getElementById('ws-category').value;
+            const icon = document.getElementById('ws-icon').value;
+
+            if (editId) {
+                const idx = appData.workspaceLinks.findIndex(w => String(w.id) === String(editId));
+                if (idx > -1) {
+                    appData.workspaceLinks[idx] = { ...appData.workspaceLinks[idx], name, url, category, icon };
+                }
+            } else {
+                appData.workspaceLinks.push({ id: Date.now(), name, url, category, icon });
+            }
+
+            resetWorkspaceForm();
+            saveData();
+            showToast("Pintasan Tersimpan!", `${name} ditambahkan ke Workspace Hub.`, "success");
+        };
+
+        window.editWorkspaceLink = (id) => {
+            const item = appData.workspaceLinks.find(w => String(w.id) === String(id));
+            if (!item) return;
+            document.getElementById('ws-edit-id').value = item.id;
+            document.getElementById('ws-name').value = item.name;
+            document.getElementById('ws-url').value = item.url;
+            document.getElementById('ws-category').value = item.category || 'Coding & Repo';
+            document.getElementById('ws-icon').value = item.icon || 'fas fa-globe';
+
+            document.getElementById('ws-form-badge').innerText = 'Edit Pintasan';
+            document.getElementById('btn-submit-ws').innerHTML = '<i class="fas fa-check mr-1.5"></i> Update Pintasan';
+            document.getElementById('btn-cancel-ws').classList.remove('hidden');
+            document.getElementById('form-workspace-link').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
+
+        window.copyWorkspaceUrl = (url, btnEl) => {
+            const done = () => {
+                const orig = btnEl.innerHTML;
+                btnEl.innerHTML = '<i class="fas fa-check text-green-600"></i>';
+                showToast("Tautan Disalin", url, "success");
+                setTimeout(() => { btnEl.innerHTML = orig; }, 1400);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(done).catch(() => fallbackCopyText(url, done));
+            } else {
+                fallbackCopyText(url, done);
+            }
+        };
+
+        const renderWorkspaceHub = () => {
+            const grid = document.getElementById('workspace-links-grid');
+            if (!grid) return;
+
+            const searchVal = (document.getElementById('search-ws')?.value || '').toLowerCase();
+            const catFilter = document.getElementById('filter-ws-cat')?.value || 'All';
+
+            const filtered = (appData.workspaceLinks || []).filter(w => {
+                const matchText = w.name.toLowerCase().includes(searchVal) || w.url.toLowerCase().includes(searchVal);
+                const matchCat = catFilter === 'All' || w.category === catFilter;
+                return matchText && matchCat;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-gray-400 italic text-center py-6 sm:col-span-2 lg:col-span-3">Belum ada pintasan proyek di kategori ini.</p>`;
+                return;
+            }
+
+            grid.innerHTML = '';
+            filtered.forEach(item => {
+                grid.innerHTML += `
+                    <div class="bg-white/90 rounded-2xl p-4 border-2 border-sky-100 hover:border-sky-300 shadow-sm flex flex-col justify-between gap-3 transition-all">
+                        <div class="flex items-start gap-3">
+                            <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-100 to-cyan-100 text-sky-600 flex items-center justify-center text-xl shrink-0 border border-sky-200">
+                                <i class="${item.icon || 'fas fa-globe'}"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <span class="text-[10px] font-bold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-100">${item.category}</span>
+                                <h4 class="font-extrabold text-gray-800 text-sm mt-1 truncate">${item.name}</h4>
+                                <p class="text-[10px] text-gray-400 truncate mt-0.5">${item.url}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1.5 pt-2 border-t border-sky-100">
+                            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="flex-1 text-center btn-cute !bg-gradient-to-r !from-sky-400 !to-blue-500 !py-2 !px-3 text-xs">
+                                <i class="fas fa-external-link-alt mr-1"></i> Buka
+                            </a>
+                            <button type="button" onclick="copyWorkspaceUrl('${item.url.replace(/'/g, "\\'")}', this)" class="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs" title="Salin URL">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button type="button" onclick="editWorkspaceLink(${item.id})" class="p-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-600 text-xs" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" onclick="deleteItem('workspaceLinks', ${item.id})" class="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-500 text-xs" title="Hapus">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        // ==========================================
+        // 8. NOTULEN & ACTION ITEMS RAPAT ORGANISASI
+        // ==========================================
+        document.getElementById('form-org-minutes').onsubmit = (e) => {
+            e.preventDefault();
+            const eventName = document.getElementById('notulen-event').value.trim();
+            const division = document.getElementById('notulen-div').value.trim();
+            const date = document.getElementById('notulen-date').value;
+            const summary = document.getElementById('notulen-summary').value.trim();
+            const firstAction = document.getElementById('notulen-first-action').value.trim();
+
+            const actionItems = [];
+            if (firstAction) {
+                actionItems.push({ id: Date.now() + 1, text: firstAction, done: false });
+            }
+
+            appData.orgMinutes.push({
+                id: Date.now(),
+                eventName,
+                division,
+                date,
+                summary,
+                actionItems
+            });
+
+            document.getElementById('form-org-minutes').reset();
+            saveData();
+            showToast("Notulen Tersimpan!", `Hasil rapat ${eventName} berhasil dicatat.`, "success");
+        };
+
+        window.addOrgActionItem = (minuteId) => {
+            const input = document.getElementById(`new-action-input-${minuteId}`);
+            if (!input) return;
+            const val = input.value.trim();
+            if (!val) return;
+            const minute = appData.orgMinutes.find(m => String(m.id) === String(minuteId));
+            if (minute) {
+                if (!minute.actionItems) minute.actionItems = [];
+                minute.actionItems.push({ id: Date.now(), text: val, done: false });
+                input.value = '';
+                saveData();
+            }
+        };
+
+        window.toggleOrgActionItem = (minuteId, actionId) => {
+            const minute = appData.orgMinutes.find(m => String(m.id) === String(minuteId));
+            if (!minute) return;
+            const act = (minute.actionItems || []).find(a => String(a.id) === String(actionId));
+            if (act) {
+                act.done = !act.done;
+                saveData();
+            }
+        };
+
+        window.deleteOrgActionItem = (minuteId, actionId) => {
+            const minute = appData.orgMinutes.find(m => String(m.id) === String(minuteId));
+            if (!minute) return;
+            minute.actionItems = (minute.actionItems || []).filter(a => String(a.id) !== String(actionId));
+            saveData();
+        };
+
+        window.pushActionItemToDeadline = (minuteId, actionId) => {
+            const minute = appData.orgMinutes.find(m => String(m.id) === String(minuteId));
+            if (!minute) return;
+            const act = (minute.actionItems || []).find(a => String(a.id) === String(actionId));
+            if (!act) return;
+
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const targetDate = minute.date && parseLocalDate(minute.date) >= new Date() ? minute.date : formatDateLocal(tomorrow);
+
+            appData.deadlines.push({
+                id: Date.now(),
+                task: `[${minute.division || 'Organisasi'}] ${act.text} (${minute.eventName})`,
+                date: targetDate,
+                time: '21:00',
+                category: 'Organisasi',
+                remindMode: 'all'
+            });
+            saveData();
+            showToast("Masuk Deadline Tracker!", `"${act.text}" dijadwalkan dengan notif H-3, H-2, H-1, H-0.`, "success");
+        };
+
+        const renderOrgMinutes = () => {
+            const container = document.getElementById('org-minutes-list');
+            if (!container) return;
+
+            const list = [...(appData.orgMinutes || [])].sort((a, b) => parseLocalDate(b.date) - parseLocalDate(a.date));
+            if (list.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 italic text-center py-4 md:col-span-2">Belum ada notulen rapat organisasi. Catat instruksi kepanitiaanmu di atas!</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            list.forEach(m => {
+                const actions = m.actionItems || [];
+                const doneCount = actions.filter(a => a.done).length;
+                const actionListHtml = actions.length > 0
+                    ? actions.map(a => `
+                        <div class="flex items-center justify-between gap-1.5 bg-white p-2 rounded-lg border border-purple-100 text-xs">
+                            <label class="flex items-center gap-2 cursor-pointer flex-1 min-w-0 ${a.done ? 'line-through text-gray-400' : 'text-gray-700 font-semibold'}">
+                                <input type="checkbox" class="custom-checkbox" ${a.done ? 'checked' : ''} onchange="toggleOrgActionItem(${m.id}, ${a.id})">
+                                <span class="truncate">${a.text}</span>
+                            </label>
+                            <div class="flex items-center gap-1 shrink-0">
+                                <button type="button" onclick="pushActionItemToDeadline(${m.id}, ${a.id})" class="text-[10px] font-bold bg-pink-50 text-pink-600 hover:bg-pink-100 px-1.5 py-0.5 rounded border border-pink-200" title="Kirim ke Deadline Tracker">
+                                    <i class="fas fa-bell"></i> DL
+                                </button>
+                                <button type="button" onclick="deleteOrgActionItem(${m.id}, ${a.id})" class="text-red-300 hover:text-red-500 px-1">
+                                    <i class="fas fa-times text-[11px]"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')
+                    : `<p class="text-[10px] text-gray-400 italic">Belum ada action item.</p>`;
+
+                container.innerHTML += `
+                    <div class="bg-purple-50/60 rounded-2xl p-4 border border-purple-200 flex flex-col justify-between gap-2.5">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-1">
+                                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-200 text-purple-800">${m.division || 'Panitia'}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold text-gray-500">${m.date}</span>
+                                    <button onclick="deleteItem('orgMinutes', ${m.id})" class="text-red-300 hover:text-red-500 text-xs"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <h4 class="font-extrabold text-gray-800 text-sm mb-1">${m.eventName}</h4>
+                            <p class="text-xs text-gray-600 bg-white/80 p-2 rounded-lg border border-purple-100 whitespace-pre-wrap mb-2.5">${m.summary}</p>
+
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[10px] font-extrabold text-purple-700 uppercase">Action Items (${doneCount}/${actions.length})</span>
+                            </div>
+                            <div class="flex flex-col gap-1.5 mb-2">${actionListHtml}</div>
+                        </div>
+
+                        <div class="flex gap-1.5 pt-2 border-t border-purple-200/60">
+                            <input type="text" id="new-action-input-${m.id}" placeholder="Tambah instruksi/tugas divisi..." class="!py-1.5 !px-2.5 !text-xs border-purple-200">
+                            <button type="button" onclick="addOrgActionItem(${m.id})" class="btn-cute !bg-purple-500 !py-1.5 !px-3 text-xs"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        // ==========================================
+        // 9. FITUR ALARM DI MY PLANNER (AUDIO LOOP + SNOOZE)
+        // ==========================================
+        let alarmRingInterval = null;
+        let currentRingingAlarmData = null;
+
+        function playAlarmTonePattern(tone = 'chime') {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const now = ctx.currentTime;
+
+                const notes = tone === 'urgent'
+                    ? [880, 987.77, 880, 987.77]
+                    : (tone === 'bell' ? [659.25, 880, 1046.5] : [523.25, 659.25, 783.99, 1046.5]);
+
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = tone === 'urgent' ? 'triangle' : 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.16);
+                    gain.gain.setValueAtTime(0.18, now + idx * 0.16);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.16 + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + idx * 0.16);
+                    osc.stop(now + idx * 0.16 + 0.36);
+                });
+            } catch (e) {}
+        }
+
+        window.testPlannerAlarmSound = () => {
+            const tone = document.getElementById('alarm-tone')?.value || 'chime';
+            playAlarmTonePattern(tone);
+            showToast("Tes Suara Alarm", "Nada dering alarm siap berbunyi pada waktunya!", "success");
+        };
+
+        window.ringPlannerAlarm = (title, timeStr, tone = 'chime', desc = 'Waktunya mengeksekusi agenda terjadwalmu!') => {
+            currentRingingAlarmData = { title, timeStr, tone, desc };
+            triggerSystemNotification(`⏰ ALARM: ${title}`, `${desc} (${timeStr})`);
+
+            const modal = document.getElementById('active-alarm-modal');
+            const content = document.getElementById('active-alarm-content');
+            if (modal && content) {
+                document.getElementById('ringing-alarm-time').innerText = timeStr;
+                document.getElementById('ringing-alarm-title').innerText = title;
+                document.getElementById('ringing-alarm-desc').innerText = desc;
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-95');
+                    content.classList.add('scale-100');
+                }, 10);
+            }
+
+            if (alarmRingInterval) clearInterval(alarmRingInterval);
+            playAlarmTonePattern(tone);
+            alarmRingInterval = setInterval(() => playAlarmTonePattern(tone), 2200);
+        };
+
+        window.stopPlannerAlarm = () => {
+            if (alarmRingInterval) {
+                clearInterval(alarmRingInterval);
+                alarmRingInterval = null;
+            }
+            const modal = document.getElementById('active-alarm-modal');
+            const content = document.getElementById('active-alarm-content');
+            if (modal && content) {
+                modal.classList.add('opacity-0');
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 250);
+            }
+            currentRingingAlarmData = null;
+        };
+
+        window.snoozePlannerAlarm = () => {
+            const data = currentRingingAlarmData;
+            stopPlannerAlarm();
+            if (!data) return;
+
+            const snoozeDate = new Date(Date.now() + 5 * 60 * 1000);
+            const snoozeTime = snoozeDate.getHours().toString().padStart(2, '0') + ":" + snoozeDate.getMinutes().toString().padStart(2, '0');
+
+            appData.plannerAlarms.push({
+                id: Date.now(),
+                time: snoozeTime,
+                label: `[Snooze] ${data.title}`,
+                repeat: 'once',
+                tone: data.tone || 'chime',
+                enabled: true
+            });
+            saveData();
+            showToast("Alarm Di-Snooze 5 Menit", `Akan berbunyi lagi pukul ${snoozeTime}.`, "pink");
+        };
+
+        window.toggleAlarmAutoSync = (checked) => {
+            appData.alarmAutoSync = checked;
+            saveData(true);
+        };
+
+        document.getElementById('form-planner-alarm').onsubmit = (e) => {
+            e.preventDefault();
+            const time = document.getElementById('alarm-time').value;
+            const label = document.getElementById('alarm-label').value.trim();
+            const repeat = document.getElementById('alarm-repeat').value;
+            const tone = document.getElementById('alarm-tone').value;
+
+            appData.plannerAlarms.push({
+                id: Date.now(),
+                time,
+                label,
+                repeat,
+                tone,
+                enabled: true
+            });
+
+            document.getElementById('form-planner-alarm').reset();
+            saveData();
+            playAlarmTonePattern(tone);
+            showToast("Alarm Diset!", `Alarm "${label}" aktif pukul ${time}.`, "success");
+        };
+
+        window.togglePlannerAlarmState = (id) => {
+            const al = (appData.plannerAlarms || []).find(a => String(a.id) === String(id));
+            if (al) {
+                al.enabled = !al.enabled;
+                if (al.enabled) al.lastTriggeredKey = '';
+                saveData();
+            }
+        };
+
+        const renderPlannerAlarms = () => {
+            const container = document.getElementById('planner-alarms-list');
+            const autoSyncEl = document.getElementById('toggle-alarm-autosync');
+            if (autoSyncEl) autoSyncEl.checked = appData.alarmAutoSync !== false;
+            if (!container) return;
+
+            const list = [...(appData.plannerAlarms || [])].sort((a, b) => a.time.localeCompare(b.time));
+            if (list.length === 0) {
+                container.innerHTML = `<p class="text-[11px] text-gray-400 italic text-center py-2">Belum ada alarm kustom.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            list.forEach(al => {
+                const repLabel = al.repeat === 'daily' ? 'Setiap Hari' : (al.repeat === 'weekdays' ? 'Sen-Jum' : 'Sekali');
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-2.5 rounded-xl border ${al.enabled ? 'bg-white border-amber-200 shadow-sm' : 'bg-gray-50 border-gray-200 opacity-60'}">
+                        <div class="min-w-0 pr-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-black font-mono text-amber-700">${al.time}</span>
+                                <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">${repLabel}</span>
+                            </div>
+                            <p class="text-xs font-bold text-gray-700 truncate">${al.label}</p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <input type="checkbox" class="custom-checkbox" ${al.enabled ? 'checked' : ''} onchange="togglePlannerAlarmState(${al.id})" title="Aktif/Nonaktif">
+                            <button type="button" onclick="deleteItem('plannerAlarms', ${al.id})" class="text-red-300 hover:text-red-500 text-xs px-1"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        setInterval(() => {
+            const clk = document.getElementById('planner-live-clock');
+            if (clk) {
+                const now = new Date();
+                clk.innerText = now.toTimeString().slice(0, 8);
+            }
+        }, 1000);
 
         setupImageUploads();
         syncRemindersToSW();
