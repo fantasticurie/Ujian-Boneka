@@ -162,16 +162,16 @@
         .calendar-day.selected { border: 2px solid #e84393; transform: scale(1.05); background: #ffeaa7 !important; color: #4a4a4a !important; }
 
         /* --- Polaroid --- */
-        .polaroid-frame { background: #fff; padding: 10px 10px 30px 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 4px; position: relative; transition: transform 0.3s ease; width: 100%; }
+        .polaroid-frame { background: #fff; padding: 10px 10px 26px 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 4px; position: relative; transition: transform 0.3s ease; width: 100%; }
         .polaroid-frame:hover { z-index: 10; }
         .pin-icon { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-size: 1.8rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 5; }
-        .polaroid-img { width: 100%; height: 140px; object-fit: cover; object-position: 50% 50%; border-radius: 2px; background-color: #f8f9fa; }
-        .tilt-left { transform: rotate(-3deg); } .tilt-left:hover { transform: rotate(0deg) scale(1.05); }
-        .tilt-right { transform: rotate(3deg); } .tilt-right:hover { transform: rotate(0deg) scale(1.05); }
-        .tilt-straight { transform: rotate(1deg); } .tilt-straight:hover { transform: rotate(0deg) scale(1.05); }
+        .polaroid-img { width: 100%; height: 150px; object-fit: cover; object-position: 50% 50%; border-radius: 2px; background-color: #f8f9fa; display: block; }
+        .tilt-left { transform: rotate(-2deg); } .tilt-left:hover { transform: rotate(0deg) scale(1.03); }
+        .tilt-right { transform: rotate(2deg); } .tilt-right:hover { transform: rotate(0deg) scale(1.03); }
+        .tilt-straight { transform: rotate(1deg); } .tilt-straight:hover { transform: rotate(0deg) scale(1.03); }
 
-        input[type="range"].pos-slider { -webkit-appearance: none; width: 100%; height: 4px; border-radius: 5px; background: #f4aeb8; outline: none; margin-top: 8px; }
-        input[type="range"].pos-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #e84393; cursor: pointer; }
+        input[type="range"].pos-slider { -webkit-appearance: none; width: 100%; height: 5px; border-radius: 5px; background: #f4aeb8; outline: none; margin-top: 8px; }
+        input[type="range"].pos-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #e84393; cursor: pointer; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
 
         /* --- Animations --- */
         .bg-animation-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; overflow: hidden; }
@@ -255,6 +255,9 @@
 </head>
 <body class="antialiased flex flex-col min-h-screen">
 
+    <!-- FLOATING TOAST NOTIFICATION BANNER (NON-BLOCKING REPLACEMENT FOR ALERT) -->
+    <div id="toast-container" class="fixed top-12 left-1/2 -translate-x-1/2 z-[100000] flex flex-col gap-2 w-[92vw] max-w-md pointer-events-none"></div>
+
     <!-- FLOATING MARQUEE (RUNNING TEXT) - GENERAL NOTES -->
     <div class="marquee-container" id="running-text-bar">
         <div class="marquee-content" id="running-text-content"></div>
@@ -275,43 +278,46 @@
         </div>
     </div>
 
-    <!-- MODAL PANDUAN NOTIFIKASI HP & ANDROID APK -->
+    <!-- MODAL PANDUAN NOTIFIKASI HP & LAPTOP -->
     <div id="pwa-guide-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 z-[99997] hidden flex items-center justify-center transition-opacity opacity-0 p-4" onclick="closePwaGuideModal()">
         <div id="pwa-guide-content" class="w-full max-w-lg rounded-2xl shadow-2xl p-6 relative transform scale-95 transition-transform bg-white border-2 border-pink-300 max-h-[88vh] overflow-y-auto custom-scrollbar" onclick="event.stopPropagation()">
             <button onclick="closePwaGuideModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
             <div class="text-center mb-4 border-b border-pink-100 pb-3">
-                <div class="w-12 h-12 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl"><i class="fas fa-mobile-alt"></i></div>
-                <h2 class="text-xl font-extrabold text-pink-600 font-nunito">Notifikasi Layar HP & Mode APK</h2>
-                <p class="text-xs text-gray-500 mt-1">Agar reminder H-3, H-1, & Hari-H muncul di lock screen walau web ditutup</p>
+                <div class="w-12 h-12 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl"><i class="fas fa-bell"></i></div>
+                <h2 class="text-xl font-extrabold text-pink-600 font-nunito">Pengaturan Notifikasi HP & Laptop</h2>
+                <p class="text-xs text-gray-500 mt-1">Pengingat otomatis H-3, H-1, & Hari-H untuk Deadline, Beasiswa/Lomba, dan Kalender</p>
             </div>
 
-            <div class="bg-pink-50 border border-pink-200 rounded-xl p-3 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div>
-                    <p class="text-xs font-bold text-gray-700">Status Izin Notifikasi HP:</p>
-                    <p id="pwa-notif-status-text" class="text-xs font-extrabold text-pink-600">Mengecek...</p>
-                </div>
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <button onclick="requestNotificationPermission()" class="btn-cute text-xs px-3 py-2 flex-1 sm:flex-initial"><i class="fas fa-bell mr-1"></i> Aktifkan</button>
-                    <button onclick="sendTestHpNotification()" class="btn-cute !bg-gradient-to-r !from-purple-400 !to-pink-500 text-xs px-3 py-2 flex-1 sm:flex-initial"><i class="fas fa-paper-plane mr-1"></i> Test Notif</button>
+            <div class="bg-pink-50 border border-pink-200 rounded-xl p-3.5 mb-4 flex flex-col gap-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <p class="text-xs font-bold text-gray-700">Status Izin Browser:</p>
+                        <p id="pwa-notif-status-text" class="text-xs font-extrabold text-pink-600">Mengecek...</p>
+                        <p id="pwa-env-status-text" class="text-[10px] text-gray-500 mt-0.5"></p>
+                    </div>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <button onclick="requestNotificationPermission()" class="btn-cute text-xs px-3 py-2 flex-1 sm:flex-initial"><i class="fas fa-bell mr-1"></i> Aktifkan</button>
+                        <button onclick="sendTestHpNotification()" class="btn-cute !bg-gradient-to-r !from-purple-400 !to-pink-500 text-xs px-3 py-2 flex-1 sm:flex-initial"><i class="fas fa-paper-plane mr-1"></i> Test Notif</button>
+                    </div>
                 </div>
             </div>
 
             <div class="space-y-3 text-xs text-gray-700 leading-relaxed">
-                <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-200">
-                    <h4 class="font-bold text-yellow-800 mb-1"><i class="fas fa-star text-yellow-500 mr-1"></i> Cara 1: Install PWA ke Layar Utama (Tercepat)</h4>
-                    <ol class="list-decimal pl-4 space-y-1">
-                        <li>Buka web ini lewat <b>Google Chrome</b> di HP Android (wajib HTTPS / GitHub Pages / Vercel).</li>
-                        <li>Ketuk ikon <b>Titik Tiga (⋮)</b> di pojok kanan atas Chrome.</li>
-                        <li>Pilih <b>"Tambahkan ke Layar utama" (Add to Home Screen)</b> lalu klik <b>Install</b>.</li>
-                        <li>Buka <b>Pengaturan HP &gt; Aplikasi &gt; Tasya Planner &gt; Baterai</b>, pilih <b>"Tidak Dibatasi" (Unrestricted)</b> agar Service Worker selalu aktif di background.</li>
-                    </ol>
+                <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+                    <h4 class="font-bold text-amber-800 mb-1"><i class="fas fa-laptop text-amber-600 mr-1"></i> Jika di Laptop (Windows / Mac) Tidak Muncul Banner:</h4>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li>Pastikan mode <b>Do Not Disturb / Focus Assist</b> di Windows/Mac dalam keadaan <b>OFF</b>.</li>
+                        <li>Klik ikon <b>Gembok / Setelan situs</b> di sebelah kiri URL browser &rarr; pastikan <b>Notifications = Allow (Izinkan)</b>.</li>
+                        <li>Jangan membuka file langsung dari <code>file:///</code>; gunakan link HTTPS hosting kamu (link yang sama tetap bisa dipakai!).</li>
+                    </ul>
                 </div>
-                <div class="bg-blue-50 p-3 rounded-xl border border-blue-200">
-                    <h4 class="font-bold text-blue-800 mb-1"><i class="fab fa-android text-green-600 mr-1"></i> Cara 2: Bungkus Jadi File .APK (PWABuilder)</h4>
+                <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-200">
+                    <h4 class="font-bold text-yellow-800 mb-1"><i class="fas fa-mobile-alt text-pink-500 mr-1"></i> Agar Muncul di Layar HP Android:</h4>
                     <ol class="list-decimal pl-4 space-y-1">
-                        <li>Pastikan file <code>index.html</code>, <code>manifest.json</code>, dan <code>sw.js</code> sudah di-upload online (misal GitHub Pages / Netlify).</li>
-                        <li>Buka <b>pwabuilder.com</b>, masukkan URL web planner kamu, lalu klik <b>Package for Stores &gt; Android</b> untuk mengunduh file <b>.apk</b>.</li>
-                        <li>Install APK tersebut di HP agar berjalan sebagai aplikasi Android mandiri dengan notifikasi bar penuh.</li>
+                        <li>Buka link web kamu lewat <b>Google Chrome</b> di HP Android.</li>
+                        <li>Ketuk tombol <b>Aktifkan</b> di atas lalu tekan <b>Izinkan (Allow)</b>.</li>
+                        <li>Ketuk menu <b>Titik Tiga (⋮)</b> di Chrome &rarr; pilih <b>"Tambahkan ke Layar utama" (Add to Home Screen)</b> &rarr; <b>Install</b>.</li>
+                        <li>Buka <b>Pengaturan HP &gt; Aplikasi &gt; Tasya Planner &gt; Baterai</b>, pilih <b>"Tidak Dibatasi" (Unrestricted)</b>.</li>
                     </ol>
                 </div>
             </div>
@@ -426,17 +432,17 @@
                 <i class="fas fa-arrow-left mr-1"></i> Menu
             </button>
 
-            <!-- TOP RIGHT CONTROLS: NOTIF HP + DEADLINE POPUP + LOGIN SYNC -->
+            <!-- TOP RIGHT CONTROLS: NOTIF HP/LAPTOP + DEADLINE POPUP + LOGIN SYNC -->
             <div class="absolute right-0 top-0 flex items-center gap-2 sm:gap-3 z-[60]">
-                <button onclick="openPwaGuideModal()" id="btn-hp-notif-trigger" class="bg-white border border-pink-200 shadow-sm px-2.5 py-1.5 rounded-full text-[11px] font-bold text-pink-600 flex items-center gap-1.5 hover:bg-pink-50 transition" title="Atur Notifikasi Layar HP & APK">
-                    <i class="fas fa-mobile-alt text-pink-500"></i>
-                    <span class="hidden sm:inline" id="btn-hp-notif-label">Aktifkan Notif HP</span>
+                <button onclick="openPwaGuideModal()" id="btn-hp-notif-trigger" class="bg-white border border-pink-200 shadow-sm px-2.5 py-1.5 rounded-full text-[11px] font-bold text-pink-600 flex items-center gap-1.5 hover:bg-pink-50 transition" title="Atur & Tes Notifikasi HP/Laptop">
+                    <i class="fas fa-bell text-pink-500"></i>
+                    <span class="hidden sm:inline" id="btn-hp-notif-label">Aktifkan Notif</span>
                     <span id="hp-notif-dot" class="w-2 h-2 rounded-full bg-yellow-400"></span>
                 </button>
 
                 <div class="relative flex flex-col items-end">
                     <div class="cursor-pointer transition-transform hover:scale-110 relative bg-white border border-gray-200 shadow-sm p-1.5 rounded-full w-8 h-8 flex items-center justify-center" id="notif-status" onclick="toggleDeadlinePopup()" title="Deadline Alerts">
-                        <i class="fas fa-bell text-pink-500 text-sm" id="notif-icon"></i>
+                        <i class="fas fa-tasks text-pink-500 text-sm" id="notif-icon"></i>
                         <span id="deadline-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full hidden shadow-sm border border-white">0</span>
                     </div>
 
@@ -444,8 +450,8 @@
                         <div class="flex justify-between items-center border-b border-pink-100 pb-2 mb-2">
                             <h3 class="text-pink-600 font-bold text-sm"><i class="fas fa-tasks mr-1"></i> Deadline Mendekat!</h3>
                             <div class="flex gap-1.5">
-                                <button onclick="requestNotificationPermission()" class="text-[10px] bg-pink-50 text-pink-600 px-2 py-1 rounded hover:bg-pink-100 border border-pink-200 shadow-sm font-bold" title="Aktifkan Notifikasi HP"><i class="fas fa-bell mr-1"></i>Notif HP</button>
-                                <button onclick="sendTestHpNotification()" class="text-[10px] bg-purple-50 text-purple-600 px-2 py-1 rounded hover:bg-purple-100 border border-purple-200 shadow-sm font-bold" title="Test Notif ke Layar HP"><i class="fas fa-vial"></i></button>
+                                <button onclick="requestNotificationPermission()" class="text-[10px] bg-pink-50 text-pink-600 px-2 py-1 rounded hover:bg-pink-100 border border-pink-200 shadow-sm font-bold" title="Aktifkan Notifikasi"><i class="fas fa-bell mr-1"></i>Izin</button>
+                                <button onclick="sendTestHpNotification()" class="text-[10px] bg-purple-50 text-purple-600 px-2 py-1 rounded hover:bg-purple-100 border border-purple-200 shadow-sm font-bold" title="Tes Munculkan Notifikasi Sekarang"><i class="fas fa-paper-plane mr-1"></i>Tes</button>
                             </div>
                         </div>
                         <div id="deadline-popup-list" class="flex flex-col gap-2 max-h-60 overflow-y-auto overflow-x-hidden w-full custom-scrollbar pr-1"></div>
@@ -544,11 +550,55 @@
             </section>
 
             <section class="glass-card p-5 flex flex-col md:col-span-2 relative">
-                <h2 class="text-xl font-bold mb-4 text-pink-500 flex items-center justify-center"><i class="fas fa-heart text-red-400 mr-2"></i> My Support System</h2>
+                <div class="flex flex-col items-center mb-4">
+                    <h2 class="text-xl font-bold text-pink-500 flex items-center justify-center"><i class="fas fa-heart text-red-400 mr-2"></i> My Support System</h2>
+                    <p class="text-[11px] text-gray-500 mt-1">Foto otomatis dikompres & disimpan permanen (geser slider untuk atur posisi vertikal)</p>
+                </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
-                    <div class="flex flex-col items-center"><div class="polaroid-frame tilt-left"><i class="fas fa-thumbtack pin-icon text-pink-400"></i><img id="img-family" src="https://placehold.co/300x300/ffeaa7/fd79a8?text=Keluarga" alt="Keluarga" class="polaroid-img"><input type="range" min="0" max="100" value="50" class="pos-slider" oninput="adjustImagePos('family', this.value)"></div><input type="file" id="upload-family" accept="image/*" class="text-[10px] mt-2 w-3/4"></div>
-                    <div class="flex flex-col items-center"><div class="polaroid-frame tilt-straight"><i class="fas fa-thumbtack pin-icon text-yellow-400"></i><img id="img-friends" src="https://placehold.co/300x300/ffd1dc/e84393?text=Teman" alt="Teman" class="polaroid-img"><input type="range" min="0" max="100" value="50" class="pos-slider" oninput="adjustImagePos('friends', this.value)"></div><input type="file" id="upload-friends" accept="image/*" class="text-[10px] mt-2 w-3/4"></div>
-                    <div class="flex flex-col items-center"><div class="polaroid-frame tilt-right"><i class="fas fa-thumbtack pin-icon text-red-400"></i><img id="img-partner" src="https://placehold.co/300x300/f4aeb8/ffffff?text=Pacar" alt="Pacar" class="polaroid-img"><input type="range" min="0" max="100" value="50" class="pos-slider" oninput="adjustImagePos('partner', this.value)"></div><input type="file" id="upload-partner" accept="image/*" class="text-[10px] mt-2 w-3/4"></div>
+                    <!-- Keluarga -->
+                    <div class="flex flex-col items-center">
+                        <div class="polaroid-frame tilt-left">
+                            <i class="fas fa-thumbtack pin-icon text-pink-400"></i>
+                            <button type="button" id="del-photo-family" onclick="removeSupportPhoto('family')" class="hidden absolute top-2 right-2 z-10 bg-white/90 text-red-500 hover:bg-red-500 hover:text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow" title="Hapus Foto"><i class="fas fa-times"></i></button>
+                            <img id="img-family" src="https://placehold.co/300x300/ffeaa7/fd79a8?text=Keluarga" alt="Keluarga" class="polaroid-img">
+                            <input type="range" id="slider-family" min="0" max="100" value="50" class="pos-slider" oninput="previewImagePos('family', this.value)" onchange="commitImagePos('family', this.value)">
+                            <span id="status-photo-family" class="block text-center text-[10px] font-bold text-gray-400 mt-1">Keluarga</span>
+                        </div>
+                        <label class="mt-2.5 cursor-pointer bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold text-[11px] px-3 py-1.5 rounded-full shadow-sm transition flex items-center gap-1.5">
+                            <i class="fas fa-camera"></i> Pilih Foto Keluarga
+                            <input type="file" id="upload-family" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+
+                    <!-- Teman -->
+                    <div class="flex flex-col items-center">
+                        <div class="polaroid-frame tilt-straight">
+                            <i class="fas fa-thumbtack pin-icon text-yellow-400"></i>
+                            <button type="button" id="del-photo-friends" onclick="removeSupportPhoto('friends')" class="hidden absolute top-2 right-2 z-10 bg-white/90 text-red-500 hover:bg-red-500 hover:text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow" title="Hapus Foto"><i class="fas fa-times"></i></button>
+                            <img id="img-friends" src="https://placehold.co/300x300/ffd1dc/e84393?text=Teman" alt="Teman" class="polaroid-img">
+                            <input type="range" id="slider-friends" min="0" max="100" value="50" class="pos-slider" oninput="previewImagePos('friends', this.value)" onchange="commitImagePos('friends', this.value)">
+                            <span id="status-photo-friends" class="block text-center text-[10px] font-bold text-gray-400 mt-1">Teman</span>
+                        </div>
+                        <label class="mt-2.5 cursor-pointer bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold text-[11px] px-3 py-1.5 rounded-full shadow-sm transition flex items-center gap-1.5">
+                            <i class="fas fa-camera"></i> Pilih Foto Teman
+                            <input type="file" id="upload-friends" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+
+                    <!-- Pacar -->
+                    <div class="flex flex-col items-center">
+                        <div class="polaroid-frame tilt-right">
+                            <i class="fas fa-thumbtack pin-icon text-red-400"></i>
+                            <button type="button" id="del-photo-partner" onclick="removeSupportPhoto('partner')" class="hidden absolute top-2 right-2 z-10 bg-white/90 text-red-500 hover:bg-red-500 hover:text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow" title="Hapus Foto"><i class="fas fa-times"></i></button>
+                            <img id="img-partner" src="https://placehold.co/300x300/f4aeb8/ffffff?text=Pacar" alt="Pacar" class="polaroid-img">
+                            <input type="range" id="slider-partner" min="0" max="100" value="50" class="pos-slider" oninput="previewImagePos('partner', this.value)" onchange="commitImagePos('partner', this.value)">
+                            <span id="status-photo-partner" class="block text-center text-[10px] font-bold text-gray-400 mt-1">Spesial</span>
+                        </div>
+                        <label class="mt-2.5 cursor-pointer bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-[11px] px-3 py-1.5 rounded-full shadow-sm transition flex items-center gap-1.5">
+                            <i class="fas fa-camera"></i> Pilih Foto Spesial
+                            <input type="file" id="upload-partner" accept="image/*" class="hidden">
+                        </label>
+                    </div>
                 </div>
                 <div class="w-full bg-pink-50 bg-opacity-50 p-3 rounded-lg border border-pink-200">
                     <textarea id="input-motivation" rows="2" class="w-full text-center italic text-base md:text-lg font-bold text-pink-600 bg-transparent outline-none resize-none" placeholder="Tulis kalimat penyemangatmu di sini..."></textarea>
@@ -558,8 +608,20 @@
             <section class="glass-card p-5 flex flex-col items-center md:col-span-2">
                 <h2 class="text-xl font-bold mb-4 text-blue-500 flex items-center"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i> My Inspiration</h2>
                 <div class="flex flex-col sm:flex-row gap-6 w-full items-center justify-center">
-                    <div class="w-full sm:w-1/2 max-w-[250px]"><div class="polaroid-frame tilt-left"><i class="fas fa-thumbtack pin-icon text-blue-400"></i><img id="img-inspiration" src="https://placehold.co/300x200/e0f7fa/00acc1?text=Inspirasi" alt="Inspirasi" class="polaroid-img" style="height: 180px;"><input type="range" min="0" max="100" value="50" class="pos-slider" oninput="adjustImagePos('inspiration', this.value)"></div><input type="file" id="upload-inspiration" accept="image/*" class="text-[10px] mt-2 w-full"></div>
-                    <div class="w-full sm:w-1/2"><textarea id="input-inspiration-desc" rows="4" class="w-full text-sm font-medium text-gray-700 bg-white bg-opacity-60 p-3 rounded-lg border border-pink-200 outline-none resize-none focus:border-pink-500" placeholder="Keterangan inspirasimu..."></textarea></div>
+                    <div class="w-full sm:w-1/2 max-w-[260px] flex flex-col items-center">
+                        <div class="polaroid-frame tilt-left">
+                            <i class="fas fa-thumbtack pin-icon text-blue-400"></i>
+                            <button type="button" id="del-photo-inspiration" onclick="removeSupportPhoto('inspiration')" class="hidden absolute top-2 right-2 z-10 bg-white/90 text-red-500 hover:bg-red-500 hover:text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow" title="Hapus Foto"><i class="fas fa-times"></i></button>
+                            <img id="img-inspiration" src="https://placehold.co/300x200/e0f7fa/00acc1?text=Inspirasi" alt="Inspirasi" class="polaroid-img" style="height: 180px;">
+                            <input type="range" id="slider-inspiration" min="0" max="100" value="50" class="pos-slider" oninput="previewImagePos('inspiration', this.value)" onchange="commitImagePos('inspiration', this.value)">
+                            <span id="status-photo-inspiration" class="block text-center text-[10px] font-bold text-gray-400 mt-1">Role Model / Inspirasi</span>
+                        </div>
+                        <label class="mt-2.5 cursor-pointer bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold text-[11px] px-3 py-1.5 rounded-full shadow-sm transition flex items-center gap-1.5">
+                            <i class="fas fa-camera"></i> Pilih Foto Inspirasi
+                            <input type="file" id="upload-inspiration" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+                    <div class="w-full sm:w-1/2"><textarea id="input-inspiration-desc" rows="5" class="w-full text-sm font-medium text-gray-700 bg-white bg-opacity-60 p-3 rounded-lg border border-pink-200 outline-none resize-none focus:border-pink-500" placeholder="Keterangan inspirasimu..."></textarea></div>
                 </div>
             </section>
         </main>
@@ -591,7 +653,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                     <div>
                         <h2 class="text-xl font-bold text-fuchsia-700 flex items-center"><i class="fas fa-award mr-2 text-fuchsia-500"></i> Manajemen Beasiswa & Lomba</h2>
-                        <p class="text-xs text-gray-500">Kelola alur seleksi secara terstruktur. Setiap Deadline otomatis terhubung ke <b>Deadline Tracker</b> & <b>Notifikasi Layar HP (H-3, H-1, Hari-H)</b>.</p>
+                        <p class="text-xs text-gray-500">Kelola alur seleksi secara terstruktur. Setiap Deadline otomatis terhubung ke <b>Deadline Tracker</b> & <b>Notifikasi (H-3, H-1, Hari-H)</b>.</p>
                     </div>
                     <span id="opp-form-mode-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-fuchsia-100 text-fuchsia-700 self-start">Mode: Tambah Baru</span>
                 </div>
@@ -648,7 +710,7 @@
                     <div class="md:col-span-12 flex flex-wrap gap-2 justify-end pt-2 border-t border-fuchsia-200/60">
                         <button type="button" id="btn-cancel-opp" onclick="resetOpportunityForm()" class="hidden px-4 py-2 rounded-xl text-xs font-bold bg-gray-200 text-gray-700 hover:bg-gray-300 transition">Batal Edit</button>
                         <button type="submit" id="btn-submit-opp" class="btn-cute !bg-gradient-to-r !from-fuchsia-500 !to-purple-600 text-xs px-6 py-2.5">
-                            <i class="fas fa-save mr-1.5"></i> Simpan ke Tabel & Set Notif HP
+                            <i class="fas fa-save mr-1.5"></i> Simpan ke Tabel & Set Notif
                         </button>
                     </div>
                 </form>
@@ -931,7 +993,7 @@
             </section>
         </main>
 
-        <!-- MY PLANNER + DEADLINE TRACKER TERINTEGRASI NOTIFIKASI HP -->
+        <!-- MY PLANNER + DEADLINE TRACKER TERINTEGRASI NOTIFIKASI HP & LAPTOP -->
         <main id="planner-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
              <div class="lg:col-span-1 flex flex-col gap-6">
                 <section class="glass-card p-5 border-2 border-pink-300">
@@ -958,7 +1020,7 @@
                                 </select>
                                 <select id="input-cal-priority" class="w-[22%] text-[9px] p-2 border border-pink-200 rounded text-gray-600">
                                     <option value="rendah">Biasa</option>
-                                    <option value="tinggi">Penting! (Notif HP)</option>
+                                    <option value="tinggi">Penting! (Notif)</option>
                                 </select>
                                 <select id="input-cal-routine" class="w-[25%] text-[9px] p-2 border border-pink-200 rounded text-gray-600">
                                     <option value="sekali">Sekali</option>
@@ -981,9 +1043,12 @@
                 <section class="glass-card p-5 flex flex-col md:col-span-2 min-h-[400px] border-2 border-pink-300">
                     <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
                         <h2 class="text-xl font-bold text-pink-500">Deadline Tracker</h2>
-                        <span class="text-[10px] font-bold bg-pink-100 text-pink-700 px-2.5 py-1 rounded-full"><i class="fas fa-mobile-alt mr-1"></i> Auto-Push Notif HP (H-3, H-1, Hari-H)</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold bg-pink-100 text-pink-700 px-2.5 py-1 rounded-full"><i class="fas fa-bell mr-1"></i> Auto-Notif (H-3, H-1, Hari-H)</span>
+                            <button type="button" onclick="sendTestHpNotification()" class="text-[10px] font-bold bg-purple-100 text-purple-700 hover:bg-purple-200 px-2.5 py-1 rounded-full transition"><i class="fas fa-paper-plane mr-1"></i> Tes Notif</button>
+                        </div>
                     </div>
-                    <p class="text-xs text-red-400 mb-3 font-semibold">*Otomatis kirim pengingat ke layar HP & beri alert jika deadline &le; 7 Hari!</p>
+                    <p class="text-xs text-red-400 mb-3 font-semibold">*Otomatis kirim pengingat ke layar HP/Laptop & beri alert jika deadline &le; 7 Hari!</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow overflow-y-auto mb-4 pr-1" id="deadlines-list"></div>
                     <div class="mt-auto flex flex-col gap-2 border-t border-pink-100 pt-3">
                         <form id="form-deadlines" class="w-full grid grid-cols-1 sm:grid-cols-12 gap-2">
@@ -995,12 +1060,12 @@
                             </select>
                             <input type="date" id="input-deadline-date" required class="sm:col-span-2 text-xs">
                             <input type="time" id="input-deadline-time" required class="sm:col-span-2 text-xs">
-                            <select id="input-deadline-remind" class="sm:col-span-2 text-[11px] p-2 border border-pink-200 rounded text-pink-700 font-bold" title="Jadwal Notifikasi Layar HP">
+                            <select id="input-deadline-remind" class="sm:col-span-2 text-[11px] p-2 border border-pink-200 rounded text-pink-700 font-bold" title="Jadwal Notifikasi">
                                 <option value="all">Notif: H-3, H-1, H-0</option>
                                 <option value="h1">Notif: H-1 & H-0</option>
                                 <option value="h0">Notif: Hari-H Saja</option>
                             </select>
-                            <button type="submit" class="btn-cute sm:col-span-12 py-2 text-xs"><i class="fas fa-plus mr-1"></i> Tambah Deadline & Jadwalkan Notif HP</button>
+                            <button type="submit" class="btn-cute sm:col-span-12 py-2 text-xs"><i class="fas fa-plus mr-1"></i> Tambah Deadline & Jadwalkan Notif</button>
                         </form>
                     </div>
                 </section>
@@ -1239,6 +1304,62 @@
 
     <script>
         // ==========================================
+        // 0. TOAST & SOUND HELPER (NON-BLOCKING UI)
+        // ==========================================
+        const NOTIF_ICON_SVG = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+            `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+                <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff9d2"/><stop offset="100%" stop-color="#fd79a8"/></linearGradient></defs>
+                <rect width="128" height="128" rx="28" fill="url(#g)"/>
+                <text x="64" y="84" font-size="68" text-anchor="middle">👑</text>
+            </svg>`
+        );
+
+        function playGentleChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+                osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12); // A5
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.46);
+            } catch (e) {}
+        }
+
+        function showToast(title, message, type = 'pink') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            const borderCol = type === 'error' ? 'border-red-400' : (type === 'success' ? 'border-emerald-400' : 'border-pink-400');
+            const titleCol = type === 'error' ? 'text-red-600' : (type === 'success' ? 'text-emerald-700' : 'text-pink-600');
+            toast.className = `pointer-events-auto bg-white/95 backdrop-blur-md border-2 ${borderCol} rounded-2xl shadow-xl p-3.5 flex items-start gap-3 transition-all duration-300 transform -translate-y-4 opacity-0`;
+            toast.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-bell"></i></div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-xs font-extrabold ${titleCol}">${title}</h4>
+                    <p class="text-[11px] text-gray-700 mt-0.5 leading-snug">${message}</p>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600 text-xs"><i class="fas fa-times"></i></button>
+            `;
+            container.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.classList.remove('-translate-y-4', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+            });
+            setTimeout(() => {
+                toast.classList.add('-translate-y-4', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 6000);
+        }
+
+        // ==========================================
         // 1. FIREBASE CONFIGURATION (CLOUD SYNC)
         // ==========================================
         const firebaseConfig = {
@@ -1310,7 +1431,13 @@
             periodLogs: []
         };
 
-        let appData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        let appData = null;
+        try {
+            appData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        } catch (e) {
+            appData = null;
+        }
+
         if(!appData) {
             appData = defaultData;
         } else {
@@ -1323,6 +1450,8 @@
             if(!appData.dailyReminders) appData.dailyReminders = [];
             if(!appData.periodLogs) appData.periodLogs = [];
             if(!appData.scheduleNotes) appData.scheduleNotes = {};
+            if(!appData.photos) appData.photos = { family: null, friends: null, partner: null, inspiration: null };
+            if(!appData.photoPositions) appData.photoPositions = { family: 50, friends: 50, partner: 50, inspiration: 50 };
             if(!appData.schedule || appData.schedule.length === 0) appData.schedule = defaultSchedule;
 
             // Migrasi otomatis data Beasiswa lama ke format terpadu Beasiswa & Lomba
@@ -1452,57 +1581,60 @@
                     });
                 };
 
-                if ('serviceWorker' in navigator) {
-                    const reg = await navigator.serviceWorker.ready;
-                    if (reg.active) {
+                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                    const reg = await navigator.serviceWorker.getRegistration();
+                    if (reg && reg.active) {
                         reg.active.postMessage({ type: 'SYNC_REMINDERS', reminders });
                     }
-                    if ('periodicSync' in reg) {
+                    if (reg && 'periodicSync' in reg) {
                         try {
                             await reg.periodicSync.register('tasya-deadline-check', {
                                 minInterval: 60 * 60 * 1000
                             });
-                        } catch (err) {
-                            console.log('PeriodicSync info:', err.message);
-                        }
+                        } catch (err) {}
                     }
                 }
-            } catch (err) {
-                console.log('SW Sync skipped:', err);
-            }
+            } catch (err) {}
         }
 
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => {
-                        console.log('Service Worker terdaftar:', reg.scope);
-                        syncRemindersToSW();
-                    })
-                    .catch(err => console.log('SW belum aktif (jalankan via HTTPS/localhost):', err));
+                    .then(() => syncRemindersToSW())
+                    .catch(() => {});
             });
         }
 
-        const saveData = () => {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        function persistToStorageAndCloud() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (err) {
+                console.error("Storage penuh:", err);
+                showToast("Penyimpanan Penuh", "Kapasitas lokal penuh. Coba hapus foto lama atau canvas yang tidak terpakai.", "error");
+            }
             if(isFirebaseActive && currentUserUid) {
                 db.collection('users').doc(currentUserUid).set(appData)
-                    .then(() => console.log("Data synced to cloud!"))
                     .catch((error) => console.error("Error syncing to cloud: ", error));
             }
             syncRemindersToSW();
-            renderAll();
+        }
+
+        const saveData = (skipRender = false) => {
+            persistToStorageAndCloud();
+            if (!skipRender) {
+                renderAll();
+            }
         };
 
         window.signInGoogle = () => {
-            if(!isFirebaseActive) return alert("Firebase tidak aktif.");
+            if(!isFirebaseActive) return showToast("Firebase Offline", "Mode sinkronisasi cloud tidak aktif.", "error");
             const btn = document.getElementById('btn-login-google');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Loading...';
 
             auth.signInWithPopup(provider)
-            .then(() => { console.log("Login sukses!"); })
-            .catch((error) => { alert("Oops, Login Gagal!\n\nAlasan: " + error.message); btn.innerHTML = originalText; });
+            .then(() => { showToast("Sync Berhasil!", "Akun Google terhubung ke Cloud.", "success"); })
+            .catch((error) => { showToast("Login Gagal", error.message, "error"); btn.innerHTML = originalText; });
         };
 
         window.signOutGoogle = () => { if(isFirebaseActive) auth.signOut(); };
@@ -1525,7 +1657,9 @@
                             if(!appData.periodLogs) appData.periodLogs = [];
                             if(!appData.scheduleNotes) appData.scheduleNotes = {};
                             if(!appData.opportunities) appData.opportunities = [];
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                            if(!appData.photos) appData.photos = { family: null, friends: null, partner: null, inspiration: null };
+                            if(!appData.photoPositions) appData.photoPositions = { family: 50, friends: 50, partner: 50, inspiration: 50 };
+                            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); } catch (e) {}
                             syncRemindersToSW();
                             renderAll();
                         } else { saveData(); }
@@ -1618,6 +1752,7 @@
 
             resetOpportunityForm();
             saveData();
+            showToast("Program Tersimpan!", `${name} masuk ke tabel & jadwal pengingat.`, "success");
         };
 
         window.resetOpportunityForm = () => {
@@ -1625,7 +1760,7 @@
             document.getElementById('opp-edit-id').value = '';
             document.getElementById('opp-dl-time').value = '23:59';
             document.getElementById('opp-form-mode-badge').innerText = 'Mode: Tambah Baru';
-            document.getElementById('btn-submit-opp').innerHTML = '<i class="fas fa-save mr-1.5"></i> Simpan ke Tabel & Set Notif HP';
+            document.getElementById('btn-submit-opp').innerHTML = '<i class="fas fa-save mr-1.5"></i> Simpan ke Tabel & Set Notif';
             document.getElementById('btn-cancel-opp').classList.add('hidden');
         };
 
@@ -1668,6 +1803,7 @@
             const showCopied = () => {
                 const orig = btnEl.innerHTML;
                 btnEl.innerHTML = '<i class="fas fa-check text-green-600"></i>';
+                showToast("Link Disalin", url, "success");
                 setTimeout(() => { btnEl.innerHTML = orig; }, 1500);
             };
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1968,7 +2104,7 @@
             const notes = document.getElementById('period-notes').value.trim();
 
             if (parseLocalDate(end) < parseLocalDate(start)) {
-                alert('Tanggal selesai tidak boleh lebih awal dari tanggal mulai!');
+                showToast("Tanggal Tidak Valid", "Tanggal selesai tidak boleh lebih awal dari tanggal mulai!", "error");
                 return;
             }
 
@@ -1996,6 +2132,7 @@
             resetPeriodForm();
             saveData();
             renderPeriodCalendar();
+            showToast("Siklus Red Day Tersimpan", `Tercatat ${start} s/d ${end} (${duration} hari).`, "success");
         };
 
         window.editPeriodLog = (id) => {
@@ -2393,7 +2530,7 @@
             } else {
                 btnBack.classList.remove('hidden');
                 if (sectionId === 'planner-section') { mainTitle.innerText = "My Personal Planner"; mainSubtitle.innerHTML = '<i class="far fa-calendar-check text-pink-500 mr-2"></i> Jadwal & Target Studi'; }
-                else if (sectionId === 'goals-section') { mainTitle.innerText = "Goals & Support"; mainSubtitle.innerHTML = '<i class="fas fa-bullseye text-amber-500 mr-2"></i> Mimpi, Inspirasi, dan Support System'; }
+                else if (sectionId === 'goals-section') { mainTitle.innerText = "Goals & Support"; mainSubtitle.innerHTML = '<i class="fas fa-bullseye text-amber-500 mr-2"></i> Mimpi, Inspirasi, dan Support System'; renderSupportPhotosOnce(); }
                 else if (sectionId === 'beasiswa-section') { mainTitle.innerText = "Beasiswa & Lomba"; mainSubtitle.innerHTML = '<i class="fas fa-award text-fuchsia-500 mr-2"></i> Spreadsheet & Manajemen Tahapan Seleksi'; }
                 else if (sectionId === 'finance-section') { mainTitle.innerText = "Keuangan Anak Kos"; mainSubtitle.innerHTML = '<i class="fas fa-wallet text-green-500 mr-2"></i> Tracker Pengeluaran Mingguan & Harian'; }
                 else if (sectionId === 'schedule-section') { mainTitle.innerText = "Jadwal Perkuliahan"; mainSubtitle.innerHTML = '<i class="fas fa-calendar-alt text-orange-500 mr-2"></i> Kalender Matkul, Praktikum & Kuis'; }
@@ -2408,81 +2545,131 @@
         };
 
         // ==========================================
-        // NOTIFIKASI LAYAR HP & ALARM ENGINE
+        // NOTIFIKASI LAYAR HP & LAPTOP (ANTI-HANG ENGINE)
         // ==========================================
-        const notifIcon = document.getElementById('notif-icon');
         function updateNotifIcon() {
             const statusText = document.getElementById('pwa-notif-status-text');
+            const envText = document.getElementById('pwa-env-status-text');
             const dot = document.getElementById('hp-notif-dot');
             const label = document.getElementById('btn-hp-notif-label');
 
+            if (envText) {
+                const isSecure = window.isSecureContext;
+                const hasSw = ('serviceWorker' in navigator && !!navigator.serviceWorker.controller);
+                envText.innerText = `Mode: ${isSecure ? 'HTTPS/Aman' : 'Lokal (file://)'} • Background SW: ${hasSw ? 'Aktif' : 'Standar Browser'}`;
+            }
+
             if (!("Notification" in window)) {
-                notifIcon.className = "fas fa-bell-slash text-gray-300";
                 if (statusText) statusText.innerText = "Browser tidak mendukung Notifikasi";
                 if (dot) dot.className = "w-2 h-2 rounded-full bg-gray-400";
             } else if (Notification.permission === "granted") {
-                notifIcon.className = "fas fa-bell text-pink-500";
-                if (statusText) statusText.innerText = "✅ AKTIF (Siap kirim ke Layar HP)";
+                if (statusText) statusText.innerText = "✅ AKTIF (Siap kirim ke Laptop & HP)";
                 if (dot) dot.className = "w-2 h-2 rounded-full bg-green-500 animate-ping";
-                if (label) label.innerText = "Notif HP Aktif";
+                if (label) label.innerText = "Notif Aktif";
             } else if (Notification.permission === "denied") {
-                notifIcon.className = "fas fa-bell-slash text-red-400";
-                if (statusText) statusText.innerText = "❌ Diblokir (Izinkan lewat Setelan Browser/HP)";
+                if (statusText) statusText.innerText = "❌ Diblokir (Klik gembok URL browser -> Izinkan Notifikasi)";
                 if (dot) dot.className = "w-2 h-2 rounded-full bg-red-500";
             } else {
-                notifIcon.className = "fas fa-bell text-gray-400";
-                if (statusText) statusText.innerText = "⚠️ Belum Diizinkan (Klik Aktifkan)";
+                if (statusText) statusText.innerText = "⚠️ Belum Diizinkan (Klik tombol Aktifkan)";
                 if (dot) dot.className = "w-2 h-2 rounded-full bg-yellow-400";
             }
         }
 
-        window.requestNotificationPermission = () => {
-            if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                    updateNotifIcon();
-                    if (permission === "granted") {
-                        syncRemindersToSW();
-                        triggerSystemNotification("🎉 Notifikasi HP Aktif!", "Reminder H-3, H-1, dan Hari-H akan muncul otomatis di layar HP kamu.");
-                    } else {
-                        alert("Izin notifikasi ditolak. Silakan aktifkan izin notifikasi di pengaturan browser/HP agar pengingat H-3 & H-1 muncul.");
-                    }
-                });
-            } else {
-                alert("Browser ini tidak mendukung Web Notifications.");
+        window.requestNotificationPermission = async () => {
+            if (!("Notification" in window)) {
+                showToast("Tidak Didukung", "Browser ini tidak mendukung sistem notifikasi.", "error");
+                return;
+            }
+            try {
+                const permission = await Notification.requestPermission();
+                updateNotifIcon();
+                if (permission === "granted") {
+                    syncRemindersToSW();
+                    triggerSystemNotification("🎉 Notifikasi Aktif!", "Reminder H-3, H-1, dan Hari-H akan muncul otomatis di layar HP & Laptop kamu.");
+                } else if (permission === "denied") {
+                    showToast("Izin Notifikasi Diblokir", "Buka pengaturan situs (ikon gembok di samping alamat web) lalu ubah Notifikasi menjadi Izinkan.", "error");
+                }
+            } catch (err) {
+                showToast("Gagal Meminta Izin", "Pastikan web dibuka lewat link HTTPS / Chrome.", "error");
             }
         };
 
-        window.sendTestHpNotification = () => {
-            if ("Notification" in window && Notification.permission !== "granted") {
-                requestNotificationPermission();
+        window.sendTestHpNotification = async () => {
+            if (!("Notification" in window)) {
+                showToast("Tes Notif", "Browser tidak mendukung Web Notification.", "error");
+                return;
+            }
+            if (Notification.permission !== "granted") {
+                await requestNotificationPermission();
                 return;
             }
             triggerSystemNotification(
-                "🔔 Test Notifikasi Layar HP Tasya",
-                "Berhasil! Pengingat H-3, H-1, dan Hari-H dari Deadline Tracker, Beasiswa & Lomba, serta Kalender akan tampil seperti ini."
+                "🔔 Tes Notifikasi Tasya Planner",
+                "Berhasil! Pengingat H-3, H-1, dan Hari-H akan tampil otomatis seperti ini di HP & Laptop kamu."
             );
         };
 
+        function fireDirectBrowserNotification(title, message) {
+            try {
+                const n = new Notification(title, {
+                    body: message,
+                    icon: NOTIF_ICON_SVG,
+                    tag: 'tasya-planner-' + Date.now()
+                });
+                n.onclick = () => {
+                    window.focus();
+                    n.close();
+                };
+            } catch (e) {
+                console.warn("Direct Notification fallback error:", e);
+            }
+        }
+
         function triggerSystemNotification(title, message) {
+            // Selalu tampilkan visual toast & suara lembut di dalam layar agar tidak pernah terlewat
+            playGentleChime();
+            showToast(title, message, 'pink');
+
             if ("Notification" in window && Notification.permission === "granted") {
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.ready.then(reg => {
-                        reg.showNotification(title, {
-                            body: message,
-                            icon: 'icon-192.png',
-                            badge: 'icon-192.png',
-                            vibrate: [200, 100, 200],
-                            tag: 'tasya-planner-alert-' + Date.now(),
-                            requireInteraction: true
-                        });
+                // Gunakan Service Worker HANYA jika benar-benar sudah aktif mengontrol halaman, dengan batas waktu 800ms
+                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                    let settled = false;
+                    const timer = setTimeout(() => {
+                        if (!settled) {
+                            settled = true;
+                            fireDirectBrowserNotification(title, message);
+                        }
+                    }, 800);
+
+                    navigator.serviceWorker.getRegistration().then(reg => {
+                        if (reg && reg.showNotification) {
+                            return reg.showNotification(title, {
+                                body: message,
+                                icon: NOTIF_ICON_SVG,
+                                badge: NOTIF_ICON_SVG,
+                                vibrate: [200, 100, 200],
+                                tag: 'tasya-planner-sw-' + Date.now(),
+                                requireInteraction: true
+                            });
+                        } else {
+                            throw new Error("No SW showNotification");
+                        }
+                    }).then(() => {
+                        if (!settled) {
+                            settled = true;
+                            clearTimeout(timer);
+                        }
                     }).catch(() => {
-                        new Notification(title, { body: message, icon: "icon-192.png" });
+                        if (!settled) {
+                            settled = true;
+                            clearTimeout(timer);
+                            fireDirectBrowserNotification(title, message);
+                        }
                     });
                 } else {
-                    new Notification(title, { body: message, icon: "icon-192.png" });
+                    // Langsung panggil notifikasi native browser (Laptop & Android Chrome tanpa SW controller)
+                    fireDirectBrowserNotification(title, message);
                 }
-            } else {
-                alert(`🔔 ALARM PLANNER TASYA!\n\n${title}\n${message}`);
             }
         }
 
@@ -2595,7 +2782,7 @@
                 } else if (diffDays === 1 && (mode === 'all' || mode === 'h1') && !item.notifiedMilestones.h1) {
                     triggerSystemNotification("⚠️ Pengingat H-1 Deadline!", `Besok batas akhir: ${item.task} (${item.date} ${item.time || ''})`);
                     item.notifiedMilestones.h1 = true; dataChanged = true;
-                } else if (diffDays === 0 && (item.time === currentTime || !item.notifiedMilestones.h0Morning)) {
+                } else if (diffDays === 0) {
                     if (item.time === currentTime && !item.notifiedMilestones.h0Exact) {
                         triggerSystemNotification("🚨 HARI-H DEADLINE SEKARANG!", `Waktunya mengumpulkan: ${item.task}`);
                         item.notifiedMilestones.h0Exact = true; dataChanged = true;
@@ -2770,7 +2957,7 @@
             const events = appData.calendarEvents[selectedCalendarDate] || [];
             if(events.length === 0 && !holidayName) { container.innerHTML = '<p class="text-xs text-gray-400 italic">Tidak ada acara di tanggal ini.</p>'; return; }
             events.forEach(ev => {
-                let priorityBadge = ev.priority === 'tinggi' ? '<span class="text-[9px] font-bold bg-red-200 text-red-700 px-1.5 py-0.5 rounded ml-1"><i class="fas fa-bell"></i> Penting (Notif HP)</span>' : '';
+                let priorityBadge = ev.priority === 'tinggi' ? '<span class="text-[9px] font-bold bg-red-200 text-red-700 px-1.5 py-0.5 rounded ml-1"><i class="fas fa-bell"></i> Penting (Notif)</span>' : '';
                 let timeStr = ev.timeStart ? `${ev.timeStart} - ${ev.timeEnd}` : ev.time;
                 let categoryBadge = ev.category ? `<span class="text-[9px] font-bold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded ml-1">${ev.category}</span>` : '';
 
@@ -2863,7 +3050,7 @@
                         <div class="w-full">
                             <div class="flex flex-wrap items-center justify-between gap-1">
                                 <span class="text-[10px] font-bold ${isPanic ? 'panic-text' : 'text-pink-500'}"><i class="far fa-calendar-alt mr-1"></i>${item.date} ${item.time || ''}</span>
-                                <span class="text-[9px] font-bold bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full"><i class="fas fa-mobile-alt mr-1"></i>${remindLabel}</span>
+                                <span class="text-[9px] font-bold bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full"><i class="fas fa-bell mr-1"></i>${remindLabel}</span>
                             </div>
                             <h4 class="font-bold text-gray-800 text-sm mt-1">${categoryLabel}${item.task} ${linkedBadge}</h4>
                             ${isPanic ? '<span class="text-[10px] font-bold text-red-500 animate-pulse block mt-0.5">🚨 MENDESAK (&le; 3 Hari)!</span>' : ''}
@@ -3041,9 +3228,28 @@
         function draw(e) { if(!isDrawing) return; const rect = canvas.getBoundingClientRect(); ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = document.getElementById('pen-color').value; ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top); ctx.stroke(); }
         function stopDraw() { isDrawing = false; }
         window.clearCanvas = () => { if(ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); };
-        window.saveAcademicNote = () => { const title = document.getElementById('academic-note-title').value; const evalText = document.getElementById('academic-note-eval').value; if(!title) return alert("Masukkan topik evaluasi!"); const dataUrl = canvas.toDataURL(); appData.academicNotes.push({ id: Date.now(), title, evalText, image: dataUrl }); document.getElementById('academic-note-title').value = ''; document.getElementById('academic-note-eval').value = ''; clearCanvas(); saveData(); alert("Catatan Canvas berhasil disimpan!"); };
+        window.saveAcademicNote = () => {
+            const title = document.getElementById('academic-note-title').value;
+            const evalText = document.getElementById('academic-note-eval').value;
+            if(!title) return showToast("Topik Kosong", "Masukkan topik evaluasi terlebih dahulu!", "error");
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            appData.academicNotes.push({ id: Date.now(), title, evalText, image: dataUrl });
+            document.getElementById('academic-note-title').value = '';
+            document.getElementById('academic-note-eval').value = '';
+            clearCanvas();
+            saveData();
+            showToast("Canvas Tersimpan", "Catatan coret-coret berhasil disimpan ke arsip!", "success");
+        };
         const renderAcademicNotes = () => { const container = document.getElementById('academic-notes-list'); if(!container) return; container.innerHTML = appData.academicNotes.length === 0 ? '<p class="text-xs text-gray-400 italic">Belum ada arsip canvas.</p>' : ''; appData.academicNotes.forEach(n => { container.innerHTML += `<div class="bg-white p-3 rounded-xl border border-cyan-200 shadow-sm flex flex-col gap-2"><div class="flex justify-between items-center"><h4 class="font-bold text-cyan-700 text-sm">${n.title}</h4><button onclick="deleteItem('academicNotes', ${n.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button></div><img src="${n.image}" class="w-full h-32 object-contain bg-gray-50 border rounded"><p class="text-xs text-gray-600 bg-cyan-50 p-2 rounded"><strong>Evaluasi:</strong> ${n.evalText}</p></div>`; }); };
-        window.saveLectureNote = () => { const title = document.getElementById('lecture-note-title').value; const content = document.getElementById('lecture-note-editor').innerHTML; if(!title) return alert("Masukkan judul mata kuliah/bab!"); appData.lectureNotes.push({ id: Date.now(), title, content }); document.getElementById('lecture-note-title').value = ''; document.getElementById('lecture-note-editor').innerHTML = ''; saveData(); };
+        window.saveLectureNote = () => {
+            const title = document.getElementById('lecture-note-title').value;
+            const content = document.getElementById('lecture-note-editor').innerHTML;
+            if(!title) return showToast("Judul Kosong", "Masukkan judul mata kuliah/bab!", "error");
+            appData.lectureNotes.push({ id: Date.now(), title, content });
+            document.getElementById('lecture-note-title').value = '';
+            document.getElementById('lecture-note-editor').innerHTML = '';
+            saveData();
+        };
         const renderLectureNotes = () => { const container = document.getElementById('lecture-archive-list'); if(!container) return; container.innerHTML = appData.lectureNotes.length === 0 ? '<p class="text-xs text-gray-400 italic">Belum ada arsip catatan.</p>' : ''; appData.lectureNotes.forEach(l => { container.innerHTML += `<div class="bg-indigo-50 bg-opacity-40 p-3 rounded-lg border border-indigo-200 flex flex-col gap-1"><div class="flex justify-between items-center"><strong class="text-indigo-700 text-xs">${l.title}</strong><button onclick="deleteItem('lectureNotes', ${l.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash text-xs"></i></button></div><div class="text-xs text-gray-700 bg-white p-2 rounded max-h-24 overflow-y-auto">${l.content}</div></div>`; }); };
 
         // ==========================================
@@ -3052,12 +3258,167 @@
         const renderVault = () => { const container = document.getElementById('vault-list'); if(!container) return; container.innerHTML = appData.secureNotes.length === 0 ? '<p class="text-xs text-gray-400 italic text-center">Vault kosong.</p>' : ''; appData.secureNotes.forEach(v => { container.innerHTML += `<div class="bg-indigo-50 p-3 rounded-xl border border-indigo-200 flex justify-between items-center shadow-sm"><div><h4 class="font-bold text-indigo-800 text-sm">${v.title}</h4><p class="text-xs text-gray-600 font-mono mt-0.5">${v.data}</p></div><button onclick="deleteItem('secureNotes', ${v.id})" class="text-red-300 hover:text-red-500"><i class="fas fa-trash"></i></button></div>`; }); };
 
         // ==========================================
-        // SUPPORT SYSTEM & POLAROID POSITIONS
+        // SUPPORT SYSTEM & INSPIRATION (ANTI-LOOP & COMPRESSED SAVE)
         // ==========================================
-        window.adjustImagePos = (type, val) => { appData.photoPositions[type] = val; const img = document.getElementById(`img-${type}`); if(img) img.style.objectPosition = `50% ${val}%`; saveData(); };
+        const DEFAULT_PLACEHOLDERS = {
+            family: "https://placehold.co/300x300/ffeaa7/fd79a8?text=Keluarga",
+            friends: "https://placehold.co/300x300/ffd1dc/e84393?text=Teman",
+            partner: "https://placehold.co/300x300/f4aeb8/ffffff?text=Pacar",
+            inspiration: "https://placehold.co/300x200/e0f7fa/00acc1?text=Inspirasi"
+        };
+
+        const PHOTO_LABELS = {
+            family: "Keluarga",
+            friends: "Teman",
+            partner: "Spesial",
+            inspiration: "Role Model / Inspirasi"
+        };
+
+        // Kompresi foto otomatis ke ukuran ~45 KB agar selalu muat di localStorage (5MB) & Firebase (1MB)
+        function compressImageFile(file, maxDim = 640, quality = 0.78) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onerror = () => reject(new Error("Gagal membaca file foto"));
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onerror = () => reject(new Error("Format gambar tidak didukung"));
+                    img.onload = () => {
+                        let w = img.width;
+                        let h = img.height;
+                        if (w > maxDim || h > maxDim) {
+                            if (w > h) {
+                                h = Math.round((h * maxDim) / w);
+                                w = maxDim;
+                            } else {
+                                w = Math.round((w * maxDim) / h);
+                                h = maxDim;
+                            }
+                        }
+                        const offCanvas = document.createElement('canvas');
+                        offCanvas.width = w;
+                        offCanvas.height = h;
+                        const offCtx = offCanvas.getContext('2d');
+                        offCtx.fillStyle = '#ffffff';
+                        offCtx.fillRect(0, 0, w, h);
+                        offCtx.drawImage(img, 0, 0, w, h);
+                        const compressedDataUrl = offCanvas.toDataURL('image/jpeg', quality);
+                        resolve(compressedDataUrl);
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Update UI foto tanpa memicu loop ulang
+        function renderSupportPhotosOnce() {
+            ['family', 'friends', 'partner', 'inspiration'].forEach(type => {
+                const imgNode = document.getElementById(`img-${type}`);
+                const delBtn = document.getElementById(`del-photo-${type}`);
+                const statusEl = document.getElementById(`status-photo-${type}`);
+                const slider = document.getElementById(`slider-${type}`);
+
+                const savedSrc = appData.photos ? appData.photos[type] : null;
+                const targetSrc = savedSrc || DEFAULT_PLACEHOLDERS[type];
+
+                if (imgNode && imgNode.dataset.loadedKey !== (savedSrc ? 'custom' : 'default') || (savedSrc && imgNode.src !== savedSrc)) {
+                    imgNode.src = targetSrc;
+                    imgNode.dataset.loadedKey = savedSrc ? 'custom' : 'default';
+                }
+
+                if (delBtn) {
+                    if (savedSrc) delBtn.classList.remove('hidden');
+                    else delBtn.classList.add('hidden');
+                }
+
+                if (statusEl) {
+                    statusEl.innerText = savedSrc ? `✅ ${PHOTO_LABELS[type]} (Tersimpan)` : PHOTO_LABELS[type];
+                    statusEl.className = savedSrc
+                        ? "block text-center text-[10px] font-bold text-emerald-600 mt-1"
+                        : "block text-center text-[10px] font-bold text-gray-400 mt-1";
+                }
+
+                const pos = (appData.photoPositions && appData.photoPositions[type] !== undefined) ? appData.photoPositions[type] : 50;
+                if (imgNode) imgNode.style.objectPosition = `50% ${pos}%`;
+                if (slider && document.activeElement !== slider) slider.value = pos;
+            });
+        }
+
+        // Saat slider digeser (oninput): ubah CSS saja dengan halus tanpa reload gambar
+        window.previewImagePos = (type, val) => {
+            if (!appData.photoPositions) appData.photoPositions = {};
+            appData.photoPositions[type] = Number(val);
+            const img = document.getElementById(`img-${type}`);
+            if (img) img.style.objectPosition = `50% ${val}%`;
+        };
+
+        // Saat slider dilepas (onchange): simpan posisi secara permanen tanpa render ulang img.src
+        window.commitImagePos = (type, val) => {
+            if (!appData.photoPositions) appData.photoPositions = {};
+            appData.photoPositions[type] = Number(val);
+            saveData(true);
+        };
+
+        window.removeSupportPhoto = (type) => {
+            if (!appData.photos) appData.photos = {};
+            appData.photos[type] = null;
+            appData.photoPositions[type] = 50;
+            const imgNode = document.getElementById(`img-${type}`);
+            if (imgNode) imgNode.dataset.loadedKey = '';
+            renderSupportPhotosOnce();
+            saveData(true);
+            showToast("Foto Dihapus", `Bingkai ${PHOTO_LABELS[type]} dikembalikan ke default.`, "pink");
+        };
+
         const setupImageUploads = () => {
-            ['family', 'friends', 'partner', 'inspiration'].forEach(type => { const input = document.getElementById(`upload-${type}`); if(input) { input.onchange = (e) => { const file = e.target.files[0]; if(file) { const reader = new FileReader(); reader.onload = (event) => { appData.photos[type] = event.target.result; document.getElementById(`img-${type}`).src = event.target.result; saveData(); }; reader.readAsDataURL(file); } }; } });
-            const quoteUpload = document.getElementById('quote-upload'); if(quoteUpload) { quoteUpload.onchange = (e) => { const file = e.target.files[0]; if(file) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('quote-img-base64').value = ev.target.result; }; reader.readAsDataURL(file); } }; }
+            ['family', 'friends', 'partner', 'inspiration'].forEach(type => {
+                const input = document.getElementById(`upload-${type}`);
+                if (input) {
+                    input.onchange = async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        const statusEl = document.getElementById(`status-photo-${type}`);
+                        if (statusEl) {
+                            statusEl.innerText = "⏳ Mengompres & menyimpan...";
+                            statusEl.className = "block text-center text-[10px] font-bold text-amber-600 mt-1";
+                        }
+                        try {
+                            const compressed = await compressImageFile(file, 640, 0.78);
+                            if (!appData.photos) appData.photos = {};
+                            appData.photos[type] = compressed;
+                            const imgNode = document.getElementById(`img-${type}`);
+                            if (imgNode) {
+                                imgNode.src = compressed;
+                                imgNode.dataset.loadedKey = 'custom';
+                            }
+                            renderSupportPhotosOnce();
+                            saveData(true);
+                            showToast("Foto Tersimpan!", `Foto ${PHOTO_LABELS[type]} berhasil disimpan permanen.`, "success");
+                        } catch (err) {
+                            showToast("Gagal Upload Foto", err.message, "error");
+                            renderSupportPhotosOnce();
+                        } finally {
+                            // Reset input value agar jika user pilih ulang foto tidak memicu bug
+                            e.target.value = '';
+                        }
+                    };
+                }
+            });
+
+            const quoteUpload = document.getElementById('quote-upload');
+            if (quoteUpload) {
+                quoteUpload.onchange = async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    try {
+                        const compressed = await compressImageFile(file, 600, 0.75);
+                        document.getElementById('quote-img-base64').value = compressed;
+                        showToast("Foto Siap", "Foto pendukung quote siap disimpan.", "success");
+                    } catch (err) {
+                        showToast("Gagal Memproses Foto", err.message, "error");
+                    }
+                };
+            }
         };
 
         // ==========================================
@@ -3131,7 +3492,7 @@
                     appData.deadlines[idx].remindMode = remindMode;
                 }
                 editingDeadlineId = null;
-                document.querySelector('#form-deadlines button[type="submit"]').innerHTML = '<i class="fas fa-plus mr-1"></i> Tambah Deadline & Jadwalkan Notif HP';
+                document.querySelector('#form-deadlines button[type="submit"]').innerHTML = '<i class="fas fa-plus mr-1"></i> Tambah Deadline & Jadwalkan Notif';
             } else {
                 const newId = Date.now();
                 appData.deadlines.push({ id: newId, task: task, date: date, time: time, category: category, remindMode: remindMode });
@@ -3141,6 +3502,7 @@
             }
             document.getElementById('form-deadlines').reset();
             saveData();
+            showToast("Deadline Dijadwalkan", `Pengingat ${task} (${date}) aktif!`, "success");
         };
 
         document.getElementById('form-goals').onsubmit = (e) => { e.preventDefault(); appData.goals.push({ id: Date.now(), text: document.getElementById('input-goals').value }); document.getElementById('input-goals').value = ''; saveData(); };
@@ -3229,13 +3591,13 @@
         const motInput = document.getElementById('input-motivation');
         if(motInput) {
             motInput.value = appData.motivation || "";
-            motInput.oninput = (e) => { appData.motivation = e.target.value; saveData(); };
+            motInput.oninput = (e) => { appData.motivation = e.target.value; saveData(true); };
         }
 
         const inspInput = document.getElementById('input-inspiration-desc');
         if(inspInput) {
             inspInput.value = appData.inspirationDesc || "";
-            inspInput.oninput = (e) => { appData.inspirationDesc = e.target.value; saveData(); };
+            inspInput.oninput = (e) => { appData.inspirationDesc = e.target.value; saveData(true); };
         }
 
         window.renderAll = () => {
@@ -3261,18 +3623,7 @@
             renderDailyReminders();
             renderMarquee();
             renderPeriodCalendar();
-
-            ['family', 'friends', 'partner', 'inspiration'].forEach(type => {
-                if (appData.photos[type]) {
-                    const img = document.getElementById(`img-${type}`);
-                    if(img) img.src = appData.photos[type];
-                }
-                const pos = appData.photoPositions[type] || 50;
-                const imgNode = document.getElementById(`img-${type}`);
-                if(imgNode) imgNode.style.objectPosition = `50% ${pos}%`;
-                const slider = document.querySelector(`.pos-slider[oninput*="${type}"]`);
-                if(slider) slider.value = pos;
-            });
+            renderSupportPhotosOnce();
         };
 
         setupImageUploads();
