@@ -178,10 +178,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1px;
-            font-size: 11px;
+            gap: 3px;
+            font-size: 10px;
             line-height: 1;
-            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
+            color: #ec4899;
+            filter: drop-shadow(0 1px 2px rgba(236, 72, 153, 0.22));
         }
 
         /* --- Polaroid --- */
@@ -210,7 +211,7 @@
 
         ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #fd79a8; border-radius: 10px; }
 
-        /* --- APP MENU STYLE (PADUAN KETIGA KONSEP) --- */
+        /* --- APP MENU STYLE --- */
         .menu-btn-giant { height: 112px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; border-radius: 22px; cursor: pointer; text-align: center; width: 100%; padding: 10px 8px; }
         .menu-icon-circle { width: 44px; height: 44px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.25s ease; }
         .menu-btn-giant:hover .menu-icon-circle { transform: scale(1.08); }
@@ -551,9 +552,9 @@
             <p class="text-gray-600 font-medium text-base md:text-lg" id="main-subtitle"><i class="fas fa-graduation-cap text-yellow-500 mr-2"></i> 2026 Future Engineer Dashboard</p>
         </header>
 
-        <!-- APP DRAWER MENU - RANCANGAN PADUAN KETIGA KONSEP -->
+        <!-- APP DRAWER MENU -->
         <section id="home-section" class="flex flex-col gap-5 mt-8 w-full max-w-md mx-auto px-3">
-            <!-- 1. TOP HIGHLIGHT (2 KOTAK UTAMA DI ATAS - PROPORSIONAL) -->
+            <!-- 1. TOP HIGHLIGHT -->
             <div class="grid grid-cols-2 gap-3.5">
                 <div class="glass-card menu-btn-giant !h-32 border border-pink-200/90 hover:border-pink-400 relative" style="background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(255,209,220,0.45));" onclick="showSection('planner-section')">
                     <span id="planner-menu-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-6 h-6 flex items-center justify-center rounded-full hidden shadow-lg animate-bounce border-2 border-white">0</span>
@@ -1553,9 +1554,10 @@
                     <div class="calendar-grid text-xs font-bold text-gray-500 mb-2"><div class="text-red-500">Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div></div>
                     <div id="calendar-days" class="calendar-grid"></div>
                     <div class="flex flex-wrap items-center justify-center gap-3 mt-2.5 text-[10px] text-gray-500 font-semibold">
-                        <span>🎂 Ulang Tahun</span>
-                        <span>⭐ Acara</span>
-                        <span>📢 Pengumuman / Penting</span>
+                        <span class="inline-flex items-center gap-1"><i class="fas fa-birthday-cake text-pink-400"></i> Ulang Tahun</span>
+                        <span class="inline-flex items-center gap-1"><i class="fas fa-star text-pink-400"></i> Kegiatan</span>
+                        <span class="inline-flex items-center gap-1"><i class="fas fa-bullhorn text-pink-400"></i> Pengumuman</span>
+                        <span class="inline-flex items-center gap-1"><i class="fas fa-bell text-pink-400"></i> Pengingat</span>
                     </div>
                     <div class="mt-3 pt-3 border-t border-pink-200">
                         <div class="flex items-center justify-between mb-2">
@@ -1579,9 +1581,10 @@
 
                             <div class="flex gap-1.5">
                                 <select id="input-cal-category" class="w-[42%] text-[10px] p-2 border border-pink-200 rounded text-gray-700 font-semibold" required>
-                                    <option value="Acara">⭐ Acara</option>
-                                    <option value="Ulang Tahun">🎂 Ulang Tahun</option>
-                                    <option value="Pengumuman / Hari Penting">📢 Pengumuman / Penting</option>
+                                    <option value="Acara">Kegiatan / Acara</option>
+                                    <option value="Ulang Tahun">Ulang Tahun</option>
+                                    <option value="Pengumuman / Hari Penting">Pengumuman</option>
+                                    <option value="Pengingat">Pengingat</option>
                                 </select>
                                 <select id="input-cal-priority" class="w-[29%] text-[10px] p-2 border border-pink-200 rounded text-gray-600">
                                     <option value="rendah">Biasa</option>
@@ -2005,8 +2008,9 @@
         function normalizeCalCategory(cat) {
             if (!cat) return 'Acara';
             if (cat === 'Ulang Tahun') return 'Ulang Tahun';
-            if (cat === 'Acara' || cat === 'Acara/Kegiatan') return 'Acara';
-            if (cat === 'Pengumuman / Hari Penting' || cat === 'Pengumuman' || cat === 'Pengingat') {
+            if (cat === 'Pengingat') return 'Pengingat';
+            if (cat === 'Acara' || cat === 'Acara/Kegiatan' || cat === 'Kegiatan') return 'Acara';
+            if (cat === 'Pengumuman / Hari Penting' || cat === 'Pengumuman') {
                 return 'Pengumuman / Hari Penting';
             }
             return 'Acara';
@@ -2017,7 +2021,7 @@
             if (normalized === 'Ulang Tahun') {
                 return {
                     key: 'Ulang Tahun',
-                    icon: '🎂',
+                    icon: '<i class="fas fa-birthday-cake text-pink-500"></i>',
                     label: 'Ulang Tahun',
                     badgeClass: 'bg-pink-100 text-pink-700 border-pink-200'
                 };
@@ -2025,151 +2029,163 @@
             if (normalized === 'Pengumuman / Hari Penting') {
                 return {
                     key: 'Pengumuman / Hari Penting',
-                    icon: '📢',
-                    label: 'Pengumuman / Penting',
+                    icon: '<i class="fas fa-bullhorn text-pink-500"></i>',
+                    label: 'Pengumuman',
                     badgeClass: 'bg-rose-100 text-rose-700 border-rose-200'
+                };
+            }
+            if (normalized === 'Pengingat') {
+                return {
+                    key: 'Pengingat',
+                    icon: '<i class="fas fa-bell text-pink-500"></i>',
+                    label: 'Pengingat',
+                    badgeClass: 'bg-pink-100 text-pink-700 border-pink-200'
                 };
             }
             return {
                 key: 'Acara',
-                icon: '⭐',
-                label: 'Acara',
-                badgeClass: 'bg-amber-100 text-amber-800 border-amber-200'
+                icon: '<i class="fas fa-star text-pink-500"></i>',
+                label: 'Kegiatan / Acara',
+                badgeClass: 'bg-pink-100 text-pink-700 border-pink-200'
             };
         }
 
         function compressImageFile(file, maxWidth = 650, quality = 0.72) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 const reader = new FileReader();
-                reader.onload = (ev) => {
+                reader.onload = (e) => {
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        let w = img.width;
-                        let h = img.height;
-                        if (w > maxWidth) {
-                            h = Math.round((h * maxWidth) / w);
-                            w = maxWidth;
+                        let width = img.width;
+                        let height = img.height;
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
                         }
-                        canvas.width = w;
-                        canvas.height = h;
+                        canvas.width = width;
+                        canvas.height = height;
                         const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, w, h);
+                        ctx.drawImage(img, 0, 0, width, height);
                         resolve(canvas.toDataURL('image/jpeg', quality));
                     };
-                    img.onerror = reject;
-                    img.src = ev.target.result;
+                    img.onerror = () => resolve(e.target.result);
+                    img.src = e.target.result;
                 };
-                reader.onerror = reject;
                 reader.readAsDataURL(file);
             });
         }
 
-        const defaultSchedule = [
-            { id: 1, type: 'Kuliah', name: 'Mekanika Fluida', day: 'Senin', start: '08:00', end: '10:30', room: 'RK. TMB 01' },
-            { id: 2, type: 'Praktikum', name: 'Praktikum Elektronika & Instrumentasi', day: 'Selasa', start: '13:00', end: '16:00', room: 'Lab. Otomatisasi' },
-            { id: 3, type: 'Kuliah', name: 'Termodinamika Teknik', day: 'Rabu', start: '10:00', end: '12:30', room: 'RK. TMB 02' },
-            { id: 4, type: 'Praktikum', name: 'Praktikum Gambar Teknik & CAD', day: 'Kamis', start: '09:00', end: '12:00', room: 'Lab. Komputasi' }
-        ];
-
-        const defaultWorkspaceLinks = [
-            { id: 101, name: "GitHub Repositories", url: "https://github.com", category: "Coding & Repo", icon: "fab fa-github" },
-            { id: 102, name: "Google Drive PKM & Kuliah", url: "https://drive.google.com", category: "Dokumen & Referensi", icon: "fab fa-google-drive" },
-            { id: 103, name: "New LMS / Portal Kampus", url: "https://newlms.ipb.ac.id", category: "Kampus", icon: "fas fa-graduation-cap" },
-            { id: 104, name: "Wokwi IoT & Arduino Sim", url: "https://wokwi.com", category: "Dashboard IoT", icon: "fas fa-microchip" },
-            { id: 105, name: "Overleaf LaTeX / Laporan", url: "https://www.overleaf.com", category: "Dokumen & Referensi", icon: "fas fa-file-alt" },
-            { id: 106, name: "Google Scholar Referensi", url: "https://scholar.google.com", category: "Dokumen & Referensi", icon: "fas fa-globe" }
-        ];
-
-        const defaultData = {
-            schedule: defaultSchedule,
-            scheduleNotes: {},
-            goals: [],
-            daily: [],
-            importantNotes: [{ id: 1, text: "Semangat kuliah & riset hari ini, Tasya! ✨" }],
-            dailyReminders: [],
-            coursework: [],
-            organizations: [],
-            deadlines: [],
-            opportunities: [],
-            calendarEvents: {},
-            photos: { family: null, friends: null, partner: null, inspiration: null },
-            photoPositions: { family: 50, friends: 50, partner: 50, inspiration: 50 },
-            motivation: "I can achieve anything I set my mind to!",
-            inspirationDesc: "",
-            finance: { rab: [], wallets: { utama: [], tabungan: [], wishlist: [] } },
-            diary: [],
-            quotesList: [],
-            recipes: [],
-            mealPlan: [],
-            shoppingNotes: [],
-            academicNotes: [],
-            lectureNotes: [],
-            secureNotes: [],
-            periodLogs: [],
-            researchLogs: [],
-            workspaceLinks: defaultWorkspaceLinks,
-            orgMinutes: [],
-            plannerAlarms: [],
-            alarmAutoSync: true
-        };
-
-        let appData = null;
-        try {
-            appData = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        } catch (e) {
-            appData = null;
-        }
-
-        if (!appData) {
-            appData = JSON.parse(JSON.stringify(defaultData));
-        } else {
-            Object.keys(defaultData).forEach(k => {
-                if (typeof appData[k] === 'undefined' || appData[k] === null) {
-                    appData[k] = JSON.parse(JSON.stringify(defaultData[k]));
-                }
-            });
-            if (!appData.finance.wallets) appData.finance.wallets = { utama: [], tabungan: [], wishlist: [] };
-            if (!appData.finance.rab) appData.finance.rab = [];
-            if (!appData.photos) appData.photos = { family: null, friends: null, partner: null, inspiration: null };
-            if (!appData.photoPositions) appData.photoPositions = { family: 50, friends: 50, partner: 50, inspiration: 50 };
-            if (!Array.isArray(appData.schedule) || appData.schedule.length === 0) appData.schedule = defaultSchedule;
-        }
-
         function createDefaultChecklist(category) {
-            if (category === 'Lomba') {
+            if (category === 'Beasiswa') {
                 return [
-                    { id: 1, text: 'Baca Guidebook & Syarat Tema', done: false },
-                    { id: 2, text: 'KTM / Identitas Tim', done: false },
-                    { id: 3, text: 'Abstrak / Karya / Proposal', done: false },
-                    { id: 4, text: 'Twibbon & Bukti Follow', done: false },
-                    { id: 5, text: 'Submit Berkas di Portal', done: false }
+                    { id: 1, text: 'CV & Portofolio Akademik', done: false },
+                    { id: 2, text: 'Esai Motivasi / Study Plan', done: false },
+                    { id: 3, text: 'Transkrip Nilai & KTM', done: false },
+                    { id: 4, text: 'Surat Rekomendasi Dosen', done: false }
                 ];
             }
             return [
-                { id: 1, text: 'CV & Portofolio Terbaru', done: false },
-                { id: 2, text: 'Esai Motivasi / Rencana Studi', done: false },
-                { id: 3, text: 'Transkrip Nilai & KTM', done: false },
-                { id: 4, text: 'Surat Rekomendasi / Pengantar', done: false },
-                { id: 5, text: 'Submit Formulir Pendaftaran', done: false }
+                { id: 1, text: 'Registrasi Tim & KTM', done: false },
+                { id: 2, text: 'Abstrak / Proposal Karya', done: false },
+                { id: 3, text: 'Slide Presentasi / Poster', done: false }
             ];
         }
 
-        // ==========================================
-        // 4. INDEXEDDB & SERVICE WORKER NOTIF ENGINE
-        // ==========================================
+        const defaultData = {
+            importantNotes: [
+                { id: 1, text: '✨ Semangat Future Engineer 2026! Cek Deadline Tracker hari ini ✨' }
+            ],
+            dailyReminders: [
+                { id: 1, text: 'Minum air putih minimal 2 Liter 💧', done: false },
+                { id: 2, text: 'Review materi kuliah & praktikum 30 menit 📚', done: false }
+            ],
+            goals: [
+                { id: 1, text: 'IPK Semester di atas 3.75 & Lolos Pendanaan PKM 2026', completed: false },
+                { id: 2, text: 'Menguasai Pemrograman Mikrokontroler & IoT Terapan', completed: false }
+            ],
+            photos: {
+                family: '',
+                friends: '',
+                partner: '',
+                inspiration: ''
+            },
+            photoPos: {
+                family: 50,
+                friends: 50,
+                partner: 50,
+                inspiration: 50
+            },
+            motivation: 'Tetap melangkah meski pelan, karena setiap baris kode dan perhitungan membawamu lebih dekat ke garis finis! 💖',
+            inspirationDesc: 'Sosok insinyur dan inovator yang membuktikan bahwa ketekunan, rasa ingin tahu, dan empati dapat menciptakan teknologi yang bermanfaat bagi banyak orang.',
+            calendarEvents: {},
+            daily: [],
+            plannerAlarms: [],
+            alarmAutoSync: true,
+            deadlines: [],
+            coursework: [],
+            organizations: [],
+            orgMinutes: [],
+            schedule: [],
+            scheduleNotes: {},
+            researchLogs: [],
+            workspaceLinks: [
+                { id: 1, name: 'GitHub Repository', url: 'https://github.com', category: 'Coding & Repo', icon: 'fab fa-github' },
+                { id: 2, name: 'Google Drive Kuliah & PKM', url: 'https://drive.google.com', category: 'Dokumen & Referensi', icon: 'fab fa-google-drive' },
+                { id: 3, name: 'Wokwi IoT Simulator', url: 'https://wokwi.com', category: 'Dashboard IoT', icon: 'fas fa-microchip' }
+            ],
+            opportunities: [],
+            finance: {
+                wallets: { utama: [], tabungan: [], wishlist: [] },
+                rab: []
+            },
+            mealPlan: [],
+            recipes: [],
+            shoppingNotes: [],
+            academicNotes: [],
+            lectureNotes: [],
+            periodLogs: [],
+            secureNotes: [],
+            diary: [],
+            quotesList: [
+                { id: 1, text: 'Bila kamu tak tahan penatnya belajar, maka kamu akan menanggung perihnya kebodohan. — Imam Syafi’i', img: '' }
+            ]
+        };
+
+        let appData = JSON.parse(JSON.stringify(defaultData));
+        try {
+            const rawSaved = localStorage.getItem(STORAGE_KEY);
+            if (rawSaved) {
+                const parsed = JSON.parse(rawSaved);
+                appData = {
+                    ...defaultData,
+                    ...parsed,
+                    photos: { ...defaultData.photos, ...(parsed.photos || {}) },
+                    photoPos: { ...defaultData.photoPos, ...(parsed.photoPos || {}) },
+                    finance: {
+                        wallets: {
+                            utama: (parsed.finance && parsed.finance.wallets && parsed.finance.wallets.utama) || [],
+                            tabungan: (parsed.finance && parsed.finance.wallets && parsed.finance.wallets.tabungan) || [],
+                            wishlist: (parsed.finance && parsed.finance.wallets && parsed.finance.wallets.wishlist) || []
+                        },
+                        rab: (parsed.finance && parsed.finance.rab) || []
+                    }
+                };
+            }
+        } catch (e) {}
+
         function openNotifDB() {
             return new Promise((resolve, reject) => {
-                if (!('indexedDB' in window)) return reject('IndexedDB tidak didukung');
-                const request = indexedDB.open(IDB_NAME, 1);
-                request.onupgradeneeded = (e) => {
+                if (!('indexedDB' in window)) return reject('No IDB');
+                const req = indexedDB.open(IDB_NAME, 1);
+                req.onupgradeneeded = (e) => {
                     const idb = e.target.result;
                     if (!idb.objectStoreNames.contains(IDB_STORE)) {
                         idb.createObjectStore(IDB_STORE, { keyPath: 'id' });
                     }
                 };
-                request.onsuccess = (e) => resolve(e.target.result);
-                request.onerror = (e) => reject(e.target.error);
+                req.onsuccess = (e) => resolve(e.target.result);
+                req.onerror = (e) => reject(e.target.error);
             });
         }
 
@@ -2190,17 +2206,16 @@
 
                 Object.keys(appData.calendarEvents || {}).forEach(dateStr => {
                     (appData.calendarEvents[dateStr] || []).forEach(ev => {
-                        if (ev.priority === 'tinggi') {
-                            const meta = getCalendarCategoryMeta(ev.category);
-                            reminders.push({
-                                id: `cal_${ev.id}_${dateStr}`,
-                                title: `${meta.icon} Acara Penting (${meta.label}): ${ev.text}`,
-                                date: dateStr,
-                                time: ev.timeStart || ev.time || '08:00',
-                                remindMode: 'all',
-                                source: 'Kalender Utama'
-                            });
-                        }
+                        if (ev.completed) return;
+                        const meta = getCalendarCategoryMeta(ev.category);
+                        reminders.push({
+                            id: `cal_${ev.id}_${dateStr}`,
+                            title: `${meta.label}: ${ev.text}`,
+                            date: dateStr,
+                            time: ev.timeStart || ev.time || '08:00',
+                            remindMode: ev.priority === 'tinggi' ? 'all' : 'h0',
+                            source: 'Kalender Utama'
+                        });
                     });
                 });
 
@@ -2214,19 +2229,41 @@
                             date: dItem.date || todayStr,
                             time: dItem.time,
                             remindMode: 'h0',
+                            silent: rMode === 'silent',
                             source: 'Daily Planner'
                         });
                     }
                 });
 
                 const idb = await openNotifDB();
+                const existingMap = await new Promise((resolve) => {
+                    const readTx = idb.transaction(IDB_STORE, 'readonly');
+                    const req = readTx.objectStore(IDB_STORE).getAll();
+                    req.onsuccess = () => {
+                        const map = {};
+                        (req.result || []).forEach(r => { map[r.id] = r.notifiedFlags || {}; });
+                        resolve(map);
+                    };
+                    req.onerror = () => resolve({});
+                });
+
                 const tx = idb.transaction(IDB_STORE, 'readwrite');
                 const store = tx.objectStore(IDB_STORE);
                 store.clear();
-                reminders.forEach(r => store.put(r));
+                reminders.forEach(r => {
+                    r.notifiedFlags = existingMap[r.id] || {};
+                    store.put(r);
+                });
 
-                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.controller.postMessage({ type: 'CHECK_REMINDERS_NOW' });
+                if ('serviceWorker' in navigator) {
+                    if (navigator.serviceWorker.controller) {
+                        navigator.serviceWorker.controller.postMessage({ type: 'SYNC_REMINDERS' });
+                    }
+                    navigator.serviceWorker.ready.then((reg) => {
+                        if (reg.active) {
+                            reg.active.postMessage({ type: 'SYNC_REMINDERS' });
+                        }
+                    }).catch(() => {});
                 }
             } catch (e) {}
         }
@@ -2243,19 +2280,20 @@
             }
 
             syncRemindersToSW();
+            checkAndNotifyUpcomingReminders();
             if (!skipRender) renderAll();
         }
 
         // ==========================================
-        // 5. GOOGLE AUTH SYNC
+        // 4. FIREBASE AUTHENTICATION (GOOGLE SYNC)
         // ==========================================
         window.signInGoogle = () => {
             if (!isFirebaseActive || !auth) {
-                showToast("Mode Offline", "Data tersimpan aman di perangkat lokal.", "pink");
+                showToast("Mode Offline Lokal", "Data tersimpan aman di perangkat ini.", "pink");
                 return;
             }
-            auth.signInWithPopup(provider).catch(err => {
-                showToast("Login Gagal", err.message, "error");
+            auth.signInWithPopup(provider).catch((err) => {
+                showToast("Gagal Login Google", err.message || "Coba lagi beberapa saat.", "error");
             });
         };
 
@@ -2264,38 +2302,338 @@
         };
 
         if (isFirebaseActive && auth) {
-            auth.onAuthStateChanged(user => {
-                const loginBtn = document.getElementById('btn-login-google');
-                const profileDiv = document.getElementById('user-profile');
+            auth.onAuthStateChanged((user) => {
+                const btnLogin = document.getElementById('btn-login-google');
+                const profileBox = document.getElementById('user-profile');
                 if (user) {
                     currentUserUid = user.uid;
-                    if (loginBtn) loginBtn.classList.add('hidden');
-                    if (profileDiv) {
-                        profileDiv.classList.remove('hidden');
-                        document.getElementById('user-avatar').src = user.photoURL || NOTIF_ICON_SVG;
+                    if (btnLogin) btnLogin.classList.add('hidden');
+                    if (profileBox) {
+                        profileBox.classList.remove('hidden');
+                        document.getElementById('user-avatar').src = user.photoURL || 'https://placehold.co/64x64/ffd1dc/e84393?text=T';
                         document.getElementById('user-name').innerText = (user.displayName || 'Tasya').split(' ')[0];
                     }
-                    db.collection('users').doc(user.uid).get().then(doc => {
-                        if (doc.exists && doc.data().plannerData) {
-                            appData = Object.assign({}, defaultData, doc.data().plannerData);
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-                            renderAll();
-                            showToast("Cloud Sync Aktif", "Data berhasil disinkronkan dari akun Google.", "success");
-                        } else {
-                            saveData(true);
-                        }
-                    }).catch(() => {});
+                    if (db) {
+                        db.collection('users').doc(user.uid).get().then((doc) => {
+                            if (doc.exists && doc.data().plannerData) {
+                                appData = { ...appData, ...doc.data().plannerData };
+                                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+                                renderAll();
+                            } else {
+                                saveData(true);
+                            }
+                        }).catch(() => {});
+                    }
                 } else {
                     currentUserUid = null;
-                    if (loginBtn) loginBtn.classList.remove('hidden');
-                    if (profileDiv) profileDiv.classList.add('hidden');
+                    if (btnLogin) btnLogin.classList.remove('hidden');
+                    if (profileBox) profileBox.classList.add('hidden');
                 }
             });
         }
 
         // ==========================================
+        // 5. RUNNING TEXT, FLOATING BUBBLES & BADGES
+        // ==========================================
+        function renderRunningText() {
+            const topEl = document.getElementById('running-text-content');
+            const botEl = document.getElementById('running-text-content-bottom');
+            const notes = appData.importantNotes || [];
+
+            if (topEl) {
+                topEl.innerText = notes.length > 0
+                    ? notes.map(n => n.text).join('   •   ')
+                    : '✨ Welcome to My Personal Planner 2026 — Be the kind author of your own story ✨';
+            }
+
+            const modalList = document.getElementById('important-notes-modal-list');
+            if (modalList) {
+                modalList.innerHTML = notes.map(n => `
+                    <div class="flex items-center justify-between bg-pink-50 px-2.5 py-1.5 rounded-lg text-[11px]">
+                        <span class="truncate pr-2 font-semibold text-gray-700">${n.text}</span>
+                        <button onclick="deleteImportantNote(${n.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button>
+                    </div>
+                `).join('');
+            }
+
+            if (botEl) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const urgentDls = (appData.deadlines || []).filter(d => {
+                    const diff = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
+                    return diff >= 0 && diff <= 3;
+                });
+                const todayStr = formatDateLocal(today);
+                const todayEvs = (appData.calendarEvents && appData.calendarEvents[todayStr]) || [];
+
+                const parts = [];
+                urgentDls.forEach(d => parts.push(`🚨 DL: ${d.task} (${d.date} ${d.time || ''})`));
+                todayEvs.forEach(ev => parts.push(`📅 Hari Ini: ${ev.text} (${ev.timeStart || ''})`));
+
+                botEl.innerText = parts.length > 0
+                    ? parts.join('   |   ')
+                    : '🌟 Tidak ada deadline mendesak hari ini. Tetap konsisten dengan jadwalmu ya, Tasya! 🌟';
+            }
+        }
+
+        window.toggleBubble = () => {
+            const m = document.getElementById('important-bubble-modal');
+            if (!m) return;
+            if (m.classList.contains('hidden')) {
+                m.classList.remove('hidden');
+                requestAnimationFrame(() => { m.classList.remove('scale-95', 'opacity-0'); });
+            } else {
+                m.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => m.classList.add('hidden'), 200);
+            }
+        };
+
+        window.saveImportantNote = () => {
+            const inp = document.getElementById('input-bubble-note');
+            if (!inp || !inp.value.trim()) return;
+            appData.importantNotes.push({ id: Date.now(), text: inp.value.trim() });
+            inp.value = '';
+            saveData();
+        };
+
+        window.deleteImportantNote = (id) => {
+            appData.importantNotes = (appData.importantNotes || []).filter(n => n.id !== id);
+            saveData();
+        };
+
+        function renderDailyRemindersModal() {
+            const list = document.getElementById('daily-reminder-list');
+            if (!list) return;
+            const items = appData.dailyReminders || [];
+            if (items.length === 0) {
+                list.innerHTML = '<p class="text-[11px] text-gray-400 italic">Belum ada rutinitas harian.</p>';
+                return;
+            }
+            list.innerHTML = items.map(r => `
+                <div class="flex items-center justify-between bg-amber-50/80 px-2.5 py-1.5 rounded-lg text-xs">
+                    <label class="flex items-center gap-2 cursor-pointer ${r.done ? 'line-through text-gray-400' : 'text-gray-700 font-semibold'}">
+                        <input type="checkbox" class="custom-checkbox !w-4 !h-4" ${r.done ? 'checked' : ''} onchange="toggleDailyReminderItem(${r.id})">
+                        <span>${r.text}</span>
+                    </label>
+                    <button onclick="deleteDailyReminder(${r.id})" class="text-red-400 hover:text-red-600 text-[11px]"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+        }
+
+        window.toggleDailyReminder = () => {
+            const m = document.getElementById('daily-reminder-modal');
+            if (!m) return;
+            renderDailyRemindersModal();
+            if (m.classList.contains('hidden')) {
+                m.classList.remove('hidden');
+                requestAnimationFrame(() => { m.classList.remove('scale-95', 'opacity-0'); });
+            } else {
+                m.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => m.classList.add('hidden'), 200);
+            }
+        };
+
+        window.saveDailyReminder = () => {
+            const inp = document.getElementById('input-daily-reminder');
+            if (!inp || !inp.value.trim()) return;
+            appData.dailyReminders.push({ id: Date.now(), text: inp.value.trim(), done: false });
+            inp.value = '';
+            saveData();
+            renderDailyRemindersModal();
+        };
+
+        window.toggleDailyReminderItem = (id) => {
+            const item = (appData.dailyReminders || []).find(r => r.id === id);
+            if (item) {
+                item.done = !item.done;
+                saveData();
+                renderDailyRemindersModal();
+            }
+        };
+
+        window.deleteDailyReminder = (id) => {
+            appData.dailyReminders = (appData.dailyReminders || []).filter(r => r.id !== id);
+            saveData();
+            renderDailyRemindersModal();
+        };
+
+        function updateBadges() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const urgentDeadlines = (appData.deadlines || []).filter(d => {
+                const diff = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
+                return diff >= 0 && diff <= 7;
+            });
+
+            const count = urgentDeadlines.length;
+            const badge = document.getElementById('deadline-badge');
+            const menuBadge = document.getElementById('planner-menu-badge');
+            if (badge) {
+                badge.innerText = count;
+                if (count > 0) badge.classList.remove('hidden');
+                else badge.classList.add('hidden');
+            }
+            if (menuBadge) {
+                menuBadge.innerText = count;
+                if (count > 0) menuBadge.classList.remove('hidden');
+                else menuBadge.classList.add('hidden');
+            }
+
+            const oppBadge = document.getElementById('opp-menu-badge');
+            const urgentOpps = (appData.opportunities || []).filter(o => {
+                const diff = Math.ceil((parseLocalDate(o.deadlineDate) - today) / 86400000);
+                return diff >= 0 && diff <= 7;
+            });
+            if (oppBadge) {
+                oppBadge.innerText = urgentOpps.length;
+                if (urgentOpps.length > 0) oppBadge.classList.remove('hidden');
+                else oppBadge.classList.add('hidden');
+            }
+
+            const popupList = document.getElementById('deadline-popup-list');
+            if (popupList) {
+                if (urgentDeadlines.length === 0) {
+                    popupList.innerHTML = '<p class="text-[11px] text-gray-400 italic text-center py-2">Aman! Tidak ada deadline &le; 7 hari ke depan.</p>';
+                } else {
+                    popupList.innerHTML = urgentDeadlines.map(d => {
+                        const diff = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
+                        const label = diff === 0 ? 'HARI INI!' : `H-${diff}`;
+                        return `
+                            <div class="bg-red-50/90 border border-red-200 rounded-lg p-2 text-left">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] font-extrabold text-red-600">${d.category || 'Tugas'} • ${label}</span>
+                                    <span class="text-[10px] text-gray-500">${d.date} ${d.time || ''}</span>
+                                </div>
+                                <p class="text-xs font-bold text-gray-800 truncate">${d.task}</p>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        window.toggleDeadlinePopup = () => {
+            const m = document.getElementById('deadline-popup-modal');
+            if (!m) return;
+            updateBadges();
+            if (m.classList.contains('hidden')) {
+                m.classList.remove('hidden');
+                requestAnimationFrame(() => { m.classList.remove('scale-95', 'opacity-0'); });
+            } else {
+                m.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => m.classList.add('hidden'), 200);
+            }
+        };
+
+        // ==========================================
         // 6. NOTIFICATIONS, PWA GUIDE & ALARM ENGINE
         // ==========================================
+        const NOTIF_LOG_KEY = 'tasya_notified_log_v1';
+
+        function getNotifLog() {
+            try {
+                return JSON.parse(localStorage.getItem(NOTIF_LOG_KEY)) || {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function markNotifSent(key) {
+            const log = getNotifLog();
+            log[key] = Date.now();
+            try {
+                localStorage.setItem(NOTIF_LOG_KEY, JSON.stringify(log));
+            } catch (e) {}
+        }
+
+        async function sendSystemNotification(title, body, tag = 'tasya-planner-notif', silent = false) {
+            if (!("Notification" in window) || Notification.permission !== "granted") return false;
+            const options = {
+                body,
+                icon: NOTIF_ICON_SVG,
+                badge: NOTIF_ICON_SVG,
+                tag,
+                silent,
+                vibrate: silent ? undefined : [250, 100, 250],
+                requireInteraction: true
+            };
+
+            try {
+                if ('serviceWorker' in navigator) {
+                    const reg = await navigator.serviceWorker.getRegistration();
+                    if (reg && reg.showNotification) {
+                        await reg.showNotification(title, options);
+                        return true;
+                    }
+                }
+            } catch (e) {}
+
+            try {
+                const n = new Notification(title, options);
+                n.onclick = () => {
+                    window.focus();
+                    n.close();
+                };
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        async function checkAndNotifyUpcomingReminders() {
+            if (!("Notification" in window) || Notification.permission !== "granted") return;
+            const now = new Date();
+            const todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const log = getNotifLog();
+
+            const items = [];
+            (appData.deadlines || []).forEach(d => {
+                if (d.date) {
+                    items.push({
+                        id: `dl_${d.id}`,
+                        title: `Deadline ${d.category || 'Tugas'}: ${d.task}`,
+                        date: d.date,
+                        time: d.time || '23:59',
+                        remindMode: d.remindMode || 'all'
+                    });
+                }
+            });
+
+            Object.keys(appData.calendarEvents || {}).forEach(dateStr => {
+                (appData.calendarEvents[dateStr] || []).forEach(ev => {
+                    if (ev.completed) return;
+                    const meta = getCalendarCategoryMeta(ev.category);
+                    items.push({
+                        id: `cal_${ev.id}_${dateStr}`,
+                        title: `${meta.label}: ${ev.text}`,
+                        date: dateStr,
+                        time: ev.timeStart || ev.time || '08:00',
+                        remindMode: ev.priority === 'tinggi' ? 'all' : 'h0'
+                    });
+                });
+            });
+
+            for (const rem of items) {
+                const targetZero = parseLocalDate(rem.date);
+                const diffDays = Math.round((targetZero - todayZero) / 86400000);
+                const mode = rem.remindMode || 'all';
+
+                if (diffDays === 3 && mode === 'all' && !log[`${rem.id}_h3`]) {
+                    markNotifSent(`${rem.id}_h3`);
+                    await sendSystemNotification('⏳ Pengingat H-3 | Tasya Planner', `${rem.title} jatuh tempo 3 hari lagi (${rem.date} ${rem.time})`, `${rem.id}_h3`);
+                } else if (diffDays === 2 && (mode === 'all' || mode === 'h2') && !log[`${rem.id}_h2`]) {
+                    markNotifSent(`${rem.id}_h2`);
+                    await sendSystemNotification('⏰ Pengingat H-2 | Tasya Planner', `${rem.title} jatuh tempo 2 hari lagi (${rem.date} ${rem.time})`, `${rem.id}_h2`);
+                } else if (diffDays === 1 && (mode === 'all' || mode === 'h2' || mode === 'h1') && !log[`${rem.id}_h1`]) {
+                    markNotifSent(`${rem.id}_h1`);
+                    await sendSystemNotification('⚠️ Pengingat H-1 (Besok) | Tasya Planner', `Besok batas akhir: ${rem.title} (${rem.date} ${rem.time})`, `${rem.id}_h1`);
+                } else if (diffDays === 0 && !log[`${rem.id}_h0`]) {
+                    markNotifSent(`${rem.id}_h0`);
+                    await sendSystemNotification('🚨 HARI INI! | Tasya Planner', `Jangan lupa hari ini: ${rem.title} pukul ${rem.time}`, `${rem.id}_h0`);
+                }
+            }
+        }
+
         function updateNotifIcon() {
             const dot = document.getElementById('hp-notif-dot');
             const label = document.getElementById('btn-hp-notif-label');
@@ -2303,28 +2641,31 @@
             const envText = document.getElementById('pwa-env-status-text');
 
             if (!("Notification" in window)) {
-                if (dot) dot.className = "w-2 h-2 rounded-full bg-red-500";
-                if (label) label.innerText = "Notif N/A";
-                if (statusText) statusText.innerText = "Browser tidak mendukung Notifikasi Web";
+                if (dot) dot.className = 'w-2 h-2 rounded-full bg-gray-400';
+                if (statusText) statusText.innerText = 'Browser tidak mendukung Web Notification';
                 return;
             }
 
             const perm = Notification.permission;
             if (perm === 'granted') {
-                if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-500";
-                if (label) label.innerText = "Notif Aktif";
-                if (statusText) statusText.innerText = "✅ Diizinkan (Aktif)";
+                if (dot) dot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+                if (label) label.innerText = 'Notif Aktif';
+                if (statusText) statusText.innerText = '✅ Diizinkan (Granted)';
             } else if (perm === 'denied') {
-                if (dot) dot.className = "w-2 h-2 rounded-full bg-red-500";
-                if (label) label.innerText = "Notif Diblokir";
-                if (statusText) statusText.innerText = "❌ Diblokir di pengaturan browser";
+                if (dot) dot.className = 'w-2 h-2 rounded-full bg-red-500';
+                if (label) label.innerText = 'Notif Diblokir';
+                if (statusText) statusText.innerText = '❌ Diblokir Browser (Buka ikon gembok URL untuk mengizinkan)';
             } else {
-                if (dot) dot.className = "w-2 h-2 rounded-full bg-yellow-400";
-                if (label) label.innerText = "Aktifkan Notif";
-                if (statusText) statusText.innerText = "⚠️ Belum diizinkan (Klik Aktifkan)";
+                if (dot) dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-ping';
+                if (label) label.innerText = 'Aktifkan Notif';
+                if (statusText) statusText.innerText = '⚠️ Belum Diaktifkan (Klik tombol Aktifkan)';
             }
+
             if (envText) {
-                envText.innerText = `Protocol: ${window.location.protocol} | ServiceWorker: ${'serviceWorker' in navigator ? 'Didukung' : 'Tidak'}`;
+                const isSecure = window.isSecureContext;
+                envText.innerText = isSecure
+                    ? `Koneksi Aman (${window.location.protocol}) • Service Worker ${'serviceWorker' in navigator ? 'Didukung' : 'Tidak Didukung'}`
+                    : '⚠️ Halaman dibuka via koneksi tidak aman (HTTP/file). Gunakan HTTPS agar notifikasi latar belakang bekerja penuh.';
             }
         }
 
@@ -2336,7 +2677,8 @@
             m.classList.remove('hidden');
             requestAnimationFrame(() => {
                 m.classList.remove('opacity-0');
-                if (c) { c.classList.remove('scale-95'); c.classList.add('scale-100'); }
+                c.classList.remove('scale-95');
+                c.classList.add('scale-100');
             });
         };
 
@@ -2345,7 +2687,8 @@
             const c = document.getElementById('pwa-guide-content');
             if (!m) return;
             m.classList.add('opacity-0');
-            if (c) { c.classList.remove('scale-100'); c.classList.add('scale-95'); }
+            c.classList.remove('scale-100');
+            c.classList.add('scale-95');
             setTimeout(() => m.classList.add('hidden'), 250);
         };
 
@@ -2358,29 +2701,34 @@
             updateNotifIcon();
             if (perm === 'granted') {
                 showToast("Notifikasi Aktif!", "Pengingat H-3, H-2, H-1, Hari-H & Daily Planner siap muncul.", "success");
-                syncRemindersToSW();
+                await syncRemindersToSW();
+                await checkAndNotifyUpcomingReminders();
             } else {
                 showToast("Izin Belum Aktif", "Aktifkan izin notifikasi di pengaturan gembok URL browser.", "error");
             }
         };
 
-        window.sendTestHpNotification = () => {
+        window.sendTestHpNotification = async () => {
             playGentleChime('chime');
             showToast("Tes Pengingat Tasya Planner ✨", "Notifikasi layar berfungsi dengan baik!", "success");
             if ("Notification" in window && Notification.permission === "granted") {
-                try {
-                    new Notification("👑 Tasya Planner 2026", {
-                        body: "Tes notifikasi berhasil! Pengingat deadline & daily planner aktif.",
-                        icon: NOTIF_ICON_SVG
-                    });
-                } catch (e) {}
+                await sendSystemNotification(
+                    "👑 Tasya Planner 2026",
+                    "Tes notifikasi berhasil! Pengingat deadline & daily planner aktif.",
+                    `tasya-test-${Date.now()}`,
+                    false
+                );
             } else if ("Notification" in window && Notification.permission !== "denied") {
-                requestNotificationPermission();
+                await requestNotificationPermission();
             }
         };
 
         if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
-            navigator.serviceWorker.register('./sw.js').catch(() => {});
+            navigator.serviceWorker.register('./sw.js').then((reg) => {
+                if (reg.active) {
+                    reg.active.postMessage({ type: 'SYNC_REMINDERS' });
+                }
+            }).catch(() => {});
         }
 
         // --- DAILY PLANNER SILENT SCREEN BANNER & MODE ---
@@ -2408,89 +2756,58 @@
                 });
             }
 
-            if ("Notification" in window && Notification.permission === "granted") {
-                try {
-                    const n = new Notification(`🔕 Pengingat Layar (${timeStr || 'Hari Ini'})`, {
-                        body: `${title} — Waktunya mengeksekusi agenda Daily Planner-mu ✨`,
-                        icon: NOTIF_ICON_SVG,
-                        silent: true,
-                        requireInteraction: true,
-                        tag: `tasya-daily-silent-${taskId || Date.now()}`
-                    });
-                    n.onclick = () => {
-                        window.focus();
-                        n.close();
-                    };
-                } catch (e) {}
-            }
+            sendSystemNotification(
+                `Pengingat Layar (${timeStr || 'Hari Ini'})`,
+                `${title} — Waktunya mengeksekusi agenda Daily Planner-mu ✨`,
+                `tasya-daily-silent-${taskId || Date.now()}`,
+                true
+            );
         };
 
         window.closeSilentDailyBanner = () => {
             const banner = document.getElementById('daily-silent-banner');
             if (!banner) return;
-            banner.classList.remove('translate-y-0', 'opacity-100');
             banner.classList.add('-translate-y-4', 'opacity-0');
             setTimeout(() => {
                 banner.classList.add('hidden');
                 activeSilentDailyTaskId = null;
-            }, 300);
+            }, 250);
         };
 
         window.completeSilentDailyTask = () => {
-            if (activeSilentDailyTaskId !== null) {
-                const item = appData.daily.find(i => String(i.id) === String(activeSilentDailyTaskId));
-                if (item && !item.completed) {
-                    item.completed = true;
+            if (activeSilentDailyTaskId) {
+                const task = (appData.daily || []).find(d => d.id === activeSilentDailyTaskId);
+                if (task) {
+                    task.completed = true;
                     saveData();
-                    showToast("Target Harian Selesai!", `"${item.text}" ditandai selesai ✨`, "success");
+                    showToast("Agenda Selesai! 🎉", `"${task.text}" ditandai selesai.`, "success");
                 }
             }
             closeSilentDailyBanner();
         };
 
-        window.cycleDailyRemindType = (id) => {
-            const item = appData.daily.find(i => String(i.id) === String(id));
-            if (!item) return;
-            const current = item.remindType || (item.time ? 'silent' : 'none');
-            const next = current === 'silent' ? 'sound' : (current === 'sound' ? 'none' : 'silent');
-            item.remindType = next;
-            item.notified = false;
-            item.lastNotifiedSlot = '';
-            saveData();
-            const labelMap = {
-                silent: '🔕 Notif Layar (Tanpa Suara)',
-                sound: '🔔 Alarm Suara + Layar',
-                none: 'Off (Tanpa Pengingat)'
-            };
-            showToast('Mode Pengingat Diubah', `${item.text}: ${labelMap[next]}`, 'pink');
-        };
-
-        // --- PLANNER ALARM SOUND & RING ENGINE ---
+        // --- ALARM MY PLANNER ENGINE ---
         let alarmRingInterval = null;
-        let currentRingingAlarm = null;
-
-        window.toggleAlarmAutoSync = (checked) => {
-            appData.alarmAutoSync = checked;
-            saveData(true);
-        };
-
-        window.testPlannerAlarmSound = () => {
-            ringPlannerAlarm('Tes Alarm My Planner', new Date().toTimeString().slice(0, 5), 'chime', 'Ini adalah simulasi dering alarm & pop-up layar.');
-        };
+        let currentRingingAlarmMeta = null;
 
         window.ringPlannerAlarm = (title, timeStr, tone = 'chime', desc = 'Waktunya mengeksekusi agenda terjadwalmu, Tasya!') => {
-            currentRingingAlarm = { title, timeStr, tone, desc };
+            currentRingingAlarmMeta = { title, timeStr, tone, desc };
             const modal = document.getElementById('active-alarm-modal');
             const content = document.getElementById('active-alarm-content');
-            if (document.getElementById('ringing-alarm-time')) document.getElementById('ringing-alarm-time').innerText = timeStr;
-            if (document.getElementById('ringing-alarm-title')) document.getElementById('ringing-alarm-title').innerText = title;
-            if (document.getElementById('ringing-alarm-desc')) document.getElementById('ringing-alarm-desc').innerText = desc;
+            const timeEl = document.getElementById('ringing-alarm-time');
+            const titleEl = document.getElementById('ringing-alarm-title');
+            const descEl = document.getElementById('ringing-alarm-desc');
 
-            if (modal) {
+            if (timeEl) timeEl.innerText = timeStr || '00:00';
+            if (titleEl) titleEl.innerText = title || 'Alarm My Planner';
+            if (descEl) descEl.innerText = desc;
+
+            if (modal && content) {
                 modal.classList.remove('hidden');
                 requestAnimationFrame(() => {
                     modal.classList.remove('opacity-0');
-                    if (content) { content.classList.remove('scale-95'); content.classList.add('scale-100'); }
+                    content.classList.remove('scale-95');
+                    content.classList.add('scale-100');
                 });
             }
 
@@ -2498,11 +2815,12 @@
             if (alarmRingInterval) clearInterval(alarmRingInterval);
             alarmRingInterval = setInterval(() => playGentleChime(tone), 2200);
 
-            if ("Notification" in window && Notification.permission === "granted") {
-                try {
-                    new Notification(`🔔 ${title} (${timeStr})`, { body: desc, icon: NOTIF_ICON_SVG, requireInteraction: true });
-                } catch (e) {}
-            }
+            sendSystemNotification(
+                `🔔 ${title} (${timeStr})`,
+                desc,
+                `tasya-alarm-${Date.now()}`,
+                false
+            );
         };
 
         window.stopPlannerAlarm = () => {
@@ -2512,647 +2830,68 @@
             }
             const modal = document.getElementById('active-alarm-modal');
             const content = document.getElementById('active-alarm-content');
-            if (modal) {
+            if (modal && content) {
                 modal.classList.add('opacity-0');
-                if (content) { content.classList.remove('scale-100'); content.classList.add('scale-95'); }
+                content.classList.remove('scale-100');
+                content.classList.add('scale-95');
                 setTimeout(() => modal.classList.add('hidden'), 250);
             }
-            currentRingingAlarm = null;
+            currentRingingAlarmMeta = null;
         };
 
         window.snoozePlannerAlarm = () => {
-            const info = currentRingingAlarm;
+            const meta = currentRingingAlarmMeta;
             stopPlannerAlarm();
-            if (!info) return;
-            const future = new Date(Date.now() + 5 * 60000);
-            const snoozeTime = `${String(future.getHours()).padStart(2, '0')}:${String(future.getMinutes()).padStart(2, '0')}`;
+            if (!meta) return;
+            const snoozeDate = new Date(Date.now() + 5 * 60000);
+            const snoozeHHMM = `${String(snoozeDate.getHours()).padStart(2, '0')}:${String(snoozeDate.getMinutes()).padStart(2, '0')}`;
             appData.plannerAlarms.push({
                 id: Date.now(),
-                time: snoozeTime,
-                label: `[Snooze] ${info.title}`,
+                time: snoozeHHMM,
+                label: `[Snooze] ${meta.title}`,
                 repeat: 'once',
-                tone: info.tone || 'chime',
-                enabled: true
+                tone: meta.tone || 'chime',
+                enabled: true,
+                lastTriggeredSlot: ''
             });
             saveData();
-            showToast('Snooze 5 Menit', `Alarm akan berbunyi kembali pukul ${snoozeTime}`, 'pink');
+            showToast("Snooze 5 Menit ⏰", `Alarm ditunda ke pukul ${snoozeHHMM}.`, "pink");
         };
 
-        function checkAlarms() {
+        window.testPlannerAlarmSound = () => {
+            const tone = document.getElementById('alarm-tone')?.value || 'chime';
             const now = new Date();
-            const currentDate = formatDateLocal(now);
-            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-            const currentSec = `${String(now.getSeconds()).padStart(2, '0')}`;
-            const clockEl = document.getElementById('planner-live-clock');
-            if (clockEl) clockEl.innerText = `${currentTime}:${currentSec}`;
-
-            let dataChanged = false;
-            const triggerSlot = `${currentDate}_${currentTime}`;
-
-            // 1. Daily Planner items
-            (appData.daily || []).forEach(item => {
-                if (!item.completed && item.time === currentTime && item.lastNotifiedSlot !== triggerSlot) {
-                    if (!item.date || item.date === currentDate) {
-                        const rMode = item.remindType || 'silent';
-                        if (rMode === 'silent') {
-                            triggerSilentDailyNotification(item.text, currentTime, item.id);
-                        } else if (rMode === 'sound') {
-                            ringPlannerAlarm(`Fokus Harian: ${item.text}`, currentTime, 'chime', 'Pengingat Daily Planner');
-                        }
-                        item.lastNotifiedSlot = triggerSlot;
-                        item.notified = true;
-                        dataChanged = true;
-                    }
-                }
-            });
-
-            // 2. Custom Planner Alarms
-            const dayIdx = now.getDay();
-            (appData.plannerAlarms || []).forEach(al => {
-                if (!al.enabled || al.time !== currentTime || al.lastTriggeredSlot === triggerSlot) return;
-                const matchRepeat =
-                    al.repeat === 'daily' ||
-                    al.repeat === 'once' ||
-                    (al.repeat === 'weekdays' && dayIdx >= 1 && dayIdx <= 5);
-                if (matchRepeat) {
-                    ringPlannerAlarm(al.label, al.time, al.tone || 'chime', 'Alarm Terjadwal My Planner');
-                    al.lastTriggeredSlot = triggerSlot;
-                    if (al.repeat === 'once') al.enabled = false;
-                    dataChanged = true;
-                }
-            });
-
-            // 3. Auto-sync Deadlines & Calendar Events
-            if (appData.alarmAutoSync) {
-                (appData.deadlines || []).forEach(dl => {
-                    if (dl.date === currentDate && dl.time === currentTime && dl.lastAlarmSlot !== triggerSlot) {
-                        ringPlannerAlarm(`Deadline: ${dl.task}`, currentTime, 'urgent', `Kategori: ${dl.category || 'Tugas'}`);
-                        dl.lastAlarmSlot = triggerSlot;
-                        dataChanged = true;
-                    }
-                });
-                const todayCalEvents = (appData.calendarEvents && appData.calendarEvents[currentDate]) || [];
-                todayCalEvents.forEach(ev => {
-                    const evStart = ev.timeStart || ev.time;
-                    if (!ev.completed && evStart === currentTime && ev.lastAlarmSlot !== triggerSlot) {
-                        const meta = getCalendarCategoryMeta(ev.category);
-                        if (ev.priority === 'tinggi') {
-                            ringPlannerAlarm(`${meta.icon} Acara Penting: ${ev.text}`, currentTime, 'bell', meta.label);
-                        } else {
-                            triggerSilentDailyNotification(`${meta.icon} ${ev.text}`, currentTime, null);
-                        }
-                        ev.lastAlarmSlot = triggerSlot;
-                        dataChanged = true;
-                    }
-                });
-            }
-
-            if (dataChanged) saveData();
-        }
-        setInterval(checkAlarms, 4000);
-        setTimeout(checkAlarms, 1500);
-        updateNotifIcon();
-
-        // ==========================================
-        // 7. RUNNING TEXT, BUBBLE NOTES & DEADLINE POPUP
-        // ==========================================
-        function renderRunningText() {
-            const topBar = document.getElementById('running-text-content');
-            const botBar = document.getElementById('running-text-content-bottom');
-            const modalList = document.getElementById('important-notes-modal-list');
-
-            if (topBar) {
-                const notes = (appData.importantNotes || []).map(n => `✨ ${n.text}`).join('   •   ');
-                topBar.innerText = notes || "✨ Welcome, Tasya! Be the kind author of your own story ✨";
-            }
-
-            if (modalList) {
-                modalList.innerHTML = (appData.importantNotes || []).map(n => `
-                    <div class="flex justify-between items-center bg-pink-50 px-2.5 py-1 rounded-lg text-[11px] text-pink-800">
-                        <span class="truncate pr-2">${n.text}</span>
-                        <button onclick="deleteImportantNote(${n.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-times"></i></button>
-                    </div>
-                `).join('');
-            }
-
-            if (botBar) {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const urgentDls = (appData.deadlines || []).filter(d => {
-                    const diff = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
-                    return diff >= 0 && diff <= 7;
-                }).map(d => {
-                    const diff = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
-                    return `🚨 DL ${diff === 0 ? 'HARI INI' : 'H-' + diff}: ${d.task} (${d.time || '23:59'})`;
-                });
-                botBar.innerText = urgentDls.length > 0
-                    ? urgentDls.join('   |   ')
-                    : "🎯 Tidak ada deadline mendesak dalam 7 hari ke depan. Tetap konsisten & semangat!";
-            }
-        }
-
-        window.toggleBubble = () => {
-            const m = document.getElementById('important-bubble-modal');
-            const d = document.getElementById('daily-reminder-modal');
-            if (d && !d.classList.contains('hidden')) d.classList.add('hidden');
-            if (!m) return;
-            if (m.classList.contains('hidden')) {
-                m.classList.remove('hidden', 'scale-95', 'opacity-0');
-            } else {
-                m.classList.add('hidden');
-            }
+            const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            ringPlannerAlarm('Tes Alarm My Planner 🔔', hhmm, tone, 'Suara & pop-up alarm berfungsi normal!');
         };
 
-        window.saveImportantNote = () => {
-            const inp = document.getElementById('input-bubble-note');
-            if (!inp || !inp.value.trim()) return;
-            appData.importantNotes.push({ id: Date.now(), text: inp.value.trim() });
-            inp.value = '';
-            saveData();
-        };
-
-        window.deleteImportantNote = (id) => {
-            appData.importantNotes = (appData.importantNotes || []).filter(n => n.id !== id);
-            saveData();
-        };
-
-        window.toggleDailyReminder = () => {
-            const m = document.getElementById('daily-reminder-modal');
-            const b = document.getElementById('important-bubble-modal');
-            if (b && !b.classList.contains('hidden')) b.classList.add('hidden');
-            if (!m) return;
-            if (m.classList.contains('hidden')) {
-                m.classList.remove('hidden', 'scale-95', 'opacity-0');
-                renderDailyReminders();
-            } else {
-                m.classList.add('hidden');
-            }
-        };
-
-        function renderDailyReminders() {
-            const list = document.getElementById('daily-reminder-list');
-            if (!list) return;
-            if (!appData.dailyReminders || appData.dailyReminders.length === 0) {
-                list.innerHTML = '<p class="text-[11px] text-gray-400 italic">Belum ada rutinitas harian.</p>';
-                return;
-            }
-            list.innerHTML = appData.dailyReminders.map(r => `
-                <div class="flex items-center justify-between bg-amber-50 px-2.5 py-1.5 rounded-lg text-xs">
-                    <label class="flex items-center gap-2 cursor-pointer ${r.done ? 'line-through text-gray-400' : 'text-gray-700 font-medium'}">
-                        <input type="checkbox" class="custom-checkbox !w-4 !h-4" ${r.done ? 'checked' : ''} onchange="toggleDailyReminderCheck(${r.id})">
-                        <span>${r.text}</span>
-                    </label>
-                    <button onclick="deleteDailyReminder(${r.id})" class="text-red-400 hover:text-red-600 text-[10px]"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
-        }
-
-        window.saveDailyReminder = () => {
-            const inp = document.getElementById('input-daily-reminder');
-            if (!inp || !inp.value.trim()) return;
-            appData.dailyReminders.push({ id: Date.now(), text: inp.value.trim(), done: false });
-            inp.value = '';
-            saveData();
-            renderDailyReminders();
-        };
-
-        window.toggleDailyReminderCheck = (id) => {
-            const item = appData.dailyReminders.find(r => r.id === id);
-            if (item) { item.done = !item.done; saveData(); renderDailyReminders(); }
-        };
-
-        window.deleteDailyReminder = (id) => {
-            appData.dailyReminders = appData.dailyReminders.filter(r => r.id !== id);
-            saveData();
-            renderDailyReminders();
-        };
-
-        window.toggleDeadlinePopup = () => {
-            const m = document.getElementById('deadline-popup-modal');
-            if (!m) return;
-            if (m.classList.contains('hidden')) {
-                renderDeadlinePopup();
-                m.classList.remove('hidden', 'scale-95', 'opacity-0');
-            } else {
-                m.classList.add('hidden');
-            }
-        };
-
-        function renderDeadlinePopup() {
-            const list = document.getElementById('deadline-popup-list');
-            if (!list) return;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const upcoming = (appData.deadlines || []).filter(d => {
-                const diff = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
-                return diff >= 0 && diff <= 7;
-            }).sort((a, b) => parseLocalDate(a.date) - parseLocalDate(b.date));
-
-            if (upcoming.length === 0) {
-                list.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-2">Aman! Tidak ada deadline &le; 7 hari.</p>';
-                return;
-            }
-            list.innerHTML = upcoming.map(d => {
-                const diff = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
-                return `
-                    <div class="bg-pink-50 border border-pink-200 rounded-xl p-2.5 text-xs">
-                        <div class="flex justify-between font-bold">
-                            <span class="text-pink-700 truncate pr-2">${d.task}</span>
-                            <span class="text-red-600 shrink-0">${diff === 0 ? 'Hari Ini!' : 'H-' + diff}</span>
-                        </div>
-                        <p class="text-[10px] text-gray-500 mt-0.5">${d.category || 'Tugas'} • ${d.date} ${d.time || ''}</p>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function updateBadges() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const urgentCount = (appData.deadlines || []).filter(d => {
-                const diff = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
-                return diff >= 0 && diff <= 7;
-            }).length;
-
-            ['deadline-badge', 'planner-menu-badge'].forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                if (urgentCount > 0) {
-                    el.innerText = urgentCount;
-                    el.classList.remove('hidden');
-                } else {
-                    el.classList.add('hidden');
-                }
-            });
-
-            const oppBadge = document.getElementById('opp-menu-badge');
-            const activeOppCount = (appData.opportunities || []).length;
-            if (oppBadge) {
-                if (activeOppCount > 0) {
-                    oppBadge.innerText = activeOppCount;
-                    oppBadge.classList.remove('hidden');
-                } else {
-                    oppBadge.classList.add('hidden');
-                }
-            }
-        }
-
-        function checkTodayHighPriorityEvents() {
-            const todayStr = formatDateLocal(new Date());
-            const sessionKey = `hp_shown_${todayStr}`;
-            if (sessionStorage.getItem(sessionKey)) return;
-
-            const todayEvents = ((appData.calendarEvents && appData.calendarEvents[todayStr]) || [])
-                .filter(ev => ev.priority === 'tinggi');
-
-            if (todayEvents.length > 0) {
-                const listEl = document.getElementById('high-priority-list');
-                const modal = document.getElementById('high-priority-popup');
-                const content = document.getElementById('high-priority-content');
-                if (listEl && modal) {
-                    listEl.innerHTML = todayEvents.map(ev => {
-                        const meta = getCalendarCategoryMeta(ev.category);
-                        return `
-                            <div class="bg-red-50 border border-red-200 rounded-xl p-2.5 text-left">
-                                <span class="text-[10px] font-bold text-red-600 uppercase">${meta.icon} ${meta.label} • ${ev.timeStart || ''} ${ev.timeEnd ? '- ' + ev.timeEnd : ''}</span>
-                                <p class="text-sm font-extrabold text-gray-800">${ev.text}</p>
-                            </div>
-                        `;
-                    }).join('');
-                    modal.classList.remove('hidden');
-                    requestAnimationFrame(() => {
-                        modal.classList.remove('opacity-0');
-                        if (content) { content.classList.remove('scale-95'); content.classList.add('scale-100'); }
-                    });
-                    sessionStorage.setItem(sessionKey, '1');
-                }
-            }
-        }
-
-        window.closeHighPriorityPopup = () => {
-            const p = document.getElementById('high-priority-popup');
-            if (p) p.classList.add('hidden');
-        };
-
-        // ==========================================
-        // 8. GENERAL ITEM HELPERS
-        // ==========================================
-        window.toggleItem = (key, id) => {
-            if (!Array.isArray(appData[key])) return;
-            const item = appData[key].find(i => String(i.id) === String(id));
-            if (item) {
-                item.completed = !item.completed;
-                saveData();
-            }
-        };
-
-        window.deleteItem = (key, id) => {
-            if (!Array.isArray(appData[key])) return;
-            appData[key] = appData[key].filter(i => String(i.id) !== String(id));
-            saveData();
-        };
-
-        // ==========================================
-        // 9. GOALS & SUPPORT SYSTEM
-        // ==========================================
-        function renderGoals() {
-            const container = document.getElementById('goals-list');
-            if (!container) return;
-            if (!appData.goals || appData.goals.length === 0) {
-                container.innerHTML = '<p class="text-xs text-gray-400 italic col-span-2">Belum ada Long-Term Goals. Tuliskan impianmu di bawah!</p>';
-                return;
-            }
-            container.innerHTML = appData.goals.map(g => `
-                <div class="list-item ${g.completed ? 'completed' : ''} !border-l-amber-400 !mb-0">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <input type="checkbox" class="custom-checkbox" ${g.completed ? 'checked' : ''} onclick="toggleItem('goals', ${g.id})">
-                        <span class="text-xs font-bold text-gray-700 truncate">${g.text}</span>
-                    </div>
-                    <button onclick="deleteItem('goals', ${g.id})" class="text-red-300 hover:text-red-500 text-xs"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
-        }
-
-        document.getElementById('form-goals').onsubmit = (e) => {
-            e.preventDefault();
-            const inp = document.getElementById('input-goals');
-            if (!inp.value.trim()) return;
-            appData.goals.push({ id: Date.now(), text: inp.value.trim(), completed: false });
-            inp.value = '';
-            saveData();
-        };
-
-        const photoPlaceholders = {
-            family: 'https://placehold.co/300x300/ffeaa7/fd79a8?text=Keluarga',
-            friends: 'https://placehold.co/300x300/ffd1dc/e84393?text=Teman',
-            partner: 'https://placehold.co/300x300/f4aeb8/ffffff?text=Pacar',
-            inspiration: 'https://placehold.co/300x200/e0f7fa/00acc1?text=Inspirasi'
-        };
-
-        function renderPhotos() {
-            ['family', 'friends', 'partner', 'inspiration'].forEach(key => {
-                const img = document.getElementById(`img-${key}`);
-                const delBtn = document.getElementById(`del-photo-${key}`);
-                const slider = document.getElementById(`slider-${key}`);
-                const pos = (appData.photoPositions && typeof appData.photoPositions[key] !== 'undefined') ? appData.photoPositions[key] : 50;
-
-                if (img) {
-                    img.src = (appData.photos && appData.photos[key]) ? appData.photos[key] : photoPlaceholders[key];
-                    img.style.objectPosition = `50% ${pos}%`;
-                }
-                if (slider) slider.value = pos;
-                if (delBtn) {
-                    if (appData.photos && appData.photos[key]) delBtn.classList.remove('hidden');
-                    else delBtn.classList.add('hidden');
-                }
-            });
-
-            const motEl = document.getElementById('input-motivation');
-            if (motEl && document.activeElement !== motEl) motEl.value = appData.motivation || '';
-            const inspEl = document.getElementById('input-inspiration-desc');
-            if (inspEl && document.activeElement !== inspEl) inspEl.value = appData.inspirationDesc || '';
-        }
-
-        ['family', 'friends', 'partner', 'inspiration'].forEach(key => {
-            const inp = document.getElementById(`upload-${key}`);
-            if (inp) {
-                inp.onchange = async (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    const base64 = await compressImageFile(file, 500, 0.75);
-                    appData.photos[key] = base64;
-                    saveData();
-                    showToast("Foto Tersimpan", "Foto support system berhasil diperbarui.", "success");
-                };
-            }
-        });
-
-        window.removeSupportPhoto = (key) => {
-            appData.photos[key] = null;
-            saveData();
-        };
-
-        window.previewImagePos = (key, val) => {
-            const img = document.getElementById(`img-${key}`);
-            if (img) img.style.objectPosition = `50% ${val}%`;
-        };
-
-        window.commitImagePos = (key, val) => {
-            appData.photoPositions[key] = Number(val);
+        window.toggleAlarmAutoSync = (checked) => {
+            appData.alarmAutoSync = !!checked;
             saveData(true);
         };
 
-        document.getElementById('input-motivation').onchange = (e) => {
-            appData.motivation = e.target.value;
-            saveData(true);
-        };
-        document.getElementById('input-inspiration-desc').onchange = (e) => {
-            appData.inspirationDesc = e.target.value;
-            saveData(true);
-        };
-
-        // ==========================================
-        // 10. DAILY PLANNER (REAL-TIME SYNC DENGAN KALENDER), ALARMS, DEADLINES
-        // ==========================================
-        let currentCalDate = new Date();
-        let selectedCalDateStr = formatDateLocal(new Date());
-        const monthNamesID = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        const dayNamesFullID = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-
-        function formatDisplayDateID(dateStr) {
-            const d = parseLocalDate(dateStr);
-            return `${dayNamesFullID[d.getDay()]}, ${d.getDate()} ${monthNamesID[d.getMonth()]} ${d.getFullYear()}`;
-        }
-
-        window.jumpToTodayPlanner = () => {
-            const todayStr = formatDateLocal(new Date());
-            currentCalDate = new Date();
-            selectCalendarDate(todayStr);
-        };
-
-        function renderDaily() {
-            const container = document.getElementById('daily-list');
-            const urgentBox = document.getElementById('urgent-notes-display');
-            if (!container) return;
-
-            const activeDateStr = selectedCalDateStr || formatDateLocal(new Date());
-            const dateDisp = document.getElementById('daily-date-display');
-            if (dateDisp) dateDisp.innerText = formatDisplayDateID(activeDateStr);
-
-            const dailyViewPicker = document.getElementById('daily-view-date');
-            if (dailyViewPicker && dailyViewPicker.value !== activeDateStr) {
-                dailyViewPicker.value = activeDateStr;
-            }
-
-            if (urgentBox) {
-                const dueOnActiveDate = (appData.deadlines || []).filter(d => d.date === activeDateStr);
-                if (dueOnActiveDate.length > 0) {
-                    urgentBox.innerHTML = dueOnActiveDate.map(d => `
-                        <div class="bg-red-50 border border-red-200 rounded-xl px-3 py-2 text-[11px] font-bold text-red-600 flex items-center justify-between">
-                            <span>🚨 DL Tanggal Ini: ${d.task}</span>
-                            <span>${d.time || '23:59'}</span>
-                        </div>
-                    `).join('');
-                } else {
-                    urgentBox.innerHTML = '';
-                }
-            }
-
-            // Gabungkan jadwal dari Kalender untuk tanggal activeDateStr + item Daily Planner
-            const calEventsForDate = ((appData.calendarEvents && appData.calendarEvents[activeDateStr]) || []).map(ev => {
-                const meta = getCalendarCategoryMeta(ev.category);
-                return {
-                    source: 'calendar',
-                    id: ev.id,
-                    dateStr: activeDateStr,
-                    text: ev.text,
-                    timeStart: ev.timeStart || ev.time || '',
-                    timeEnd: ev.timeEnd || '',
-                    categoryMeta: meta,
-                    priority: ev.priority || 'rendah',
-                    completed: !!ev.completed
-                };
-            });
-
-            const dailyTasksForDate = (appData.daily || [])
-                .filter(item => !item.date || item.date === activeDateStr)
-                .map(item => ({
-                    source: 'daily',
-                    id: item.id,
-                    dateStr: item.date || '',
-                    text: item.text,
-                    timeStart: item.time || '',
-                    timeEnd: '',
-                    remindType: item.remindType || (item.time ? 'silent' : 'none'),
-                    completed: !!item.completed
-                }));
-
-            // Urutkan kronologis berdasarkan slot jam (jam kosong diletakkan di akhir)
-            const mergedTimeline = [...calEventsForDate, ...dailyTasksForDate].sort((a, b) => {
-                const tA = a.timeStart || '99:99';
-                const tB = b.timeStart || '99:99';
-                return tA.localeCompare(tB);
-            });
-
-            if (mergedTimeline.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400 italic">Belum ada jadwal/target pada ${formatDisplayDateID(activeDateStr)}.</p>`;
-                return;
-            }
-
-            container.innerHTML = mergedTimeline.map(entry => {
-                if (entry.source === 'calendar') {
-                    const timeLabel = entry.timeStart
-                        ? (entry.timeEnd ? `${entry.timeStart} - ${entry.timeEnd}` : entry.timeStart)
-                        : 'Sepanjang Hari';
-                    return `
-                        <div class="list-item ${entry.completed ? 'completed' : ''} !border-l-amber-400 bg-amber-50/50">
-                            <div class="flex items-center gap-3 min-w-0 pr-2">
-                                <input type="checkbox" class="custom-checkbox" ${entry.completed ? 'checked' : ''} onclick="toggleCalendarEventComplete('${entry.dateStr}', ${entry.id})">
-                                <div class="min-w-0">
-                                    <div class="flex items-center gap-1.5 flex-wrap">
-                                        <span class="text-sm leading-none" title="${entry.categoryMeta.label}">${entry.categoryMeta.icon}</span>
-                                        <p class="text-sm font-bold text-gray-800 truncate">${entry.text}</p>
-                                    </div>
-                                    <div class="flex items-center flex-wrap gap-1.5 mt-1">
-                                        <span class="text-[10px] font-extrabold text-pink-600 bg-white px-2 py-0.5 rounded-full border border-pink-200">
-                                            <i class="far fa-clock mr-1"></i>${timeLabel}
-                                        </span>
-                                        <span class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${entry.categoryMeta.badgeClass}">
-                                            Kalender • ${entry.categoryMeta.label}
-                                        </span>
-                                        ${entry.priority === 'tinggi' ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-red-100 text-red-600">🔥 Penting</span>' : ''}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-1.5 shrink-0">
-                                <button type="button" onclick="editCalendarEvent('${entry.dateStr}', ${entry.id})" class="text-blue-400 hover:text-blue-600 p-1" title="Edit Jadwal di Kalender"><i class="fas fa-edit text-xs"></i></button>
-                                <button type="button" onclick="deleteCalendarEvent('${entry.dateStr}', ${entry.id})" class="text-red-300 hover:text-red-500 p-1" title="Hapus Jadwal"><i class="fas fa-trash text-xs"></i></button>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                const rMode = entry.remindType;
-                let remindBadge = '';
-                if (entry.timeStart) {
-                    if (rMode === 'silent') {
-                        remindBadge = `<button type="button" onclick="cycleDailyRemindType(${entry.id})" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-pink-100 text-pink-600 hover:bg-pink-200 transition ml-1" title="Klik untuk ganti mode pengingat"><i class="fas fa-bell-slash mr-1"></i>Notif Layar</button>`;
-                    } else if (rMode === 'sound') {
-                        remindBadge = `<button type="button" onclick="cycleDailyRemindType(${entry.id})" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 hover:bg-amber-200 transition ml-1" title="Klik untuk ganti mode pengingat"><i class="fas fa-bell mr-1"></i>Alarm Suara</button>`;
-                    } else {
-                        remindBadge = `<button type="button" onclick="cycleDailyRemindType(${entry.id})" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition ml-1" title="Klik untuk aktifkan pengingat">Off</button>`;
-                    }
-                }
-                return `
-                    <div class="list-item ${entry.completed ? 'completed' : ''}">
-                        <div class="flex items-center gap-3 min-w-0 pr-2">
-                            <input type="checkbox" class="custom-checkbox" ${entry.completed ? 'checked' : ''} onclick="toggleItem('daily', ${entry.id})">
-                            <div class="min-w-0">
-                                <p class="text-sm font-bold text-gray-700 truncate">${entry.text}</p>
-                                <div class="flex items-center flex-wrap gap-1 mt-0.5">
-                                    <span class="text-[10px] text-gray-500 font-semibold"><i class="far fa-clock mr-1"></i>${entry.timeStart || '--:--'} (${entry.dateStr || 'Setiap Hari'})</span>
-                                    ${remindBadge}
-                                </div>
-                            </div>
-                        </div>
-                        <button onclick="deleteItem('daily', ${entry.id})" class="text-red-300 hover:text-red-500 shrink-0"><i class="fas fa-trash text-xs"></i></button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        document.getElementById('form-daily').onsubmit = (e) => {
-            e.preventDefault();
-            const textVal = document.getElementById('input-daily').value.trim();
-            const dateVal = document.getElementById('input-daily-date').value;
-            const timeVal = document.getElementById('input-daily-time').value;
-            const remindVal = document.getElementById('input-daily-remind').value || 'silent';
-            if (!textVal) return;
-
-            appData.daily.push({
-                id: Date.now(),
-                text: textVal,
-                date: dateVal,
-                time: timeVal,
-                remindType: timeVal ? remindVal : 'none',
-                completed: false
-            });
-            document.getElementById('input-daily').value = '';
-            if (dateVal) selectedCalDateStr = dateVal;
-            saveData();
-            if (timeVal && remindVal !== 'none') {
-                showToast(
-                    remindVal === 'silent' ? '🔕 Pengingat Layar Aktif' : '🔔 Alarm Harian Aktif',
-                    `"${textVal}" dijadwalkan pukul ${timeVal}.`,
-                    'success'
-                );
-            }
-        };
-
-        // --- PLANNER ALARMS ---
         function renderPlannerAlarms() {
-            const container = document.getElementById('planner-alarms-list');
-            const syncToggle = document.getElementById('toggle-alarm-autosync');
-            if (syncToggle) syncToggle.checked = !!appData.alarmAutoSync;
-            if (!container) return;
+            const list = document.getElementById('planner-alarms-list');
+            const autoChk = document.getElementById('toggle-alarm-autosync');
+            if (autoChk) autoChk.checked = appData.alarmAutoSync !== false;
+            if (!list) return;
 
-            if (!appData.plannerAlarms || appData.plannerAlarms.length === 0) {
-                container.innerHTML = '<p class="text-[11px] text-gray-400 italic">Belum ada alarm khusus diatur.</p>';
+            const alarms = [...(appData.plannerAlarms || [])].sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+            if (alarms.length === 0) {
+                list.innerHTML = '<p class="text-[11px] text-gray-400 italic text-center py-2">Belum ada alarm manual diset.</p>';
                 return;
             }
-            const repeatLabels = { once: 'Sekali', daily: 'Setiap Hari', weekdays: 'Sen-Jum' };
-            container.innerHTML = appData.plannerAlarms.map(al => `
-                <div class="flex items-center justify-between bg-amber-50/70 border border-amber-200 rounded-xl px-3 py-2">
+            const repLabels = { once: 'Sekali', daily: 'Setiap Hari', weekdays: 'Sen-Jum' };
+            list.innerHTML = alarms.map(a => `
+                <div class="flex items-center justify-between bg-amber-50/70 border border-amber-200 rounded-xl px-3 py-2 text-xs ${a.enabled ? '' : 'opacity-50'}">
                     <div class="min-w-0 pr-2">
-                        <div class="flex items-center gap-2">
-                            <span class="font-mono font-black text-sm ${al.enabled ? 'text-amber-700' : 'text-gray-400'}">${al.time}</span>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-white border border-amber-200 text-amber-800 font-bold">${repeatLabels[al.repeat] || 'Sekali'}</span>
-                        </div>
-                        <p class="text-xs font-semibold ${al.enabled ? 'text-gray-700' : 'text-gray-400 line-through'} truncate">${al.label}</p>
+                        <span class="font-black font-mono text-amber-700 text-sm">${a.time}</span>
+                        <span class="text-[10px] font-bold bg-white px-2 py-0.5 rounded-full border border-amber-200 text-amber-800 ml-1">${repLabels[a.repeat] || 'Sekali'}</span>
+                        <p class="text-xs font-semibold text-gray-800 truncate mt-0.5">${a.label}</p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <input type="checkbox" class="custom-checkbox !w-4 !h-4" ${al.enabled ? 'checked' : ''} onchange="togglePlannerAlarm(${al.id})">
-                        <button onclick="deletePlannerAlarm(${al.id})" class="text-red-400 hover:text-red-600 text-xs"><i class="fas fa-trash"></i></button>
+                        <input type="checkbox" class="custom-checkbox !w-4 !h-4" ${a.enabled ? 'checked' : ''} onchange="togglePlannerAlarm(${a.id})" title="Aktif/Nonaktif">
+                        <button type="button" onclick="deletePlannerAlarm(${a.id})" class="text-red-400 hover:text-red-600"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
@@ -3165,55 +2904,375 @@
             const repeat = document.getElementById('alarm-repeat').value;
             const tone = document.getElementById('alarm-tone').value;
             if (!time || !label) return;
-            appData.plannerAlarms.push({ id: Date.now(), time, label, repeat, tone, enabled: true });
-            document.getElementById('alarm-label').value = '';
+            appData.plannerAlarms.push({
+                id: Date.now(),
+                time,
+                label,
+                repeat,
+                tone,
+                enabled: true,
+                lastTriggeredSlot: ''
+            });
+            document.getElementById('form-planner-alarm').reset();
             saveData();
-            showToast('Alarm Disetel', `Alarm "${label}" pukul ${time} aktif.`, 'success');
+            showToast("Alarm Diset ⏰", `Alarm "${label}" diatur pukul ${time}.`, "success");
         };
 
         window.togglePlannerAlarm = (id) => {
-            const al = appData.plannerAlarms.find(a => a.id === id);
+            const al = (appData.plannerAlarms || []).find(x => x.id === id);
             if (al) {
                 al.enabled = !al.enabled;
-                al.lastTriggeredSlot = '';
                 saveData();
             }
         };
 
         window.deletePlannerAlarm = (id) => {
-            appData.plannerAlarms = appData.plannerAlarms.filter(a => a.id !== id);
+            appData.plannerAlarms = (appData.plannerAlarms || []).filter(x => x.id !== id);
             saveData();
         };
 
-        // --- DEADLINES ---
-        function renderDeadlines() {
-            const container = document.getElementById('deadlines-list');
-            if (!container) return;
-            if (!appData.deadlines || appData.deadlines.length === 0) {
-                container.innerHTML = '<p class="text-xs text-gray-400 italic col-span-2">Belum ada deadline tercatat. Tambahkan di bawah!</p>';
+        function updateLiveClock() {
+            const clockEl = document.getElementById('planner-live-clock');
+            if (!clockEl) return;
+            const now = new Date();
+            clockEl.innerText = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+        }
+        setInterval(updateLiveClock, 1000);
+        updateLiveClock();
+
+        function checkAlarms() {
+            const now = new Date();
+            const todayStr = formatDateLocal(now);
+            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const triggerSlot = `${todayStr}_${currentTime}`;
+            const dayOfWeek = now.getDay(); // 0=Min, 1=Sen .. 6=Sab
+            let dataChanged = false;
+
+            // 1. Cek Alarm Manual
+            (appData.plannerAlarms || []).forEach(al => {
+                if (!al.enabled || al.time !== currentTime || al.lastTriggeredSlot === triggerSlot) return;
+                const matchDay = al.repeat === 'daily' || al.repeat === 'once' || (al.repeat === 'weekdays' && dayOfWeek >= 1 && dayOfWeek <= 5);
+                if (matchDay) {
+                    ringPlannerAlarm(al.label, currentTime, al.tone || 'chime', 'Pengingat Alarm My Planner');
+                    al.lastTriggeredSlot = triggerSlot;
+                    if (al.repeat === 'once') al.enabled = false;
+                    dataChanged = true;
+                }
+            });
+
+            // 2. Cek Daily Planner (Notif Layar Senyap atau Alarm Suara)
+            (appData.daily || []).forEach(d => {
+                const rMode = d.remindType || (d.time ? 'silent' : 'none');
+                const matchDate = !d.date || d.date === todayStr;
+                if (!d.completed && matchDate && d.time === currentTime && rMode !== 'none' && d.lastTriggeredSlot !== triggerSlot) {
+                    if (rMode === 'sound') {
+                        ringPlannerAlarm(`Daily Planner: ${d.text}`, currentTime, 'chime', 'Agenda Daily Planner terjadwal sekarang!');
+                    } else {
+                        triggerSilentDailyNotification(d.text, currentTime, d.id);
+                    }
+                    d.lastTriggeredSlot = triggerSlot;
+                    dataChanged = true;
+                }
+            });
+
+            // 3. Cek Deadline Hari-H tepat jamnya
+            if (appData.alarmAutoSync !== false) {
+                (appData.deadlines || []).forEach(dl => {
+                    const dlTime = dl.time || '23:59';
+                    if (dl.date === todayStr && dlTime === currentTime && dl.lastAlarmSlot !== triggerSlot) {
+                        ringPlannerAlarm(`Deadline ${dl.category || 'Tugas'}: ${dl.task}`, currentTime, 'urgent', 'Batas waktu pengumpulan tugas tiba sekarang!');
+                        dl.lastAlarmSlot = triggerSlot;
+                        dataChanged = true;
+                    }
+                });
+            }
+
+            // 4. Cek Jadwal Kalender Hari Ini
+            const todayCalEvents = (appData.calendarEvents && appData.calendarEvents[todayStr]) || [];
+            if (todayCalEvents.length > 0) {
+                todayCalEvents.forEach(ev => {
+                    const evStart = ev.timeStart || ev.time;
+                    if (!ev.completed && evStart === currentTime && ev.lastAlarmSlot !== triggerSlot) {
+                        const meta = getCalendarCategoryMeta(ev.category);
+                        if (ev.priority === 'tinggi') {
+                            ringPlannerAlarm(`${meta.label}: ${ev.text}`, currentTime, 'bell', meta.label);
+                        } else {
+                            triggerSilentDailyNotification(`${meta.label}: ${ev.text}`, currentTime, null);
+                        }
+                        ev.lastAlarmSlot = triggerSlot;
+                        dataChanged = true;
+                    }
+                });
+            }
+
+            if (dataChanged) saveData();
+        }
+        setInterval(checkAlarms, 4000);
+        setInterval(checkAndNotifyUpcomingReminders, 30000);
+        setTimeout(() => {
+            checkAlarms();
+            checkAndNotifyUpcomingReminders();
+        }, 1500);
+        updateNotifIcon();
+
+        // ==========================================
+        // 7. GOALS & SUPPORT SYSTEM (PHOTOS & TEXT)
+        // ==========================================
+        function renderGoals() {
+            const list = document.getElementById('goals-list');
+            if (!list) return;
+            const goals = appData.goals || [];
+            if (goals.length === 0) {
+                list.innerHTML = '<p class="text-xs text-gray-400 italic col-span-2">Tuliskan target dan impian jangka panjangmu di bawah!</p>';
                 return;
             }
+            list.innerHTML = goals.map(g => `
+                <div class="list-item !mb-0 !border-l-amber-400 ${g.completed ? 'completed' : ''}">
+                    <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                        <input type="checkbox" class="custom-checkbox" ${g.completed ? 'checked' : ''} onchange="toggleGoal(${g.id})">
+                        <span class="text-xs font-bold text-gray-800">${g.text}</span>
+                    </div>
+                    <button onclick="deleteGoal(${g.id})" class="text-red-300 hover:text-red-500 text-xs shrink-0"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('form-goals').onsubmit = (e) => {
+            e.preventDefault();
+            const inp = document.getElementById('input-goals');
+            if (!inp || !inp.value.trim()) return;
+            appData.goals.push({ id: Date.now(), text: inp.value.trim(), completed: false });
+            inp.value = '';
+            saveData();
+        };
+
+        window.toggleGoal = (id) => {
+            const g = (appData.goals || []).find(x => x.id === id);
+            if (g) { g.completed = !g.completed; saveData(); }
+        };
+
+        window.deleteGoal = (id) => {
+            appData.goals = (appData.goals || []).filter(x => x.id !== id);
+            saveData();
+        };
+
+        const PHOTO_PLACEHOLDERS = {
+            family: 'https://placehold.co/300x300/ffeaa7/fd79a8?text=Keluarga',
+            friends: 'https://placehold.co/300x300/ffd1dc/e84393?text=Teman',
+            partner: 'https://placehold.co/300x300/f4aeb8/ffffff?text=Pacar',
+            inspiration: 'https://placehold.co/300x200/e0f7fa/00acc1?text=Inspirasi'
+        };
+
+        function renderPhotos() {
+            ['family', 'friends', 'partner', 'inspiration'].forEach(key => {
+                const imgEl = document.getElementById(`img-${key}`);
+                const sliderEl = document.getElementById(`slider-${key}`);
+                const delBtn = document.getElementById(`del-photo-${key}`);
+                const src = appData.photos && appData.photos[key];
+                const pos = (appData.photoPos && appData.photoPos[key] !== undefined) ? appData.photoPos[key] : 50;
+
+                if (imgEl) {
+                    imgEl.src = src || PHOTO_PLACEHOLDERS[key];
+                    imgEl.style.objectPosition = `50% ${pos}%`;
+                }
+                if (sliderEl) sliderEl.value = pos;
+                if (delBtn) {
+                    if (src) delBtn.classList.remove('hidden');
+                    else delBtn.classList.add('hidden');
+                }
+            });
+
+            const motInp = document.getElementById('input-motivation');
+            if (motInp && document.activeElement !== motInp) {
+                motInp.value = appData.motivation || '';
+            }
+            const inspInp = document.getElementById('input-inspiration-desc');
+            if (inspInp && document.activeElement !== inspInp) {
+                inspInp.value = appData.inspirationDesc || '';
+            }
+        }
+
+        ['family', 'friends', 'partner', 'inspiration'].forEach(key => {
+            const fileInp = document.getElementById(`upload-${key}`);
+            if (fileInp) {
+                fileInp.onchange = async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const compressed = await compressImageFile(file, 650, 0.75);
+                    if (!appData.photos) appData.photos = {};
+                    appData.photos[key] = compressed;
+                    saveData();
+                    showToast('Foto Tersimpan ✨', 'Foto support system berhasil diperbarui.', 'success');
+                };
+            }
+        });
+
+        window.previewImagePos = (key, val) => {
+            const imgEl = document.getElementById(`img-${key}`);
+            if (imgEl) imgEl.style.objectPosition = `50% ${val}%`;
+        };
+
+        window.commitImagePos = (key, val) => {
+            if (!appData.photoPos) appData.photoPos = {};
+            appData.photoPos[key] = Number(val);
+            saveData(true);
+        };
+
+        window.removeSupportPhoto = (key) => {
+            if (appData.photos) appData.photos[key] = '';
+            saveData();
+        };
+
+        document.getElementById('input-motivation').oninput = (e) => {
+            appData.motivation = e.target.value;
+            saveData(true);
+        };
+
+        document.getElementById('input-inspiration-desc').oninput = (e) => {
+            appData.inspirationDesc = e.target.value;
+            saveData(true);
+        };
+
+        // ==========================================
+        // 8. DAILY PLANNER & DEADLINE TRACKER
+        // ==========================================
+        function renderDaily() {
+            const disp = document.getElementById('daily-date-display');
+            const viewDateInp = document.getElementById('daily-view-date');
+            const urgentBox = document.getElementById('urgent-notes-display');
+            const list = document.getElementById('daily-list');
+
+            if (disp) disp.innerText = `Tanggal: ${selectedCalDateStr}`;
+            if (viewDateInp) viewDateInp.value = selectedCalDateStr;
+
+            // Tampilkan agenda dari Kalender pada tanggal yang sedang dipilih
+            if (urgentBox) {
+                const calEvs = [...((appData.calendarEvents && appData.calendarEvents[selectedCalDateStr]) || [])]
+                    .sort((a, b) => (a.timeStart || '99:99').localeCompare(b.timeStart || '99:99'));
+                if (calEvs.length > 0) {
+                    urgentBox.innerHTML = calEvs.map(ev => {
+                        const meta = getCalendarCategoryMeta(ev.category);
+                        return `
+                            <div class="bg-pink-50/90 border border-pink-200 rounded-xl px-3 py-2 flex items-center justify-between text-xs ${ev.completed ? 'opacity-60 line-through' : ''}">
+                                <label class="flex items-center gap-2 cursor-pointer min-w-0 pr-2">
+                                    <input type="checkbox" class="custom-checkbox !w-4 !h-4" ${ev.completed ? 'checked' : ''} onchange="toggleCalendarEventComplete('${selectedCalDateStr}', ${ev.id})">
+                                    <span class="truncate font-bold text-gray-800">${meta.icon} <span class="text-pink-600">${ev.timeStart || ''}</span> ${ev.text}</span>
+                                </label>
+                                <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white text-pink-600 border border-pink-200 shrink-0">Kalender</span>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    urgentBox.innerHTML = '';
+                }
+            }
+
+            if (!list) return;
+            const filteredDaily = (appData.daily || []).filter(d => !d.date || d.date === selectedCalDateStr);
+            if (filteredDaily.length === 0) {
+                list.innerHTML = '<p class="text-xs text-gray-400 italic text-center py-4">Belum ada fokus harian untuk tanggal ini. Tambahkan di bawah!</p>';
+                return;
+            }
+
+            list.innerHTML = filteredDaily.map(d => {
+                const rMode = d.remindType || (d.time ? 'silent' : 'none');
+                const modeBadge = d.time
+                    ? (rMode === 'sound' ? `<span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">🔔 ${d.time}</span>`
+                        : (rMode === 'silent' ? `<span class="text-[10px] font-bold text-pink-700 bg-pink-100 px-2 py-0.5 rounded-full">🔕 ${d.time}</span>`
+                        : `<span class="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">${d.time}</span>`))
+                    : '';
+                return `
+                    <div class="list-item ${d.completed ? 'completed' : ''}">
+                        <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                            <input type="checkbox" class="custom-checkbox" ${d.completed ? 'checked' : ''} onchange="toggleDaily(${d.id})">
+                            <div class="min-w-0">
+                                <p class="text-xs font-bold text-gray-800 break-words">${d.text}</p>
+                                <div class="flex items-center gap-1.5 mt-0.5">
+                                    ${modeBadge}
+                                    <span class="text-[10px] text-gray-400">${d.date ? d.date : 'Setiap Hari'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="deleteDaily(${d.id})" class="text-red-300 hover:text-red-500 text-xs shrink-0"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('form-daily').onsubmit = (e) => {
+            e.preventDefault();
+            const text = document.getElementById('input-daily').value.trim();
+            const date = document.getElementById('input-daily-date').value;
+            const time = document.getElementById('input-daily-time').value;
+            const remindType = document.getElementById('input-daily-remind').value;
+            if (!text) return;
+
+            appData.daily.push({
+                id: Date.now(),
+                text,
+                date,
+                time,
+                remindType,
+                completed: false,
+                lastTriggeredSlot: ''
+            });
+            document.getElementById('input-daily').value = '';
+            document.getElementById('input-daily-time').value = '';
+            saveData();
+        };
+
+        window.toggleDaily = (id) => {
+            const item = (appData.daily || []).find(d => d.id === id);
+            if (item) {
+                item.completed = !item.completed;
+                saveData();
+            }
+        };
+
+        window.deleteDaily = (id) => {
+            appData.daily = (appData.daily || []).filter(d => d.id !== id);
+            saveData();
+        };
+
+        window.jumpToTodayPlanner = () => {
+            selectCalendarDate(formatDateLocal(new Date()));
+        };
+
+        function renderDeadlines() {
+            const list = document.getElementById('deadlines-list');
+            if (!list) return;
+            const deadlines = [...(appData.deadlines || [])].sort((a, b) => parseLocalDate(a.date) - parseLocalDate(b.date));
+
+            if (deadlines.length === 0) {
+                list.innerHTML = '<p class="text-xs text-gray-400 italic md:col-span-2 text-center py-6">Yeay! Belum ada deadline tugas yang tercatat.</p>';
+                return;
+            }
+
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const sorted = [...appData.deadlines].sort((a, b) => parseLocalDate(a.date) - parseLocalDate(b.date));
 
-            container.innerHTML = sorted.map(d => {
-                const diff = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
-                const isUrgent = diff >= 0 && diff <= 7;
-                const badgeText = diff < 0 ? `Terlewat (${Math.abs(diff)}h)` : (diff === 0 ? 'HARI INI!' : `H-${diff}`);
+            list.innerHTML = deadlines.map(d => {
+                const diffDays = Math.ceil((parseLocalDate(d.date) - today) / 86400000);
+                const isPanic = diffDays >= 0 && diffDays <= 7;
+                const statusBadge = diffDays < 0
+                    ? '<span class="text-[10px] font-bold bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">Terlewat</span>'
+                    : (diffDays === 0
+                        ? '<span class="text-[10px] font-extrabold bg-red-500 text-white px-2 py-0.5 rounded-full animate-pulse">HARI INI!</span>'
+                        : `<span class="text-[10px] font-extrabold ${isPanic ? 'bg-red-100 text-red-600' : 'bg-pink-100 text-pink-700'} px-2 py-0.5 rounded-full">H-${diffDays}</span>`);
+
                 return `
-                    <div class="list-item ${isUrgent ? 'panic-warning' : ''} !items-start">
+                    <div class="list-item !mb-0 ${isPanic ? 'panic-warning' : ''} items-start">
                         <div class="min-w-0 pr-2">
-                            <div class="flex items-center gap-1.5 flex-wrap mb-1">
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-pink-100 text-pink-700">${d.category || 'Matkul'}</span>
-                                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${isUrgent ? 'bg-red-500 text-white' : 'bg-amber-100 text-amber-800'}">${badgeText}</span>
+                            <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white border border-pink-200 text-pink-600">${d.category || 'Matkul'}</span>
+                                ${statusBadge}
                             </div>
-                            <p class="text-sm font-bold text-gray-800">${d.task}</p>
-                            <p class="text-[11px] text-gray-500 mt-0.5"><i class="far fa-calendar-alt mr-1"></i>${d.date} • ${d.time || '23:59'}</p>
+                            <h4 class="text-xs sm:text-sm font-extrabold ${isPanic ? 'panic-text' : 'text-gray-800'} break-words">${d.task}</h4>
+                            <p class="text-[11px] text-gray-500 mt-1"><i class="far fa-clock mr-1 text-pink-400"></i>${d.date} • ${d.time || '23:59'}</p>
                         </div>
-                        <div class="flex gap-2 shrink-0">
-                            <button onclick="editDeadline(${d.id})" class="text-blue-400 hover:text-blue-600 text-xs" title="Edit"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteDeadline(${d.id})" class="text-red-400 hover:text-red-600 text-xs" title="Hapus"><i class="fas fa-trash"></i></button>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button type="button" onclick="editDeadline(${d.id})" class="text-blue-400 hover:text-blue-600 text-xs" title="Edit Deadline"><i class="fas fa-edit"></i></button>
+                            <button type="button" onclick="deleteDeadline(${d.id})" class="text-emerald-500 hover:text-emerald-700 text-sm" title="Tandai Selesai / Hapus"><i class="fas fa-check-circle"></i></button>
                         </div>
                     </div>
                 `;
@@ -3225,7 +3284,7 @@
             const task = document.getElementById('input-deadline-task').value.trim();
             const category = document.getElementById('input-deadline-category').value;
             const date = document.getElementById('input-deadline-date').value;
-            const time = document.getElementById('input-deadline-time').value;
+            const time = document.getElementById('input-deadline-time').value || '23:59';
             const remindMode = document.getElementById('input-deadline-remind').value;
             if (!task || !date) return;
 
@@ -3236,50 +3295,60 @@
                 }
                 editingDeadlineId = null;
                 document.getElementById('btn-submit-deadline').innerHTML = '<i class="fas fa-plus mr-1"></i> Tambah Deadline & Jadwalkan Notif';
+                showToast('Deadline Diperbarui', `"${task}" berhasil diperbarui.`, 'success');
             } else {
                 appData.deadlines.push({ id: Date.now(), task, category, date, time, remindMode });
+                showToast('Deadline Dijadwalkan 🔔', `"${task}" akan diingatkan otomatis.`, 'success');
             }
-
             document.getElementById('form-deadlines').reset();
             saveData();
-            showToast('Deadline Tersimpan', `"${task}" dijadwalkan dengan pengingat otomatis.`, 'success');
         };
 
         window.editDeadline = (id) => {
-            const d = appData.deadlines.find(item => item.id === id);
+            const d = (appData.deadlines || []).find(x => x.id === id);
             if (!d) return;
-            editingDeadlineId = id;
+            editingDeadlineId = d.id;
             document.getElementById('input-deadline-task').value = d.task;
             document.getElementById('input-deadline-category').value = d.category || 'Matkul';
             document.getElementById('input-deadline-date').value = d.date;
             document.getElementById('input-deadline-time').value = d.time || '23:59';
             document.getElementById('input-deadline-remind').value = d.remindMode || 'all';
             document.getElementById('btn-submit-deadline').innerHTML = '<i class="fas fa-save mr-1"></i> Simpan Perubahan Deadline';
+            document.getElementById('input-deadline-task').focus();
         };
 
         window.deleteDeadline = (id) => {
-            appData.deadlines = appData.deadlines.filter(d => d.id !== id);
+            appData.deadlines = (appData.deadlines || []).filter(d => d.id !== id);
+            if (editingDeadlineId === id) {
+                editingDeadlineId = null;
+                document.getElementById('form-deadlines').reset();
+                document.getElementById('btn-submit-deadline').innerHTML = '<i class="fas fa-plus mr-1"></i> Tambah Deadline & Jadwalkan Notif';
+            }
             saveData();
+            showToast('Mantap! 🎉', 'Satu tugas selesai dari daftar deadline.', 'success');
         };
 
-        // --- COURSEWORK & ORGANIZATION ---
+        // ==========================================
+        // 9. COURSEWORK, ORGANIZATION & NOTULEN RAPAT
+        // ==========================================
         function renderCoursework() {
-            const c = document.getElementById('coursework-list');
-            if (!c) return;
-            if (!appData.coursework || appData.coursework.length === 0) {
-                c.innerHTML = '<p class="text-xs text-gray-400 italic">Belum ada daftar coursework.</p>';
+            const list = document.getElementById('coursework-list');
+            if (!list) return;
+            const items = appData.coursework || [];
+            if (items.length === 0) {
+                list.innerHTML = '<p class="text-xs text-gray-400 italic">Belum ada daftar tugas mata kuliah.</p>';
                 return;
             }
-            c.innerHTML = appData.coursework.map(item => `
-                <div class="list-item ${item.completed ? 'completed' : ''}">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <input type="checkbox" class="custom-checkbox" ${item.completed ? 'checked' : ''} onclick="toggleItem('coursework', ${item.id})">
+            list.innerHTML = items.map(c => `
+                <div class="list-item ${c.completed ? 'completed' : ''}">
+                    <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                        <input type="checkbox" class="custom-checkbox" ${c.completed ? 'checked' : ''} onchange="toggleCoursework(${c.id})">
                         <div class="min-w-0">
-                            <p class="text-xs font-extrabold text-pink-600 truncate">${item.course}</p>
-                            <p class="text-xs text-gray-700 truncate">${item.detail}</p>
+                            <h4 class="text-xs font-extrabold text-pink-600 truncate">${c.course}</h4>
+                            <p class="text-xs text-gray-700 break-words">${c.detail}</p>
                         </div>
                     </div>
-                    <button onclick="deleteItem('coursework', ${item.id})" class="text-red-300 hover:text-red-500 text-xs"><i class="fas fa-trash"></i></button>
+                    <button onclick="deleteCoursework(${c.id})" class="text-red-300 hover:text-red-500 text-xs shrink-0"><i class="fas fa-trash"></i></button>
                 </div>
             `).join('');
         }
@@ -3290,28 +3359,38 @@
             const detail = document.getElementById('input-course-detail').value.trim();
             if (!course || !detail) return;
             appData.coursework.push({ id: Date.now(), course, detail, completed: false });
-            document.getElementById('input-course').value = '';
-            document.getElementById('input-course-detail').value = '';
+            document.getElementById('form-coursework').reset();
+            saveData();
+        };
+
+        window.toggleCoursework = (id) => {
+            const c = (appData.coursework || []).find(x => x.id === id);
+            if (c) { c.completed = !c.completed; saveData(); }
+        };
+
+        window.deleteCoursework = (id) => {
+            appData.coursework = (appData.coursework || []).filter(x => x.id !== id);
             saveData();
         };
 
         function renderOrganizations() {
-            const c = document.getElementById('org-list');
-            if (!c) return;
-            if (!appData.organizations || appData.organizations.length === 0) {
-                c.innerHTML = '<p class="text-xs text-gray-400 italic">Belum ada agenda organisasi/kepanitiaan.</p>';
+            const list = document.getElementById('org-list');
+            if (!list) return;
+            const items = appData.organizations || [];
+            if (items.length === 0) {
+                list.innerHTML = '<p class="text-xs text-gray-400 italic">Belum ada agenda organisasi/kepanitiaan.</p>';
                 return;
             }
-            c.innerHTML = appData.organizations.map(item => `
-                <div class="list-item ${item.completed ? 'completed' : ''}">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <input type="checkbox" class="custom-checkbox" ${item.completed ? 'checked' : ''} onclick="toggleItem('organizations', ${item.id})">
+            list.innerHTML = items.map(o => `
+                <div class="list-item !border-l-purple-400 ${o.completed ? 'completed' : ''}">
+                    <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                        <input type="checkbox" class="custom-checkbox" ${o.completed ? 'checked' : ''} onchange="toggleOrg(${o.id})">
                         <div class="min-w-0">
-                            <p class="text-xs font-extrabold text-gray-800 truncate">${item.name}</p>
-                            <p class="text-[10px] text-gray-500">${item.role} • ${item.date}</p>
+                            <h4 class="text-xs font-extrabold text-purple-700 truncate">${o.name}</h4>
+                            <p class="text-[11px] text-gray-600">${o.role} • <span class="text-gray-400">${o.date}</span></p>
                         </div>
                     </div>
-                    <button onclick="deleteItem('organizations', ${item.id})" class="text-red-300 hover:text-red-500 text-xs"><i class="fas fa-trash"></i></button>
+                    <button onclick="deleteOrg(${o.id})" class="text-red-300 hover:text-red-500 text-xs shrink-0"><i class="fas fa-trash"></i></button>
                 </div>
             `).join('');
         }
@@ -3321,80 +3400,98 @@
             const name = document.getElementById('input-org-name').value.trim();
             const role = document.getElementById('input-org-role').value.trim();
             const date = document.getElementById('input-org-date').value;
-            if (!name || !role) return;
+            if (!name) return;
             appData.organizations.push({ id: Date.now(), name, role, date, completed: false });
-            document.getElementById('input-org-name').value = '';
-            document.getElementById('input-org-role').value = '';
+            document.getElementById('form-org').reset();
             saveData();
         };
 
-        // --- NOTULEN & ACTION ITEMS RAPAT ---
+        window.toggleOrg = (id) => {
+            const o = (appData.organizations || []).find(x => x.id === id);
+            if (o) { o.completed = !o.completed; saveData(); }
+        };
+
+        window.deleteOrg = (id) => {
+            appData.organizations = (appData.organizations || []).filter(x => x.id !== id);
+            saveData();
+        };
+
+        // --- NOTULEN & ACTION ITEMS RAPAT ORGANISASI ---
+        document.getElementById('form-org-minutes').onsubmit = (e) => {
+            e.preventDefault();
+            const eventName = document.getElementById('notulen-event').value.trim();
+            const division = document.getElementById('notulen-div').value.trim();
+            const date = document.getElementById('notulen-date').value;
+            const summary = document.getElementById('notulen-summary').value.trim();
+            const firstAction = document.getElementById('notulen-first-action').value.trim();
+            if (!eventName || !summary) return;
+
+            const actions = firstAction ? [{ id: Date.now() + 1, text: firstAction, done: false }] : [];
+            appData.orgMinutes.unshift({
+                id: Date.now(),
+                eventName,
+                division,
+                date,
+                summary,
+                actions
+            });
+            document.getElementById('form-org-minutes').reset();
+            document.getElementById('notulen-date').value = formatDateLocal(new Date());
+            saveData();
+            showToast('Notulen Tersimpan 📋', `Hasil rapat "${eventName}" berhasil dicatat.`, 'success');
+        };
+
         function renderOrgMinutes() {
-            const container = document.getElementById('org-minutes-list');
-            if (!container) return;
-            if (!appData.orgMinutes || appData.orgMinutes.length === 0) {
-                container.innerHTML = '<p class="text-xs text-gray-400 italic md:col-span-2">Belum ada notulen rapat tersimpan.</p>';
+            const list = document.getElementById('org-minutes-list');
+            if (!list) return;
+            const minutes = appData.orgMinutes || [];
+            if (minutes.length === 0) {
+                list.innerHTML = '<p class="text-xs text-gray-400 italic md:col-span-2 text-center py-4">Belum ada notulen rapat organisasi.</p>';
                 return;
             }
-            container.innerHTML = appData.orgMinutes.map(m => `
-                <div class="bg-white/85 rounded-2xl p-4 border border-purple-200 shadow-sm flex flex-col justify-between gap-2">
+
+            list.innerHTML = minutes.map(m => `
+                <div class="bg-purple-50/75 border border-purple-200 rounded-2xl p-4 flex flex-col justify-between gap-3">
                     <div>
                         <div class="flex justify-between items-start gap-2">
                             <div>
                                 <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">${m.division}</span>
                                 <span class="text-[10px] text-gray-400 ml-1">${m.date}</span>
-                                <h4 class="text-sm font-extrabold text-gray-800 mt-1">${m.event}</h4>
+                                <h4 class="text-sm font-extrabold text-gray-800 mt-1">${m.eventName}</h4>
                             </div>
-                            <button onclick="deleteOrgMinute(${m.id})" class="text-red-300 hover:text-red-500 text-xs"><i class="fas fa-trash"></i></button>
+                            <button onclick="deleteOrgMinute(${m.id})" class="text-red-400 hover:text-red-600 text-xs"><i class="fas fa-trash"></i></button>
                         </div>
-                        <p class="text-xs text-gray-600 mt-1.5 bg-purple-50/70 p-2 rounded-lg whitespace-pre-wrap">${m.summary}</p>
-                        <div class="mt-2.5 space-y-1.5">
-                            <p class="text-[10px] font-extrabold text-purple-700 uppercase">Action Items:</p>
-                            ${(m.actions || []).map(a => `
-                                <div class="flex items-center justify-between gap-1.5 bg-gray-50 px-2 py-1 rounded-lg text-xs">
-                                    <label class="flex items-center gap-2 cursor-pointer min-w-0 ${a.done ? 'line-through text-gray-400' : 'text-gray-700'}">
-                                        <input type="checkbox" class="custom-checkbox !w-4 !h-4" ${a.done ? 'checked' : ''} onchange="toggleMinuteAction(${m.id}, ${a.id})">
-                                        <span class="truncate">${a.text}</span>
-                                    </label>
-                                    <button onclick="sendMinuteActionToDeadline(${m.id}, ${a.id})" class="text-[10px] font-bold bg-pink-100 text-pink-700 hover:bg-pink-200 px-2 py-0.5 rounded shrink-0" title="Kirim ke Deadline Tracker">+ DL</button>
-                                </div>
-                            `).join('')}
+                        <p class="text-xs text-gray-700 bg-white/80 p-2.5 rounded-xl border border-purple-100 mt-2 whitespace-pre-wrap">${m.summary}</p>
+
+                        <div class="mt-2.5">
+                            <span class="text-[10px] font-extrabold text-purple-700 uppercase block mb-1">Action Items:</span>
+                            <div class="flex flex-col gap-1.5">
+                                ${(m.actions || []).map(act => `
+                                    <div class="flex items-center justify-between bg-white px-2.5 py-1.5 rounded-lg border border-purple-100 text-xs">
+                                        <label class="flex items-center gap-2 cursor-pointer min-w-0 pr-1 ${act.done ? 'line-through text-gray-400' : 'text-gray-700 font-semibold'}">
+                                            <input type="checkbox" class="custom-checkbox !w-4 !h-4" ${act.done ? 'checked' : ''} onchange="toggleOrgAction(${m.id}, ${act.id})">
+                                            <span class="truncate">${act.text}</span>
+                                        </label>
+                                        <button type="button" onclick="sendOrgActionToDeadline(${m.id}, ${act.id})" class="text-[10px] font-bold text-pink-600 hover:text-pink-800 bg-pink-50 px-2 py-0.5 rounded shrink-0" title="Kirim ke Deadline Tracker">
+                                            + DL
+                                        </button>
+                                    </div>
+                                `).join('')}
+                            </div>
                         </div>
                     </div>
-                    <div class="flex gap-1.5 mt-2 pt-2 border-t border-purple-100">
-                        <input type="text" id="new-act-${m.id}" placeholder="Tambah action item..." class="!py-1 !px-2 !text-[11px]">
-                        <button onclick="addMinuteAction(${m.id})" class="btn-cute !bg-purple-500 !py-1 !px-2.5 text-[10px]"><i class="fas fa-plus"></i></button>
+
+                    <div class="flex gap-1.5 pt-2 border-t border-purple-200/60">
+                        <input type="text" id="new-action-input-${m.id}" placeholder="Tambah action item baru..." class="!py-1.5 !px-2.5 !text-xs border-purple-200">
+                        <button type="button" onclick="addActionToOrgMinute(${m.id})" class="btn-cute !bg-purple-500 !py-1.5 !px-3 text-xs"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        document.getElementById('form-org-minutes').onsubmit = (e) => {
-            e.preventDefault();
-            const event = document.getElementById('notulen-event').value.trim();
-            const division = document.getElementById('notulen-div').value.trim();
-            const date = document.getElementById('notulen-date').value;
-            const summary = document.getElementById('notulen-summary').value.trim();
-            const firstAct = document.getElementById('notulen-first-action').value.trim();
-            if (!event || !summary) return;
-
-            const actions = firstAct ? [{ id: Date.now() + 1, text: firstAct, done: false }] : [];
-            appData.orgMinutes.unshift({ id: Date.now(), event, division, date, summary, actions });
-            document.getElementById('form-org-minutes').reset();
-            saveData();
-            showToast('Notulen Tersimpan', `Catatan rapat "${event}" ditambahkan.`, 'success');
-        };
-
-        window.toggleMinuteAction = (minId, actId) => {
-            const m = appData.orgMinutes.find(x => x.id === minId);
-            if (!m) return;
-            const a = (m.actions || []).find(x => x.id === actId);
-            if (a) { a.done = !a.done; saveData(); }
-        };
-
-        window.addMinuteAction = (minId) => {
-            const m = appData.orgMinutes.find(x => x.id === minId);
-            const inp = document.getElementById(`new-act-${minId}`);
+        window.addActionToOrgMinute = (minuteId) => {
+            const m = (appData.orgMinutes || []).find(x => x.id === minuteId);
+            const inp = document.getElementById(`new-action-input-${minuteId}`);
             if (!m || !inp || !inp.value.trim()) return;
             if (!m.actions) m.actions = [];
             m.actions.push({ id: Date.now(), text: inp.value.trim(), done: false });
@@ -3402,40 +3499,99 @@
             saveData();
         };
 
-        window.sendMinuteActionToDeadline = (minId, actId) => {
-            const m = appData.orgMinutes.find(x => x.id === minId);
+        window.toggleOrgAction = (minuteId, actionId) => {
+            const m = (appData.orgMinutes || []).find(x => x.id === minuteId);
             if (!m) return;
-            const a = (m.actions || []).find(x => x.id === actId);
-            if (!a) return;
-            const targetDate = m.date || formatDateLocal(new Date(Date.now() + 2 * 86400000));
+            const act = (m.actions || []).find(a => a.id === actionId);
+            if (act) {
+                act.done = !act.done;
+                saveData();
+            }
+        };
+
+        window.sendOrgActionToDeadline = (minuteId, actionId) => {
+            const m = (appData.orgMinutes || []).find(x => x.id === minuteId);
+            if (!m) return;
+            const act = (m.actions || []).find(a => a.id === actionId);
+            if (!act) return;
+            const targetDate = m.date || formatDateLocal(new Date());
             appData.deadlines.push({
                 id: Date.now(),
-                task: `[${m.division}] ${a.text}`,
+                task: `[${m.division}] ${act.text}`,
                 category: 'Organisasi',
                 date: targetDate,
                 time: '23:59',
                 remindMode: 'all'
             });
             saveData();
-            showToast('Terkirim ke Deadline Tracker', `"${a.text}" masuk ke daftar deadline.`, 'success');
+            showToast('Terkirim ke Deadline Tracker! 🚀', `"${act.text}" dijadwalkan pada ${targetDate}.`, 'success');
         };
 
-        window.deleteOrgMinute = (minId) => {
-            appData.orgMinutes = appData.orgMinutes.filter(m => m.id !== minId);
+        window.deleteOrgMinute = (minuteId) => {
+            appData.orgMinutes = (appData.orgMinutes || []).filter(x => x.id !== minuteId);
             saveData();
         };
 
         // ==========================================
-        // 11. MAIN CALENDAR (IKON KATEGORI SPESIFIK, EDIT & SYNC KE DAILY PLANNER)
+        // 10. HIGH PRIORITY POPUP (TODAY'S IMPORTANT EVENTS)
         // ==========================================
+        function checkTodayHighPriorityEvents() {
+            const todayStr = formatDateLocal(new Date());
+            const events = (appData.calendarEvents && appData.calendarEvents[todayStr]) || [];
+            const urgentToday = events.filter(ev => ev.priority === 'tinggi' && !ev.completed);
+            if (urgentToday.length === 0) return;
+
+            const listEl = document.getElementById('high-priority-list');
+            const popup = document.getElementById('high-priority-popup');
+            const content = document.getElementById('high-priority-content');
+            if (!listEl || !popup || !content) return;
+
+            listEl.innerHTML = urgentToday.map(ev => {
+                const meta = getCalendarCategoryMeta(ev.category);
+                return `
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-2.5 text-left">
+                        <span class="text-[10px] font-bold text-red-600 uppercase inline-flex items-center gap-1">${meta.icon} ${meta.label} • ${ev.timeStart || ''} ${ev.timeEnd ? '- ' + ev.timeEnd : ''}</span>
+                        <p class="text-sm font-extrabold text-gray-800">${ev.text}</p>
+                    </div>
+                `;
+            }).join('');
+
+            popup.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                popup.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            });
+        }
+
+        window.closeHighPriorityPopup = () => {
+            const popup = document.getElementById('high-priority-popup');
+            const content = document.getElementById('high-priority-content');
+            if (!popup || !content) return;
+            popup.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => popup.classList.add('hidden'), 250);
+        };
+
+        // ==========================================
+        // 11. INTERACTIVE CALENDAR & SYNC TO DAILY PLANNER
+        // ==========================================
+        const monthNamesID = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+        let currentCalDate = new Date();
+        let selectedCalDateStr = formatDateLocal(new Date());
+
         function renderCalendar() {
             const daysContainer = document.getElementById('calendar-days');
-            const headerEl = document.getElementById('calendar-month-year');
-            if (!daysContainer || !headerEl) return;
+            const monthYearHeader = document.getElementById('calendar-month-year');
+            if (!daysContainer || !monthYearHeader) return;
 
             const year = currentCalDate.getFullYear();
             const month = currentCalDate.getMonth();
-            headerEl.innerText = `${monthNamesID[month]} ${year}`;
+            monthYearHeader.innerText = `${monthNamesID[month]} ${year}`;
 
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -3449,9 +3605,9 @@
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dayOfWeek = new Date(year, month, day).getDay();
-                const dayEvents = (appData.calendarEvents && appData.calendarEvents[dateStr]) || [];
                 const isToday = dateStr === todayStr;
                 const isSelected = dateStr === selectedCalDateStr;
+                const dayEvents = (appData.calendarEvents && appData.calendarEvents[dateStr]) || [];
 
                 let iconsHtml = '';
                 let tooltipAttr = '';
@@ -3460,7 +3616,7 @@
                     const displayedIcons = uniqueIcons.slice(0, 3).join('');
                     const extraCount = dayEvents.length > 3 ? `<span class="text-[8px] font-extrabold text-pink-600">+${dayEvents.length - 3}</span>` : '';
                     iconsHtml = `<span class="cal-cat-icons">${displayedIcons}${extraCount}</span>`;
-                    const tip = dayEvents.map(ev => `${getCalendarCategoryMeta(ev.category).icon} ${ev.timeStart || ''} ${ev.text}`).join(' | ');
+                    const tip = dayEvents.map(ev => `${getCalendarCategoryMeta(ev.category).label}: ${ev.timeStart || ''} ${ev.text}`).join(' | ');
                     tooltipAttr = `title="${tip.replace(/"/g, '&quot;')}"`;
                 }
 
@@ -3619,7 +3775,6 @@
             const meta = getCalendarCategoryMeta(category);
 
             if (editId) {
-                // Mode Edit Jadwal Kalender
                 let existingCompleted = false;
                 if (origDate && appData.calendarEvents[origDate]) {
                     const prevEv = appData.calendarEvents[origDate].find(ev => String(ev.id) === String(editId));
@@ -3646,7 +3801,6 @@
                 return;
             }
 
-            // Mode Tambah Jadwal Baru
             const weeks = routine === 'rutin' ? 4 : 1;
             const baseDate = parseLocalDate(targetDateStr);
             for (let w = 0; w < weeks; w++) {
@@ -5171,7 +5325,10 @@
 
         renderAll();
         syncRemindersToSW();
-        setTimeout(checkTodayHighPriorityEvents, 2400);
+        setTimeout(() => {
+            checkTodayHighPriorityEvents();
+            checkAndNotifyUpcomingReminders();
+        }, 2400);
     </script>
 </body>
 </html>
